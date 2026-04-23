@@ -1,0 +1,522 @@
+[
+    {
+        "slug": "full-stack",
+        "title": "Full Stack Development",
+        "image": "/images/courses/full-stack-development.svg",
+        "description": "Learn frontend and backend with real-world projects",
+        "duration": "6 Months",
+        "level": "Beginner to Advanced",
+        "modules": [
+            "HTML, CSS, JavaScript",
+            "React.js",
+            "Node.js",
+            "MongoDB"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Industry-ready learning path",
+                    "description": "Move from frontend basics to backend architecture with structured, project-led progression."
+                },
+                {
+                    "title": "Build complete applications",
+                    "description": "Learn how to connect interfaces, APIs, databases, and deployment workflows into one working system."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "6 Months",
+                    "label": "Complete guided learning roadmap"
+                },
+                {
+                    "value": "4 Core Stacks",
+                    "label": "Frontend, backend, database, and deployment exposure"
+                }
+            ],
+            "cta": {
+                "button_text": "Start Full Stack Journey",
+                "batch_info": "Next cohort starts soon with guided enrollment support"
+            }
+        }
+    },
+    {
+        "slug": "frontend-development",
+        "title": "Computer Science",
+        "image": "/images/courses/frontend-development.svg",
+        "description": "Build strong computer science fundamentals with practical exposure to programming, problem solving, and software systems.",
+        "duration": "6 Months",
+        "level": "Beginner to Intermediate",
+        "modules": [
+            "Programming Fundamentals",
+            "Data Structures and Algorithms",
+            "Database Concepts",
+            "Software Development Basics"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Core computing foundations",
+                    "description": "Develop confidence in logic, programming structure, and the essential concepts behind modern software systems."
+                },
+                {
+                    "title": "Practical problem-solving workflow",
+                    "description": "Practice how to approach technical challenges with structured thinking, coding exercises, and implementation-focused learning."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "6 Months",
+                    "label": "Computer science foundation track"
+                },
+                {
+                    "value": "CS Core",
+                    "label": "Programming, algorithms, and systems thinking"
+                }
+            ],
+            "cta": {
+                "button_text": "Join Computer Science Program",
+                "batch_info": "Admissions are open for the upcoming computer science batch"
+            }
+        }
+    },
+    {
+        "slug": "backend-development",
+        "title": "Backend Development",
+        "image": "/images/courses/backend-development.svg",
+        "description": "Learn how to create secure APIs, manage databases, and build scalable server-side applications.",
+        "duration": "5 Months",
+        "level": "Intermediate",
+        "modules": [
+            "Node.js",
+            "REST API Development",
+            "Authentication and Security",
+            "Database Design"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Server-side application design",
+                    "description": "Understand how data, APIs, authentication, and business logic work together in real systems."
+                },
+                {
+                    "title": "Scalable engineering practices",
+                    "description": "Learn architecture patterns and secure workflows used to support reliable production backends."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "5 Months",
+                    "label": "Backend-focused roadmap"
+                },
+                {
+                    "value": "API + DB",
+                    "label": "Practical exposure to core backend systems"
+                }
+            ],
+            "cta": {
+                "button_text": "Apply for Backend Program",
+                "batch_info": "Admissions are open for the next backend learning track"
+            }
+        }
+    },
+    {
+        "slug": "ui-ux-design",
+        "title": "UI/UX Design",
+        "image": "/images/courses/ui-ux-design.svg",
+        "description": "Design intuitive digital products with strong user flows, wireframes, and polished interfaces.",
+        "duration": "4 Months",
+        "level": "Beginner to Intermediate",
+        "modules": [
+            "Design Fundamentals",
+            "Wireframing",
+            "Figma Workflows",
+            "User Experience Systems"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "User-centered product thinking",
+                    "description": "Create interfaces that balance visual clarity, usability, and practical user journeys."
+                },
+                {
+                    "title": "End-to-end design workflow",
+                    "description": "Move from idea to wireframes, prototypes, and polished design systems with structured guidance."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "4 Months",
+                    "label": "Complete design learning cycle"
+                },
+                {
+                    "value": "UX + UI",
+                    "label": "From user research to interface execution"
+                }
+            ],
+            "cta": {
+                "button_text": "Explore UI/UX Program",
+                "batch_info": "Upcoming design batch now accepting new learners"
+            }
+        }
+    },
+    {
+        "slug": "graphic-design",
+        "title": "Graphic Design",
+        "image": "/images/courses/graphic-design.svg",
+        "description": "Master visual communication, branding, and creative asset design for digital platforms.",
+        "duration": "3 Months",
+        "level": "Beginner",
+        "modules": [
+            "Brand Design Basics",
+            "Typography and Layouts",
+            "Social Media Creatives",
+            "Portfolio Projects"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Visual communication basics",
+                    "description": "Learn how layout, typography, and branding come together to create strong digital assets."
+                },
+                {
+                    "title": "Creative portfolio development",
+                    "description": "Build project work that helps showcase your design style and practical execution skills."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "3 Months",
+                    "label": "Focused creative skill program"
+                },
+                {
+                    "value": "Portfolio-led",
+                    "label": "Projects designed to strengthen presentation and output"
+                }
+            ],
+            "cta": {
+                "button_text": "Join Graphic Design Program",
+                "batch_info": "New creative batch opens with mentor-guided learning"
+            }
+        }
+    },
+    {
+        "slug": "cyber-security",
+        "title": "Cyber Security",
+        "image": "/images/courses/cyber-security.svg",
+        "description": "Understand security fundamentals, threat analysis, and practical defense workflows for modern systems.",
+        "duration": "6 Months",
+        "level": "Intermediate",
+        "modules": [
+            "Network Security",
+            "Threat Detection",
+            "Ethical Security Practices",
+            "Security Audits"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Security-first technical mindset",
+                    "description": "Build strong fundamentals around defense workflows, threat awareness, and secure system thinking."
+                },
+                {
+                    "title": "Practical audit exposure",
+                    "description": "Learn how to review systems, identify risks, and understand real-world security improvement paths."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "6 Months",
+                    "label": "Comprehensive security roadmap"
+                },
+                {
+                    "value": "Audit Ready",
+                    "label": "Focused on practical system review and awareness"
+                }
+            ],
+            "cta": {
+                "button_text": "Start Cyber Security Program",
+                "batch_info": "Security cohort applications are currently open"
+            }
+        }
+    },
+    {
+        "slug": "cloud-computing",
+        "title": "Cloud Computing",
+        "image": "/images/courses/cloud-computing.svg",
+        "description": "Build cloud-ready applications and learn deployment, infrastructure, and scalable system concepts.",
+        "duration": "5 Months",
+        "level": "Intermediate",
+        "modules": [
+            "Cloud Foundations",
+            "Deployment Pipelines",
+            "Virtual Infrastructure",
+            "Monitoring and Scaling"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Cloud deployment workflows",
+                    "description": "Understand how modern applications are deployed, scaled, monitored, and maintained in cloud environments."
+                },
+                {
+                    "title": "Infrastructure fundamentals",
+                    "description": "Develop confidence with cloud concepts that support resilient and scalable software delivery."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "5 Months",
+                    "label": "Cloud-focused learning path"
+                },
+                {
+                    "value": "Deploy + Scale",
+                    "label": "Practical exposure to modern infrastructure concepts"
+                }
+            ],
+            "cta": {
+                "button_text": "Explore Cloud Program",
+                "batch_info": "Enrollment is open for the upcoming cloud computing track"
+            }
+        }
+    },
+    {
+        "slug": "digital-marketing",
+        "title": "Digital Marketing",
+        "image": "/images/courses/digital-marketing.svg",
+        "description": "Learn modern digital growth strategies across campaigns, content, and performance channels.",
+        "duration": "4 Months",
+        "level": "Beginner to Intermediate",
+        "modules": [
+            "Marketing Strategy",
+            "Content Planning",
+            "Campaign Execution",
+            "Performance Tracking"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Growth-focused campaign learning",
+                    "description": "Understand how digital strategies, content planning, and channel execution work together to drive results."
+                },
+                {
+                    "title": "Performance-led marketing structure",
+                    "description": "Build practical confidence with campaign workflows, reporting, and optimization thinking."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "4 Months",
+                    "label": "Modern marketing skill track"
+                },
+                {
+                    "value": "Strategy + Execution",
+                    "label": "Balanced learning across planning and performance"
+                }
+            ],
+            "cta": {
+                "button_text": "Join Digital Marketing Program",
+                "batch_info": "Upcoming digital marketing batch now open"
+            }
+        }
+    },
+    {
+        "slug": "seo-search-engine-optimization",
+        "title": "SEO (Search Engine Optimization)",
+        "image": "/images/courses/seo-search-engine-optimization.svg",
+        "description": "Improve search visibility with technical SEO, on-page optimization, and content ranking strategies.",
+        "duration": "3 Months",
+        "level": "Beginner to Intermediate",
+        "modules": [
+            "Keyword Research",
+            "On-Page SEO",
+            "Technical SEO",
+            "Analytics and Reporting"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Search visibility fundamentals",
+                    "description": "Learn how on-page, technical, and content-focused SEO practices improve discoverability and ranking."
+                },
+                {
+                    "title": "Practical optimization methods",
+                    "description": "Build a clear workflow for keyword strategy, implementation, and performance review."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "3 Months",
+                    "label": "Focused SEO growth track"
+                },
+                {
+                    "value": "Search Ready",
+                    "label": "Practical optimization systems and reporting exposure"
+                }
+            ],
+            "cta": {
+                "button_text": "Apply for SEO Program",
+                "batch_info": "New SEO batch is open for early applications"
+            }
+        }
+    },
+    {
+        "slug": "google-ads",
+        "title": "Google Ads",
+        "image": "/images/courses/google-ads.svg",
+        "description": "Create paid search campaigns that drive measurable traffic, leads, and performance growth.",
+        "duration": "2 Months",
+        "level": "Beginner to Intermediate",
+        "modules": [
+            "Campaign Setup",
+            "Keyword Strategy",
+            "Ad Optimization",
+            "Conversion Tracking"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Paid search campaign structure",
+                    "description": "Understand how to build, manage, and optimize campaigns with stronger targeting and intent alignment."
+                },
+                {
+                    "title": "Conversion-focused performance learning",
+                    "description": "Learn how to connect campaign setup with meaningful reporting and lead generation goals."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "2 Months",
+                    "label": "Fast-track Google Ads program"
+                },
+                {
+                    "value": "Campaign Driven",
+                    "label": "Focused on setup, optimization, and measurable outcomes"
+                }
+            ],
+            "cta": {
+                "button_text": "Start Google Ads Program",
+                "batch_info": "Apply now for the next short-format paid search batch"
+            }
+        }
+    },
+    {
+        "slug": "meta-ads-facebook-instagram-ads",
+        "title": "Meta Ads (Facebook/Instagram Ads)",
+        "image": "/images/courses/meta-ads-facebook-instagram-ads.svg",
+        "description": "Launch and optimize ad campaigns across Meta platforms with audience targeting and creative strategy.",
+        "duration": "2 Months",
+        "level": "Beginner to Intermediate",
+        "modules": [
+            "Audience Targeting",
+            "Creative Ad Strategy",
+            "Campaign Optimization",
+            "Lead Generation Funnels"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Audience and creative targeting",
+                    "description": "Learn how campaign success improves when audience intent, creative direction, and optimization align."
+                },
+                {
+                    "title": "Lead-focused ad workflows",
+                    "description": "Understand practical methods for campaign launch, testing, and conversion-based iteration."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "2 Months",
+                    "label": "Focused Meta ads skill track"
+                },
+                {
+                    "value": "Creative + Funnel",
+                    "label": "Designed around targeting and performance growth"
+                }
+            ],
+            "cta": {
+                "button_text": "Join Meta Ads Program",
+                "batch_info": "Upcoming Meta ads cohort seats are now available"
+            }
+        }
+    },
+    {
+        "slug": "business-analytics",
+        "title": "Business Analytics",
+        "image": "/images/courses/business-analytics.svg",
+        "description": "Turn data into decision-making insights using reporting, dashboards, and practical business analysis methods.",
+        "duration": "4 Months",
+        "level": "Beginner to Intermediate",
+        "modules": [
+            "Data Interpretation",
+            "Business Dashboards",
+            "Reporting Systems",
+            "Insight Presentation"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Decision-focused data thinking",
+                    "description": "Learn how reporting, dashboards, and analysis support clearer business planning and smarter execution."
+                },
+                {
+                    "title": "Practical insight communication",
+                    "description": "Build confidence in presenting findings, structuring reports, and translating data into action."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "4 Months",
+                    "label": "Business analytics learning path"
+                },
+                {
+                    "value": "Data to Insight",
+                    "label": "Built around dashboards, reporting, and decision support"
+                }
+            ],
+            "cta": {
+                "button_text": "Explore Analytics Program",
+                "batch_info": "Admissions are open for the next analytics cohort"
+            }
+        }
+    },
+    {
+        "slug": "mobile-app-development",
+        "title": "Mobile App Development",
+        "image": "/images/courses/mobile-app-development.svg",
+        "description": "Build mobile applications with user-first experiences, strong architecture, and deployment workflows.",
+        "duration": "6 Months",
+        "level": "Intermediate",
+        "modules": [
+            "Mobile UI Systems",
+            "App Logic and Navigation",
+            "API Integration",
+            "App Deployment"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "End-to-end mobile product flow",
+                    "description": "Learn how interface design, app logic, data handling, and release workflows connect in mobile products."
+                },
+                {
+                    "title": "Build deployment-ready applications",
+                    "description": "Work through practical app structure and production thinking for stronger implementation confidence."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "6 Months",
+                    "label": "Comprehensive mobile app roadmap"
+                },
+                {
+                    "value": "UI to Release",
+                    "label": "Covers key layers of app development and delivery"
+                }
+            ],
+            "cta": {
+                "button_text": "Start Mobile App Program",
+                "batch_info": "The next mobile app development cohort is accepting applications"
+            }
+        }
+    }
+]
