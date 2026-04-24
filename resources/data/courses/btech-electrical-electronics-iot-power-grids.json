@@ -1,0 +1,44 @@
+{
+    "slug":  "btech-electrical-electronics-iot-power-grids",
+    "title":  "B.Tech Electrical \u0026 Electronics (IoT \u0026 Power Grids)",
+    "image":  "/images/courses/cyber-security.svg",
+    "description":  "Build practical understanding of IoT-enabled systems, power grid concepts, connected devices, and electrical control workflows.",
+    "duration":  "6 Months",
+    "level":  "Intermediate",
+    "modules":  [
+                    "IoT Device Foundations",
+                    "Electrical Systems and Controls",
+                    "Smart Grid Concepts",
+                    "Monitoring and Energy Data"
+                ],
+    "program_overview":  {
+                             "cta":  {
+                                         "batch_info":  "Admissions are now open for the next electrical systems and IoT cohort.",
+                                         "button_text":  "Join Electrical \u0026 IoT Program"
+                                     },
+                             "features":  [
+                                              {
+                                                  "description":  "Learn how connected devices, control systems, and sensor-based monitoring fit into practical electrical and electronics workflows.",
+                                                  "title":  "IoT-enabled electrical systems"
+                                              },
+                                              {
+                                                  "description":  "Build a grounded understanding of modern power systems, grid monitoring, and data-driven approaches to electrical infrastructure.",
+                                                  "title":  "Smart grid awareness"
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "6 Months",
+                                               "label":  "Intermediate track combining electrical systems with IoT applications"
+                                           },
+                                           {
+                                               "value":  "IoT + Power",
+                                               "label":  "Devices, controls, smart grids, and monitoring-based engineering exposure"
+                                           },
+                                           {
+                                               "value":  "Grid Ready",
+                                               "label":  "Combines electrical systems, IoT monitoring, and smart grid exposure"
+                                           }
+                                       ]
+                         }
+}

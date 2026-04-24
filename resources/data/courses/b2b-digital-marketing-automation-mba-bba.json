@@ -1,0 +1,44 @@
+{
+    "slug":  "b2b-digital-marketing-automation-mba-bba",
+    "title":  "B2B Digital Marketing \u0026 Automation (MBA/BBA)",
+    "image":  "/images/courses/digital-marketing.svg",
+    "description":  "Build modern B2B growth systems across funnels, content, lead journeys, campaign strategy, and automation workflows.",
+    "duration":  "4 Months",
+    "level":  "Beginner to Intermediate",
+    "modules":  [
+                    "B2B Marketing Strategy",
+                    "Lead Funnel Design",
+                    "Marketing Automation Workflows",
+                    "Campaign Performance Tracking"
+                ],
+    "program_overview":  {
+                             "cta":  {
+                                         "batch_info":  "Seats are now opening for the next B2B digital marketing and automation batch.",
+                                         "button_text":  "Apply for B2B Marketing Program"
+                                     },
+                             "features":  [
+                                              {
+                                                  "description":  "Understand how lead generation, nurture journeys, campaign planning, and conversion-focused messaging work together in B2B growth.",
+                                                  "title":  "B2B funnel strategy"
+                                              },
+                                              {
+                                                  "description":  "Build practical familiarity with workflow automation, follow-up systems, and performance tracking across modern digital campaigns.",
+                                                  "title":  "Automation-led execution"
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "4 Months",
+                                               "label":  "Focused pathway covering B2B campaigns, funnels, and automation"
+                                           },
+                                           {
+                                               "value":  "Funnels + Automation",
+                                               "label":  "Lead journeys, campaign systems, and measurable growth workflows"
+                                           },
+                                           {
+                                               "value":  "B2B Growth",
+                                               "label":  "Focused on lead generation, nurture systems, and campaign execution"
+                                           }
+                                       ]
+                         }
+}

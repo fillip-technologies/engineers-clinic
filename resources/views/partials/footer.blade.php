@@ -1,3 +1,17 @@
+@php
+    $footerPrograms = [
+        ['label' => 'UI/UX & Product Design Professional', 'slug' => 'ui-ux-product-design-professional'],
+        ['label' => 'Data Science & Analytics Expert', 'slug' => 'data-science-analytics-expert'],
+        ['label' => 'B2B Digital Marketing & Automation (MBA/BBA)', 'slug' => 'b2b-digital-marketing-automation-mba-bba'],
+        ['label' => 'AWS Cloud Solutions Architect', 'slug' => 'aws-cloud-solutions-architect'],
+        ['label' => 'B.Tech Civil Engineering (Smart City & BIM Infrastructure)', 'slug' => 'btech-civil-engineering-smart-city-bim-infrastructure'],
+        ['label' => 'B.Tech Mechanical Engineering (Digital Twin & Automation)', 'slug' => 'btech-mechanical-engineering-digital-twin-automation'],
+        ['label' => 'B.Tech Electrical & Electronics (IoT & Power Grids)', 'slug' => 'btech-electrical-electronics-iot-power-grids'],
+        ['label' => 'LLB & Corporate Law (Legal Tech & Tech Law)', 'slug' => 'llb-corporate-law-legal-tech-tech-law'],
+        ['label' => 'Mass Communication & Journalism (Digital Media & PR Tech)', 'slug' => 'mass-communication-journalism-digital-media-pr-tech'],
+    ];
+@endphp
+
 <footer class="relative bg-gradient-to-br from-[#022c22] via-[#064e3b] to-[#022c22] text-white {{ request()->is('login') ? 'mt-0' : 'mt-16' }}">
 
     <!-- 🌿 GREEN GLOW -->
@@ -9,7 +23,7 @@
     <div class="relative max-w-7xl mx-auto px-6 py-16">
 
         <!-- GRID -->
-        <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.1fr_1.8fr_1fr_1fr]">
 
             <!-- BRAND -->
             <div>
@@ -22,18 +36,18 @@
                 </p>
             </div>
 
-            <!-- PLATFORM -->
+            <!-- PROGRAMS -->
             <div>
                 <h3 class="text-xs font-semibold uppercase tracking-wider text-green-300">
-                    Platform
+                    Internship Programs
                 </h3>
 
-                <ul class="mt-4 space-y-2 text-sm text-green-200/80">
-                    <li><a href="#" class="hover:text-white transition">Internships</a></li>
-                    <li><a href="#" class="hover:text-white transition">AI Tools</a></li>
-                    <li><a href="#" class="hover:text-white transition">Tracks</a></li>
-                    <li><a href="#" class="hover:text-white transition">Dashboard</a></li>
-                </ul>
+                <div class="mt-4 grid gap-x-6 gap-y-2 text-sm text-green-200/80 sm:grid-cols-2">
+                    @foreach ($footerPrograms as $program)
+                        <a href="{{ route('course.detail', $program['slug']) }}"
+                            class="hover:text-white transition">{{ $program['label'] }}</a>
+                    @endforeach
+                </div>
             </div>
 
             <!-- COMPANY -->

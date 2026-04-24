@@ -1,0 +1,44 @@
+{
+    "slug":  "ui-ux-product-design-professional",
+    "title":  "UI/UX \u0026 Product Design Professional",
+    "image":  "/images/courses/ui-ux-design.svg",
+    "description":  "Design digital products with stronger user flows, product thinking, wireframes, and polished interface systems.",
+    "duration":  "4 Months",
+    "level":  "Beginner to Intermediate",
+    "modules":  [
+                    "Product Thinking Fundamentals",
+                    "User Research and Personas",
+                    "Wireframing and Prototyping",
+                    "Figma Design Systems"
+                ],
+    "program_overview":  {
+                             "cta":  {
+                                         "batch_info":  "The next product design cohort is opening soon with guided portfolio support.",
+                                         "button_text":  "Explore Product Design Program"
+                                     },
+                             "features":  [
+                                              {
+                                                  "description":  "Move from user research and problem framing into wireframes, interaction patterns, and polished interface decisions that reflect product thinking.",
+                                                  "title":  "Product design workflow mastery"
+                                              },
+                                              {
+                                                  "description":  "Learn how design systems, reusable components, and Figma workflows help teams ship more consistent digital products.",
+                                                  "title":  "System-based interface building"
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "4 Months",
+                                               "label":  "Structured path across UX research, flows, and interface design"
+                                           },
+                                           {
+                                               "value":  "UX + UI",
+                                               "label":  "User journeys, wireframes, prototypes, and visual systems"
+                                           },
+                                           {
+                                               "value":  "Portfolio Ready",
+                                               "label":  "Built to strengthen case studies and product presentation skills"
+                                           }
+                                       ]
+                         }
+}

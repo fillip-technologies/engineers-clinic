@@ -1,0 +1,44 @@
+{
+    "slug":  "data-science-analytics-expert",
+    "title":  "Data Science \u0026 Analytics Expert",
+    "image":  "/images/courses/business-analytics.svg",
+    "description":  "Turn data into decisions through analytics foundations, dashboards, storytelling, and practical business insights.",
+    "duration":  "5 Months",
+    "level":  "Beginner to Advanced",
+    "modules":  [
+                    "Data Analysis Foundations",
+                    "Dashboarding and Reporting",
+                    "Statistical Thinking",
+                    "Insight Communication"
+                ],
+    "program_overview":  {
+                             "cta":  {
+                                         "batch_info":  "Admissions are now live for the upcoming analytics-focused intake.",
+                                         "button_text":  "Join Data Science \u0026 Analytics Program"
+                                     },
+                             "features":  [
+                                              {
+                                                  "description":  "Build the ability to interpret raw business data, identify patterns, and turn analysis into recommendations that teams can act on.",
+                                                  "title":  "Data-to-decision thinking"
+                                              },
+                                              {
+                                                  "description":  "Work through practical reporting workflows, dashboard structures, and insight communication used in modern analytics roles.",
+                                                  "title":  "Reporting and dashboard execution"
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "5 Months",
+                                               "label":  "Applied roadmap for analytics, reporting, and business interpretation"
+                                           },
+                                           {
+                                               "value":  "Data to Insight",
+                                               "label":  "Analysis, storytelling, dashboards, and decision support skills"
+                                           },
+                                           {
+                                               "value":  "Analytics Ready",
+                                               "label":  "Covers reporting, dashboards, and insight communication workflows"
+                                           }
+                                       ]
+                         }
+}

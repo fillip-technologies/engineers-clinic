@@ -1,0 +1,44 @@
+{
+    "slug":  "llb-corporate-law-legal-tech-tech-law",
+    "title":  "LLB \u0026 Corporate Law (Legal Tech \u0026 Tech Law)",
+    "image":  "/images/courses/seo-search-engine-optimization.svg",
+    "description":  "Explore legal careers shaped by technology through corporate law basics, legal operations, compliance, and digital-era legal systems.",
+    "duration":  "4 Months",
+    "level":  "Beginner to Intermediate",
+    "modules":  [
+                    "Corporate Law Foundations",
+                    "Legal Research and Drafting",
+                    "Legal Tech Tools",
+                    "Compliance and Tech Policy"
+                ],
+    "program_overview":  {
+                             "cta":  {
+                                         "batch_info":  "The upcoming legal tech and corporate law intake is now open for enrollment.",
+                                         "button_text":  "Explore Legal Tech \u0026 Corporate Law Program"
+                                     },
+                             "features":  [
+                                              {
+                                                  "description":  "Understand how contracts, compliance, governance, and business law increasingly intersect with technology-driven environments.",
+                                                  "title":  "Corporate law in digital contexts"
+                                              },
+                                              {
+                                                  "description":  "Gain practical exposure to legal research, documentation workflows, and technology-enabled processes used in modern legal teams.",
+                                                  "title":  "Legal operations and tech tools"
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "4 Months",
+                                               "label":  "Focused legal pathway covering corporate practice and technology contexts"
+                                           },
+                                           {
+                                               "value":  "Law + Tech",
+                                               "label":  "Compliance, research, drafting, and digital legal operations"
+                                           },
+                                           {
+                                               "value":  "Legal Ops",
+                                               "label":  "Blends corporate law basics with legal tech and compliance workflows"
+                                           }
+                                       ]
+                         }
+}

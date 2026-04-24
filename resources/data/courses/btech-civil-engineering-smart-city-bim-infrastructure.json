@@ -1,0 +1,44 @@
+{
+    "slug":  "btech-civil-engineering-smart-city-bim-infrastructure",
+    "title":  "B.Tech Civil Engineering (Smart City \u0026 BIM Infrastructure)",
+    "image":  "/images/courses/business-analytics.svg",
+    "description":  "Prepare for future-ready civil engineering roles with BIM workflows, smart city planning, infrastructure coordination, and digital project systems.",
+    "duration":  "6 Months",
+    "level":  "Intermediate",
+    "modules":  [
+                    "BIM Fundamentals",
+                    "Smart City Planning Concepts",
+                    "Infrastructure Coordination",
+                    "Digital Project Management"
+                ],
+    "program_overview":  {
+                             "cta":  {
+                                         "batch_info":  "Applications are now open for the upcoming smart infrastructure and BIM batch.",
+                                         "button_text":  "Join Civil Engineering Smart Infrastructure Program"
+                                     },
+                             "features":  [
+                                              {
+                                                  "description":  "Understand how building information modeling supports coordination, planning accuracy, and execution visibility in modern civil projects.",
+                                                  "title":  "BIM-led infrastructure workflows"
+                                              },
+                                              {
+                                                  "description":  "Explore how digital planning, connected infrastructure, and data-backed urban systems are shaping future-ready civil engineering roles.",
+                                                  "title":  "Smart city systems context"
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "6 Months",
+                                               "label":  "Career-focused pathway for BIM, planning, and digital infrastructure"
+                                           },
+                                           {
+                                               "value":  "BIM + Smart Cities",
+                                               "label":  "Modeling, coordination, and urban systems thinking for infrastructure work"
+                                           },
+                                           {
+                                               "value":  "Infra Ready",
+                                               "label":  "Connects BIM planning with smart infrastructure thinking"
+                                           }
+                                       ]
+                         }
+}

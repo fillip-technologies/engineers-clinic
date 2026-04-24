@@ -3,7 +3,7 @@
 @section('content')
 <x-hero />
 <x-stat />
-<x-modules />
+<x-modules :courses="$courses" />
 <x-college-tie-up />
 <x-partners />
 <x-services />

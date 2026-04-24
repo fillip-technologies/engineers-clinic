@@ -2,95 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     protected array $courseFamilies = [
-        'full-stack' => [
-            'menu_group' => 'Computer Science & IT',
+        'ui-ux-product-design-professional' => [
+            'menu_group' => 'Design & Product',
             'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Build complete web products',
-            'career_path' => 'Frontend + backend engineering track',
+            'hero_badge' => 'Design product experiences end to end',
+            'career_path' => 'UI, UX, and product systems track',
         ],
-        'frontend-development' => [
-            'menu_group' => 'Computer Science & IT',
+        'data-science-analytics-expert' => [
+            'menu_group' => 'Data & Analytics',
             'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Build strong computing fundamentals',
-            'career_path' => 'Computer science and software foundations track',
+            'hero_badge' => 'Turn data into practical decisions',
+            'career_path' => 'Analytics, dashboards, and insight track',
         ],
-        'backend-development' => [
-            'menu_group' => 'Computer Science & IT',
+        'b2b-digital-marketing-automation-mba-bba' => [
+            'menu_group' => 'Business & Marketing',
             'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Build secure APIs and systems',
-            'career_path' => 'Server-side engineering track',
+            'hero_badge' => 'Build growth systems for B2B brands',
+            'career_path' => 'Digital funnels and automation track',
         ],
-        'ui-ux-design' => [
-            'menu_group' => 'Computer Science & IT',
+        'aws-cloud-solutions-architect' => [
+            'menu_group' => 'Cloud & Infrastructure',
             'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Shape product experiences end to end',
-            'career_path' => 'Product design and UX workflow track',
+            'hero_badge' => 'Architect and scale cloud systems',
+            'career_path' => 'AWS infrastructure and deployment track',
         ],
-        'graphic-design' => [
-            'menu_group' => 'Business & Management',
+        'btech-civil-engineering-smart-city-bim-infrastructure' => [
+            'menu_group' => 'Civil Engineering',
             'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Create strong brand visuals',
-            'career_path' => 'Creative design and branding track',
+            'hero_badge' => 'Plan smarter infrastructure systems',
+            'career_path' => 'BIM and smart city engineering track',
         ],
-        'cyber-security' => [
-            'menu_group' => 'Computer Science & IT',
+        'btech-mechanical-engineering-digital-twin-automation' => [
+            'menu_group' => 'Mechanical Engineering',
             'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Develop a security-first mindset',
-            'career_path' => 'Security analysis and audit track',
+            'hero_badge' => 'Connect machines with digital intelligence',
+            'career_path' => 'Automation and digital twin track',
         ],
-        'cloud-computing' => [
-            'menu_group' => 'Computer Science & IT',
+        'btech-electrical-electronics-iot-power-grids' => [
+            'menu_group' => 'Electrical & Electronics',
             'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Deploy and scale modern apps',
-            'career_path' => 'Infrastructure and cloud delivery track',
+            'hero_badge' => 'Work with IoT-enabled power systems',
+            'career_path' => 'Connected devices and smart grids track',
         ],
-        'digital-marketing' => [
-            'menu_group' => 'Business & Management',
+        'llb-corporate-law-legal-tech-tech-law' => [
+            'menu_group' => 'Law & Legal Tech',
             'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Drive measurable growth campaigns',
-            'career_path' => 'Performance marketing track',
+            'hero_badge' => 'Navigate legal work in digital contexts',
+            'career_path' => 'Corporate law and legal tech track',
         ],
-        'seo-search-engine-optimization' => [
-            'menu_group' => 'Business & Management',
+        'mass-communication-journalism-digital-media-pr-tech' => [
+            'menu_group' => 'Media & Communication',
             'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Improve organic search visibility',
-            'career_path' => 'SEO strategy and optimization track',
-        ],
-        'google-ads' => [
-            'menu_group' => 'Business & Management',
-            'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Launch paid search campaigns',
-            'career_path' => 'Paid acquisition and ads track',
-        ],
-        'meta-ads-facebook-instagram-ads' => [
-            'menu_group' => 'Business & Management',
-            'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Scale social performance campaigns',
-            'career_path' => 'Paid social and funnel track',
-        ],
-        'business-analytics' => [
-            'menu_group' => 'Business & Management',
-            'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Turn reporting into decisions',
-            'career_path' => 'Analytics and reporting track',
-        ],
-        'mobile-app-development' => [
-            'menu_group' => 'Computer Science & IT',
-            'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Ship mobile products with confidence',
-            'career_path' => 'Mobile engineering track',
+            'hero_badge' => 'Build digital-first media communication skills',
+            'career_path' => 'Journalism, media, and PR tech track',
         ],
     ];
 
     public function index()
     {
-        return view('pages.home');
+        $courses = $this->loadAllCourses();
+
+        return view('pages.home', compact('courses'));
     }
 
     public function login()
@@ -180,12 +157,59 @@ class HomeController extends Controller
 
     public function courseDetail($slug)
     {
-        $path = resource_path('data/courses.json');
-        $courses = json_decode(File::get($path), true) ?? [];
+        return $this->show($slug);
+    }
 
-        $course = collect($courses)->firstWhere('slug', $slug);
+    public function show($slug)
+    {
+        $course = $this->loadCourseBySlug($slug);
 
         abort_unless($course, 404);
+
+        return view('course.detail', compact('course'));
+    }
+
+    protected function loadAllCourses(): array
+    {
+        $courseFiles = glob(resource_path('data/courses/*.json')) ?: [];
+
+        $courses = [];
+
+        foreach ($courseFiles as $courseFile) {
+            $course = json_decode(file_get_contents($courseFile), true);
+
+            if (! is_array($course) || ! isset($course['slug'])) {
+                continue;
+            }
+
+            $courses[] = $this->attachCourseMeta($course);
+        }
+
+        usort($courses, fn (array $first, array $second) => strcmp($first['title'], $second['title']));
+
+        return $courses;
+    }
+
+    protected function loadCourseBySlug(string $slug): ?array
+    {
+        $courseFile = resource_path("data/courses/{$slug}.json");
+
+        if (! is_file($courseFile)) {
+            return null;
+        }
+
+        $course = json_decode(file_get_contents($courseFile), true);
+
+        if (! is_array($course)) {
+            return null;
+        }
+
+        return $this->attachCourseMeta($course);
+    }
+
+    protected function attachCourseMeta(array $course): array
+    {
+        $slug = $course['slug'] ?? '';
 
         $meta = $this->courseFamilies[$slug] ?? [
             'menu_group' => 'AI Remote Internships',
@@ -199,7 +223,7 @@ class HomeController extends Controller
         $course['hero_badge'] = $meta['hero_badge'];
         $course['career_path'] = $meta['career_path'];
 
-        return view('course.detail', compact('course'));
+        return $course;
     }
 
     public function about()

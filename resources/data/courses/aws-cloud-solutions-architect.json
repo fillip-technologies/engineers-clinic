@@ -1,0 +1,44 @@
+{
+    "slug":  "aws-cloud-solutions-architect",
+    "title":  "AWS Cloud Solutions Architect",
+    "image":  "/images/courses/cloud-computing.svg",
+    "description":  "Develop cloud architecture skills with AWS concepts, deployment pipelines, infrastructure planning, and scaling workflows.",
+    "duration":  "5 Months",
+    "level":  "Intermediate",
+    "modules":  [
+                    "AWS Cloud Foundations",
+                    "Infrastructure Design",
+                    "Deployment and Monitoring",
+                    "Scalability and Reliability"
+                ],
+    "program_overview":  {
+                             "cta":  {
+                                         "batch_info":  "Enrollment is now open for the next AWS solutions architecture cohort.",
+                                         "button_text":  "Explore AWS Cloud Architect Program"
+                                     },
+                             "features":  [
+                                              {
+                                                  "description":  "Learn how to structure cloud environments, map infrastructure decisions, and design systems that are reliable, scalable, and deployment-ready.",
+                                                  "title":  "Cloud architecture planning"
+                                              },
+                                              {
+                                                  "description":  "Gain practical understanding of provisioning, monitoring, and scaling application environments using cloud-first engineering patterns.",
+                                                  "title":  "AWS deployment workflows"
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "5 Months",
+                                               "label":  "Architecture-focused learning path for AWS and cloud delivery"
+                                           },
+                                           {
+                                               "value":  "AWS + Scale",
+                                               "label":  "Infrastructure design, deployment, monitoring, and reliability thinking"
+                                           },
+                                           {
+                                               "value":  "Cloud Ready",
+                                               "label":  "Built around AWS architecture, deployment, and reliability workflows"
+                                           }
+                                       ]
+                         }
+}

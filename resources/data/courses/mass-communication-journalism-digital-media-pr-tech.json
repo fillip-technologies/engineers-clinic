@@ -1,0 +1,44 @@
+{
+    "slug":  "mass-communication-journalism-digital-media-pr-tech",
+    "title":  "Mass Communication \u0026 Journalism (Digital Media \u0026 PR Tech)",
+    "image":  "/images/courses/graphic-design.svg",
+    "description":  "Build digital media and journalism skills through content strategy, PR workflows, storytelling, and audience-first communication systems.",
+    "duration":  "4 Months",
+    "level":  "Beginner to Intermediate",
+    "modules":  [
+                    "Digital Storytelling",
+                    "Media Planning and Publishing",
+                    "Public Relations Workflows",
+                    "Audience and Brand Communication"
+                ],
+    "program_overview":  {
+                             "cta":  {
+                                         "batch_info":  "Seats are now opening for the next digital media and PR technology cohort.",
+                                         "button_text":  "Join Digital Media \u0026 PR Tech Program"
+                                     },
+                             "features":  [
+                                              {
+                                                  "description":  "Develop the ability to shape stories, editorial content, and communication plans for digital-first audiences and platforms.",
+                                                  "title":  "Digital storytelling workflows"
+                                              },
+                                              {
+                                                  "description":  "Learn how public relations, publishing, campaign messaging, and audience engagement operate in modern media environments.",
+                                                  "title":  "PR and media execution"
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "4 Months",
+                                               "label":  "Industry-aligned pathway for media, journalism, and digital communication"
+                                           },
+                                           {
+                                               "value":  "Media + PR",
+                                               "label":  "Storytelling, publishing, public communication, and platform-ready execution"
+                                           },
+                                           {
+                                               "value":  "Digital First",
+                                               "label":  "Built for media execution across storytelling, publishing, and PR channels"
+                                           }
+                                       ]
+                         }
+}

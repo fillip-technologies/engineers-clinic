@@ -1,0 +1,44 @@
+{
+    "slug":  "btech-mechanical-engineering-digital-twin-automation",
+    "title":  "B.Tech Mechanical Engineering (Digital Twin \u0026 Automation)",
+    "image":  "/images/courses/backend-development.svg",
+    "description":  "Explore modern mechanical engineering through automation systems, digital twins, simulation thinking, and connected industrial workflows.",
+    "duration":  "6 Months",
+    "level":  "Intermediate",
+    "modules":  [
+                    "Automation Fundamentals",
+                    "Digital Twin Concepts",
+                    "Simulation and Monitoring",
+                    "Industrial Process Optimization"
+                ],
+    "program_overview":  {
+                             "cta":  {
+                                         "batch_info":  "The next digital twin and automation cohort is now accepting applications.",
+                                         "button_text":  "Explore Mechanical Automation Program"
+                                     },
+                             "features":  [
+                                              {
+                                                  "description":  "Build practical awareness of how sensors, controls, and automation workflows improve mechanical operations in modern industrial environments.",
+                                                  "title":  "Automation systems understanding"
+                                              },
+                                              {
+                                                  "description":  "Learn how simulation, system monitoring, and digital replicas support optimization, diagnostics, and process-level decision making.",
+                                                  "title":  "Digital twin application thinking"
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "6 Months",
+                                               "label":  "Mechanical pathway built around automation and Industry 4.0 concepts"
+                                           },
+                                           {
+                                               "value":  "Automation + Twin",
+                                               "label":  "Controls, simulation, monitoring, and connected process workflows"
+                                           },
+                                           {
+                                               "value":  "Industry 4.0",
+                                               "label":  "Links automation systems with simulation and digital twin concepts"
+                                           }
+                                       ]
+                         }
+}
