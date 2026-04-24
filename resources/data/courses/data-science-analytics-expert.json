@@ -40,5 +40,102 @@
                                                "label":  "Covers reporting, dashboards, and insight communication workflows"
                                            }
                                        ]
+                         },
+    "why_choose":  [
+                       {
+                           "description":  "Solve business-style analysis problems instead of only learning concepts in theory.",
+                           "title":  "Applied Dataset Work"
+                       },
+                       {
+                           "description":  "Each task trains you to turn raw data into charts, insight, and action.",
+                           "title":  "Decision-Focused Learning"
+                       },
+                       {
+                           "description":  "Build dashboards, analysis notebooks, and presentation-ready findings.",
+                           "title":  "Career-Ready Outputs"
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Ritika Jain",
+                             "text":  "The assignments felt close to real analyst work, especially the dashboard and insight tasks.",
+                             "role":  "Analytics Learner"
+                         },
+                         {
+                             "name":  "Kunal Sharma",
+                             "text":  "I finally understood how to move from spreadsheets and code to clear business recommendations.",
+                             "role":  "Beginner in Data"
                          }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Is coding mandatory for this course?",
+                    "answer":  "Basic coding helps, but the path is structured to ease you into practical analysis."
+                },
+                {
+                    "question":  "What kind of projects will I complete?",
+                    "answer":  "You will work on datasets, reporting tasks, dashboards, and insight-driven presentations."
+                },
+                {
+                    "question":  "Is this useful for analyst roles?",
+                    "answer":  "Yes. The course is designed around skills commonly expected in analytics and reporting roles."
+                }
+            ],
+    "curriculum":  [
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Dirty Dataset Cleanup",
+                                             "submission":  "Python (Pandas) code snippet.",
+                                             "assignment":  "Take a dirty CSV dataset with missing values and outliers, and clean it.",
+                                             "ai_review":  "The AI scans the code for specific functions like .dropna(), .fillna(), and data-type conversions to ensure the logic is structurally sound."
+                                         }
+                                     ],
+                           "title":  "Task 1: Data Cleaning \u0026 Pre-processing"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "3-Table SQL Join",
+                                             "submission":  "Raw SQL query.",
+                                             "assignment":  "Write an SQL query that joins three tables to find the highest-paying customers in a specific region.",
+                                             "ai_review":  "The AI executes the query against a virtual database. If the output matches the exact required monetary value, it is a Pass."
+                                         }
+                                     ],
+                           "title":  "Task 2: Relational Database Architecture"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Dynamic Sales Dashboard",
+                                             "submission":  "A Plotly or D3.js configuration object.",
+                                             "assignment":  "Create a dynamic sales dashboard chart.",
+                                             "ai_review":  "The AI checks the axes mapping, data labels, and whether the correct chart type such as Bar vs. Scatter was selected for the dataset."
+                                         }
+                                     ],
+                           "title":  "Task 3: Data Visualization Configuration"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "House Price Regression",
+                                             "submission":  "Python script using Scikit-Learn.",
+                                             "assignment":  "Train a basic Linear Regression model to predict house prices.",
+                                             "ai_review":  "The AI checks for the train_test_split function and evaluates whether the student properly avoided data leakage."
+                                         }
+                                     ],
+                           "title":  "Task 4: The Machine Learning Pipeline"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Live API Reporting Pipeline",
+                                             "submission":  "End-to-end Python automation script.",
+                                             "assignment":  "Build an automated script that pulls live API data, cleans it, runs a predictive model, and outputs a formatted summary report.",
+                                             "ai_review":  "The AI evaluates the full pipeline, checking API authentication, try/catch error handling, and the mathematical accuracy of the final model."
+                                         }
+                                     ],
+                           "title":  "Month 3 Capstone: The Automated Reporting Engine"
+                       }
+                   ]
 }

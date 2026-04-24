@@ -40,5 +40,91 @@
                                                "label":  "Blends corporate law basics with legal tech and compliance workflows"
                                            }
                                        ]
+                         },
+    "why_choose":  [
+                       {
+                           "description":  "Understand how legal work intersects with technology, digital products, and compliance shifts.",
+                           "title":  "Law with Modern Context"
+                       },
+                       {
+                           "description":  "Assignments move beyond theory into drafting, analysis, and tech-linked legal scenarios.",
+                           "title":  "Practical Legal Thinking"
+                       },
+                       {
+                           "description":  "Build familiarity with emerging legal tech and digital-era corporate law demands.",
+                           "title":  "Career-Relevant Positioning"
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Tanvi Deshpande",
+                             "text":  "The legal tech angle made the coursework feel much more aligned with where the profession is heading.",
+                             "role":  "Law Student"
+                         },
+                         {
+                             "name":  "Aditya Sethi",
+                             "text":  "I appreciated how the tasks connected compliance, contracts, and tech-focused legal issues.",
+                             "role":  "Corporate Law Learner"
                          }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Is this useful for students interested in corporate law careers?",
+                    "answer":  "Yes. It strengthens applied understanding of corporate and technology-linked legal work."
+                },
+                {
+                    "question":  "Does the course include legal tech exposure?",
+                    "answer":  "Yes. The track introduces digital workflows and technology-related legal contexts."
+                },
+                {
+                    "question":  "Will I practice legal analysis inside the program?",
+                    "answer":  "Yes. The assignments are designed around interpretation, drafting, and applied reasoning."
+                }
+            ],
+    "curriculum":  [
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "NDA Loophole Detection",
+                                             "submission":  "JSON or structured text mapping the specific clauses.",
+                                             "assignment":  "Review a deliberately flawed Non-Disclosure Agreement and identify the 3 loopholes.",
+                                             "ai_review":  "The AI uses strict NLP matching to verify whether the student caught critical issues such as the missing Survival Clause."
+                                         }
+                                     ],
+                           "title":  "Task 1: The AI Contract Auditor"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "SaaS Data Consent Form",
+                                             "submission":  "Text document.",
+                                             "assignment":  "Draft a data consent form for a new SaaS startup.",
+                                             "ai_review":  "The AI grades against a strict legal rubric, requiring exact phrases like Data Fiduciary, Explicit Consent, and Right to Erasure."
+                                         }
+                                     ],
+                           "title":  "Task 2: DPDP Act 2023 Implementation"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Typeform-to-Contract Workflow",
+                                             "submission":  "Webhook URL.",
+                                             "assignment":  "Build an automated workflow where filling out a Typeform instantly generates a customized PDF employment contract.",
+                                             "ai_review":  "The AI submits a mock Typeform and expects a perfectly formatted 200 OK payload containing the mapped variables."
+                                         }
+                                     ],
+                           "title":  "Task 3: Automated Legal Assembly"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "AI Company Legal Pack",
+                                             "submission":  "Full legal document set.",
+                                             "assignment":  "Submit a comprehensive Terms of Service, Privacy Policy, and an API licensing agreement for an AI company.",
+                                             "ai_review":  "The AI evaluates the documents for IP protection, indemnification strength, and API abuse limitations, acting as a Senior Corporate Counsel."
+                                         }
+                                     ],
+                           "title":  "Month 3 Capstone: The Corporate SaaS Legal Framework"
+                       }
+                   ]
 }

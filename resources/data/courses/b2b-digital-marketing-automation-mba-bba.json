@@ -40,5 +40,102 @@
                                                "label":  "Focused on lead generation, nurture systems, and campaign execution"
                                            }
                                        ]
+                         },
+    "why_choose":  [
+                       {
+                           "description":  "Learn funnels, positioning, and lead generation with B2B use cases in mind.",
+                           "title":  "Campaigns with Business Context"
+                       },
+                       {
+                           "description":  "Practice workflows that connect outreach, nurturing, and conversion tracking.",
+                           "title":  "Automation-Led Execution"
+                       },
+                       {
+                           "description":  "Assignments focus on messaging, CRM thinking, and growth decision-making.",
+                           "title":  "Performance-Oriented Tasks"
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Sakshi Arora",
+                             "text":  "This felt much more practical than theory classes because every task linked to real funnel thinking.",
+                             "role":  "MBA Student"
+                         },
+                         {
+                             "name":  "Dev Malhotra",
+                             "text":  "The automation modules helped me understand how leads move through a complete B2B journey.",
+                             "role":  "Marketing Beginner"
                          }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Is this only for marketing students?",
+                    "answer":  "No. It also suits founders, business students, and early-career learners exploring growth roles."
+                },
+                {
+                    "question":  "Will I learn automation concepts too?",
+                    "answer":  "Yes. The course includes workflow thinking across lead capture, nurturing, and follow-up."
+                },
+                {
+                    "question":  "Does the course cover strategy and execution?",
+                    "answer":  "Yes. You work on positioning, campaign structure, and practical conversion tasks together."
+                }
+            ],
+    "curriculum":  [
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Multi-Channel UTM Sheet",
+                                             "submission":  "A structured JSON or CSV of URLs.",
+                                             "assignment":  "Build a structured UTM parameter sheet for a multi-channel campaign across Email, LinkedIn, and Google Ads.",
+                                             "ai_review":  "The AI verifies that utm_source, utm_medium, and utm_campaign are correctly formatted with no spaces or broken characters."
+                                         }
+                                     ],
+                           "title":  "Task 1: The UTM Tracking Architecture"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "CRM Lead Scoring Matrix",
+                                             "submission":  "A logical flowchart or text matrix.",
+                                             "assignment":  "Design a CRM lead scoring matrix.",
+                                             "ai_review":  "The AI checks whether the student correctly applied weights to behavioral triggers such as +10 points for downloading a whitepaper and -5 points for unsubscribing."
+                                         }
+                                     ],
+                           "title":  "Task 2: Lead Scoring Logic"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "3-Step Email Drip",
+                                             "submission":  "Plain text emails.",
+                                             "assignment":  "Write a 3-step automated email drip campaign.",
+                                             "ai_review":  "The AI uses NLP to evaluate the copy for spam-trigger words, checks CTA clarity, and ensures personalized merge tags like {{First_Name}} are used correctly."
+                                         }
+                                     ],
+                           "title":  "Task 3: The Cold Outreach Sequence"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Lead Ad to Google Sheet Automation",
+                                             "submission":  "The Webhook URL.",
+                                             "assignment":  "Connect a Facebook Lead Ad to a Google Sheet using Make.com or Zapier.",
+                                             "ai_review":  "The AI fires a test payload to the student\u0027s webhook to see if it successfully catches the data and returns a 200 OK status."
+                                         }
+                                     ],
+                           "title":  "Task 4: The Webhook Zap"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Full Funnel Automation Blueprint",
+                                             "submission":  "Funnel logic document, wireframe, and tracking setup.",
+                                             "assignment":  "Map out a complete funnel from ad click to CRM conversion, including the automation logic, landing page wireframe, and tracking pixels.",
+                                             "ai_review":  "The AI evaluates the funnel logic, ensuring there are no dead ends in the customer journey and that GDPR or DPDP consent checkboxes are included in the data collection strategy."
+                                         }
+                                     ],
+                           "title":  "Month 3 Capstone: The Autonomous Acquisition Engine"
+                       }
+                   ]
 }
