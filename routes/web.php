@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
@@ -14,3 +15,4 @@ Route::get('/college/dashboard', function () {
 })->name('college.dashboard');
 Route::get('/dashboard/enrolled-courses', [HomeController::class, 'enrolledCourses'])->name('dashboard.enrolled-courses');
 Route::get('/course/{slug}', [HomeController::class, 'courseDetail'])->name('course.detail');
+
