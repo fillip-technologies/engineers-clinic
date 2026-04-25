@@ -1,0 +1,141 @@
+{
+    "slug":  "btech-mechanical-engineering-digital-twin-automation",
+    "title":  "B.Tech Mechanical Engineering (Digital Twin \u0026 Automation)",
+    "image":  "/images/courses/backend-development.svg",
+    "description":  "Explore modern mechanical engineering through automation systems, digital twins, simulation thinking, and connected industrial workflows.",
+    "duration":  "6 Months",
+    "level":  "Intermediate",
+    "modules":  [
+                    "Automation Fundamentals",
+                    "Digital Twin Concepts",
+                    "Simulation and Monitoring",
+                    "Industrial Process Optimization"
+                ],
+    "program_overview":  {
+                             "cta":  {
+                                         "batch_info":  "The next digital twin and automation cohort is now accepting applications.",
+                                         "button_text":  "Explore Mechanical Automation Program"
+                                     },
+                             "features":  [
+                                              {
+                                                  "description":  "Build practical awareness of how sensors, controls, and automation workflows improve mechanical operations in modern industrial environments.",
+                                                  "title":  "Automation systems understanding"
+                                              },
+                                              {
+                                                  "description":  "Learn how simulation, system monitoring, and digital replicas support optimization, diagnostics, and process-level decision making.",
+                                                  "title":  "Digital twin application thinking"
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "6 Months",
+                                               "label":  "Mechanical pathway built around automation and Industry 4.0 concepts"
+                                           },
+                                           {
+                                               "value":  "Automation + Twin",
+                                               "label":  "Controls, simulation, monitoring, and connected process workflows"
+                                           },
+                                           {
+                                               "value":  "Industry 4.0",
+                                               "label":  "Links automation systems with simulation and digital twin concepts"
+                                           }
+                                       ]
+                         },
+    "why_choose":  [
+                       {
+                           "description":  "See how automation logic and digital twin concepts extend core mechanical understanding.",
+                           "title":  "Mechanical Meets Digital"
+                       },
+                       {
+                           "description":  "Tasks are built around process flow, machine behavior, and monitoring use cases.",
+                           "title":  "System-Level Problem Solving"
+                       },
+                       {
+                           "description":  "The curriculum bridges mechanical fundamentals with Industry 4.0 style applications.",
+                           "title":  "Future-Facing Skill Track"
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Rohit Kulkarni",
+                             "text":  "The course made automation feel relevant to mechanical roles instead of something completely separate.",
+                             "role":  "Mechanical Student"
+                         },
+                         {
+                             "name":  "Ishita Sen",
+                             "text":  "I liked how digital twin concepts were explained through practical system behavior and use cases.",
+                             "role":  "Engineering Learner"
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need automation experience before starting?",
+                    "answer":  "No. The course introduces the concepts in a mechanical engineering friendly way."
+                },
+                {
+                    "question":  "What will I learn beyond theory?",
+                    "answer":  "You will work through system logic, monitoring ideas, and application-based mechanical tasks."
+                },
+                {
+                    "question":  "Is this aligned with Industry 4.0 trends?",
+                    "answer":  "Yes. The program is shaped around connected systems, automation, and digital modeling concepts."
+                }
+            ],
+    "curriculum":  [
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Engine Heat Dissipation Script",
+                                             "submission":  "Python script using NumPy/SciPy libraries.",
+                                             "assignment":  "Write a script to calculate heat dissipation on an engine block.",
+                                             "ai_review":  "The AI checks the syntax and evaluates whether the output values fall within the expected thermodynamic safety limits."
+                                         }
+                                     ],
+                           "title":  "Task 1: Thermal/Stress Analysis Scripting"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Toolpath Instruction Set",
+                                             "submission":  "Raw G-Code text.",
+                                             "assignment":  "Write the toolpath instructions to mill a specific geometric part.",
+                                             "ai_review":  "The AI reads the coordinates to ensure the toolpath does not exceed the physical bounding box, which would cause a machine crash."
+                                         }
+                                     ],
+                           "title":  "Task 2: CNC / 3D Printer G-Code Generation"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Steel Reorder Logic",
+                                             "submission":  "Make.com webhook or logic document.",
+                                             "assignment":  "Build a logic flow that automatically orders steel when inventory drops below 15%.",
+                                             "ai_review":  "The AI tests the inventory thresholds. If it triggers the order at 20% instead of 15%, it issues a correction."
+                                         }
+                                     ],
+                           "title":  "Task 3: Supply Chain Auto-Replenishment"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Turbine RPM + Vibration Parsing",
+                                             "submission":  "Data parsing script.",
+                                             "assignment":  "Parse live RPM and vibration data from a simulated turbine.",
+                                             "ai_review":  "The AI feeds dirty data into the script and checks whether the code successfully isolates the anomalies."
+                                         }
+                                     ],
+                           "title":  "Task 4: Digital Twin Data Parsing"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Robotic Line API + Halt Logic",
+                                             "submission":  "API logic flow document and automation design.",
+                                             "assignment":  "Design the API and logic flow for a robotic assembly line, including defect detection alerts and automated halting protocols.",
+                                             "ai_review":  "The AI pressure-tests the logic: if Robot A fails, does the student\u0027s script safely halt Robot B?"
+                                         }
+                                     ],
+                           "title":  "Month 3 Capstone: The Automated Assembly Line"
+                       }
+                   ]
+}

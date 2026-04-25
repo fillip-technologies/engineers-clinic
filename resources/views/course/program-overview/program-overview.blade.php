@@ -1,81 +1,69 @@
-<section class="bg-white py-20 px-6 sm:px-10 lg:px-14">
-    @php
-        $programOverviewImage = $data['image'] ?? ($course['image'] ?? '/images/college-tie-up-illustration.svg');
-        $programOverviewTitle = $course['title'] ?? ($data['title'] ?? 'Course');
-    @endphp
+@props(['course'])
 
-    <div class="mx-auto max-w-7xl grid lg:grid-cols-2 gap-12 items-center">
+@php
+$overview = $course['program_overview'] ?? [];
+$iconStyles = [
+    ['bg' => 'bg-brandSoft', 'text' => 'text-brand'],
+    ['bg' => 'bg-secondarySoft', 'text' => 'text-secondary'],
+    ['bg' => 'bg-bgMain', 'text' => 'text-textPrimary'],
+];
+$icons = [
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M7 20l4-16m2 16l4-16M5 9h14M4 15h14" />',
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6a3 3 0 016 0v6m-9 0h12a2 2 0 002-2V9a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.414-1.414A1 1 0 0013.586 5h-3.172a1 1 0 00-.707.293L8.293 6.707A1 1 0 017.586 7H6a2 2 0 00-2 2v6a2 2 0 002 2z" />',
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />',
+];
+@endphp
 
-        <!-- LEFT SIDE -->
-        <div>
-            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-primary mb-6">
-                Program Overview
+<section class="relative overflow-hidden bg-bgWhite px-6 py-20 sm:px-10 lg:px-14">
+    <div
+        class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(21,128,61,0.08),_transparent_24%),radial-gradient(circle_at_bottom_right,_rgba(249,115,22,0.08),_transparent_30%)]">
+    </div>
+
+    <div class="relative mx-auto max-w-6xl">
+        <div class="mx-auto max-w-3xl text-center">
+            <span
+                class="inline-flex items-center rounded-full border border-brand/10 bg-brandSoft px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-brand">
+                Outcomes
+            </span>
+            <h2 class="mt-5 text-3xl font-semibold leading-tight text-textPrimary sm:text-4xl">
+                What this program helps you build by the end
+            </h2>
+            <p class="mt-4 text-base leading-8 text-textSecondary">
+                Outcome-focused highlights designed to make the value of the program easy to understand at a glance.
             </p>
+        </div>
 
-            <div class="space-y-6">
-                @foreach ($data['features'] as $feature)
-                    <div class="flex items-start gap-4">
-                        
-                        <!-- ICON -->
-                        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
-                            <span class="text-primary text-lg">•</span>
+        <div class="mt-14 grid gap-6 md:grid-cols-3">
+            @foreach ($overview['stats'] ?? [] as $index => $stat)
+            @php
+            $style = $iconStyles[$index % count($iconStyles)];
+            $icon = $icons[$index % count($icons)];
+            @endphp
+            <article
+                class="group relative overflow-hidden rounded-[1.9rem] border border-borderLight bg-white p-7 shadow-[0_18px_45px_rgba(15,23,42,0.06)] transition duration-300 hover:-translate-y-1.5 hover:border-brand/20 hover:shadow-[0_26px_65px_rgba(15,23,42,0.1)]">
+                <div class="absolute inset-x-7 top-0 h-px bg-gradient-to-r from-brand/0 via-brand/35 to-secondary/0"></div>
+                <div class="flex items-start justify-between gap-5">
+                    <div class="min-w-0">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl {{ $style['bg'] }} {{ $style['text'] }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                {!! $icon !!}
+                            </svg>
                         </div>
-
-                        <!-- TEXT -->
-                        <div>
-                            <h3 class="text-base font-semibold text-gray-900">
-                                {{ $feature['title'] }}
-                            </h3>
-                            <p class="mt-1 text-sm text-gray-500">
-                                {{ $feature['description'] }}
-                            </p>
-                        </div>
-
+                        <p class="mt-6 text-2xl font-semibold text-textPrimary">
+                            {{ $stat['value'] ?? '' }}
+                        </p>
+                        <h3 class="mt-3 text-lg font-semibold leading-7 text-textPrimary">
+                            {{ $stat['label'] ?? '' }}
+                        </h3>
                     </div>
-                @endforeach
-            </div>
-
-            <!-- CTA -->
-            <div class="mt-10 flex flex-wrap items-center gap-6">
-                
-                <a href="{{ url('/login') }}"
-                   class="inline-flex items-center gap-2 rounded-full border border-red-500 px-5 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 transition">
-                    ↓ {{ $data['cta']['button_text'] }}
-                </a>
-
-                <p class="text-sm text-gray-600">
-                    {{ $data['cta']['batch_info'] }}
-                </p>
-
-            </div>
-        </div>
-
-        <!-- RIGHT SIDE -->
-        <div class="relative flex justify-center">
-
-            <!-- IMAGE -->
-            <img src="{{ $programOverviewImage }}"
-                 alt="{{ $programOverviewTitle }} overview illustration"
-                 class="w-[280px] rounded-2xl object-cover shadow-lg" />
-
-            <!-- STATS -->
-            @foreach ($data['stats'] as $index => $stat)
-                <div class="absolute 
-                    {{ $index == 0 ? '-top-6 left-0' : '' }}
-                    {{ $index == 1 ? 'bottom-6 left-0' : '' }}
-                    {{ $index == 2 ? '-top-6 right-0' : '' }}
-                    bg-white rounded-xl shadow-md px-4 py-3">
-
-                    <p class="text-blue-600 font-semibold text-lg">
-                        {{ $stat['value'] }}
-                    </p>
-                    <p class="text-xs text-gray-500">
-                        {{ $stat['label'] }}
-                    </p>
+                    <span
+                        class="inline-flex rounded-full border border-borderLight bg-bgMain px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-textMuted">
+                        Outcome
+                    </span>
                 </div>
+            </article>
             @endforeach
-
         </div>
-
     </div>
 </section>

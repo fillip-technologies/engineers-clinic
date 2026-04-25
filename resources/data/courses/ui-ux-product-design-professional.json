@@ -1,0 +1,141 @@
+{
+    "slug":  "ui-ux-product-design-professional",
+    "title":  "UI/UX \u0026 Product Design Professional",
+    "image":  "/images/courses/ui-ux-design.svg",
+    "description":  "Design digital products with stronger user flows, product thinking, wireframes, and polished interface systems.",
+    "duration":  "4 Months",
+    "level":  "Beginner to Intermediate",
+    "modules":  [
+                    "Product Thinking Fundamentals",
+                    "User Research and Personas",
+                    "Wireframing and Prototyping",
+                    "Figma Design Systems"
+                ],
+    "program_overview":  {
+                             "cta":  {
+                                         "batch_info":  "The next product design cohort is opening soon with guided portfolio support.",
+                                         "button_text":  "Explore Product Design Program"
+                                     },
+                             "features":  [
+                                              {
+                                                  "description":  "Move from user research and problem framing into wireframes, interaction patterns, and polished interface decisions that reflect product thinking.",
+                                                  "title":  "Product design workflow mastery"
+                                              },
+                                              {
+                                                  "description":  "Learn how design systems, reusable components, and Figma workflows help teams ship more consistent digital products.",
+                                                  "title":  "System-based interface building"
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "4 Months",
+                                               "label":  "Structured path across UX research, flows, and interface design"
+                                           },
+                                           {
+                                               "value":  "UX + UI",
+                                               "label":  "User journeys, wireframes, prototypes, and visual systems"
+                                           },
+                                           {
+                                               "value":  "Portfolio Ready",
+                                               "label":  "Built to strengthen case studies and product presentation skills"
+                                           }
+                                       ]
+                         },
+    "why_choose":  [
+                       {
+                           "description":  "Every module pushes toward case-study quality screens, flows, and presentation assets.",
+                           "title":  "Portfolio-First Workflow"
+                       },
+                       {
+                           "description":  "You learn how to connect user needs, business goals, and interface decisions.",
+                           "title":  "Product Thinking Built In"
+                       },
+                       {
+                           "description":  "Train on responsive layouts, systems, and developer-ready annotations.",
+                           "title":  "Figma-to-Handoff Practice"
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "text":  "I stopped guessing in Figma and started explaining my design choices with confidence.",
+                             "role":  "Aspiring Product Designer"
+                         },
+                         {
+                             "name":  "Neha Kapoor",
+                             "text":  "The capstone structure made my portfolio feel sharper and far more recruiter-ready.",
+                             "role":  "Design Student"
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need design experience before joining?",
+                    "answer":  "No. The track starts with UX basics and builds toward product-level execution."
+                },
+                {
+                    "question":  "Will I build portfolio projects inside the course?",
+                    "answer":  "Yes. Modules are designed to create artifacts you can refine into case studies."
+                },
+                {
+                    "question":  "Which tools are used in this program?",
+                    "answer":  "The workflow focuses on Figma, wireframing, prototyping, and design system practice."
+                }
+            ],
+    "curriculum":  [
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "UX Flow Mapping",
+                                             "submission":  "A Figma Prototype URL.",
+                                             "assignment":  "Map out the UX flow for a SaaS dashboard.",
+                                             "ai_review":  "The AI connects to the Figma API to check if the student used proper layer naming conventions, auto-layout protocols, and correct frame sizing."
+                                         }
+                                     ],
+                           "title":  "Task 1: The Wireframe Hierarchy"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Design Tokens System",
+                                             "submission":  "A JSON file of Design Tokens (or exported CSS variables).",
+                                             "assignment":  "Create a standardized color and typography system.",
+                                             "ai_review":  "The AI verifies WCAG color contrast ratios, consistent padding variables such as base-8 spacing, and responsive font sizing."
+                                         }
+                                     ],
+                           "title":  "Task 2: The Design System (Tokens)"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "State-Based Button Design",
+                                             "submission":  "Component CSS or Figma URL.",
+                                             "assignment":  "Design a primary button with Default, Hover, Active, and Disabled states.",
+                                             "ai_review":  "The AI scans for the presence of specific CSS pseudo-classes like :hover and :disabled, plus smooth transition logic."
+                                         }
+                                     ],
+                           "title":  "Task 3: Interactive Components"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Mobile UI to Code",
+                                             "submission":  "Raw HTML/CSS code.",
+                                             "assignment":  "Translate a mobile UI screen into structured HTML/Tailwind CSS.",
+                                             "ai_review":  "The AI checks for mobile-first media queries and semantic HTML tags such as nav, main, and footer."
+                                         }
+                                     ],
+                           "title":  "Task 4: The Developer Handover"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "3-Page SaaS Checkout Flow",
+                                             "submission":  "Interactive prototype link plus UX reasoning document.",
+                                             "assignment":  "Design a complete, 3-page SaaS checkout flow and submit the interactive prototype link along with a UX reasoning document.",
+                                             "ai_review":  "The AI reads the reasoning document, ensuring the student justifies design choices using terms like Friction Reduction and Conversion Rate Optimization while cross-referencing required Figma components."
+                                         }
+                                     ],
+                           "title":  "Month 3 Capstone: The Product Prototype"
+                       }
+                   ]
+}

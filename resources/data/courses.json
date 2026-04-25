@@ -1,521 +1,365 @@
 [
     {
-        "slug": "full-stack",
-        "title": "Full Stack Development",
-        "image": "/images/courses/full-stack-development.svg",
-        "description": "Learn frontend and backend with real-world projects",
-        "duration": "6 Months",
-        "level": "Beginner to Advanced",
-        "modules": [
-            "HTML, CSS, JavaScript",
-            "React.js",
-            "Node.js",
-            "MongoDB"
-        ],
-        "program_overview": {
-            "features": [
-                {
-                    "title": "Industry-ready learning path",
-                    "description": "Move from frontend basics to backend architecture with structured, project-led progression."
-                },
-                {
-                    "title": "Build complete applications",
-                    "description": "Learn how to connect interfaces, APIs, databases, and deployment workflows into one working system."
-                }
-            ],
-            "stats": [
-                {
-                    "value": "6 Months",
-                    "label": "Complete guided learning roadmap"
-                },
-                {
-                    "value": "4 Core Stacks",
-                    "label": "Frontend, backend, database, and deployment exposure"
-                }
-            ],
-            "cta": {
-                "button_text": "Start Full Stack Journey",
-                "batch_info": "Next cohort starts soon with guided enrollment support"
-            }
-        }
-    },
-    {
-        "slug": "frontend-development",
-        "title": "Computer Science",
-        "image": "/images/courses/frontend-development.svg",
-        "description": "Build strong computer science fundamentals with practical exposure to programming, problem solving, and software systems.",
-        "duration": "6 Months",
-        "level": "Beginner to Intermediate",
-        "modules": [
-            "Programming Fundamentals",
-            "Data Structures and Algorithms",
-            "Database Concepts",
-            "Software Development Basics"
-        ],
-        "program_overview": {
-            "features": [
-                {
-                    "title": "Core computing foundations",
-                    "description": "Develop confidence in logic, programming structure, and the essential concepts behind modern software systems."
-                },
-                {
-                    "title": "Practical problem-solving workflow",
-                    "description": "Practice how to approach technical challenges with structured thinking, coding exercises, and implementation-focused learning."
-                }
-            ],
-            "stats": [
-                {
-                    "value": "6 Months",
-                    "label": "Computer science foundation track"
-                },
-                {
-                    "value": "CS Core",
-                    "label": "Programming, algorithms, and systems thinking"
-                }
-            ],
-            "cta": {
-                "button_text": "Join Computer Science Program",
-                "batch_info": "Admissions are open for the upcoming computer science batch"
-            }
-        }
-    },
-    {
-        "slug": "backend-development",
-        "title": "Backend Development",
-        "image": "/images/courses/backend-development.svg",
-        "description": "Learn how to create secure APIs, manage databases, and build scalable server-side applications.",
-        "duration": "5 Months",
-        "level": "Intermediate",
-        "modules": [
-            "Node.js",
-            "REST API Development",
-            "Authentication and Security",
-            "Database Design"
-        ],
-        "program_overview": {
-            "features": [
-                {
-                    "title": "Server-side application design",
-                    "description": "Understand how data, APIs, authentication, and business logic work together in real systems."
-                },
-                {
-                    "title": "Scalable engineering practices",
-                    "description": "Learn architecture patterns and secure workflows used to support reliable production backends."
-                }
-            ],
-            "stats": [
-                {
-                    "value": "5 Months",
-                    "label": "Backend-focused roadmap"
-                },
-                {
-                    "value": "API + DB",
-                    "label": "Practical exposure to core backend systems"
-                }
-            ],
-            "cta": {
-                "button_text": "Apply for Backend Program",
-                "batch_info": "Admissions are open for the next backend learning track"
-            }
-        }
-    },
-    {
-        "slug": "ui-ux-design",
-        "title": "UI/UX Design",
+        "slug": "ui-ux-product-design-professiona",
+        "title": "UI/UX & Product Design Professional",
         "image": "/images/courses/ui-ux-design.svg",
-        "description": "Design intuitive digital products with strong user flows, wireframes, and polished interfaces.",
+        "description": "Design digital products with stronger user flows, product thinking, wireframes, and polished interface systems.",
         "duration": "4 Months",
         "level": "Beginner to Intermediate",
         "modules": [
-            "Design Fundamentals",
-            "Wireframing",
-            "Figma Workflows",
-            "User Experience Systems"
+            "Product Thinking Fundamentals",
+            "User Research and Personas",
+            "Wireframing and Prototyping",
+            "Figma Design Systems"
         ],
         "program_overview": {
             "features": [
                 {
-                    "title": "User-centered product thinking",
-                    "description": "Create interfaces that balance visual clarity, usability, and practical user journeys."
+                    "title": "User-centered design workflow",
+                    "description": "Learn how to move from research insights to wireframes, prototypes, and final interface decisions."
                 },
                 {
-                    "title": "End-to-end design workflow",
-                    "description": "Move from idea to wireframes, prototypes, and polished design systems with structured guidance."
+                    "title": "Product-ready visual systems",
+                    "description": "Build practical design systems that improve consistency, usability, and collaboration with development teams."
                 }
             ],
             "stats": [
                 {
                     "value": "4 Months",
-                    "label": "Complete design learning cycle"
+                    "label": "Focused product design learning track"
                 },
                 {
                     "value": "UX + UI",
-                    "label": "From user research to interface execution"
+                    "label": "Research, flows, design systems, and polished screens"
                 }
             ],
             "cta": {
-                "button_text": "Explore UI/UX Program",
-                "batch_info": "Upcoming design batch now accepting new learners"
+                "button_text": "Explore Product Design Program",
+                "batch_info": "Upcoming design cohort now open for guided enrollment"
             }
         }
     },
     {
-        "slug": "graphic-design",
-        "title": "Graphic Design",
-        "image": "/images/courses/graphic-design.svg",
-        "description": "Master visual communication, branding, and creative asset design for digital platforms.",
-        "duration": "3 Months",
-        "level": "Beginner",
-        "modules": [
-            "Brand Design Basics",
-            "Typography and Layouts",
-            "Social Media Creatives",
-            "Portfolio Projects"
-        ],
-        "program_overview": {
-            "features": [
-                {
-                    "title": "Visual communication basics",
-                    "description": "Learn how layout, typography, and branding come together to create strong digital assets."
-                },
-                {
-                    "title": "Creative portfolio development",
-                    "description": "Build project work that helps showcase your design style and practical execution skills."
-                }
-            ],
-            "stats": [
-                {
-                    "value": "3 Months",
-                    "label": "Focused creative skill program"
-                },
-                {
-                    "value": "Portfolio-led",
-                    "label": "Projects designed to strengthen presentation and output"
-                }
-            ],
-            "cta": {
-                "button_text": "Join Graphic Design Program",
-                "batch_info": "New creative batch opens with mentor-guided learning"
-            }
-        }
-    },
-    {
-        "slug": "cyber-security",
-        "title": "Cyber Security",
-        "image": "/images/courses/cyber-security.svg",
-        "description": "Understand security fundamentals, threat analysis, and practical defense workflows for modern systems.",
-        "duration": "6 Months",
-        "level": "Intermediate",
-        "modules": [
-            "Network Security",
-            "Threat Detection",
-            "Ethical Security Practices",
-            "Security Audits"
-        ],
-        "program_overview": {
-            "features": [
-                {
-                    "title": "Security-first technical mindset",
-                    "description": "Build strong fundamentals around defense workflows, threat awareness, and secure system thinking."
-                },
-                {
-                    "title": "Practical audit exposure",
-                    "description": "Learn how to review systems, identify risks, and understand real-world security improvement paths."
-                }
-            ],
-            "stats": [
-                {
-                    "value": "6 Months",
-                    "label": "Comprehensive security roadmap"
-                },
-                {
-                    "value": "Audit Ready",
-                    "label": "Focused on practical system review and awareness"
-                }
-            ],
-            "cta": {
-                "button_text": "Start Cyber Security Program",
-                "batch_info": "Security cohort applications are currently open"
-            }
-        }
-    },
-    {
-        "slug": "cloud-computing",
-        "title": "Cloud Computing",
-        "image": "/images/courses/cloud-computing.svg",
-        "description": "Build cloud-ready applications and learn deployment, infrastructure, and scalable system concepts.",
+        "slug": "data-science-analytics-expert",
+        "title": "Data Science & Analytics Expert",
+        "image": "/images/courses/business-analytics.svg",
+        "description": "Turn data into decisions through analytics foundations, dashboards, storytelling, and practical business insights.",
         "duration": "5 Months",
-        "level": "Intermediate",
+        "level": "Beginner to Advanced",
         "modules": [
-            "Cloud Foundations",
-            "Deployment Pipelines",
-            "Virtual Infrastructure",
-            "Monitoring and Scaling"
+            "Data Analysis Foundations",
+            "Dashboarding and Reporting",
+            "Statistical Thinking",
+            "Insight Communication"
         ],
         "program_overview": {
             "features": [
                 {
-                    "title": "Cloud deployment workflows",
-                    "description": "Understand how modern applications are deployed, scaled, monitored, and maintained in cloud environments."
+                    "title": "Decision-focused analytics learning",
+                    "description": "Understand how analysis, reporting, and business questions connect in real decision-making workflows."
                 },
                 {
-                    "title": "Infrastructure fundamentals",
-                    "description": "Develop confidence with cloud concepts that support resilient and scalable software delivery."
+                    "title": "Practical insight presentation",
+                    "description": "Develop confidence in building dashboards and explaining findings clearly to stakeholders."
                 }
             ],
             "stats": [
                 {
                     "value": "5 Months",
-                    "label": "Cloud-focused learning path"
-                },
-                {
-                    "value": "Deploy + Scale",
-                    "label": "Practical exposure to modern infrastructure concepts"
-                }
-            ],
-            "cta": {
-                "button_text": "Explore Cloud Program",
-                "batch_info": "Enrollment is open for the upcoming cloud computing track"
-            }
-        }
-    },
-    {
-        "slug": "digital-marketing",
-        "title": "Digital Marketing",
-        "image": "/images/courses/digital-marketing.svg",
-        "description": "Learn modern digital growth strategies across campaigns, content, and performance channels.",
-        "duration": "4 Months",
-        "level": "Beginner to Intermediate",
-        "modules": [
-            "Marketing Strategy",
-            "Content Planning",
-            "Campaign Execution",
-            "Performance Tracking"
-        ],
-        "program_overview": {
-            "features": [
-                {
-                    "title": "Growth-focused campaign learning",
-                    "description": "Understand how digital strategies, content planning, and channel execution work together to drive results."
-                },
-                {
-                    "title": "Performance-led marketing structure",
-                    "description": "Build practical confidence with campaign workflows, reporting, and optimization thinking."
-                }
-            ],
-            "stats": [
-                {
-                    "value": "4 Months",
-                    "label": "Modern marketing skill track"
-                },
-                {
-                    "value": "Strategy + Execution",
-                    "label": "Balanced learning across planning and performance"
-                }
-            ],
-            "cta": {
-                "button_text": "Join Digital Marketing Program",
-                "batch_info": "Upcoming digital marketing batch now open"
-            }
-        }
-    },
-    {
-        "slug": "seo-search-engine-optimization",
-        "title": "SEO (Search Engine Optimization)",
-        "image": "/images/courses/seo-search-engine-optimization.svg",
-        "description": "Improve search visibility with technical SEO, on-page optimization, and content ranking strategies.",
-        "duration": "3 Months",
-        "level": "Beginner to Intermediate",
-        "modules": [
-            "Keyword Research",
-            "On-Page SEO",
-            "Technical SEO",
-            "Analytics and Reporting"
-        ],
-        "program_overview": {
-            "features": [
-                {
-                    "title": "Search visibility fundamentals",
-                    "description": "Learn how on-page, technical, and content-focused SEO practices improve discoverability and ranking."
-                },
-                {
-                    "title": "Practical optimization methods",
-                    "description": "Build a clear workflow for keyword strategy, implementation, and performance review."
-                }
-            ],
-            "stats": [
-                {
-                    "value": "3 Months",
-                    "label": "Focused SEO growth track"
-                },
-                {
-                    "value": "Search Ready",
-                    "label": "Practical optimization systems and reporting exposure"
-                }
-            ],
-            "cta": {
-                "button_text": "Apply for SEO Program",
-                "batch_info": "New SEO batch is open for early applications"
-            }
-        }
-    },
-    {
-        "slug": "google-ads",
-        "title": "Google Ads",
-        "image": "/images/courses/google-ads.svg",
-        "description": "Create paid search campaigns that drive measurable traffic, leads, and performance growth.",
-        "duration": "2 Months",
-        "level": "Beginner to Intermediate",
-        "modules": [
-            "Campaign Setup",
-            "Keyword Strategy",
-            "Ad Optimization",
-            "Conversion Tracking"
-        ],
-        "program_overview": {
-            "features": [
-                {
-                    "title": "Paid search campaign structure",
-                    "description": "Understand how to build, manage, and optimize campaigns with stronger targeting and intent alignment."
-                },
-                {
-                    "title": "Conversion-focused performance learning",
-                    "description": "Learn how to connect campaign setup with meaningful reporting and lead generation goals."
-                }
-            ],
-            "stats": [
-                {
-                    "value": "2 Months",
-                    "label": "Fast-track Google Ads program"
-                },
-                {
-                    "value": "Campaign Driven",
-                    "label": "Focused on setup, optimization, and measurable outcomes"
-                }
-            ],
-            "cta": {
-                "button_text": "Start Google Ads Program",
-                "batch_info": "Apply now for the next short-format paid search batch"
-            }
-        }
-    },
-    {
-        "slug": "meta-ads-facebook-instagram-ads",
-        "title": "Meta Ads (Facebook/Instagram Ads)",
-        "image": "/images/courses/meta-ads-facebook-instagram-ads.svg",
-        "description": "Launch and optimize ad campaigns across Meta platforms with audience targeting and creative strategy.",
-        "duration": "2 Months",
-        "level": "Beginner to Intermediate",
-        "modules": [
-            "Audience Targeting",
-            "Creative Ad Strategy",
-            "Campaign Optimization",
-            "Lead Generation Funnels"
-        ],
-        "program_overview": {
-            "features": [
-                {
-                    "title": "Audience and creative targeting",
-                    "description": "Learn how campaign success improves when audience intent, creative direction, and optimization align."
-                },
-                {
-                    "title": "Lead-focused ad workflows",
-                    "description": "Understand practical methods for campaign launch, testing, and conversion-based iteration."
-                }
-            ],
-            "stats": [
-                {
-                    "value": "2 Months",
-                    "label": "Focused Meta ads skill track"
-                },
-                {
-                    "value": "Creative + Funnel",
-                    "label": "Designed around targeting and performance growth"
-                }
-            ],
-            "cta": {
-                "button_text": "Join Meta Ads Program",
-                "batch_info": "Upcoming Meta ads cohort seats are now available"
-            }
-        }
-    },
-    {
-        "slug": "business-analytics",
-        "title": "Business Analytics",
-        "image": "/images/courses/business-analytics.svg",
-        "description": "Turn data into decision-making insights using reporting, dashboards, and practical business analysis methods.",
-        "duration": "4 Months",
-        "level": "Beginner to Intermediate",
-        "modules": [
-            "Data Interpretation",
-            "Business Dashboards",
-            "Reporting Systems",
-            "Insight Presentation"
-        ],
-        "program_overview": {
-            "features": [
-                {
-                    "title": "Decision-focused data thinking",
-                    "description": "Learn how reporting, dashboards, and analysis support clearer business planning and smarter execution."
-                },
-                {
-                    "title": "Practical insight communication",
-                    "description": "Build confidence in presenting findings, structuring reports, and translating data into action."
-                }
-            ],
-            "stats": [
-                {
-                    "value": "4 Months",
-                    "label": "Business analytics learning path"
+                    "label": "Applied analytics and data science path"
                 },
                 {
                     "value": "Data to Insight",
-                    "label": "Built around dashboards, reporting, and decision support"
+                    "label": "Analysis, dashboards, reporting, and business interpretation"
                 }
             ],
             "cta": {
-                "button_text": "Explore Analytics Program",
-                "batch_info": "Admissions are open for the next analytics cohort"
+                "button_text": "Join Data Science & Analytics Program",
+                "batch_info": "Admissions are open for the next analytics-focused cohort"
             }
         }
     },
     {
-        "slug": "mobile-app-development",
-        "title": "Mobile App Development",
-        "image": "/images/courses/mobile-app-development.svg",
-        "description": "Build mobile applications with user-first experiences, strong architecture, and deployment workflows.",
-        "duration": "6 Months",
-        "level": "Intermediate",
+        "slug": "b2b-digital-marketing-automation-mba-bba",
+        "title": "B2B Digital Marketing & Automation (MBA/BBA)",
+        "image": "/images/courses/digital-marketing.svg",
+        "description": "Build modern B2B growth systems across funnels, content, lead journeys, campaign strategy, and automation workflows.",
+        "duration": "4 Months",
+        "level": "Beginner to Intermediate",
         "modules": [
-            "Mobile UI Systems",
-            "App Logic and Navigation",
-            "API Integration",
-            "App Deployment"
+            "B2B Marketing Strategy",
+            "Lead Funnel Design",
+            "Marketing Automation Workflows",
+            "Campaign Performance Tracking"
         ],
         "program_overview": {
             "features": [
                 {
-                    "title": "End-to-end mobile product flow",
-                    "description": "Learn how interface design, app logic, data handling, and release workflows connect in mobile products."
+                    "title": "B2B growth-oriented campaign thinking",
+                    "description": "Learn how digital channels, content, offers, and lead nurturing work together to generate business outcomes."
                 },
                 {
-                    "title": "Build deployment-ready applications",
-                    "description": "Work through practical app structure and production thinking for stronger implementation confidence."
+                    "title": "Automation-led execution",
+                    "description": "Understand practical systems for lead capture, follow-up sequences, and marketing workflow optimization."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "4 Months",
+                    "label": "B2B marketing and automation roadmap"
+                },
+                {
+                    "value": "Strategy + Funnels",
+                    "label": "Built around lead generation and automation systems"
+                },
+                {
+                    "value": "Strategy + Funnels",
+                    "label": "Built around lead generation and automation systems"
+                }
+            ],
+            "cta": {
+                "button_text": "Apply for B2B Marketing Program",
+                "batch_info": "New B2B digital marketing batch is currently accepting applications"
+            }
+        }
+    },
+    {
+        "slug": "aws-cloud-solutions-architect",
+        "title": "AWS Cloud Solutions Architect",
+        "image": "/images/courses/cloud-computing.svg",
+        "description": "Develop cloud architecture skills with AWS concepts, deployment pipelines, infrastructure planning, and scaling workflows.",
+        "duration": "5 Months",
+        "level": "Intermediate",
+        "modules": [
+            "AWS Cloud Foundations",
+            "Infrastructure Design",
+            "Deployment and Monitoring",
+            "Scalability and Reliability"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Cloud architecture fundamentals",
+                    "description": "Understand how modern applications are structured, deployed, and managed across scalable cloud environments."
+                },
+                {
+                    "title": "Implementation-ready infrastructure thinking",
+                    "description": "Build confidence in planning resilient deployments, monitoring systems, and cloud-based delivery workflows."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "5 Months",
+                    "label": "AWS-focused architecture learning path"
+                },
+                {
+                    "value": "Deploy + Scale",
+                    "label": "Architecture, operations, reliability, and cloud delivery"
+                }
+            ],
+            "cta": {
+                "button_text": "Explore AWS Cloud Architect Program",
+                "batch_info": "Enrollment is open for the upcoming AWS cloud solutions cohort"
+            }
+        }
+    },
+    {
+        "slug": "btech-civil-engineering-smart-city-bim-infrastructure",
+        "title": "B.Tech Civil Engineering (Smart City & BIM Infrastructure)",
+        "image": "/images/courses/business-analytics.svg",
+        "description": "Prepare for future-ready civil engineering roles with BIM workflows, smart city planning, infrastructure coordination, and digital project systems.",
+        "duration": "6 Months",
+        "level": "Intermediate",
+        "modules": [
+            "BIM Fundamentals",
+            "Smart City Planning Concepts",
+            "Infrastructure Coordination",
+            "Digital Project Management"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Digital-first civil engineering exposure",
+                    "description": "Learn how BIM and infrastructure data improve planning, coordination, and execution in modern civil projects."
+                },
+                {
+                    "title": "Urban systems and smart infrastructure context",
+                    "description": "Build understanding of how connected planning and digital tools support future-ready city development."
                 }
             ],
             "stats": [
                 {
                     "value": "6 Months",
-                    "label": "Comprehensive mobile app roadmap"
+                    "label": "Civil engineering digital transformation track"
                 },
                 {
-                    "value": "UI to Release",
-                    "label": "Covers key layers of app development and delivery"
+                    "value": "BIM + Smart Cities",
+                    "label": "Planning, modeling, coordination, and infrastructure systems"
                 }
             ],
             "cta": {
-                "button_text": "Start Mobile App Program",
-                "batch_info": "The next mobile app development cohort is accepting applications"
+                "button_text": "Join Civil Engineering Smart Infrastructure Program",
+                "batch_info": "Admissions are open for the next civil engineering innovation batch"
+            }
+        }
+    },
+    {
+        "slug": "btech-mechanical-engineering-digital-twin-automation",
+        "title": "B.Tech Mechanical Engineering (Digital Twin & Automation)",
+        "image": "/images/courses/backend-development.svg",
+        "description": "Explore modern mechanical engineering through automation systems, digital twins, simulation thinking, and connected industrial workflows.",
+        "duration": "6 Months",
+        "level": "Intermediate",
+        "modules": [
+            "Automation Fundamentals",
+            "Digital Twin Concepts",
+            "Simulation and Monitoring",
+            "Industrial Process Optimization"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Mechanical systems with digital intelligence",
+                    "description": "Understand how automation, simulation, and connected monitoring improve modern mechanical operations."
+                },
+                {
+                    "title": "Industry 4.0 aligned workflow",
+                    "description": "Gain practical awareness of digital twins and data-driven optimization in manufacturing and engineering environments."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "6 Months",
+                    "label": "Mechanical engineering future-tech pathway"
+                },
+                {
+                    "value": "Automation + Digital Twin",
+                    "label": "Simulation, monitoring, and process optimization exposure"
+                }
+            ],
+            "cta": {
+                "button_text": "Explore Mechanical Automation Program",
+                "batch_info": "Next mechanical engineering digital systems batch is now open"
+            }
+        }
+    },
+    {
+        "slug": "btech-electrical-electronics-iot-power-grids",
+        "title": "B.Tech Electrical & Electronics (IoT & Power Grids)",
+        "image": "/images/courses/cyber-security.svg",
+        "description": "Build practical understanding of IoT-enabled systems, power grid concepts, connected devices, and electrical control workflows.",
+        "duration": "6 Months",
+        "level": "Intermediate",
+        "modules": [
+            "IoT Device Foundations",
+            "Electrical Systems and Controls",
+            "Smart Grid Concepts",
+            "Monitoring and Energy Data"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Connected electrical systems understanding",
+                    "description": "Learn how devices, sensors, control logic, and monitoring work together in modern electrical environments."
+                },
+                {
+                    "title": "Power grid and smart infrastructure awareness",
+                    "description": "Develop practical familiarity with evolving grid systems and IoT-enabled electrical applications."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "6 Months",
+                    "label": "Electrical engineering connected-systems track"
+                },
+                {
+                    "value": "IoT + Power",
+                    "label": "Sensors, monitoring, control systems, and grid concepts"
+                }
+            ],
+            "cta": {
+                "button_text": "Join Electrical & IoT Program",
+                "batch_info": "Applications are open for the upcoming electrical and IoT cohort"
+            }
+        }
+    },
+    {
+        "slug": "llb-corporate-law-legal-tech-tech-law",
+        "title": "LLB & Corporate Law (Legal Tech & Tech Law)",
+        "image": "/images/courses/seo-search-engine-optimization.svg",
+        "description": "Explore legal careers shaped by technology through corporate law basics, legal operations, compliance, and digital-era legal systems.",
+        "duration": "4 Months",
+        "level": "Beginner to Intermediate",
+        "modules": [
+            "Corporate Law Foundations",
+            "Legal Research and Drafting",
+            "Legal Tech Tools",
+            "Compliance and Tech Policy"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Legal work in technology-led contexts",
+                    "description": "Understand how contracts, compliance, research, and digital processes are evolving with legal technology."
+                },
+                {
+                    "title": "Practical exposure to legal operations",
+                    "description": "Build familiarity with workflows that support corporate legal teams, documentation, and regulatory awareness."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "4 Months",
+                    "label": "Corporate law and legal tech pathway"
+                },
+                {
+                    "value": "Law + Technology",
+                    "label": "Research, compliance, drafting, and digital legal systems"
+                }
+            ],
+            "cta": {
+                "button_text": "Explore Legal Tech & Corporate Law Program",
+                "batch_info": "Upcoming legal technology batch is now accepting learners"
+            }
+        }
+    },
+    {
+        "slug": "mass-communication-journalism-digital-media-pr-tech",
+        "title": "Mass Communication & Journalism (Digital Media & PR Tech)",
+        "image": "/images/courses/graphic-design.svg",
+        "description": "Build digital media and journalism skills through content strategy, PR workflows, storytelling, and audience-first communication systems.",
+        "duration": "4 Months",
+        "level": "Beginner to Intermediate",
+        "modules": [
+            "Digital Storytelling",
+            "Media Planning and Publishing",
+            "Public Relations Workflows",
+            "Audience and Brand Communication"
+        ],
+        "program_overview": {
+            "features": [
+                {
+                    "title": "Contemporary media communication track",
+                    "description": "Learn how journalism, brand storytelling, PR coordination, and digital publishing now intersect."
+                },
+                {
+                    "title": "Execution-ready content workflow",
+                    "description": "Develop confidence in planning stories, campaigns, and public communication for digital-first platforms."
+                }
+            ],
+            "stats": [
+                {
+                    "value": "4 Months",
+                    "label": "Digital media and PR technology pathway"
+                },
+                {
+                    "value": "Media + PR",
+                    "label": "Storytelling, public communication, and platform-ready execution"
+                }
+            ],
+            "cta": {
+                "button_text": "Join Digital Media & PR Tech Program",
+                "batch_info": "New journalism and media-tech cohort is open for enrollment"
             }
         }
     }

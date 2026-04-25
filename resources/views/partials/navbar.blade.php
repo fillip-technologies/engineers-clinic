@@ -1,4 +1,18 @@
-<header class="w-full bg-bgMain" x-data="{ mobileOpen: false, internshipOpen: false, mobileInternshipOpen: false }">
+@php
+    $internshipPrograms = [
+        ['label' => 'UI/UX & Product Design Professional', 'slug' => 'ui-ux-product-design-professional'],
+        ['label' => 'Data Science & Analytics Expert', 'slug' => 'data-science-analytics-expert'],
+        ['label' => 'B2B Digital Marketing & Automation (MBA/BBA)', 'slug' => 'b2b-digital-marketing-automation-mba-bba'],
+        ['label' => 'AWS Cloud Solutions Architect', 'slug' => 'aws-cloud-solutions-architect'],
+        ['label' => 'B.Tech Civil Engineering (Smart City & BIM Infrastructure)', 'slug' => 'btech-civil-engineering-smart-city-bim-infrastructure'],
+        ['label' => 'B.Tech Mechanical Engineering (Digital Twin & Automation)', 'slug' => 'btech-mechanical-engineering-digital-twin-automation'],
+        ['label' => 'B.Tech Electrical & Electronics (IoT & Power Grids)', 'slug' => 'btech-electrical-electronics-iot-power-grids'],
+        ['label' => 'LLB & Corporate Law (Legal Tech & Tech Law)', 'slug' => 'llb-corporate-law-legal-tech-tech-law'],
+        ['label' => 'Mass Communication & Journalism (Digital Media & PR Tech)', 'slug' => 'mass-communication-journalism-digital-media-pr-tech'],
+    ];
+@endphp
+
+<header class="w-full bg-bgMain" x-data="{ mobileOpen: false, mobileInternshipOpen: false }">
 
     <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
 
@@ -12,45 +26,7 @@
                 Home
             </a>
 
-            <div class="relative" @mouseenter="internshipOpen = true" @mouseleave="internshipOpen = false">
-                <button type="button"
-                    class="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-textSecondary transition hover:bg-bgWhite"
-                    @click="internshipOpen = !internshipOpen">
-                    <span>Internship</span>
-                    <svg class="h-4 w-4 transition" :class="internshipOpen ? 'rotate-180' : ''" viewBox="0 0 20 20"
-                        fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd"
-                            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.51a.75.75 0 01-1.08 0l-4.25-4.51a.75.75 0 01.02-1.06z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </button>
-
-                <div x-show="internshipOpen" x-cloak x-transition
-                    class="absolute left-0 top-full z-50 mt-3 w-[26rem] rounded-3xl border border-borderLight bg-white p-5 shadow-2xl shadow-glowGreen/10">
-                    <div class="grid gap-5 sm:grid-cols-2">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-brand">AI Remote Internships</p>
-                            <p class="mt-1 text-xs text-textMuted">Our Programs</p>
-                            <div class="mt-3 space-y-2">
-                                <a href="#" class="block rounded-2xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">Computer Science & IT</a>
-                                <a href="#" class="block rounded-2xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">Core Engineering (Mechanical, Civil)</a>
-                                <a href="#" class="block rounded-2xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">Business & Management</a>
-                                <a href="#" class="block rounded-2xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">Law & Humanities</a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-secondary">Corporate Internships</p>
-                            <p class="mt-1 text-xs text-textMuted">Job Board</p>
-                            <div class="mt-3 space-y-2">
-                                <a href="#" class="block rounded-2xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">Browse by Branch</a>
-                                <a href="#" class="block rounded-2xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">Browse by Location / Remote</a>
-                                <a href="#" class="block rounded-2xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">Pre-Placement Offers (PPO)</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <x-mega-menu />
 
             <a href="#"
                 class="rounded-full px-4 py-2 text-sm font-medium text-textSecondary transition hover:bg-bgWhite">
@@ -117,20 +93,10 @@
                         <p class="text-xs font-semibold uppercase tracking-[0.18em] text-brand">AI Remote Internships</p>
                         <p class="mt-1 text-xs text-textMuted">Our Programs</p>
                         <div class="mt-3 space-y-1">
-                            <a href="#" class="block rounded-xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">Computer Science & IT</a>
-                            <a href="#" class="block rounded-xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">Core Engineering (Mechanical, Civil)</a>
-                            <a href="#" class="block rounded-xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">Business & Management</a>
-                            <a href="#" class="block rounded-xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">Law & Humanities</a>
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-secondary">Corporate Internships</p>
-                        <p class="mt-1 text-xs text-textMuted">Job Board</p>
-                        <div class="mt-3 space-y-1">
-                            <a href="#" class="block rounded-xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">Browse by Branch</a>
-                            <a href="#" class="block rounded-xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">Browse by Location / Remote</a>
-                            <a href="#" class="block rounded-xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">Pre-Placement Offers (PPO)</a>
+                            @foreach ($internshipPrograms as $program)
+                                <a href="{{ route('course.detail', $program['slug']) }}"
+                                    class="block rounded-xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">{{ $program['label'] }}</a>
+                            @endforeach
                         </div>
                     </div>
                 </div>

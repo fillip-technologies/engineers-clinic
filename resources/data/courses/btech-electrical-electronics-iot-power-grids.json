@@ -1,0 +1,130 @@
+{
+    "slug":  "btech-electrical-electronics-iot-power-grids",
+    "title":  "B.Tech Electrical \u0026 Electronics (IoT \u0026 Power Grids)",
+    "image":  "/images/courses/cyber-security.svg",
+    "description":  "Build practical understanding of IoT-enabled systems, power grid concepts, connected devices, and electrical control workflows.",
+    "duration":  "6 Months",
+    "level":  "Intermediate",
+    "modules":  [
+                    "IoT Device Foundations",
+                    "Electrical Systems and Controls",
+                    "Smart Grid Concepts",
+                    "Monitoring and Energy Data"
+                ],
+    "program_overview":  {
+                             "cta":  {
+                                         "batch_info":  "Admissions are now open for the next electrical systems and IoT cohort.",
+                                         "button_text":  "Join Electrical \u0026 IoT Program"
+                                     },
+                             "features":  [
+                                              {
+                                                  "description":  "Learn how connected devices, control systems, and sensor-based monitoring fit into practical electrical and electronics workflows.",
+                                                  "title":  "IoT-enabled electrical systems"
+                                              },
+                                              {
+                                                  "description":  "Build a grounded understanding of modern power systems, grid monitoring, and data-driven approaches to electrical infrastructure.",
+                                                  "title":  "Smart grid awareness"
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "6 Months",
+                                               "label":  "Intermediate track combining electrical systems with IoT applications"
+                                           },
+                                           {
+                                               "value":  "IoT + Power",
+                                               "label":  "Devices, controls, smart grids, and monitoring-based engineering exposure"
+                                           },
+                                           {
+                                               "value":  "Grid Ready",
+                                               "label":  "Combines electrical systems, IoT monitoring, and smart grid exposure"
+                                           }
+                                       ]
+                         },
+    "why_choose":  [
+                       {
+                           "description":  "Combine electrical fundamentals with IoT thinking and smart grid applications.",
+                           "title":  "Core + Emerging Skill Blend"
+                       },
+                       {
+                           "description":  "Learn through connected-device and power-system scenarios, not passive explanation alone.",
+                           "title":  "Use-Case Driven Modules"
+                       },
+                       {
+                           "description":  "Build familiarity with the kinds of systems shaping modern energy and electronics roles.",
+                           "title":  "Stronger Technical Relevance"
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Vaibhav Tandon",
+                             "text":  "The smart grid examples made the course feel current and much closer to industry expectations.",
+                             "role":  "EEE Student"
+                         },
+                         {
+                             "name":  "Simran Gill",
+                             "text":  "I found the IoT sections especially useful because they connected devices, data, and power use clearly.",
+                             "role":  "Electronics Learner"
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Is this course more electrical or more IoT focused?",
+                    "answer":  "It blends both, helping you understand connected systems in modern electrical contexts."
+                },
+                {
+                    "question":  "Will I work on practical applications?",
+                    "answer":  "Yes. The modules use real-world style tasks around power, monitoring, and connected devices."
+                },
+                {
+                    "question":  "Who is this course best suited for?",
+                    "answer":  "It is a strong fit for electrical and electronics students exploring future-ready technical roles."
+                }
+            ],
+    "curriculum":  [
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Fail-Safe Elevator Logic",
+                                             "submission":  "Boolean expressions / Truth Table (CSV).",
+                                             "assignment":  "Design the logic gate structure for a fail-safe elevator system.",
+                                             "ai_review":  "The AI mathematically verifies the truth table. If the doors can open while the elevator is moving, it fails."
+                                         }
+                                     ],
+                           "title":  "Task 1: Boolean Logic Architecture"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "ESP32 Voltage Sync to AWS",
+                                             "submission":  "C++ or MicroPython script.",
+                                             "assignment":  "Write the code to push voltage data from an ESP32 to an AWS server via MQTT.",
+                                             "ai_review":  "The AI scans for proper Wi-Fi authentication loops, MQTT topic formatting, and secure data packaging."
+                                         }
+                                     ],
+                           "title":  "Task 2: Microcontroller (Arduino/ESP32) Cloud Sync"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Solar-to-Battery Routing Logic",
+                                             "submission":  "Code snippet.",
+                                             "assignment":  "Write an algorithm to route solar power to batteries during peak sun, and grid power during the night.",
+                                             "ai_review":  "The AI runs test scenarios against the code to ensure the battery is never instructed to overcharge."
+                                         }
+                                     ],
+                           "title":  "Task 3: Power Load Balancing Algorithm"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "5-Meter Smart Grid Simulation",
+                                             "submission":  "Simulated network code and data routing setup.",
+                                             "assignment":  "Build a complete simulated network where 5 smart meters send data to a central hub, which automatically calculates billing and detects power theft.",
+                                             "ai_review":  "The AI evaluates the JSON data routing, API security to prevent bill tampering, and error-handling logic."
+                                         }
+                                     ],
+                           "title":  "Month 3 Capstone: The Smart Grid IoT Network"
+                       }
+                   ]
+}

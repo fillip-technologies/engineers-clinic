@@ -1,0 +1,141 @@
+{
+    "slug":  "aws-cloud-solutions-architect",
+    "title":  "AWS Cloud Solutions Architect",
+    "image":  "/images/courses/cloud-computing.svg",
+    "description":  "Develop cloud architecture skills with AWS concepts, deployment pipelines, infrastructure planning, and scaling workflows.",
+    "duration":  "5 Months",
+    "level":  "Intermediate",
+    "modules":  [
+                    "AWS Cloud Foundations",
+                    "Infrastructure Design",
+                    "Deployment and Monitoring",
+                    "Scalability and Reliability"
+                ],
+    "program_overview":  {
+                             "cta":  {
+                                         "batch_info":  "Enrollment is now open for the next AWS solutions architecture cohort.",
+                                         "button_text":  "Explore AWS Cloud Architect Program"
+                                     },
+                             "features":  [
+                                              {
+                                                  "description":  "Learn how to structure cloud environments, map infrastructure decisions, and design systems that are reliable, scalable, and deployment-ready.",
+                                                  "title":  "Cloud architecture planning"
+                                              },
+                                              {
+                                                  "description":  "Gain practical understanding of provisioning, monitoring, and scaling application environments using cloud-first engineering patterns.",
+                                                  "title":  "AWS deployment workflows"
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "5 Months",
+                                               "label":  "Architecture-focused learning path for AWS and cloud delivery"
+                                           },
+                                           {
+                                               "value":  "AWS + Scale",
+                                               "label":  "Infrastructure design, deployment, monitoring, and reliability thinking"
+                                           },
+                                           {
+                                               "value":  "Cloud Ready",
+                                               "label":  "Built around AWS architecture, deployment, and reliability workflows"
+                                           }
+                                       ]
+                         },
+    "why_choose":  [
+                       {
+                           "description":  "Work through deployment, scaling, and infrastructure planning scenarios step by step.",
+                           "title":  "Architecture-Led Practice"
+                       },
+                       {
+                           "description":  "Understand why services are chosen, not just how to click through setups.",
+                           "title":  "Cloud Thinking That Sticks"
+                       },
+                       {
+                           "description":  "Build confidence across compute, storage, networking, and reliability decisions.",
+                           "title":  "Hands-On Service Mapping"
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Harshit Nair",
+                             "text":  "The tasks made AWS feel structured instead of overwhelming because every module had a clear system goal.",
+                             "role":  "Cloud Learner"
+                         },
+                         {
+                             "name":  "Pooja Bansal",
+                             "text":  "I liked that the course explained architecture choices, not just service names and definitions.",
+                             "role":  "IT Graduate"
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Is this course suitable for beginners in cloud?",
+                    "answer":  "Yes. It introduces core AWS concepts progressively before moving into larger architecture scenarios."
+                },
+                {
+                    "question":  "Will I work on practical cloud tasks?",
+                    "answer":  "Yes. The curriculum is designed around deployment logic, infrastructure setup, and reviewable outputs."
+                },
+                {
+                    "question":  "Does this help with solution architect preparation?",
+                    "answer":  "It supports that path by strengthening applied cloud understanding and architecture reasoning."
+                }
+            ],
+    "curriculum":  [
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "S3 Read-Only IAM Policy",
+                                             "submission":  "AWS IAM JSON Policy.",
+                                             "assignment":  "Create a secure user policy that grants read-only access to an S3 bucket.",
+                                             "ai_review":  "The AI scans the JSON to ensure Allow is only applied to s3:GetObject and that there are no dangerous wildcard admin privileges."
+                                         }
+                                     ],
+                           "title":  "Task 1: IAM Security \u0026 Roles"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Public + Private Subnet Design",
+                                             "submission":  "CloudFormation or Terraform script.",
+                                             "assignment":  "Design a VPC with one public subnet and one private subnet.",
+                                             "ai_review":  "The AI checks the routing tables to ensure the private subnet does not have a direct Internet Gateway attached."
+                                         }
+                                     ],
+                           "title":  "Task 2: Virtual Private Cloud (VPC) Setup"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Lambda + API Gateway Launch",
+                                             "submission":  "The live API Gateway URL.",
+                                             "assignment":  "Deploy a simple AWS Lambda function connected to an API Gateway.",
+                                             "ai_review":  "The AI pings the URL and expects a specific JSON response within a 2-second timeout window."
+                                         }
+                                     ],
+                           "title":  "Task 3: Serverless API Deployment"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Load Balancer Architecture",
+                                             "submission":  "Architecture documentation.",
+                                             "assignment":  "Configure a load balancer across two server instances.",
+                                             "ai_review":  "The AI reads the documentation to verify the inclusion of Health Checks and Auto-Scaling Groups."
+                                         }
+                                     ],
+                           "title":  "Task 4: High Availability Configuration"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Secure AWS Migration IaC",
+                                             "submission":  "Complete Terraform infrastructure code.",
+                                             "assignment":  "Submit the complete Terraform infrastructure code to migrate a legacy application into a highly secure, auto-scaling AWS environment.",
+                                             "ai_review":  "The AI performs a strict security and cost-optimization audit on the code, failing immediately if port 22 SSH is left open to the public internet."
+                                         }
+                                     ],
+                           "title":  "Month 3 Capstone: Enterprise Migration Blueprint"
+                       }
+                   ]
+}

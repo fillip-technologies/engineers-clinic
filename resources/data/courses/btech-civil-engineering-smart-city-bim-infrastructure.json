@@ -1,0 +1,141 @@
+{
+    "slug":  "btech-civil-engineering-smart-city-bim-infrastructure",
+    "title":  "B.Tech Civil Engineering (Smart City \u0026 BIM Infrastructure)",
+    "image":  "/images/courses/business-analytics.svg",
+    "description":  "Prepare for future-ready civil engineering roles with BIM workflows, smart city planning, infrastructure coordination, and digital project systems.",
+    "duration":  "6 Months",
+    "level":  "Intermediate",
+    "modules":  [
+                    "BIM Fundamentals",
+                    "Smart City Planning Concepts",
+                    "Infrastructure Coordination",
+                    "Digital Project Management"
+                ],
+    "program_overview":  {
+                             "cta":  {
+                                         "batch_info":  "Applications are now open for the upcoming smart infrastructure and BIM batch.",
+                                         "button_text":  "Join Civil Engineering Smart Infrastructure Program"
+                                     },
+                             "features":  [
+                                              {
+                                                  "description":  "Understand how building information modeling supports coordination, planning accuracy, and execution visibility in modern civil projects.",
+                                                  "title":  "BIM-led infrastructure workflows"
+                                              },
+                                              {
+                                                  "description":  "Explore how digital planning, connected infrastructure, and data-backed urban systems are shaping future-ready civil engineering roles.",
+                                                  "title":  "Smart city systems context"
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "6 Months",
+                                               "label":  "Career-focused pathway for BIM, planning, and digital infrastructure"
+                                           },
+                                           {
+                                               "value":  "BIM + Smart Cities",
+                                               "label":  "Modeling, coordination, and urban systems thinking for infrastructure work"
+                                           },
+                                           {
+                                               "value":  "Infra Ready",
+                                               "label":  "Connects BIM planning with smart infrastructure thinking"
+                                           }
+                                       ]
+                         },
+    "why_choose":  [
+                       {
+                           "description":  "Connect core civil concepts with BIM workflows and smart infrastructure planning.",
+                           "title":  "Modern Civil Tech Exposure"
+                       },
+                       {
+                           "description":  "Assignments focus on layouts, coordination, and planning decisions used in current practice.",
+                           "title":  "Project-Based Interpretation"
+                       },
+                       {
+                           "description":  "Learn how digital tools support accuracy, collaboration, and smarter urban systems.",
+                           "title":  "Industry-Relevant Lens"
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aniket Rao",
+                             "text":  "The BIM-oriented tasks gave me a much clearer picture of how modern infrastructure teams actually work.",
+                             "role":  "Civil Engineering Student"
+                         },
+                         {
+                             "name":  "Muskan Yadav",
+                             "text":  "This course helped me connect classroom civil concepts with digital planning and coordination tools.",
+                             "role":  "Final Year Learner"
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Is this relevant for traditional civil engineering students?",
+                    "answer":  "Yes. It adds a digital layer to core civil concepts without replacing engineering fundamentals."
+                },
+                {
+                    "question":  "What practical areas does the course focus on?",
+                    "answer":  "The track emphasizes BIM thinking, infrastructure planning, and smart city oriented workflows."
+                },
+                {
+                    "question":  "Will this improve my project understanding?",
+                    "answer":  "Yes. The assignments are built to strengthen interpretation, planning, and coordination skills."
+                }
+            ],
+    "curriculum":  [
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Dead + Live Load Calculation",
+                                             "submission":  "Python script or structured JSON math array.",
+                                             "assignment":  "Calculate the dead and live loads for a commercial floor plan based on standard IS/IBC codes.",
+                                             "ai_review":  "The AI runs the math. If the calculations exceed the safety-threshold formulas, it flags a structural failure and issues a Fail."
+                                         }
+                                     ],
+                           "title":  "Task 1: Load Distribution Mathematics"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "BOQ Data Export",
+                                             "submission":  "CSV or JSON file.",
+                                             "assignment":  "Export a Bill of Quantities (BOQ) from Revit or AutoCAD for concrete and steel.",
+                                             "ai_review":  "The AI parses the data structure to ensure proper material coding, cost estimation limits, and volume constraints are met."
+                                         }
+                                     ],
+                           "title":  "Task 2: BIM Material Extraction (Data)"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Smart Bridge Sensor Schema",
+                                             "submission":  "JSON Payload Schema.",
+                                             "assignment":  "Design the data schema for temperature and stress sensors placed across a smart bridge.",
+                                             "ai_review":  "The AI checks whether the schema includes critical tracking fields such as sensor_id, timestamp, stress_value, and battery_level."
+                                         }
+                                     ],
+                           "title":  "Task 3: IoT Sensor Mapping for Smart Buildings"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Emergency SMS Trigger",
+                                             "submission":  "Live Webhook URL.",
+                                             "assignment":  "Create a webhook that triggers an emergency SMS if a bridge sensor detects a micro-fracture.",
+                                             "ai_review":  "The AI fires a mock critical stress payload at the webhook to ensure it correctly catches the data and returns a 200 OK status."
+                                         }
+                                     ],
+                           "title":  "Task 4: The Automation Alert (Webhook)"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Smart Building Data Architecture",
+                                             "submission":  "Infrastructure data architecture package.",
+                                             "assignment":  "Submit the complete data architecture for a smart building, including load scripts, sensor routing, and an automated energy-saving API.",
+                                             "ai_review":  "The AI evaluates the end-to-end logic, ensuring data flows correctly from the simulated physical structure to the cloud dashboard without errors."
+                                         }
+                                     ],
+                           "title":  "Month 3 Capstone: The Smart Infrastructure Blueprint"
+                       }
+                   ]
+}

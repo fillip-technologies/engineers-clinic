@@ -1,0 +1,130 @@
+{
+    "slug":  "mass-communication-journalism-digital-media-pr-tech",
+    "title":  "Mass Communication \u0026 Journalism (Digital Media \u0026 PR Tech)",
+    "image":  "/images/courses/graphic-design.svg",
+    "description":  "Build digital media and journalism skills through content strategy, PR workflows, storytelling, and audience-first communication systems.",
+    "duration":  "4 Months",
+    "level":  "Beginner to Intermediate",
+    "modules":  [
+                    "Digital Storytelling",
+                    "Media Planning and Publishing",
+                    "Public Relations Workflows",
+                    "Audience and Brand Communication"
+                ],
+    "program_overview":  {
+                             "cta":  {
+                                         "batch_info":  "Seats are now opening for the next digital media and PR technology cohort.",
+                                         "button_text":  "Join Digital Media \u0026 PR Tech Program"
+                                     },
+                             "features":  [
+                                              {
+                                                  "description":  "Develop the ability to shape stories, editorial content, and communication plans for digital-first audiences and platforms.",
+                                                  "title":  "Digital storytelling workflows"
+                                              },
+                                              {
+                                                  "description":  "Learn how public relations, publishing, campaign messaging, and audience engagement operate in modern media environments.",
+                                                  "title":  "PR and media execution"
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "4 Months",
+                                               "label":  "Industry-aligned pathway for media, journalism, and digital communication"
+                                           },
+                                           {
+                                               "value":  "Media + PR",
+                                               "label":  "Storytelling, publishing, public communication, and platform-ready execution"
+                                           },
+                                           {
+                                               "value":  "Digital First",
+                                               "label":  "Built for media execution across storytelling, publishing, and PR channels"
+                                           }
+                                       ]
+                         },
+    "why_choose":  [
+                       {
+                           "description":  "Learn to create, shape, and distribute stories for today\u0027s fast-moving media landscape.",
+                           "title":  "Digital-First Media Training"
+                       },
+                       {
+                           "description":  "The curriculum balances storytelling, audience thinking, and communication strategy.",
+                           "title":  "Editorial + PR Perspective"
+                       },
+                       {
+                           "description":  "Build practical skills across modern content, digital media, and public communication workflows.",
+                           "title":  "Platform-Aware Execution"
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Mehak Bedi",
+                             "text":  "This course helped me understand how journalism and digital communication now overlap in real work.",
+                             "role":  "Media Student"
+                         },
+                         {
+                             "name":  "Arjun Bose",
+                             "text":  "The assignments felt current and useful for building stronger media and brand communication skills.",
+                             "role":  "Aspiring Content Strategist"
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Is this course only for journalism students?",
+                    "answer":  "No. It also suits learners interested in digital media, PR, and communication strategy."
+                },
+                {
+                    "question":  "What kind of outputs will I create?",
+                    "answer":  "You will work on story planning, communication tasks, and digital-first media exercises."
+                },
+                {
+                    "question":  "Does the course reflect current media workflows?",
+                    "answer":  "Yes. The structure is built around platform-aware and audience-focused communication practice."
+                }
+            ],
+    "curriculum":  [
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Viral Article Structure",
+                                             "submission":  "HTML or Markdown file.",
+                                             "assignment":  "Outline a viral article, complete with Meta Title, Description, and Header H1/H2 hierarchy.",
+                                             "ai_review":  "The AI checks exact character counts such as Meta Title under 60 chars, keyword density, and structural formatting."
+                                         }
+                                     ],
+                           "title":  "Task 1: SEO Content Architecture"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Negative Sentiment Slack Alert",
+                                             "submission":  "Webhook URL / Automation schema.",
+                                             "assignment":  "Set up an automation that tracks Twitter/X for a brand\u0027s name, runs sentiment analysis, and alerts a Slack channel if sentiment turns Negative.",
+                                             "ai_review":  "The AI pushes a negative JSON payload to the webhook to verify the routing logic fires correctly."
+                                         }
+                                     ],
+                           "title":  "Task 2: Social Listening Crisis Alert"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "B2B Ad Targeting Parameters",
+                                             "submission":  "JSON targeting array.",
+                                             "assignment":  "Build the targeting parameters for a B2B ad campaign.",
+                                             "ai_review":  "The AI checks whether the budget allocation and audience exclusions are logically sound based on the given prompt."
+                                         }
+                                     ],
+                           "title":  "Task 3: Programmatic Ad Logic"
+                       },
+                       {
+                           "tasks":  [
+                                         {
+                                             "title":  "Tracked Digital PR System",
+                                             "submission":  "Campaign logic, press release, and ROI dashboard setup.",
+                                             "assignment":  "Design a complete digital PR campaign, including the tracked email distribution logic, SEO-optimized press release, and automated ROI dashboard.",
+                                             "ai_review":  "The AI evaluates the campaign\u0027s trackability. If the student cannot prove how they will measure open rates and click-throughs, they fail."
+                                         }
+                                     ],
+                           "title":  "Month 3 Capstone: Autonomous PR Command Center"
+                       }
+                   ]
+}

@@ -1,132 +1,180 @@
-@extends('layouts.app')
+    @extends('layouts.app')
 
-@section('content')
-<section
-    class="relative overflow-hidden bg-gradient-to-br from-bgDark via-bgDarkSoft to-bgIndigo px-6 py-16 sm:px-10 lg:px-14 lg:py-20">
-    <div
-        class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.18),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(99,102,241,0.22),_transparent_36%)]">
-    </div>
-    <div class="absolute left-0 top-16 h-72 w-72 rounded-full bg-primarySoft blur-3xl"></div>
-    <div class="absolute right-0 top-1/3 h-80 w-80 rounded-full bg-secondarySoft blur-3xl"></div>
+    @section('content')
 
-    <div class="relative mx-auto max-w-7xl">
-        <div class="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
-            <div class="flex h-full flex-col">
-                <div class="max-w-2xl">
-                    <p class="text-sm font-semibold uppercase tracking-[0.32em] text-primaryLight">Course Detail</p>
-                    <h1 class="mt-5 text-4xl font-semibold tracking-tight text-textPrimary sm:text-5xl lg:text-6xl">
-                        {{ $course['title'] }}
-                    </h1>
-                    <p class="mt-6 max-w-xl text-base leading-8 text-textSecondary sm:text-lg">
-                        {{ $course['description'] }}
+    <section class="relative overflow-hidden bg-gradient-to-br from-bgMain via-white to-bgSoft px-6 py-14 sm:px-10 lg:px-14 lg:py-20">
+        <div
+            class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(34,197,94,0.14),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(249,115,22,0.12),_transparent_32%)]">
+        </div>
+        <div class="pointer-events-none absolute -left-16 top-10 h-56 w-56 rounded-full bg-brandSoft blur-3xl"></div>
+        <div class="pointer-events-none absolute -right-12 bottom-0 h-72 w-72 rounded-full bg-secondarySoft blur-3xl"></div>
+
+        <div class="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-[minmax(0,1.08fr)_420px] lg:items-start">
+            <div class="max-w-2xl">
+                <div
+                    class="inline-flex flex-wrap items-center gap-3 rounded-full border border-brand/15 bg-white/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand shadow-[0_16px_40px_rgba(21,128,61,0.08)] backdrop-blur">
+                    <!-- <span>{{ $course['menu_group_label'] ?? 'AI Remote Internships' }}</span> -->
+                    <span class="h-1.5 w-1.5 rounded-full bg-brand"></span>
+                    <span>Trusted by 1000+ learners</span>
+                </div>
+
+                <p class="mt-6 text-sm font-semibold uppercase tracking-[0.24em] text-secondary">
+                    {{ $course['hero_badge'] ?? 'Structured practical learning' }}
+                </p>
+
+                <h1 class="mt-4 text-4xl font-semibold leading-[1.08] text-textPrimary sm:text-5xl lg:text-[3.65rem]">
+                    {{ $course['title'] }}
+                </h1>
+
+                <p class="mt-6 max-w-xl text-base leading-8 text-textSecondary sm:text-lg">
+                    {{ $course['description'] }}
+                </p>
+
+                <div class="mt-8 flex flex-wrap gap-3">
+                    <div class="inline-flex items-center gap-2 rounded-full border border-borderLight bg-white px-4 py-2 text-sm font-medium text-textPrimary shadow-sm">
+                        <span class="h-2 w-2 rounded-full bg-brand"></span>
+                        <span>{{ $course['duration'] }}</span>
+                    </div>
+                    <div class="inline-flex items-center gap-2 rounded-full border border-borderLight bg-white px-4 py-2 text-sm font-medium text-textPrimary shadow-sm">
+                        <span class="h-2 w-2 rounded-full bg-secondary"></span>
+                        <span>{{ $course['level'] }}</span>
+                    </div>
+                    <div class="inline-flex items-center gap-2 rounded-full border border-borderLight bg-white px-4 py-2 text-sm font-medium text-textPrimary shadow-sm">
+                        <span class="h-2 w-2 rounded-full bg-brandLight"></span>
+                        <span>{{ $course['career_path'] ?? 'Career-focused guided track' }}</span>
+                    </div>
+                </div>
+
+                <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+                    <a href="#enroll-now"
+                        class="inline-flex items-center justify-center rounded-2xl bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(21,128,61,0.28)] transition duration-300 hover:-translate-y-0.5 hover:bg-brandDark hover:shadow-[0_22px_50px_rgba(21,128,61,0.34)]">
+                        Reserve Your Seat
+                    </a>
+                    <p class="text-sm text-textSecondary">
+                        No spam, quick confirmation, and a counselor follow-up once you submit.
                     </p>
-                </div>
-
-                <div class="mt-8 grid gap-4 sm:grid-cols-2">
-                    <div class="rounded-[1.5rem] border border-glassBorder bg-glass p-5 backdrop-blur">
-                        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-primaryLight">Duration</p>
-                        <p class="mt-3 text-2xl font-semibold text-textPrimary">{{ $course['duration'] }}</p>
-                    </div>
-                    <div class="rounded-[1.5rem] border border-glassBorder bg-glass p-5 backdrop-blur">
-                        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-primaryLight">Level</p>
-                        <p class="mt-3 text-2xl font-semibold text-textPrimary">{{ $course['level'] }}</p>
-                    </div>
-                </div>
-
-                <div class="mt-8 grid gap-4">
-                    <div class="rounded-[1.5rem] border border-glassBorder bg-glass p-5 backdrop-blur">
-                        <p class="text-base font-semibold text-textPrimary">Real-world project exposure</p>
-                        <p class="mt-2 text-sm leading-7 text-textMuted">
-                            Build practical confidence through guided assignments and implementation-focused learning.
-                        </p>
-                    </div>
-                    <div class="rounded-[1.5rem] border border-glassBorder bg-glass p-5 backdrop-blur">
-                        <p class="text-base font-semibold text-textPrimary">Structured skill progression</p>
-                        <p class="mt-2 text-sm leading-7 text-textMuted">
-                            Move from core fundamentals to applied workflows with a roadmap built for steady growth.
-                        </p>
-                    </div>
-
                 </div>
             </div>
 
-            <div class="h-full rounded-[2rem] border border-glassBorder bg-glass p-4 shadow-2xl backdrop-blur">
-                <div class="flex h-full flex-col rounded-[1.75rem] bg-slate-900/95 p-6 ring-1 ring-inset ring-glassBorder sm:p-8">
-                    <div class="flex items-center gap-2">
-                        <span class="h-3 w-3 rounded-full bg-rose-400"></span>
-                        <span class="h-3 w-3 rounded-full bg-amber-300"></span>
-                        <span class="h-3 w-3 rounded-full bg-emerald-400"></span>
+            <div id="enroll-now"
+                class="relative overflow-hidden rounded-[2rem] border border-borderLight bg-white p-7 shadow-[0_28px_80px_rgba(15,23,42,0.12)] sm:p-8">
+                <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand via-brandLight to-secondary"></div>
 
-                        <span class="ml-2 text-xs font-semibold text-amber-300">
-                            Enrollment Open for 2026
-                        </span>
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-brand">Secure your seat</p>
+                        <h2 class="mt-2 text-2xl font-semibold text-textPrimary">Enroll Now</h2>
                     </div>
+                    <span
+                        class="inline-flex items-center rounded-full border border-secondary/15 bg-secondarySoft px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-secondary">
+                        Limited seats
+                    </span>
+                </div>
 
-                    <div class="mt-8 flex-1">
-                        <p class="text-sm font-semibold uppercase tracking-[0.24em] text-primaryLight">
-                            Enroll Now
-                        </p>
-                        <p class="mt-3 text-sm leading-7 text-slate-300">
-                            Fill in your details and our team will connect with you to guide you through the
-                            enrollment process for {{ $course['title'] }}.
-                        </p>
+                <p class="mt-3 text-sm leading-7 text-textSecondary">
+                    Fill in your details to get priority access for the upcoming batch and course guidance.
+                </p>
 
-                        <form method="POST" action="#" class="mt-6 space-y-4 lg:max-h-[33rem] lg:overflow-y-auto lg:pr-2">
-                            @csrf
 
-                            <input type="hidden" name="course_slug" value="{{ $course['slug'] }}">
-                            <input type="hidden" name="course_title" value="{{ $course['title'] }}">
 
+                <form method="POST" action="#" class="mt-7 space-y-5">
+                    @csrf
+
+                    <input type="hidden" name="course_slug" value="{{ $course['slug'] }}">
+                    <input type="hidden" name="course_title" value="{{ $course['title'] }}">
+
+                    <div class="grid gap-5 sm:grid-cols-2">
+                        <div>
+                            <label class="text-sm font-medium text-textPrimary">Full Name</label>
+                            <input type="text" placeholder="Write full name"
+                                class="mt-2 w-full rounded-2xl border border-borderLight bg-white px-4 py-3.5 text-sm text-textPrimary shadow-sm outline-none transition duration-300 placeholder:text-textMuted focus:border-brand focus:ring-4 focus:ring-brandSoft/60">
+                        </div>
+
+                        <div>
+                            <label class="text-sm font-medium text-textPrimary">Email Address</label>
+                            <input type="email" placeholder="Write email address"
+                                class="mt-2 w-full rounded-2xl border border-borderLight bg-white px-4 py-3.5 text-sm text-textPrimary shadow-sm outline-none transition duration-300 placeholder:text-textMuted focus:border-brand focus:ring-4 focus:ring-brandSoft/60">
+                        </div>
+
+                        <div>
+                            <label class="text-sm font-medium text-textPrimary">Phone Number</label>
+                            <input type="tel" placeholder="Write phone number"
+                                class="mt-2 w-full rounded-2xl border border-borderLight bg-white px-4 py-3.5 text-sm text-textPrimary shadow-sm outline-none transition duration-300 placeholder:text-textMuted focus:border-brand focus:ring-4 focus:ring-brandSoft/60">
+                        </div>
+
+                        <div>
+                            <label class="text-sm font-medium text-textPrimary">Location</label>
+                            <input type="text" placeholder="Write location"
+                                class="mt-2 w-full rounded-2xl border border-borderLight bg-white px-4 py-3.5 text-sm text-textPrimary shadow-sm outline-none transition duration-300 placeholder:text-textMuted focus:border-brand focus:ring-4 focus:ring-brandSoft/60">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="text-sm font-medium text-textPrimary">College Name</label>
+                            <input id="collegeInput" type="text" placeholder="Write college name"
+                                class="mt-2 w-full rounded-2xl border border-borderLight bg-white px-4 py-3.5 text-sm text-textPrimary shadow-sm outline-none transition duration-300 placeholder:text-textMuted focus:border-brand focus:ring-4 focus:ring-brandSoft/60">
+                        </div>
+
+                        <div id="extraFields"
+                            class="sm:col-span-2 max-h-0 space-y-5 overflow-hidden opacity-0 transition-all duration-500">
                             <div>
-                                <label for="full_name" class="text-sm font-medium text-slate-200">Full Name</label>
-                                <input id="full_name" type="text" name="full_name"
-                                    placeholder="Enter your full name"
-                                    class="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-400 focus:border-primary focus:bg-white/10 focus:ring-4 focus:ring-cyan-500/10" />
-                            </div>
-
-                            <div>
-                                <label for="phone_number" class="text-sm font-medium text-slate-200">Phone Number</label>
-                                <input id="phone_number" type="tel" name="phone_number"
-                                    placeholder="Enter your phone number"
-                                    class="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-400 focus:border-primary focus:bg-white/10 focus:ring-4 focus:ring-cyan-500/10" />
-                            </div>
-
-                            <div>
-                                <label for="email" class="text-sm font-medium text-slate-200">Email Address</label>
-                                <input id="email" type="email" name="email"
-                                    placeholder="Enter your email address"
-                                    class="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-400 focus:border-primary focus:bg-white/10 focus:ring-4 focus:ring-cyan-500/10" />
-                            </div>
-
-                            <div>
-                                <label for="experience_level" class="text-sm font-medium text-slate-200">Current Level</label>
-                                <select id="experience_level" name="experience_level"
-                                    class="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition focus:border-primary focus:bg-slate-800 focus:ring-4 focus:ring-cyan-500/10">
-                                    <option value="" class="text-slate-900">Select your current level</option>
-                                    <option value="student" class="text-slate-900">Student</option>
-                                    <option value="beginner" class="text-slate-900">Beginner</option>
-                                    <option value="working_professional" class="text-slate-900">Working Professional</option>
+                                <label class="text-sm font-medium text-textPrimary">Course</label>
+                                <select
+                                    class="mt-2 w-full rounded-2xl border border-borderLight bg-white px-4 py-3.5 text-sm text-textPrimary shadow-sm outline-none transition duration-300 focus:border-brand focus:ring-4 focus:ring-brandSoft/60">
+                                    <option>Search a course...</option>
+                                    <option>{{ $course['title'] }}</option>
                                 </select>
                             </div>
 
-                            <button type="submit"
-                                class="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:opacity-90">
-                                Submit Enrollment Request
-                            </button>
-                        </form>
+                            <div>
+                                <label class="text-sm font-medium text-textPrimary">Message (Optional)</label>
+                                <textarea rows="4" placeholder="Any specific information?"
+                                    class="mt-2 w-full rounded-2xl border border-borderLight bg-white px-4 py-3.5 text-sm text-textPrimary shadow-sm outline-none transition duration-300 placeholder:text-textMuted focus:border-brand focus:ring-4 focus:ring-brandSoft/60"></textarea>
+                            </div>
+                        </div>
                     </div>
-                </div>
+
+                    <button
+                        class="w-full rounded-2xl bg-brand px-5 py-4 text-sm font-semibold text-white shadow-[0_20px_45px_rgba(21,128,61,0.28)] transition duration-300 hover:-translate-y-0.5 hover:bg-brandDark hover:shadow-[0_24px_55px_rgba(21,128,61,0.34)]">
+                        Enroll Now
+                    </button>
+
+                    <p class="text-center text-xs font-medium tracking-[0.08em] text-textMuted">
+                        Trusted by learners across practical, career-focused tracks.
+                    </p>
+                </form>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-@if(isset($course['program_overview']))
-@include('course.program-overview.program-overview', [
-'data' => $course['program_overview'],
-'course' => $course
-])
-@endif
+    @if(isset($course['program_overview']))
+    @include('course.program-overview.program-overview', ['course' => $course])
+    @endif
 
+    @if(!empty($course['curriculum']))
+    @include('course.curriculum.curriculum', ['course' => $course])
+    @endif
 
-@endsection
+    @if(!empty($course['why_choose']) || !empty($course['testimonials']) || !empty($course['faq']))
+    @include('course.conversion.sections', ['course' => $course])
+    @endif
+
+    @endsection
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const college = document.getElementById('collegeInput');
+            const extra = document.getElementById('extraFields');
+
+            if (college && extra) {
+                college.addEventListener('input', () => {
+                    if (college.value.trim() !== "") {
+                        extra.classList.remove('opacity-0', 'max-h-0');
+                        extra.classList.add('opacity-100', 'max-h-[420px]');
+                    } else {
+                        extra.classList.add('opacity-0', 'max-h-0');
+                        extra.classList.remove('opacity-100', 'max-h-[420px]');
+                    }
+                });
+            }
+        });
+    </script>
