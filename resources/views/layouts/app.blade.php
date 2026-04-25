@@ -48,6 +48,7 @@
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         tailwind.config = {
@@ -146,6 +147,8 @@
             glow.style.display = "none";
         }
     </script>
+
+
 
 </body>
 

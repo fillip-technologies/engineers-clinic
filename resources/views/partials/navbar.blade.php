@@ -17,7 +17,8 @@
     <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
 
         <div class="text-xl font-semibold text-textPrimary">
-            Engineers <span class="text-textPrimary">Clinic</span>
+            <!-- Engineers <span class="text-textPrimary">Clinic</span> -->
+             <img src="/images/Engineers-clinic.png" class="h-14"/>
         </div>
 
         <nav class="hidden items-center gap-2 px-3 py-2 md:flex">

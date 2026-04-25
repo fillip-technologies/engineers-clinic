@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.frontend-admin')
 
 @section('content')
     <section class="rounded-[1.75rem] border border-glassBorder bg-white p-6 shadow-sm sm:p-8">
