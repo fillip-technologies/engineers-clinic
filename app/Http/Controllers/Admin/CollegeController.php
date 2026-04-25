@@ -1,0 +1,70 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\College;
+use App\Models\User;
+use Illuminate\Http\Request;
+
+class CollegeController extends Controller
+{
+    public function index()
+    {
+        $colleges = College::with('user')->get();
+        return view('admin.colleges.index', compact('colleges'));
+    }
+
+    public function create()
+    {
+        $users = User::all();
+        return view('admin.colleges.create', compact('users'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'college_name' => 'required|string|max:255',
+            'address' => 'nullable|string',
+            'contact_number' => 'nullable|string|max:20',
+        ]);
+
+        College::create($request->all());
+
+        return redirect()->route('colleges.index')->with('success', 'College created successfully.');
+    }
+
+    public function show(College $college)
+    {
+        $college->load('user', 'students');
+        return view('admin.colleges.show', compact('college'));
+    }
+
+    public function edit(College $college)
+    {
+        $users = User::all();
+        return view('admin.colleges.edit', compact('college', 'users'));
+    }
+
+    public function update(Request $request, College $college)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'college_name' => 'required|string|max:255',
+            'address' => 'nullable|string',
+            'contact_number' => 'nullable|string|max:20',
+        ]);
+
+        $college->update($request->all());
+
+        return redirect()->route('colleges.index')->with('success', 'College updated successfully.');
+    }
+
+    public function destroy(College $college)
+    {
+        $college->delete();
+
+        return redirect()->route('colleges.index')->with('success', 'College deleted successfully.');
+    }
+}
