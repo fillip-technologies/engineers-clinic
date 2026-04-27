@@ -1,0 +1,114 @@
+{
+    "slug":  "autocad-drafting",
+    "title":  "AutoCAD Drafting",
+    "category":  "Internship",
+    "level":  "Beginner",
+    "duration":  "3 Months",
+    "image":  "/images/courses/backend-development.svg",
+    "description":  "Learn drafting basics, precision drawing, and AutoCAD workflows through introductory technical drawing tasks.",
+    "modules":  [
+                    "AutoCAD Interface Basics",
+                    "2D Drafting Practice",
+                    "Dimensioning and Annotation"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Drafting Setup",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Technical Drawing Practice",
+                                           "tasks":  [
+                                                         "Room Layout Plan",
+                                                         "Dimension Exercise",
+                                                         "Layer Management Sheet"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: AutoCAD Basics",
+                           "tasks":  [
+                                         {
+                                             "title":  "2D Drafting Sheet",
+                                             "assignment":  "Draft a simple floor or object layout with clear dimensions, annotations, and organized layers.",
+                                             "submission":  "DWG or PDF export.",
+                                             "ai_review":  "The AI reviews annotation clarity, line organization, and use of drafting conventions."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "CONNECT CIVIL FUNDAMENTALS WITH PRACTICAL PROJECT WORKFLOWS",
+    "career_path":  "Drafting, modeling, site planning, and technical documentation",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "AutoCAD Interface Basics workflow",
+                                                  "description":  "Learn how AutoCAD Interface Basics connects to real civil engineering work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Project Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on drawings, plans, models, calculations, and documentation outputs with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "3 Months",
+                                               "label":  "Structured path with focused civil engineering practice and review"
+                                           },
+                                           {
+                                               "value":  "Planning + Tools",
+                                               "label":  "AutoCAD Interface Basics, 2D Drafting Practice, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Project Ready",
+                                               "label":  "Built to strengthen drawings, plans, models, calculations, and documentation outputs"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore AutoCAD Drafting Program",
+                                         "batch_info":  "Enrollment is open for the next AutoCAD Drafting cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Industry-Style Practice",
+                           "description":  "Practice drawings, plans, models, calculations, and documentation outputs through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Technical Documentation",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Project Workflow Clarity",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Civil Engineering Learner",
+                             "text":  "The structure helped me understand AutoCAD Drafting through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

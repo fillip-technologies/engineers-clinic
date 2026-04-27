@@ -1,0 +1,115 @@
+{
+    "slug":  "digital-journalism",
+    "title":  "Digital Journalism",
+    "category":  "Internship",
+    "level":  "Beginner",
+    "duration":  "3 Months",
+    "image":  "/images/courses/graphic-design.svg",
+    "description":  "Learn digital storytelling, headline writing, and audience-first publishing for modern journalism platforms.",
+    "modules":  [
+                    "Story Framing",
+                    "Headline and Copy Practice",
+                    "Digital Publishing Basics"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Editorial Foundations",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Story Packaging",
+                                           "tasks":  [
+                                                         "News Brief",
+                                                         "Feature Lead",
+                                                         "Headline Rewrite Set",
+                                                         "Content Calendar Draft"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: Digital Story Draft",
+                           "tasks":  [
+                                         {
+                                             "title":  "Publishable Story Package",
+                                             "assignment":  "Write a digital-first story with headline, summary, body copy, and audience-focused presentation.",
+                                             "submission":  "Document or CMS draft link.",
+                                             "ai_review":  "The AI checks clarity, headline strength, structure, and digital readability."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "TURN COMMUNICATION STRATEGY INTO CAMPAIGN-READY OUTPUTS",
+    "career_path":  "Content planning, audience strategy, PR, and campaign workflows",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "Story Framing workflow",
+                                                  "description":  "Learn how Story Framing connects to real communication work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Campaign Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on campaigns, stories, PR plans, and audience-ready content with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "3 Months",
+                                               "label":  "Structured path with focused communication practice and review"
+                                           },
+                                           {
+                                               "value":  "Content + Strategy",
+                                               "label":  "Story Framing, Headline and Copy Practice, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Campaign Ready",
+                                               "label":  "Built to strengthen campaigns, stories, PR plans, and audience-ready content"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore Digital Journalism Program",
+                                         "batch_info":  "Enrollment is open for the next Digital Journalism cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Campaign-First Practice",
+                           "description":  "Practice campaigns, stories, PR plans, and audience-ready content through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Audience Thinking",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Output-Based Communication",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Communication Learner",
+                             "text":  "The structure helped me understand Digital Journalism through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

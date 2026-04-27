@@ -1,0 +1,114 @@
+{
+    "slug":  "structural-design",
+    "title":  "Structural Design",
+    "category":  "Internship",
+    "level":  "Intermediate",
+    "duration":  "4 Months",
+    "image":  "/images/courses/business-analytics.svg",
+    "description":  "Learn structural concepts, load paths, and design reasoning for core building element planning.",
+    "modules":  [
+                    "Structural Basics",
+                    "Load and Member Concepts",
+                    "Design Documentation"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Structural Thinking",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Load Path Practice",
+                                           "tasks":  [
+                                                         "Beam and Column Notes",
+                                                         "Load Diagram",
+                                                         "Structural Summary Sheet"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: Structural Review",
+                           "tasks":  [
+                                         {
+                                             "title":  "Element Design Explanation",
+                                             "assignment":  "Prepare a simple structural concept note explaining element behavior and load transfer.",
+                                             "submission":  "PDF or document.",
+                                             "ai_review":  "The AI checks terminology, design logic, and explanation quality."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "CONNECT CIVIL FUNDAMENTALS WITH PRACTICAL PROJECT WORKFLOWS",
+    "career_path":  "Drafting, modeling, site planning, and technical documentation",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "Structural Basics workflow",
+                                                  "description":  "Learn how Structural Basics connects to real civil engineering work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Project Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on drawings, plans, models, calculations, and documentation outputs with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "4 Months",
+                                               "label":  "Structured path with focused civil engineering practice and review"
+                                           },
+                                           {
+                                               "value":  "Planning + Tools",
+                                               "label":  "Structural Basics, Load and Member Concepts, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Project Ready",
+                                               "label":  "Built to strengthen drawings, plans, models, calculations, and documentation outputs"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore Structural Design Program",
+                                         "batch_info":  "Enrollment is open for the next Structural Design cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Industry-Style Practice",
+                           "description":  "Practice drawings, plans, models, calculations, and documentation outputs through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Technical Documentation",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Project Workflow Clarity",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Civil Engineering Learner",
+                             "text":  "The structure helped me understand Structural Design through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

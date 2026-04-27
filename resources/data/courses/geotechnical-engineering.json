@@ -1,0 +1,114 @@
+{
+    "slug":  "geotechnical-engineering",
+    "title":  "Geotechnical Engineering",
+    "category":  "Internship",
+    "level":  "Advanced",
+    "duration":  "5 Months",
+    "image":  "/images/courses/business-analytics.svg",
+    "description":  "Understand soil behavior, site conditions, and foundation-related engineering decisions through applied interpretation tasks.",
+    "modules":  [
+                    "Soil Mechanics Basics",
+                    "Site Investigation",
+                    "Foundation Decision Support"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Ground and Foundation Logic",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Site Condition Review",
+                                           "tasks":  [
+                                                         "Soil Observation Note",
+                                                         "Foundation Option Matrix",
+                                                         "Site Assessment Summary"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: Geotechnical Summary",
+                           "tasks":  [
+                                         {
+                                             "title":  "Site Condition Interpretation",
+                                             "assignment":  "Prepare a simple note on soil conditions, risk considerations, and suitable foundation direction.",
+                                             "submission":  "Document file.",
+                                             "ai_review":  "The AI checks terminology, observation quality, and engineering logic."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "CONNECT CIVIL FUNDAMENTALS WITH PRACTICAL PROJECT WORKFLOWS",
+    "career_path":  "Drafting, modeling, site planning, and technical documentation",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "Soil Mechanics Basics workflow",
+                                                  "description":  "Learn how Soil Mechanics Basics connects to real civil engineering work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Project Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on drawings, plans, models, calculations, and documentation outputs with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "5 Months",
+                                               "label":  "Structured path with focused civil engineering practice and review"
+                                           },
+                                           {
+                                               "value":  "Planning + Tools",
+                                               "label":  "Soil Mechanics Basics, Site Investigation, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Project Ready",
+                                               "label":  "Built to strengthen drawings, plans, models, calculations, and documentation outputs"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore Geotechnical Engineering Program",
+                                         "batch_info":  "Enrollment is open for the next Geotechnical Engineering cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Industry-Style Practice",
+                           "description":  "Practice drawings, plans, models, calculations, and documentation outputs through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Technical Documentation",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Project Workflow Clarity",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Civil Engineering Learner",
+                             "text":  "The structure helped me understand Geotechnical Engineering through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

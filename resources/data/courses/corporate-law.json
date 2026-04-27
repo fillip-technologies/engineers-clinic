@@ -1,0 +1,114 @@
+{
+    "slug":  "corporate-law",
+    "title":  "Corporate Law",
+    "category":  "Internship",
+    "level":  "Intermediate",
+    "duration":  "4 Months",
+    "image":  "/images/courses/seo-search-engine-optimization.svg",
+    "description":  "Learn corporate legal workflows, compliance thinking, and document review practices for modern organizations.",
+    "modules":  [
+                    "Corporate Law Basics",
+                    "Compliance and Governance",
+                    "Document Review Practice"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Corporate Legal Workflow",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Compliance Review",
+                                           "tasks":  [
+                                                         "Contract Clause Notes",
+                                                         "Governance Checklist",
+                                                         "Compliance Brief"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: Corporate Memo",
+                           "tasks":  [
+                                         {
+                                             "title":  "Compliance Review Memo",
+                                             "assignment":  "Write a short corporate law memo reviewing a compliance issue and recommended next steps.",
+                                             "submission":  "Document file.",
+                                             "ai_review":  "The AI checks memo structure, reasoning clarity, and legal terminology."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "BUILD PRACTICAL LEGAL REASONING WITH MODERN DOCUMENTATION WORKFLOWS",
+    "career_path":  "Research, drafting, compliance, and legal technology workflows",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "Corporate Law Basics workflow",
+                                                  "description":  "Learn how Corporate Law Basics connects to real legal work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Practice Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on research briefs, legal drafts, compliance notes, and workflow maps with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "4 Months",
+                                               "label":  "Structured path with focused legal practice and review"
+                                           },
+                                           {
+                                               "value":  "Law + Tech",
+                                               "label":  "Corporate Law Basics, Compliance and Governance, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Practice Ready",
+                                               "label":  "Built to strengthen research briefs, legal drafts, compliance notes, and workflow maps"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore Corporate Law Program",
+                                         "batch_info":  "Enrollment is open for the next Corporate Law cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Drafting-Led Learning",
+                           "description":  "Practice research briefs, legal drafts, compliance notes, and workflow maps through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Legal Tech Context",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Research-to-Output Practice",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Legal Learner",
+                             "text":  "The structure helped me understand Corporate Law through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

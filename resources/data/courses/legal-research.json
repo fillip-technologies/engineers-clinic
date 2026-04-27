@@ -1,0 +1,114 @@
+{
+    "slug":  "legal-research",
+    "title":  "Legal Research",
+    "category":  "Internship",
+    "level":  "Beginner",
+    "duration":  "3 Months",
+    "image":  "/images/courses/seo-search-engine-optimization.svg",
+    "description":  "Develop case-reading, statute interpretation, and legal note-making skills through research-oriented assignments.",
+    "modules":  [
+                    "Case Reading Basics",
+                    "Statute Interpretation",
+                    "Research Note Structuring"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Research Foundations",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Legal Reading Practice",
+                                           "tasks":  [
+                                                         "Case Brief Summary",
+                                                         "Citation Practice",
+                                                         "Issue Spotting Exercise"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: Legal Brief Preparation",
+                           "tasks":  [
+                                         {
+                                             "title":  "Case Research Memo",
+                                             "assignment":  "Prepare a short legal research memo with facts, issues, relevant law, and a structured conclusion.",
+                                             "submission":  "Document file.",
+                                             "ai_review":  "The AI checks memo organization, clarity of legal reasoning, and citation consistency."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "BUILD PRACTICAL LEGAL REASONING WITH MODERN DOCUMENTATION WORKFLOWS",
+    "career_path":  "Research, drafting, compliance, and legal technology workflows",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "Case Reading Basics workflow",
+                                                  "description":  "Learn how Case Reading Basics connects to real legal work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Practice Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on research briefs, legal drafts, compliance notes, and workflow maps with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "3 Months",
+                                               "label":  "Structured path with focused legal practice and review"
+                                           },
+                                           {
+                                               "value":  "Law + Tech",
+                                               "label":  "Case Reading Basics, Statute Interpretation, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Practice Ready",
+                                               "label":  "Built to strengthen research briefs, legal drafts, compliance notes, and workflow maps"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore Legal Research Program",
+                                         "batch_info":  "Enrollment is open for the next Legal Research cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Drafting-Led Learning",
+                           "description":  "Practice research briefs, legal drafts, compliance notes, and workflow maps through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Legal Tech Context",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Research-to-Output Practice",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Legal Learner",
+                             "text":  "The structure helped me understand Legal Research through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

@@ -16,9 +16,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 });
 Route::get('/signup/{role}', [HomeController::class, 'signup'])->name('signup');
-Route::get('/dashboard', [App\Http\Controllers\Student\DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
-
-Route::get('/college/dashboard', [App\Http\Controllers\College\DashboardController::class, 'index'])->name('college.dashboard')->middleware('auth');
+Route::get('/dashboard', function () {
+    return view('pages.student.dashboard');
+})->name('dashboard');
+Route::get('/college/dashboard', function () {
+    return view('pages.college.dashboard');
+})->name('college.dashboard');
 Route::get('/dashboard/enrolled-courses', [HomeController::class, 'enrolledCourses'])->name('dashboard.enrolled-courses');
+Route::get('/dashboard/student/profile', [HomeController::class, 'studentProfile'])->name('dashboard.student.profile');
+Route::get('/dashboard/student/profile/edit', [HomeController::class, 'studentProfileEdit'])->name('dashboard.student.profile.edit');
+Route::get('/student-dashboard/quiz-attempts', [HomeController::class, 'quizAttempts'])->name('dashboard.quiz-attempts');
+Route::get('/student-dashboard/orders', [HomeController::class, 'orderHistory'])->name('dashboard.orders');
+Route::get('/student-dashboard/course/{id}', [HomeController::class, 'studentCourse'])->name('student.course.detail');
 Route::get('/course/{slug}', [HomeController::class, 'courseDetail'])->name('course.detail');
-

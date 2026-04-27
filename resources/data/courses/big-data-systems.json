@@ -1,0 +1,114 @@
+{
+    "slug":  "big-data-systems",
+    "title":  "Big Data Systems",
+    "category":  "Internship",
+    "level":  "Advanced",
+    "duration":  "5 Months",
+    "image":  "/images/courses/business-analytics.svg",
+    "description":  "Understand large-scale data pipelines, distributed processing, and data system design for analytics workloads.",
+    "modules":  [
+                    "Data Pipeline Thinking",
+                    "Distributed Processing",
+                    "System Monitoring and Flow"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Scaled Data Workflow",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Pipeline Design",
+                                           "tasks":  [
+                                                         "Ingestion Plan",
+                                                         "Storage Layer Notes",
+                                                         "Processing Flow Diagram"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: Big Data Blueprint",
+                           "tasks":  [
+                                         {
+                                             "title":  "Pipeline Architecture Summary",
+                                             "assignment":  "Design a simple big-data processing workflow and explain how data moves through each stage.",
+                                             "submission":  "Diagram or document.",
+                                             "ai_review":  "The AI checks pipeline structure, stage clarity, and distributed data reasoning."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "TURN DATA AND AI CONCEPTS INTO PRACTICAL OUTPUTS",
+    "career_path":  "Analytics, automation, models, and decision workflows",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "Data Pipeline Thinking workflow",
+                                                  "description":  "Learn how Data Pipeline Thinking connects to real data work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Insight Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on dashboards, models, automation, and insight workflows with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "5 Months",
+                                               "label":  "Structured path with focused data practice and review"
+                                           },
+                                           {
+                                               "value":  "Data + AI",
+                                               "label":  "Data Pipeline Thinking, Distributed Processing, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Insight Ready",
+                                               "label":  "Built to strengthen dashboards, models, automation, and insight workflows"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore Big Data Systems Program",
+                                         "batch_info":  "Enrollment is open for the next Big Data Systems cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Applied Data Practice",
+                           "description":  "Practice dashboards, models, automation, and insight workflows through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Logic Before Tools",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Outcome-Driven Projects",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Data Learner",
+                             "text":  "The structure helped me understand Big Data Systems through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

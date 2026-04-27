@@ -1,0 +1,120 @@
+{
+    "slug":  "web-ecosystems-frontend",
+    "title":  "Web Ecosystems \u0026 Frontend Architecture",
+    "category":  "Internship",
+    "level":  "Beginner",
+    "duration":  "3 Months",
+    "image":  "/images/courses/frontend-development.svg",
+    "description":  "Learn HTML, CSS, React, and frontend systems through practical layout, component, and interface architecture work.",
+    "modules":  [
+                    "HTML and CSS Foundations",
+                    "Component Thinking with React",
+                    "Responsive Interface Systems"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Pure Foundation",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: UI Planning",
+                                           "tasks":  [
+                                                         "Digital Persona Card",
+                                                         "Landing Page",
+                                                         "Cafe Menu UI",
+                                                         "Pricing Table",
+                                                         "FAQ Accordion",
+                                                         "Image Gallery",
+                                                         "Agency Landing Page",
+                                                         "Timeline UI",
+                                                         "Dashboard Layout"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: Frontend Layout Sprint",
+                           "tasks":  [
+                                         {
+                                             "title":  "Responsive Landing Build",
+                                             "assignment":  "Create a structured landing page with reusable sections and responsive behavior.",
+                                             "submission":  "Hosted URL or HTML/CSS source.",
+                                             "ai_review":  "The AI checks for semantic markup, responsive spacing, and consistent component structure."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "BUILD MODERN SOFTWARE SYSTEMS THROUGH APPLIED ENGINEERING TASKS",
+    "career_path":  "Architecture, implementation, testing, and deployment workflows",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "HTML and CSS Foundations workflow",
+                                                  "description":  "Learn how HTML and CSS Foundations connects to real software work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Build Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on components, APIs, security checks, and deployable system outputs with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "3 Months",
+                                               "label":  "Structured path with focused software practice and review"
+                                           },
+                                           {
+                                               "value":  "Systems + Code",
+                                               "label":  "HTML and CSS Foundations, Component Thinking with React, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Build Ready",
+                                               "label":  "Built to strengthen components, APIs, security checks, and deployable system outputs"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore Web Ecosystems \u0026 Frontend Architecture Program",
+                                         "batch_info":  "Enrollment is open for the next Web Ecosystems \u0026 Frontend Architecture cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Project-First Engineering",
+                           "description":  "Practice components, APIs, security checks, and deployable system outputs through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Architecture Thinking",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Hands-On Build Practice",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Tech Learner",
+                             "text":  "The structure helped me understand Web Ecosystems \u0026 Frontend Architecture through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

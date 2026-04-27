@@ -1,0 +1,114 @@
+{
+    "slug":  "bim-infrastructure",
+    "title":  "BIM Infrastructure",
+    "category":  "Internship",
+    "level":  "Advanced",
+    "duration":  "5 Months",
+    "image":  "/images/courses/business-analytics.svg",
+    "description":  "Learn BIM workflows, coordination logic, and infrastructure planning practices for digital construction systems.",
+    "modules":  [
+                    "BIM Foundations",
+                    "Model Coordination",
+                    "Infrastructure Workflow Planning"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Digital Coordination",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Model and Coordination Logic",
+                                           "tasks":  [
+                                                         "Coordination Matrix",
+                                                         "BIM Issue Log",
+                                                         "Infrastructure Model Notes"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: BIM Coordination Review",
+                           "tasks":  [
+                                         {
+                                             "title":  "Digital Infrastructure Note",
+                                             "assignment":  "Explain a BIM-driven infrastructure workflow and document common coordination checkpoints.",
+                                             "submission":  "Document or presentation.",
+                                             "ai_review":  "The AI checks BIM terminology, coordination reasoning, and planning structure."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "CONNECT CIVIL FUNDAMENTALS WITH PRACTICAL PROJECT WORKFLOWS",
+    "career_path":  "Drafting, modeling, site planning, and technical documentation",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "BIM Foundations workflow",
+                                                  "description":  "Learn how BIM Foundations connects to real civil engineering work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Project Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on drawings, plans, models, calculations, and documentation outputs with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "5 Months",
+                                               "label":  "Structured path with focused civil engineering practice and review"
+                                           },
+                                           {
+                                               "value":  "Planning + Tools",
+                                               "label":  "BIM Foundations, Model Coordination, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Project Ready",
+                                               "label":  "Built to strengthen drawings, plans, models, calculations, and documentation outputs"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore BIM Infrastructure Program",
+                                         "batch_info":  "Enrollment is open for the next BIM Infrastructure cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Industry-Style Practice",
+                           "description":  "Practice drawings, plans, models, calculations, and documentation outputs through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Technical Documentation",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Project Workflow Clarity",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Civil Engineering Learner",
+                             "text":  "The structure helped me understand BIM Infrastructure through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

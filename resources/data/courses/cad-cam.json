@@ -1,0 +1,114 @@
+{
+    "slug":  "cad-cam",
+    "title":  "CAD/CAM",
+    "category":  "Internship",
+    "level":  "Intermediate",
+    "duration":  "4 Months",
+    "image":  "/images/courses/backend-development.svg",
+    "description":  "Learn design-to-manufacturing workflows with CAD modeling concepts and CAM process understanding.",
+    "modules":  [
+                    "CAD Modeling Basics",
+                    "CAM Workflow Intro",
+                    "Toolpath Awareness"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Design to Manufacturing",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: CAD/CAM Setup",
+                                           "tasks":  [
+                                                         "Part Sketch",
+                                                         "Basic Model",
+                                                         "Toolpath Interpretation"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: CAD/CAM Exercise",
+                           "tasks":  [
+                                         {
+                                             "title":  "Modeled Part and CAM Notes",
+                                             "assignment":  "Create a simple modeled part and explain the CAM steps needed for manufacturing it.",
+                                             "submission":  "CAD export and notes.",
+                                             "ai_review":  "The AI checks model clarity, sequence explanation, and process understanding."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "PRACTICE MECHANICAL SYSTEMS, AUTOMATION, AND SIMULATION WORKFLOWS",
+    "career_path":  "CAD, simulation, automation, and manufacturing workflows",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "CAD Modeling Basics workflow",
+                                                  "description":  "Learn how CAD Modeling Basics connects to real mechanical engineering work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Industry Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on models, simulations, process logic, and automation outputs with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "4 Months",
+                                               "label":  "Structured path with focused mechanical engineering practice and review"
+                                           },
+                                           {
+                                               "value":  "Design + Automation",
+                                               "label":  "CAD Modeling Basics, CAM Workflow Intro, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Industry Ready",
+                                               "label":  "Built to strengthen models, simulations, process logic, and automation outputs"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore CAD/CAM Program",
+                                         "batch_info":  "Enrollment is open for the next CAD/CAM cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Applied Mechanical Workflow",
+                           "description":  "Practice models, simulations, process logic, and automation outputs through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Tool-Based Execution",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Simulation-Oriented Practice",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Mechanical Learner",
+                             "text":  "The structure helped me understand CAD/CAM through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

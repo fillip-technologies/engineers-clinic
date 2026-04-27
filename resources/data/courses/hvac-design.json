@@ -1,0 +1,114 @@
+{
+    "slug":  "hvac-design",
+    "title":  "HVAC Design",
+    "category":  "Internship",
+    "level":  "Intermediate",
+    "duration":  "4 Months",
+    "image":  "/images/courses/cloud-computing.svg",
+    "description":  "Understand HVAC planning, load concepts, and layout thinking for basic building system design.",
+    "modules":  [
+                    "HVAC Fundamentals",
+                    "Load and Layout Basics",
+                    "System Selection Awareness"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: System Planning",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: HVAC Layout Thinking",
+                                           "tasks":  [
+                                                         "Room Cooling Review",
+                                                         "Duct Path Sketch",
+                                                         "Equipment Comparison"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: HVAC Planning Sheet",
+                           "tasks":  [
+                                         {
+                                             "title":  "Basic HVAC Layout",
+                                             "assignment":  "Prepare a basic HVAC concept layout and explain the logic behind airflow and equipment placement.",
+                                             "submission":  "Drawing or document.",
+                                             "ai_review":  "The AI checks layout reasoning, labeling, and system planning clarity."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "CONNECT CIVIL FUNDAMENTALS WITH PRACTICAL PROJECT WORKFLOWS",
+    "career_path":  "Drafting, modeling, site planning, and technical documentation",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "HVAC Fundamentals workflow",
+                                                  "description":  "Learn how HVAC Fundamentals connects to real civil engineering work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Project Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on drawings, plans, models, calculations, and documentation outputs with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "4 Months",
+                                               "label":  "Structured path with focused civil engineering practice and review"
+                                           },
+                                           {
+                                               "value":  "Planning + Tools",
+                                               "label":  "HVAC Fundamentals, Load and Layout Basics, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Project Ready",
+                                               "label":  "Built to strengthen drawings, plans, models, calculations, and documentation outputs"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore HVAC Design Program",
+                                         "batch_info":  "Enrollment is open for the next HVAC Design cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Industry-Style Practice",
+                           "description":  "Practice drawings, plans, models, calculations, and documentation outputs through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Technical Documentation",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Project Workflow Clarity",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Civil Engineering Learner",
+                             "text":  "The structure helped me understand HVAC Design through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

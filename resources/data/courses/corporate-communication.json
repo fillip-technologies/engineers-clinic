@@ -1,0 +1,114 @@
+{
+    "slug":  "corporate-communication",
+    "title":  "Corporate Communication",
+    "category":  "Internship",
+    "level":  "Advanced",
+    "duration":  "5 Months",
+    "image":  "/images/courses/graphic-design.svg",
+    "description":  "Build structured communication strategy across internal messaging, brand voice, and stakeholder coordination.",
+    "modules":  [
+                    "Communication Strategy",
+                    "Stakeholder Messaging",
+                    "Brand and Internal Alignment"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Strategic Messaging",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Communication Planning",
+                                           "tasks":  [
+                                                         "Internal Announcement Draft",
+                                                         "Stakeholder Message Matrix",
+                                                         "Brand Tone Review"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: Communication Plan",
+                           "tasks":  [
+                                         {
+                                             "title":  "Corporate Messaging Framework",
+                                             "assignment":  "Prepare a communication plan for a business update covering audience, tone, channel, and key messages.",
+                                             "submission":  "Presentation or document.",
+                                             "ai_review":  "The AI checks strategic consistency, audience fit, and message clarity."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "TURN COMMUNICATION STRATEGY INTO CAMPAIGN-READY OUTPUTS",
+    "career_path":  "Content planning, audience strategy, PR, and campaign workflows",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "Communication Strategy workflow",
+                                                  "description":  "Learn how Communication Strategy connects to real communication work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Campaign Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on campaigns, stories, PR plans, and audience-ready content with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "5 Months",
+                                               "label":  "Structured path with focused communication practice and review"
+                                           },
+                                           {
+                                               "value":  "Content + Strategy",
+                                               "label":  "Communication Strategy, Stakeholder Messaging, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Campaign Ready",
+                                               "label":  "Built to strengthen campaigns, stories, PR plans, and audience-ready content"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore Corporate Communication Program",
+                                         "batch_info":  "Enrollment is open for the next Corporate Communication cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Campaign-First Practice",
+                           "description":  "Practice campaigns, stories, PR plans, and audience-ready content through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Audience Thinking",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Output-Based Communication",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Communication Learner",
+                             "text":  "The structure helped me understand Corporate Communication through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

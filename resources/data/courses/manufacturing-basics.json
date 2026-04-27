@@ -1,0 +1,114 @@
+{
+    "slug":  "manufacturing-basics",
+    "title":  "Manufacturing Basics",
+    "category":  "Internship",
+    "level":  "Beginner",
+    "duration":  "3 Months",
+    "image":  "/images/courses/backend-development.svg",
+    "description":  "Build a practical foundation in manufacturing workflows, shop-floor terminology, and process thinking.",
+    "modules":  [
+                    "Manufacturing Process Overview",
+                    "Materials and Operations",
+                    "Production Flow Basics"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Process Familiarity",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Shop Floor Logic",
+                                           "tasks":  [
+                                                         "Process Mapping",
+                                                         "Material Flow Summary",
+                                                         "Production Stage Breakdown"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: Manufacturing Workflow",
+                           "tasks":  [
+                                         {
+                                             "title":  "Mini Production Map",
+                                             "assignment":  "Document a simple manufacturing flow and explain each production stage from input to output.",
+                                             "submission":  "Process map or document.",
+                                             "ai_review":  "The AI checks sequence clarity, terminology, and understanding of process dependencies."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "PRACTICE MECHANICAL SYSTEMS, AUTOMATION, AND SIMULATION WORKFLOWS",
+    "career_path":  "CAD, simulation, automation, and manufacturing workflows",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "Manufacturing Process Overview workflow",
+                                                  "description":  "Learn how Manufacturing Process Overview connects to real mechanical engineering work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Industry Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on models, simulations, process logic, and automation outputs with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "3 Months",
+                                               "label":  "Structured path with focused mechanical engineering practice and review"
+                                           },
+                                           {
+                                               "value":  "Design + Automation",
+                                               "label":  "Manufacturing Process Overview, Materials and Operations, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Industry Ready",
+                                               "label":  "Built to strengthen models, simulations, process logic, and automation outputs"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore Manufacturing Basics Program",
+                                         "batch_info":  "Enrollment is open for the next Manufacturing Basics cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Applied Mechanical Workflow",
+                           "description":  "Practice models, simulations, process logic, and automation outputs through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Tool-Based Execution",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Simulation-Oriented Practice",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Mechanical Learner",
+                             "text":  "The structure helped me understand Manufacturing Basics through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

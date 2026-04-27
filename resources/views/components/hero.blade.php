@@ -1,20 +1,22 @@
 <section id="heroSection"
-    class="relative overflow-hidden bg-bgMain pt-24 pb-16 lg:pt-28 lg:pb-20">
+    class="relative overflow-hidden bg-bgMain min-h-[85vh] flex items-center pt-16 pb-10">
+
+    <!-- PARTICLES BACKGROUND -->
+    <div id="particles-js"></div>
 
     <!-- SOFT BACKGROUND GLOW -->
-    <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute inset-0 pointer-events-none z-[1]">
         <div class="absolute top-0 left-0 w-[400px] h-[400px] bg-green-100 blur-[140px] rounded-full"></div>
         <div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-orange-100 blur-[140px] rounded-full"></div>
     </div>
 
-    <div class="relative max-w-7xl mx-auto px-6">
+    <div class="relative z-[2] max-w-7xl mx-auto px-6 w-full">
 
-        <div class="grid lg:grid-cols-2 gap-20 items-center">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-            <!-- LEFT SIDE (SkillForge Style) -->
+            <!-- LEFT -->
             <div>
 
-                <!-- Badge -->
                 <div class="mb-6">
                     <span
                         class="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full bg-green-50 text-green-700 border border-green-200">
@@ -22,7 +24,6 @@
                     </span>
                 </div>
 
-                <!-- Heading -->
                 <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6 text-gray-900">
                     <span
                         class="bg-gradient-to-r from-green-700 via-emerald-600 to-orange-500 bg-clip-text text-transparent">
@@ -32,13 +33,11 @@
                     with Expert-Led Courses
                 </h1>
 
-                <!-- Description -->
                 <p class="text-lg text-gray-600 mb-8 max-w-xl">
                     Master in-demand skills with hands-on projects and real-world applications.
                     Join thousands of learners advancing their careers.
                 </p>
 
-                <!-- CTA -->
                 <div class="flex gap-5 mb-10">
                     <button
                         class="px-8 py-4 bg-green-700 text-white rounded-xl font-semibold shadow-md hover:bg-green-800 hover:scale-[1.02] transition">
@@ -51,18 +50,12 @@
                     </button>
                 </div>
 
-                <!-- Social Proof -->
                 <div class="flex items-center gap-6">
-
                     <div class="flex -space-x-3">
-                        <img src="https://i.pravatar.cc/40?img=1"
-                            class="w-9 h-9 rounded-full border-2 border-white">
-                        <img src="https://i.pravatar.cc/40?img=2"
-                            class="w-9 h-9 rounded-full border-2 border-white">
-                        <img src="https://i.pravatar.cc/40?img=3"
-                            class="w-9 h-9 rounded-full border-2 border-white">
-                        <img src="https://i.pravatar.cc/40?img=4"
-                            class="w-9 h-9 rounded-full border-2 border-white">
+                        <img src="https://i.pravatar.cc/40?img=1" class="w-9 h-9 rounded-full border-2 border-white">
+                        <img src="https://i.pravatar.cc/40?img=2" class="w-9 h-9 rounded-full border-2 border-white">
+                        <img src="https://i.pravatar.cc/40?img=3" class="w-9 h-9 rounded-full border-2 border-white">
+                        <img src="https://i.pravatar.cc/40?img=4" class="w-9 h-9 rounded-full border-2 border-white">
                     </div>
 
                     <p class="text-sm text-gray-600">
@@ -72,12 +65,11 @@
                     <p class="text-sm text-gray-600">
                         ⭐ <span class="font-semibold text-gray-900">4.9</span> avg. rating
                     </p>
-
                 </div>
 
             </div>
 
-            <!-- RIGHT SIDE (FORM + BLOB) -->
+            <!-- RIGHT (FORM SAME) -->
             <div class="relative flex justify-center">
 
                 <!-- BLOBS -->
@@ -106,7 +98,7 @@
                             Talk to our expert & plan your career path
                         </p>
 
-                        <!-- FORM -->
+                        <!-- FORM (UNCHANGED) -->
                         <form class="space-y-4">
 
                             <input type="text" placeholder="Full Name"
@@ -125,7 +117,6 @@
 
                         </form>
 
-                        <!-- TRUST -->
                         <p class="text-xs text-gray-400 mt-4 text-center">
                             🔒 No spam. Only helpful guidance.
                         </p>
@@ -139,3 +130,96 @@
         </div>
     </div>
 </section>
+
+<!-- PARTICLES CSS -->
+<style>
+    #particles-js {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        opacity: 1;
+
+        /* 🔥 DARK GREEN GLOW */
+        filter: drop-shadow(0 0 10px rgba(22, 101, 52, 0.6));
+    }
+
+    /* ensure content stays above */
+    #heroSection>*:not(#particles-js) {
+        position: relative;
+        z-index: 2;
+    }
+</style>
+
+<!-- PARTICLES JS -->
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        particlesJS("particles-js", {
+            particles: {
+                number: {
+                    value: 60
+                },
+
+                /* 🔥 DARK BRAND COLORS */
+                color: {
+                    value: ["#166534", "#15803d"]
+                },
+
+                shape: {
+                    type: "circle"
+                },
+
+                opacity: {
+                    value: 0.75,
+                    random: true
+                },
+
+                size: {
+                    value: 5,
+                    random: true
+                },
+
+                line_linked: {
+                    enable: true,
+                    distance: 170,
+                    color: "#166534",
+                    opacity: 0.6,
+                    width: 1.3
+                },
+
+                move: {
+                    enable: true,
+                    speed: 1.6
+                }
+            },
+
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: "grab"
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: "push"
+                    }
+                },
+                modes: {
+                    grab: {
+                        distance: 220,
+                        line_linked: {
+                            opacity: 1
+                        }
+                    },
+                    push: {
+                        particles_nb: 4
+                    }
+                }
+            },
+
+            retina_detect: true
+        });
+    });
+</script>

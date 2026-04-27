@@ -1,0 +1,114 @@
+{
+    "slug":  "cloud-backend-systems",
+    "title":  "Cloud \u0026 Backend Systems",
+    "category":  "Internship",
+    "level":  "Intermediate",
+    "duration":  "4 Months",
+    "image":  "/images/courses/cloud-computing.svg",
+    "description":  "Learn server-side logic, APIs, and cloud deployment workflows through backend engineering tasks.",
+    "modules":  [
+                    "Backend Foundations",
+                    "API Design",
+                    "Cloud Deployment Basics"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Backend Delivery",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: API Workflow",
+                                           "tasks":  [
+                                                         "CRUD API Design",
+                                                         "Auth Flow Outline",
+                                                         "Deployment Checklist"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: Backend Service Build",
+                           "tasks":  [
+                                         {
+                                             "title":  "Mini API Project",
+                                             "assignment":  "Build and document a simple backend service with routes, validation, and deployment notes.",
+                                             "submission":  "Repository link and API documentation.",
+                                             "ai_review":  "The AI checks route consistency, validation coverage, and API response clarity."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "BUILD MODERN SOFTWARE SYSTEMS THROUGH APPLIED ENGINEERING TASKS",
+    "career_path":  "Architecture, implementation, testing, and deployment workflows",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "Backend Foundations workflow",
+                                                  "description":  "Learn how Backend Foundations connects to real software work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Build Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on components, APIs, security checks, and deployable system outputs with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "4 Months",
+                                               "label":  "Structured path with focused software practice and review"
+                                           },
+                                           {
+                                               "value":  "Systems + Code",
+                                               "label":  "Backend Foundations, API Design, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Build Ready",
+                                               "label":  "Built to strengthen components, APIs, security checks, and deployable system outputs"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore Cloud \u0026 Backend Systems Program",
+                                         "batch_info":  "Enrollment is open for the next Cloud \u0026 Backend Systems cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Project-First Engineering",
+                           "description":  "Practice components, APIs, security checks, and deployable system outputs through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Architecture Thinking",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Hands-On Build Practice",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Tech Learner",
+                             "text":  "The structure helped me understand Cloud \u0026 Backend Systems through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

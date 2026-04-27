@@ -1,0 +1,114 @@
+{
+    "slug":  "cloud-architecture",
+    "title":  "Cloud Architecture",
+    "category":  "Internship",
+    "level":  "Advanced",
+    "duration":  "5 Months",
+    "image":  "/images/courses/cloud-computing.svg",
+    "description":  "Design scalable cloud systems with architecture planning, resilience thinking, and deployment decision-making.",
+    "modules":  [
+                    "Architecture Patterns",
+                    "Scalability and Reliability",
+                    "Security and Operations"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Architecture Blueprinting",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: System Design Logic",
+                                           "tasks":  [
+                                                         "Service Map",
+                                                         "Reliability Review",
+                                                         "Deployment Topology"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: Cloud Blueprint",
+                           "tasks":  [
+                                         {
+                                             "title":  "Scalable System Plan",
+                                             "assignment":  "Prepare a cloud architecture plan that explains services, traffic flow, reliability, and security choices.",
+                                             "submission":  "Architecture document or diagram.",
+                                             "ai_review":  "The AI checks system cohesion, architecture rationale, and operational awareness."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "BUILD MODERN SOFTWARE SYSTEMS THROUGH APPLIED ENGINEERING TASKS",
+    "career_path":  "Architecture, implementation, testing, and deployment workflows",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "Architecture Patterns workflow",
+                                                  "description":  "Learn how Architecture Patterns connects to real software work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Build Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on components, APIs, security checks, and deployable system outputs with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "5 Months",
+                                               "label":  "Structured path with focused software practice and review"
+                                           },
+                                           {
+                                               "value":  "Systems + Code",
+                                               "label":  "Architecture Patterns, Scalability and Reliability, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Build Ready",
+                                               "label":  "Built to strengthen components, APIs, security checks, and deployable system outputs"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore Cloud Architecture Program",
+                                         "batch_info":  "Enrollment is open for the next Cloud Architecture cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Project-First Engineering",
+                           "description":  "Practice components, APIs, security checks, and deployable system outputs through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Architecture Thinking",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Hands-On Build Practice",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Tech Learner",
+                             "text":  "The structure helped me understand Cloud Architecture through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}
