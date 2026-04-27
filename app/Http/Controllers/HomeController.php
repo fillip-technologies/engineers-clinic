@@ -81,7 +81,11 @@ class HomeController extends Controller
             ? 'college-dashboard'
             : 'student-dashboard';
 
-        return view('dashboard.home', $this->frontendAdminData($activePage));
+        $view = request()->routeIs('college.dashboard')
+            ? 'dashboard.home'
+            : 'dashboard.student-dashboard.home';
+
+        return view($view, $this->frontendAdminData($activePage));
     }
 
     public function redirectDashboardByRole($role)
@@ -190,6 +194,22 @@ class HomeController extends Controller
         return view('dashboard.student-dashboard.profile.edit', [
             'profile' => $this->studentProfileData(),
             ...$this->frontendAdminData('student-profile'),
+        ]);
+    }
+
+    public function quizAttempts()
+    {
+        return view('dashboard.student-dashboard.quiz-attempts.index', [
+            'quizAttempts' => $this->studentQuizAttemptsData(),
+            ...$this->frontendAdminData('student-quiz-attempts'),
+        ]);
+    }
+
+    public function orderHistory()
+    {
+        return view('dashboard.student-dashboard.order-history.index', [
+            'orders' => $this->studentOrderHistoryData(),
+            ...$this->frontendAdminData('student-order-history'),
         ]);
     }
 
@@ -327,8 +347,8 @@ class HomeController extends Controller
 
         $course['menu_group'] = $meta['menu_group'];
         $course['menu_group_label'] = $meta['menu_group_label'];
-        $course['hero_badge'] = $meta['hero_badge'];
-        $course['career_path'] = $meta['career_path'];
+        $course['hero_badge'] = $course['hero_badge'] ?? $meta['hero_badge'];
+        $course['career_path'] = $course['career_path'] ?? $meta['career_path'];
 
         return $course;
     }
@@ -372,21 +392,21 @@ class HomeController extends Controller
                     [
                         'key' => 'student-quiz-attempts',
                         'label' => 'My Quiz Attempts',
-                        'icon' => 'fi fi-rr-document-signed',
-                        'href' => '#',
+                        'icon' => 'fi fi-rr-document',
+                        'href' => route('dashboard.quiz-attempts'),
                     ],
                     [
                         'key' => 'student-order-history',
                         'label' => 'Order History',
                         'icon' => 'fi fi-rr-receipt',
-                        'href' => '#',
+                        'href' => route('dashboard.orders'),
                     ],
-                    [
-                        'key' => 'student-question-answer',
-                        'label' => 'Question & Answer',
-                        'icon' => 'fi fi-rr-interrogation',
-                        'href' => '#',
-                    ],
+                    // [
+                    //     'key' => 'student-question-answer',
+                    //     'label' => 'Question & Answer',
+                    //     'icon' => 'fi fi-rr-interrogation',
+                    //     'href' => '#',
+                    // ],
                     [
                         'key' => 'student-settings',
                         'label' => 'Settings',
@@ -691,6 +711,69 @@ class HomeController extends Controller
             'email' => 'john.doe@example.com',
             'age' => '22',
             'avatar' => 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80',
+        ];
+    }
+
+    protected function studentQuizAttemptsData(): array
+    {
+        return [
+            [
+                'title' => 'Frontend Foundations Quiz',
+                'course' => 'Frontend Development Internship',
+                'attempt' => 'Attempt 2 of 3',
+                'score' => '82%',
+                'status' => 'Passed',
+                'updated_at' => 'Last attempted on April 26, 2026',
+                'action' => 'Review Attempt',
+            ],
+            [
+                'title' => 'API Basics Assessment',
+                'course' => 'Full Stack Development Internship',
+                'attempt' => 'Attempt 1 of 2',
+                'score' => 'Pending',
+                'status' => 'Upcoming',
+                'updated_at' => 'Available until April 30, 2026',
+                'action' => 'Start Quiz',
+            ],
+            [
+                'title' => 'User Research Checkpoint',
+                'course' => 'UI/UX Design Internship',
+                'attempt' => 'Attempt 1 of 1',
+                'score' => '91%',
+                'status' => 'Completed',
+                'updated_at' => 'Submitted on April 18, 2026',
+                'action' => 'View Summary',
+            ],
+        ];
+    }
+
+    protected function studentOrderHistoryData(): array
+    {
+        return [
+            [
+                'title' => 'Full Stack Internship',
+                'order_id' => 'ORD-1023',
+                'purchase_date' => 'April 21, 2026',
+                'price' => 'Rs. 4,999',
+                'payment_status' => 'Paid',
+                'access_status' => 'Active',
+            ],
+            [
+                'title' => 'AI Automation Program',
+                'order_id' => 'ORD-1041',
+                'purchase_date' => 'April 10, 2026',
+                'price' => 'Rs. 6,499',
+                'payment_status' => 'Pending',
+                'access_status' => 'Active',
+            ],
+            [
+                'title' => 'UI/UX Design Course',
+                'order_id' => 'ORD-0988',
+                'purchase_date' => 'March 28, 2026',
+                'price' => 'Rs. 3,799',
+                'payment_status' => 'Failed',
+                'access_status' => 'Expired',
+            ],
         ];
     }
 

@@ -1,0 +1,114 @@
+{
+    "slug":  "cfd-fea",
+    "title":  "CFD \u0026 FEA",
+    "category":  "Internship",
+    "level":  "Advanced",
+    "duration":  "5 Months",
+    "image":  "/images/courses/backend-development.svg",
+    "description":  "Learn simulation-driven engineering basics across fluid behavior, structural analysis, and interpretation workflows.",
+    "modules":  [
+                    "Simulation Foundations",
+                    "Boundary Conditions and Setup",
+                    "Result Interpretation"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Engineering Simulation",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Setup and Analysis",
+                                           "tasks":  [
+                                                         "Model Setup Notes",
+                                                         "Boundary Condition Sheet",
+                                                         "Result Snapshot Review"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: Simulation Review",
+                           "tasks":  [
+                                         {
+                                             "title":  "Analysis Summary",
+                                             "assignment":  "Document a simple CFD or FEA setup, assumptions, and the meaning of the resulting output.",
+                                             "submission":  "Simulation summary or PDF.",
+                                             "ai_review":  "The AI checks setup logic, engineering terminology, and interpretation quality."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "PRACTICE MECHANICAL SYSTEMS, AUTOMATION, AND SIMULATION WORKFLOWS",
+    "career_path":  "CAD, simulation, automation, and manufacturing workflows",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "Simulation Foundations workflow",
+                                                  "description":  "Learn how Simulation Foundations connects to real mechanical engineering work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Industry Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on models, simulations, process logic, and automation outputs with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "5 Months",
+                                               "label":  "Structured path with focused mechanical engineering practice and review"
+                                           },
+                                           {
+                                               "value":  "Design + Automation",
+                                               "label":  "Simulation Foundations, Boundary Conditions and Setup, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Industry Ready",
+                                               "label":  "Built to strengthen models, simulations, process logic, and automation outputs"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore CFD \u0026 FEA Program",
+                                         "batch_info":  "Enrollment is open for the next CFD \u0026 FEA cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Applied Mechanical Workflow",
+                           "description":  "Practice models, simulations, process logic, and automation outputs through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Tool-Based Execution",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Simulation-Oriented Practice",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Mechanical Learner",
+                             "text":  "The structure helped me understand CFD \u0026 FEA through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

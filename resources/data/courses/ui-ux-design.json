@@ -1,0 +1,115 @@
+{
+    "slug":  "ui-ux-design",
+    "title":  "UI/UX Design",
+    "category":  "Internship",
+    "level":  "Beginner",
+    "duration":  "3 Months",
+    "image":  "/images/courses/ui-ux-design.svg",
+    "description":  "Learn interface design, wireframing, and user-centered flows through practical design system exercises.",
+    "modules":  [
+                    "Design Fundamentals",
+                    "Wireframes and User Flows",
+                    "Figma Practice"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Design Basics",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Flow and Screens",
+                                           "tasks":  [
+                                                         "Persona Card",
+                                                         "Mobile Onboarding Flow",
+                                                         "Pricing Comparison",
+                                                         "App Dashboard Wireframe"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: Interface Practice",
+                           "tasks":  [
+                                         {
+                                             "title":  "Wireframe to Visual Screen",
+                                             "assignment":  "Design a simple product flow and convert one wireframe into a polished UI screen.",
+                                             "submission":  "Figma link.",
+                                             "ai_review":  "The AI reviews hierarchy, spacing consistency, and component clarity in the submitted design."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "DESIGN PRODUCT EXPERIENCES END TO END",
+    "career_path":  "Product design, UX research, flows, and interface systems",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "Design Fundamentals workflow",
+                                                  "description":  "Learn how Design Fundamentals connects to real design work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Portfolio Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on wireframes, prototypes, and polished interface systems with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "3 Months",
+                                               "label":  "Structured path with focused design practice and review"
+                                           },
+                                           {
+                                               "value":  "UX + UI",
+                                               "label":  "Design Fundamentals, Wireframes and User Flows, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Portfolio Ready",
+                                               "label":  "Built to strengthen wireframes, prototypes, and polished interface systems"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore UI/UX Design Program",
+                                         "batch_info":  "Enrollment is open for the next UI/UX Design cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Portfolio-First Workflow",
+                           "description":  "Practice wireframes, prototypes, and polished interface systems through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Product Thinking Built In",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Figma-to-Hand-off Practice",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Design Learner",
+                             "text":  "The structure helped me understand UI/UX Design through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

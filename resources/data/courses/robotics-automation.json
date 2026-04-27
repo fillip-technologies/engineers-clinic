@@ -1,0 +1,114 @@
+{
+    "slug":  "robotics-automation",
+    "title":  "Robotics Automation",
+    "category":  "Internship",
+    "level":  "Advanced",
+    "duration":  "5 Months",
+    "image":  "/images/courses/backend-development.svg",
+    "description":  "Explore automation logic, robotic workflows, and control-system thinking for modern industrial applications.",
+    "modules":  [
+                    "Automation Logic",
+                    "Robotics Workflow Basics",
+                    "Control and Integration"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Automation Systems",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Robotic Process Design",
+                                           "tasks":  [
+                                                         "Sensor-Action Flow",
+                                                         "Robot Task Sequence",
+                                                         "Control Logic Notes"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: Automation Flow",
+                           "tasks":  [
+                                         {
+                                             "title":  "Robot Process Map",
+                                             "assignment":  "Prepare a robotics workflow showing inputs, control logic, and output actions for an automation scenario.",
+                                             "submission":  "Diagram or document.",
+                                             "ai_review":  "The AI checks process flow, control thinking, and automation clarity."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "PRACTICE MECHANICAL SYSTEMS, AUTOMATION, AND SIMULATION WORKFLOWS",
+    "career_path":  "CAD, simulation, automation, and manufacturing workflows",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "Automation Logic workflow",
+                                                  "description":  "Learn how Automation Logic connects to real mechanical engineering work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Industry Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on models, simulations, process logic, and automation outputs with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "5 Months",
+                                               "label":  "Structured path with focused mechanical engineering practice and review"
+                                           },
+                                           {
+                                               "value":  "Design + Automation",
+                                               "label":  "Automation Logic, Robotics Workflow Basics, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Industry Ready",
+                                               "label":  "Built to strengthen models, simulations, process logic, and automation outputs"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore Robotics Automation Program",
+                                         "batch_info":  "Enrollment is open for the next Robotics Automation cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Applied Mechanical Workflow",
+                           "description":  "Practice models, simulations, process logic, and automation outputs through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Tool-Based Execution",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Simulation-Oriented Practice",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Mechanical Learner",
+                             "text":  "The structure helped me understand Robotics Automation through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

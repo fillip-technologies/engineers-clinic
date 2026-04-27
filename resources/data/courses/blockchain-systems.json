@@ -1,0 +1,114 @@
+{
+    "slug":  "blockchain-systems",
+    "title":  "Blockchain Systems",
+    "category":  "Internship",
+    "level":  "Advanced",
+    "duration":  "5 Months",
+    "image":  "/images/courses/cyber-security.svg",
+    "description":  "Learn distributed ledger concepts, smart contract thinking, and blockchain system design fundamentals.",
+    "modules":  [
+                    "Blockchain Fundamentals",
+                    "Smart Contract Basics",
+                    "System Use Cases"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Distributed Systems Basics",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Contract and Ledger Logic",
+                                           "tasks":  [
+                                                         "Ledger Flow Notes",
+                                                         "Contract Rule Draft",
+                                                         "Use Case Mapping"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: Blockchain Concept Build",
+                           "tasks":  [
+                                         {
+                                             "title":  "Smart Contract Workflow Note",
+                                             "assignment":  "Document a blockchain use case and outline the smart contract rules and participant flow.",
+                                             "submission":  "Document or code snippet.",
+                                             "ai_review":  "The AI checks distributed-system reasoning, rule clarity, and use-case consistency."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "BUILD MODERN SOFTWARE SYSTEMS THROUGH APPLIED ENGINEERING TASKS",
+    "career_path":  "Architecture, implementation, testing, and deployment workflows",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "Blockchain Fundamentals workflow",
+                                                  "description":  "Learn how Blockchain Fundamentals connects to real software work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Build Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on components, APIs, security checks, and deployable system outputs with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "5 Months",
+                                               "label":  "Structured path with focused software practice and review"
+                                           },
+                                           {
+                                               "value":  "Systems + Code",
+                                               "label":  "Blockchain Fundamentals, Smart Contract Basics, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Build Ready",
+                                               "label":  "Built to strengthen components, APIs, security checks, and deployable system outputs"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore Blockchain Systems Program",
+                                         "batch_info":  "Enrollment is open for the next Blockchain Systems cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Project-First Engineering",
+                           "description":  "Practice components, APIs, security checks, and deployable system outputs through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Architecture Thinking",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Hands-On Build Practice",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Tech Learner",
+                             "text":  "The structure helped me understand Blockchain Systems through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

@@ -1,0 +1,114 @@
+{
+    "slug":  "machine-learning",
+    "title":  "Machine Learning",
+    "category":  "Internship",
+    "level":  "Intermediate",
+    "duration":  "4 Months",
+    "image":  "/images/courses/business-analytics.svg",
+    "description":  "Build practical understanding of supervised learning, model evaluation, and feature-based experimentation.",
+    "modules":  [
+                    "ML Workflow Basics",
+                    "Model Training",
+                    "Evaluation and Iteration"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Model Foundations",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Learning Pipeline",
+                                           "tasks":  [
+                                                         "Dataset Cleanup",
+                                                         "Baseline Model Run",
+                                                         "Confusion Matrix Review"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: ML Experiment",
+                           "tasks":  [
+                                         {
+                                             "title":  "Prediction Workflow",
+                                             "assignment":  "Train a simple model, evaluate it with basic metrics, and summarize what improved the result.",
+                                             "submission":  "Notebook or repository link.",
+                                             "ai_review":  "The AI checks model workflow structure, metric reporting, and clarity of findings."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "TURN DATA AND AI CONCEPTS INTO PRACTICAL OUTPUTS",
+    "career_path":  "Analytics, automation, models, and decision workflows",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "ML Workflow Basics workflow",
+                                                  "description":  "Learn how ML Workflow Basics connects to real data work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Insight Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on dashboards, models, automation, and insight workflows with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "4 Months",
+                                               "label":  "Structured path with focused data practice and review"
+                                           },
+                                           {
+                                               "value":  "Data + AI",
+                                               "label":  "ML Workflow Basics, Model Training, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Insight Ready",
+                                               "label":  "Built to strengthen dashboards, models, automation, and insight workflows"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore Machine Learning Program",
+                                         "batch_info":  "Enrollment is open for the next Machine Learning cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Applied Data Practice",
+                           "description":  "Practice dashboards, models, automation, and insight workflows through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Logic Before Tools",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Outcome-Driven Projects",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Data Learner",
+                             "text":  "The structure helped me understand Machine Learning through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}

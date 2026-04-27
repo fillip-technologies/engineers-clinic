@@ -1,0 +1,114 @@
+{
+    "slug":  "pr-strategy",
+    "title":  "PR Strategy",
+    "category":  "Internship",
+    "level":  "Intermediate",
+    "duration":  "4 Months",
+    "image":  "/images/courses/graphic-design.svg",
+    "description":  "Build media messaging, campaign planning, and audience communication skills for modern PR strategy work.",
+    "modules":  [
+                    "PR Fundamentals",
+                    "Messaging and Positioning",
+                    "Campaign Communication"
+                ],
+    "phases":  [
+                   {
+                       "title":  "Phase 1: Communication Planning",
+                       "modules":  [
+                                       {
+                                           "title":  "Module 1: Media Messaging",
+                                           "tasks":  [
+                                                         "Press Note Draft",
+                                                         "Audience Message Matrix",
+                                                         "Campaign Outline"
+                                                     ]
+                                       }
+                                   ]
+                   }
+               ],
+    "curriculum":  [
+                       {
+                           "title":  "Task 1: PR Campaign Starter",
+                           "tasks":  [
+                                         {
+                                             "title":  "Press Communication Plan",
+                                             "assignment":  "Create a small PR campaign outline with key message, audience, and rollout plan.",
+                                             "submission":  "Presentation or document.",
+                                             "ai_review":  "The AI checks strategic clarity, message consistency, and audience alignment."
+                                         }
+                                     ]
+                       }
+                   ],
+    "hero_badge":  "TURN COMMUNICATION STRATEGY INTO CAMPAIGN-READY OUTPUTS",
+    "career_path":  "Content planning, audience strategy, PR, and campaign workflows",
+    "program_overview":  {
+                             "features":  [
+                                              {
+                                                  "title":  "PR Fundamentals workflow",
+                                                  "description":  "Learn how PR Fundamentals connects to real communication work through guided tasks, examples, and applied review checkpoints."
+                                              },
+                                              {
+                                                  "title":  "Campaign Ready execution",
+                                                  "description":  "Move from concepts to practical outputs by working on campaigns, stories, PR plans, and audience-ready content with clear submission expectations."
+                                              }
+                                          ],
+                             "stats":  [
+                                           {
+                                               "value":  "4 Months",
+                                               "label":  "Structured path with focused communication practice and review"
+                                           },
+                                           {
+                                               "value":  "Content + Strategy",
+                                               "label":  "PR Fundamentals, Messaging and Positioning, and applied workflow practice"
+                                           },
+                                           {
+                                               "value":  "Campaign Ready",
+                                               "label":  "Built to strengthen campaigns, stories, PR plans, and audience-ready content"
+                                           }
+                                       ],
+                             "cta":  {
+                                         "button_text":  "Explore PR Strategy Program",
+                                         "batch_info":  "Enrollment is open for the next PR Strategy cohort."
+                                     }
+                         },
+    "why_choose":  [
+                       {
+                           "title":  "Campaign-First Practice",
+                           "description":  "Practice campaigns, stories, PR plans, and audience-ready content through structured assignments tied to realistic learning scenarios."
+                       },
+                       {
+                           "title":  "Audience Thinking",
+                           "description":  "Understand the reasoning behind each workflow so your decisions become clearer and more confident."
+                       },
+                       {
+                           "title":  "Output-Based Communication",
+                           "description":  "Create reviewable outputs that help you explain your work during internships, interviews, or project discussions."
+                       }
+                   ],
+    "testimonials":  [
+                         {
+                             "name":  "Aarav Mehta",
+                             "role":  "Communication Learner",
+                             "text":  "The structure helped me understand PR Strategy through practical tasks and clear checkpoints."
+                         },
+                         {
+                             "name":  "Nisha Kapoor",
+                             "role":  "College Student",
+                             "text":  "I liked that every module ended with something concrete to submit, review, and improve."
+                         }
+                     ],
+    "faq":  [
+                {
+                    "question":  "Do I need prior experience before joining?",
+                    "answer":  "No. The track starts with foundations and then moves into applied tasks, so beginners can build confidence step by step."
+                },
+                {
+                    "question":  "Will I build practical projects inside this course?",
+                    "answer":  "Yes. The curriculum is organized around structured assignments, submissions, and reviewable outputs."
+                },
+                {
+                    "question":  "What kind of support will I get during the program?",
+                    "answer":  "You get guided learning structure, task clarity, and review-focused feedback to help you improve your work."
+                }
+            ]
+}
