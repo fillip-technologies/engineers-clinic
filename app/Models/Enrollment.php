@@ -14,6 +14,7 @@ class Enrollment extends Model
         'student_id',
         'course_id',
         'enrollment_date',
+        'progress',
         'status',
     ];
 

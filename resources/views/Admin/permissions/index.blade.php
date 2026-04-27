@@ -1,46 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Permissions</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-4">
-        <h1>Permissions</h1>
-        <a href="{{ route('permissions.create') }}" class="btn btn-primary mb-3">Create New Permission</a>
-        
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
+@extends('Admin.layouts.layout')
 
-        <table class="table table-bordered">
-            <thead>
+@section('content')
+    <div class="mb-6 flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-semibold text-textPrimary">Permissions</h1>
+            <p class="text-textSecondary mt-1">Manage system permissions</p>
+        </div>
+        <a href="{{ route('admin.permissions.create') }}" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primaryLight transition">
+            + Create New Permission
+        </a>
+    </div>
+
+    @if(session('success'))
+        <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg">{{ session('success') }}</div>
+    @endif
+
+    <div class="bg-white rounded-xl border border-glassBorder overflow-hidden">
+        <table class="min-w-full">
+            <thead class="bg-gray-50">
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Actions</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-textMuted">ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-textMuted">Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-textMuted">Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach($permissions as $permission)
-                <tr>
-                    <td>{{ $permission->id }}</td>
-                    <td>{{ $permission->name }}</td>
-                    <td>
-                        <a href="{{ route('permissions.show', $permission->id) }}" class="btn btn-sm btn-info">View</a>
-                        <a href="{{ route('permissions.edit', $permission->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                        </form>
+            <tbody class="divide-y divide-gray-100">
+                @forelse($permissions as $permission)
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 text-textPrimary">{{ $permission->id }}</td>
+                    <td class="px-6 py-4 text-textPrimary font-medium">{{ $permission->name }}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-2">
+                            <a href="{{ route('admin.permissions.show', $permission->id) }}" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition">
+                                <i class="fi fi-rr-eye"></i>
+                            </a>
+                            <a href="{{ route('admin.permissions.edit', $permission->id) }}" class="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition">
+                                <i class="fi fi-rr-pencil"></i>
+                            </a>
+                            <form action="{{ route('admin.permissions.destroy', $permission->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition" onclick="return confirm('Are you sure?')">
+                                    <i class="fi fi-rr-trash"></i>
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="3" class="px-6 py-8 text-center text-textMuted">No permissions found.</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
-</body>
-</html>
+@endsection

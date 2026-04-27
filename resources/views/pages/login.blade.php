@@ -127,27 +127,34 @@
                                     </template>
                                 </div> -->
 
-                                <form method="POST" action="#" class="mt-8"
-                                    @submit.prevent="
-                                        if (activeRole === 'student') {
-                                            window.location.href = studentDashboardUrl;
-                                        } else if (activeRole === 'college') {
-                                            window.location.href = collegeDashboardUrl;
+                                <form method="POST" action="{{ route('loginpost') }}" class="mt-8"
+                                    x-data="{
+                                        activeRole: 'student',
+                                        get roleFieldName() {
+                                            return this.activeRole + '_email';
                                         }
-                                    ">
+                                    }">
                                     @csrf
                                     <input type="hidden" name="role" :value="activeRole">
 
                                     <div class="grid gap-5">
-                                        <template x-for="field in roles[activeRole].fields" :key="field.name">
-                                            <div>
-                                                <label class="text-sm font-medium text-textSecondary" :for="field.name"
-                                                    x-text="field.label"></label>
-                                                <input :id="field.name" :type="field.type" :name="field.name"
-                                                    :placeholder="field.placeholder"
-                                                    class="mt-2 w-full rounded-2xl border border-borderLight bg-bgSoft px-4 py-3 text-sm text-textPrimary outline-none transition placeholder:text-textMuted focus:border-brand focus:bg-bgWhite focus:ring-4 focus:ring-brandSoft" />
-                                            </div>
-                                        </template>
+                                        <div>
+                                            <label class="text-sm font-medium text-textSecondary" for="email">
+                                                Email Address
+                                            </label>
+                                            <input id="email" type="email" name="email"
+                                                placeholder="Enter your email address"
+                                                class="mt-2 w-full rounded-2xl border border-borderLight bg-bgSoft px-4 py-3 text-sm text-textPrimary outline-none transition placeholder:text-textMuted focus:border-brand focus:bg-bgWhite focus:ring-4 focus:ring-brandSoft" />
+                                        </div>
+
+                                        <div>
+                                            <label class="text-sm font-medium text-textSecondary" for="password">
+                                                Password
+                                            </label>
+                                            <input id="password" type="password" name="password"
+                                                placeholder="Enter your password"
+                                                class="mt-2 w-full rounded-2xl border border-borderLight bg-bgSoft px-4 py-3 text-sm text-textPrimary outline-none transition placeholder:text-textMuted focus:border-brand focus:bg-bgWhite focus:ring-4 focus:ring-brandSoft" />
+                                        </div>
 
                                         <!-- <div>
                                             <label class="text-sm font-medium text-slate-700" :for="activeRole + '_remember'">

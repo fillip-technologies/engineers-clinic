@@ -27,7 +27,7 @@
     <div class="login-card">
         <h2 class="text-center mb-4">Engineers Clinic</h2>
         <h5 class="text-center mb-4">Login</h5>
-        
+
         @if($errors->any())
             <div class="alert alert-danger">
                 <ul class="mb-0">
@@ -44,7 +44,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('loginpost') }}">
             @csrf
             <div class="mb-3">
                 <label for="email" class="form-label">Email Address</label>
@@ -60,7 +60,7 @@
             </div>
             <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
-        
+
         <div class="text-center mt-3">
             <p>Don't have an account? <a href="{{ route('register') }}">Register here</a></p>
         </div>
