@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\RolePermissionController;
 
 // CRUD Routes
+
 Route::resource('roles', RoleController::class);
 Route::resource('permissions', PermissionController::class);
 Route::resource('colleges', CollegeController::class);
