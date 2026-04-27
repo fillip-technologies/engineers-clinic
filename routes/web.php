@@ -16,12 +16,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 });
 Route::get('/signup/{role}', [HomeController::class, 'signup'])->name('signup');
-Route::get('/dashboard', function () {
-    return view('pages.student.dashboard');
-})->name('dashboard');
-Route::get('/college/dashboard', function () {
-    return view('pages.college.dashboard');
-})->name('college.dashboard');
+Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+Route::get('/college/dashboard', [HomeController::class, 'dashboard'])->name('college.dashboard');
+Route::get('/college/students', [HomeController::class, 'studentManagement'])->name('college.students');
+Route::get('/college/students/create', [HomeController::class, 'studentCreate'])->name('college.students.create');
+Route::get('/college/students/edit', [HomeController::class, 'studentEdit'])->name('college.students.edit');
+Route::get('/college/students/view', [HomeController::class, 'studentShow'])->name('college.students.view');
+Route::get('/college/enrollments', [HomeController::class, 'enrollments'])->name('college.enrollments');
+Route::get('/college/enrollments/create', [HomeController::class, 'enrollmentCreate'])->name('college.enrollments.create');
+Route::get('/college/enrollments/edit', [HomeController::class, 'enrollmentEdit'])->name('college.enrollments.edit');
+Route::get('/college/enrollments/view', [HomeController::class, 'enrollmentShow'])->name('college.enrollments.view');
 Route::get('/dashboard/enrolled-courses', [HomeController::class, 'enrolledCourses'])->name('dashboard.enrolled-courses');
 Route::get('/dashboard/student/profile', [HomeController::class, 'studentProfile'])->name('dashboard.student.profile');
 Route::get('/dashboard/student/profile/edit', [HomeController::class, 'studentProfileEdit'])->name('dashboard.student.profile.edit');
