@@ -16,6 +16,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 });
 Route::get('/signup/{role}', [HomeController::class, 'signup'])->name('signup');
+
+// Unified dashboard - redirects based on user role
 Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 Route::get('/college/dashboard', [HomeController::class, 'dashboard'])->name('college.dashboard');
 Route::get('/college/students', [HomeController::class, 'studentManagement'])->name('college.students');

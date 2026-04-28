@@ -1,7 +1,7 @@
 @props([
     'sections' => [],
     'activePage' => null,
-    'userName' => 'Aman Kumar',
+    'userName' => 'Guest',
     'userMeta' => null,
 ])
 

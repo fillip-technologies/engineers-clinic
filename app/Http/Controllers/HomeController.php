@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -77,15 +78,21 @@ class HomeController extends Controller
 
     public function dashboard()
     {
-        $activePage = request()->routeIs('college.dashboard')
-            ? 'college-dashboard'
-            : 'student-dashboard';
+        $user = Auth::user();
 
-        $view = request()->routeIs('college.dashboard')
-            ? 'dashboard.home'
-            : 'dashboard.student-dashboard.home';
+        // Determine role and set appropriate values
+        $roleName = $user?->role?->name ?? 'student';
 
-        return view($view, $this->frontendAdminData($activePage));
+        $activePage = $roleName . '-dashboard';
+
+        // Return role-specific view and sidebar
+        $view = match ($roleName) {
+            'college' => 'dashboard.home',
+            'admin' => 'dashboard.admin-dashboard.home',
+            default => 'dashboard.student-dashboard.home',
+        };
+
+        return view($view, $this->frontendAdminData($activePage, $roleName));
     }
 
     public function redirectDashboardByRole($role)
@@ -353,20 +360,164 @@ class HomeController extends Controller
         return $course;
     }
 
-    protected function frontendAdminData(string $activePage): array
+    protected function frontendAdminData(string $activePage, string $role = 'student'): array
     {
+        $user = Auth::user();
+        $role = Auth::check() ? Auth::user()->role->name : 'student';
+        // dd($role);
+
         return [
-            'sidebarSections' => $this->dashboardSidebarSections(),
+            'sidebarSections' => $this->dashboardSidebarSections($role),
             'activeDashboardPage' => $activePage,
-            'sidebarUserName' => 'Aman Kumar',
-            'sidebarUserMeta' => 'Unified Dashboard',
-            'navbarUserName' => 'Aman',
+            'sidebarUserName' => $user ? $user->name : 'Guest',
+            'sidebarUserMeta' => $user && $user->email ? $user->email : 'Unified Dashboard',
+            'navbarUserName' => $user ? explode(' ', $user->name)[0] : 'Guest',
             'collegeStudents' => $this->dashboardCollegeStudents(),
         ];
     }
 
-    protected function dashboardSidebarSections(): array
+    protected function dashboardSidebarSections(string $role = 'student'): array
     {
+        // Common items for all roles
+        $commonItems = [
+            [
+                'key' => 'common-settings',
+                'label' => 'Settings',
+                'icon' => 'fi fi-rr-settings',
+                'href' => '#',
+            ],
+            [
+                'key' => 'common-logout',
+                'label' => 'Logout',
+                'icon' => 'fi fi-rr-exit',
+                'href' => route('logout'),
+            ],
+        ];
+
+        // Student sidebar
+        if ($role === 'student') {
+            return [
+                [
+                    'label' => 'For Students',
+                    'items' => [
+                        [
+                            'key' => 'student-dashboard',
+                            'label' => 'Dashboard',
+                            'icon' => 'fi fi-rr-apps',
+                            'href' => route('dashboard'),
+                        ],
+                        [
+                            'key' => 'student-profile',
+                            'label' => 'My Profile',
+                            'icon' => 'fi fi-rr-user',
+                            'href' => route('dashboard.student.profile'),
+                        ],
+                        [
+                            'key' => 'student-enrolled-courses',
+                            'label' => 'Enrolled Courses',
+                            'icon' => 'fi fi-rr-book-alt',
+                            'href' => route('dashboard.enrolled-courses'),
+                        ],
+                        [
+                            'key' => 'student-quiz-attempts',
+                            'label' => 'My Quiz Attempts',
+                            'icon' => 'fi fi-rr-document',
+                            'href' => route('dashboard.quiz-attempts'),
+                        ],
+                        [
+                            'key' => 'student-order-history',
+                            'label' => 'Order History',
+                            'icon' => 'fi fi-rr-shopping-cart',
+                            'href' => route('dashboard.orders'),
+                        ],
+                    ],
+                ],
+                [
+                    'label' => 'Account',
+                    'items' => $commonItems,
+                ],
+            ];
+        }
+
+        // College sidebar
+        if ($role === 'college') {
+            return [
+                [
+                    'label' => 'For College',
+                    'items' => [
+                        [
+                            'key' => 'college-dashboard',
+                            'label' => 'Dashboard',
+                            'icon' => 'fi fi-rr-apps',
+                            'href' => route('college.dashboard'),
+                        ],
+                        [
+                            'key' => 'college-students',
+                            'label' => 'Manage Students',
+                            'icon' => 'fi fi-rr-users',
+                            'href' => route('college.students'),
+                        ],
+                        [
+                            'key' => 'college-enrollments',
+                            'label' => 'Enrollments',
+                            'icon' => 'fi fi-rr-user-plus',
+                            'href' => route('college.enrollments'),
+                        ],
+                        [
+                            'key' => 'college-courses',
+                            'label' => 'Courses',
+                            'icon' => 'fi fi-rr-book-alt',
+                            'href' => '#',
+                        ],
+                    ],
+                ],
+                [
+                    'label' => 'Account',
+                    'items' => $commonItems,
+                ],
+            ];
+        }
+
+        // Admin sidebar
+        if ($role === 'admin') {
+            return [
+                [
+                    'label' => 'Administration',
+                    'items' => [
+                        [
+                            'key' => 'admin-dashboard',
+                            'label' => 'Dashboard',
+                            'icon' => 'fi fi-rr-apps',
+                            'href' => route('admin.dashboard'),
+                        ],
+                        [
+                            'key' => 'admin-users',
+                            'label' => 'Manage Users',
+                            'icon' => 'fi fi-rr-users',
+                            'href' => '#',
+                        ],
+                        [
+                            'key' => 'admin-colleges',
+                            'label' => 'Colleges',
+                            'icon' => 'fi fi-rr-building',
+                            'href' => '#',
+                        ],
+                        [
+                            'key' => 'admin-courses',
+                            'label' => 'Courses',
+                            'icon' => 'fi fi-rr-book-alt',
+                            'href' => '#',
+                        ],
+                    ],
+                ],
+                [
+                    'label' => 'Account',
+                    'items' => $commonItems,
+                ],
+            ];
+        }
+
+        // Default student sidebar
         return [
             [
                 'label' => 'For Students',
@@ -377,199 +528,11 @@ class HomeController extends Controller
                         'icon' => 'fi fi-rr-apps',
                         'href' => route('dashboard'),
                     ],
-                    [
-                        'key' => 'student-profile',
-                        'label' => 'My Profile',
-                        'icon' => 'fi fi-rr-user',
-                        'href' => route('dashboard.student.profile'),
-                    ],
-                    [
-                        'key' => 'student-enrolled-courses',
-                        'label' => 'Enrolled Courses',
-                        'icon' => 'fi fi-rr-book-alt',
-                        'href' => route('dashboard.enrolled-courses'),
-                    ],
-                    [
-                        'key' => 'student-quiz-attempts',
-                        'label' => 'My Quiz Attempts',
-                        'icon' => 'fi fi-rr-document',
-                        'href' => route('dashboard.quiz-attempts'),
-                    ],
-                    [
-                        'key' => 'student-order-history',
-                        'label' => 'Order History',
-                        'icon' => 'fi fi-rr-receipt',
-                        'href' => route('dashboard.orders'),
-                    ],
-                    // [
-                    //     'key' => 'student-question-answer',
-                    //     'label' => 'Question & Answer',
-                    //     'icon' => 'fi fi-rr-interrogation',
-                    //     'href' => '#',
-                    // ],
-                    [
-                        'key' => 'student-settings',
-                        'label' => 'Settings',
-                        'icon' => 'fi fi-rr-settings',
-                        'href' => '#',
-                    ],
-                    [
-                        'key' => 'student-logout',
-                        'label' => 'Logout',
-                        'icon' => 'fi fi-rr-exit',
-                        'href' => '#',
-                    ],
-                ],
-            ],
-            [
-                'label' => 'For College',
-                'items' => [],
-            ],
-            [
-                'label' => 'Main',
-                'items' => [
-                    [
-                        'key' => 'college-dashboard',
-                        'label' => 'Dashboard',
-                        'icon' => 'fi fi-rr-apps',
-                        'href' => route('college.dashboard'),
-                    ],
-                ],
-            ],
-            [
-                'label' => 'Students',
-                'items' => [
-                    [
-                        'key' => 'college-students',
-                        'label' => 'Student Management',
-                        'icon' => 'fi fi-rr-users',
-                        'href' => route('college.students'),
-                        ],
-                    [
-                        'key' => 'college-enrollments',
-                        'label' => 'Enrollments',
-                        'icon' => 'fi fi-rr-book-alt',
-                        'href' => route('college.enrollments'),
-                    ],
-                ],
-            ],
-            [
-                'label' => 'Courses',
-                'items' => [
-                    [
-                        'key' => 'college-courses',
-                        'label' => 'Courses / Programs',
-                        'icon' => 'fi fi-rr-book-alt',
-                        'href' => '#',
-                    ],
-                ],
-            ],
-            [
-                'label' => 'Internship & Placement',
-                'items' => [
-                    [
-                        'key' => 'college-internships',
-                        'label' => 'Internships',
-                        'icon' => 'fi fi-rr-briefcase',
-                        'href' => '#',
-                    ],
-                    [
-                        'key' => 'college-placements',
-                        'label' => 'Placements',
-                        'icon' => 'fi fi-rr-briefcase',
-                        'href' => '#',
-                    ],
-                ],
-            ],
-            [
-                'label' => 'Analytics',
-                'items' => [
-                    [
-                        'key' => 'college-progress',
-                        'label' => 'Analytics & Reports',
-                        'icon' => 'fi fi-rr-chart-line-up',
-                        'href' => '#',
-                    ],
-                ],
-            ],
-            [
-                'label' => 'Communication',
-                'items' => [
-                    [
-                        'key' => 'college-announcements',
-                        'label' => 'Announcements / Notices',
-                        'icon' => 'fi fi-rr-megaphone',
-                        'href' => '#',
-                    ],
-                    [
-                        'key' => 'college-support',
-                        'label' => 'Q&A / Support',
-                        'icon' => 'fi fi-rr-interrogation',
-                        'href' => '#',
-                    ],
-                ],
-            ],
-            [
-                'label' => 'Finance',
-                'items' => [
-                    [
-                        'key' => 'college-payments',
-                        'label' => 'Payments / Revenue',
-                        'icon' => 'fi fi-rr-receipt',
-                        'href' => '#',
-                    ],
-                ],
-            ],
-            [
-                'label' => 'Management',
-                'items' => [
-                    [
-                        'key' => 'college-certificates',
-                        'label' => 'Certificates / Completion',
-                        'icon' => 'fi fi-rr-diploma',
-                        'href' => '#',
-                    ],
-                    [
-                        'key' => 'college-attendance',
-                        'label' => 'Attendance / Activity',
-                        'icon' => 'fi fi-rr-chart-line-up',
-                        'href' => '#',
-                    ],
                 ],
             ],
             [
                 'label' => 'Account',
-                'items' => [
-                    [
-                        'key' => 'college-profile',
-                        'label' => 'College Profile',
-                        'icon' => 'fi fi-rr-user',
-                        'href' => '#',
-                    ],
-                    [
-                        'key' => 'college-admin-users',
-                        'label' => 'Admin Users',
-                        'icon' => 'fi fi-rr-users',
-                        'href' => '#',
-                    ],
-                ],
-            ],
-            [
-                'label' => 'Settings',
-                'items' => [
-                    [
-                        'key' => 'college-settings',
-                        'label' => 'Settings',
-                        'icon' => 'fi fi-rr-settings',
-                        'href' => '#',
-                    ],
-                    [
-                        'key' => 'college-logout',
-                        'label' => 'Logout',
-                        'icon' => 'fi fi-rr-exit',
-                        'href' => '#',
-                    ],
-                ],
+                'items' => $commonItems,
             ],
         ];
     }

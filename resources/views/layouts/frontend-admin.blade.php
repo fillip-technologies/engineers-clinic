@@ -59,11 +59,11 @@
         <x-frontend-admin.sidebar
             :sections="$sidebarSections ?? []"
             :active-page="$activeDashboardPage ?? null"
-            :user-name="$sidebarUserName ?? 'Aman Kumar'"
+            :user-name="$sidebarUserName ?? 'Guest'"
             :user-meta="$sidebarUserMeta ?? null" />
 
         <div class="min-w-0 border-l border-glassBorder bg-[#FCFDFE]">
-            <x-common.navbar :user-name="$navbarUserName ?? 'Aman'" />
+            <x-common.navbar :user-name="$navbarUserName ?? 'Guest'" />
 
             <main class="px-6 pb-10 pt-6 sm:px-8 lg:px-10">
                 @yield('content')
