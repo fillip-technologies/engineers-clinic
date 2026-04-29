@@ -1,12 +1,56 @@
-<section class="bg-bgWhite py-20">
+<style>
+    .services-tech-grid {
+        background-image:
+            linear-gradient(rgba(124, 92, 252, 0.16) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(124, 92, 252, 0.16) 1px, transparent 1px),
+            linear-gradient(115deg, transparent 0%, transparent 42%, rgba(61, 32, 144, 0.18) 50%, transparent 58%, transparent 100%);
+        background-size: 46px 46px, 46px 46px, 220% 220%;
+        animation: servicesScanShift 7s linear infinite;
+        mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+    }
 
-    <div class="max-w-7xl mx-auto px-6">
+    .services-circuit-line {
+        background: linear-gradient(90deg, transparent, rgba(124, 92, 252, 0.38), rgba(245, 200, 66, 0.42), transparent);
+        animation: servicesCircuitPulse 4.8s ease-in-out infinite;
+    }
+
+    @keyframes servicesScanShift {
+        0% {
+            background-position: 0 0, 0 0, 0% 50%;
+        }
+
+        100% {
+            background-position: 46px 46px, 46px 46px, 100% 50%;
+        }
+    }
+
+    @keyframes servicesCircuitPulse {
+        0%, 100% {
+            opacity: 0.24;
+            transform: translateX(-4%);
+        }
+
+        50% {
+            opacity: 0.72;
+            transform: translateX(4%);
+        }
+    }
+</style>
+
+<section class="relative isolate overflow-hidden bg-bgWhite py-20">
+
+    <div class="pointer-events-none absolute inset-0">
+        <div class="services-tech-grid absolute inset-0 opacity-100"></div>
+        <div class="services-circuit-line absolute bottom-16 left-0 h-px w-full [animation-delay:1.7s]"></div>
+    </div>
+
+    <div class="relative max-w-7xl mx-auto px-6">
 
         <!-- HEADING -->
         <div class="text-center mb-16">
             <h2 class="text-3xl md:text-5xl font-bold text-textPrimary">
                 Choose Your
-                <span class="bg-gradient-to-r from-brand via-secondary to-accent bg-clip-text text-transparent">
+                <span class="bg-gradient-to-r from-brand via-brandLight to-secondary bg-clip-text text-transparent">
                     AI Toolkit Plan
                 </span>
             </h2>

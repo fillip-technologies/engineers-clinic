@@ -14,7 +14,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    <style>
+    <!-- <style>
         body {
             font-family: 'Inter', sans-serif;
             cursor: none;
@@ -43,7 +43,7 @@
             transform: translate(-50%, -50%);
             transition: all 0.12s ease;
         }
-    </style>
+    </style> -->
 
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
 
@@ -55,34 +55,35 @@
             theme: {
                 extend: {
                     colors: {
-
-                        /* 🎯 BRAND (MAIN CONTROL) */
-                        brand: '#15803d', // main green
-                        brandLight: '#22c55e', // hover / lighter
-                        brandDark: '#166534', // darker shade
-                        brandSoft: 'rgba(34,197,94,0.15)',
-
-                        /* 🌿 SECONDARY (warm tone like SkillForge) */
-                        secondary: '#f97316', // orange
-                        secondarySoft: 'rgba(249,115,22,0.15)',
-
+                        /* 🎯 BRAND (Aurora Primary) */
+                        brand: '#7C5CFC', // aurora violet
+                        brandLight: '#A78BFA', // hover / lighter violet
+                        brandDark: '#160840', // deep navy-purple (headings)
+                        brandSoft: 'rgba(124,92,252,0.15)',
+                        /* 🌸 SECONDARY (Aurora Accent) */
+                        secondary: '#F5C842', // gold — CTA accent
+                        secondarySoft: 'rgba(245,200,66,0.18)',
+                        /* 🌈 AURORA GRADIENT STOPS */
+                        auroraLeft: '#DDD0FF', // gradient start — soft purple
+                        auroraMid: '#B8DEFF', // gradient mid — sky blue
+                        auroraRight: '#FFD0E8', // gradient end — blush pink
                         /* 🧱 BACKGROUND SYSTEM */
-                        bgMain: '#f8f6f4', // main bg (hero/header)
-                        bgSoft: '#f1f5f9', // light sections
+                        bgMain: '#F5F0FF', // subtle purple-tinted page bg
+                        bgSoft: '#EEF5FF', // sky-tinted section bg
                         bgWhite: '#ffffff',
-
+                        /* 🧊 GLASS / FROSTED CARDS */
+                        cardBg: 'rgba(255,255,255,0.60)', // frosted glass card
+                        cardBorder: 'rgba(255,255,255,0.85)', // glass border
                         /* 📝 TEXT SYSTEM */
-                        textPrimary: '#111827', // main text
-                        textSecondary: '#4b5563', // paragraph
-                        textMuted: '#9ca3af',
-
-                        /* 🧊 UI ELEMENTS */
-                        borderLight: '#e5e7eb',
-                        cardBg: 'rgba(255,255,255,0.9)',
-
-                        /* ✨ EFFECTS */
-                        glowGreen: 'rgba(34,197,94,0.18)',
-                        glowOrange: 'rgba(249,115,22,0.18)'
+                        textPrimary: '#160840', // deep navy-purple (not black)
+                        textSecondary: '#3D2090', // mid purple for paragraphs
+                        textMuted: '#8B7FBF', // muted purple-gray
+                        /* 🧱 UI ELEMENTS */
+                        borderLight: '#E2D9FF', // soft lavender border
+                        /* ✨ GLOW EFFECTS */
+                        glowPurple: 'rgba(124,92,252,0.20)',
+                        glowBlue: 'rgba(184,222,255,0.35)',
+                        glowPink: 'rgba(255,208,232,0.35)'
                     }
                 }
             }
@@ -110,7 +111,7 @@
 
     @include('partials.footer')
 
-    <div id="cursor"></div>
+    <!-- <div id="cursor"></div>
     <div id="cursor-glow"></div>
 
     <script>
@@ -146,7 +147,7 @@
             cursor.style.display = "none";
             glow.style.display = "none";
         }
-    </script>
+    </script> -->
 
 
 

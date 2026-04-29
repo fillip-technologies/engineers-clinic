@@ -39,13 +39,13 @@ $internshipLevels = [
 ];
 @endphp
 
-<header class="w-full bg-bgMain" x-data="{ mobileOpen: false, mobileInternshipOpen: false }">
+<header class="w-full bg-bgMain" x-data="{ mobileOpen: false, mobileInternshipOpen: false, mobileInternshipLevel: 'beginner' }">
 
     <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
 
         <div class="text-xl font-semibold text-textPrimary">
             <!-- Engineers <span class="text-textPrimary">Clinic</span> -->
-            <img src="/images/Engineers-clinics.png" class="h-14" />
+            <img src="/images/Engineers-clinic-logo-black.png" class="h-14" />
         </div>
 
         <nav class="hidden items-center gap-2 px-3 py-2 md:flex">
@@ -118,13 +118,26 @@ $internshipLevels = [
 
                 <div x-show="mobileInternshipOpen" x-cloak x-transition class="border-t border-borderLight px-4 py-4">
                     <div>
-                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-brand">Internships</p>
+                        <div class="flex items-center justify-between gap-4">
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-brand">Internships</p>
+                        </div>
                         <p class="mt-1 text-xs text-textMuted">Grouped by learning level</p>
-                        <div class="mt-3 space-y-4">
+                        <div class="mt-3 flex gap-2 overflow-x-auto">
                             @foreach ($internshipLevels as $level => $programs)
-                            <div>
+                            @php $levelKey = strtolower(str_replace(' Level', '', $level)); @endphp
+                            <button type="button" @click="mobileInternshipLevel = @js($levelKey)"
+                                class="block shrink-0 rounded-xl px-3 py-2 text-left text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary"
+                                :class="mobileInternshipLevel === @js($levelKey) ? 'bg-bgSoft text-textPrimary' : ''">
+                                {{ str_replace(' Level', '', $level) }}
+                            </button>
+                            @endforeach
+                        </div>
+                        <div class="mt-3">
+                            @foreach ($internshipLevels as $level => $programs)
+                            @php $levelKey = strtolower(str_replace(' Level', '', $level)); @endphp
+                            <div x-show="mobileInternshipLevel === @js($levelKey)" x-transition>
                                 <p class="px-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-textMuted">{{ $level }}</p>
-                                <div class="mt-2 space-y-1">
+                                <div class="mt-2 grid grid-cols-1 gap-1">
                                     @foreach ($programs as $program)
                                     <a href="{{ route('course.detail', $program['slug']) }}"
                                         class="block rounded-xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">{{ $program['label'] }}</a>
