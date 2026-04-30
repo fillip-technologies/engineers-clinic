@@ -1,64 +1,227 @@
 @extends('layouts.frontend-admin')
 
 @php
-    $allCourses = $enrolledCourses;
     $activeCourses = array_values(array_filter($enrolledCourses, fn ($course) => $course['status'] === 'Active'));
-    $completedCourses = array_values(array_filter($enrolledCourses, fn ($course) => $course['status'] === 'Completed'));
-    $tabs = [
-        ['label' => 'All Courses', 'key' => 'all', 'courses' => $allCourses],
-        ['label' => 'Active Courses', 'key' => 'active', 'courses' => $activeCourses],
-        ['label' => 'Completed Courses', 'key' => 'completed', 'courses' => $completedCourses],
+    $activeCourse = $activeCourses[0] ?? ($enrolledCourses[0] ?? null);
+    $otherCourses = array_values(array_filter($enrolledCourses, fn ($course) => ! $activeCourse || $course['id'] !== $activeCourse['id']));
+
+    $projects = [
+        [
+            'id' => 'portfolio-platform',
+            'title' => 'Developer Portfolio Platform',
+            'description' => 'Build a full-stack portfolio with projects, contact form, admin updates, and deployment.',
+            'time' => '10-12 hours',
+            'points' => 450,
+            'recommended' => true,
+        ],
+        [
+            'id' => 'task-manager',
+            'title' => 'Team Task Manager',
+            'description' => 'Create a collaborative task board with authentication, status flows, and filters.',
+            'time' => '8-10 hours',
+            'points' => 380,
+            'recommended' => false,
+        ],
+        [
+            'id' => 'analytics-dashboard',
+            'title' => 'Learning Analytics Dashboard',
+            'description' => 'Design and implement charts, KPI cards, and a clean reporting dashboard.',
+            'time' => '12-14 hours',
+            'points' => 520,
+            'recommended' => false,
+        ],
+    ];
+
+    $tasks = [
+        'portfolio-platform' => [
+            ['title' => 'Set up project structure', 'meta' => 'Repository, routes, layout', 'status' => 'Done', 'action' => 'Continue Task', 'tone' => 'bg-emerald-50 text-emerald-700 ring-emerald-200'],
+            ['title' => 'Build project showcase CRUD', 'meta' => 'Models, forms, validation', 'status' => 'Review', 'action' => 'Submit Task', 'tone' => 'bg-blue-50 text-blue-700 ring-blue-200'],
+            ['title' => 'Deploy and document the app', 'meta' => 'Hosting, README, screenshots', 'status' => 'Pending', 'action' => 'Start Task', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
+        ],
+        'task-manager' => [
+            ['title' => 'Create board and task schema', 'meta' => 'Database and relationships', 'status' => 'Pending', 'action' => 'Start Task', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
+            ['title' => 'Implement drag status workflow', 'meta' => 'To do, review, done', 'status' => 'Pending', 'action' => 'Start Task', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
+            ['title' => 'Add team filters', 'meta' => 'Priority, owner, due date', 'status' => 'Pending', 'action' => 'Start Task', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
+        ],
+        'analytics-dashboard' => [
+            ['title' => 'Define dashboard metrics', 'meta' => 'KPIs and data states', 'status' => 'Pending', 'action' => 'Start Task', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
+            ['title' => 'Build chart components', 'meta' => 'Progress and comparison views', 'status' => 'Pending', 'action' => 'Start Task', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
+            ['title' => 'Create final report view', 'meta' => 'Export-ready summary', 'status' => 'Pending', 'action' => 'Start Task', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
+        ],
     ];
 @endphp
 
 @section('content')
-    <div class="mx-auto max-w-6xl" x-data="{ activeTab: 'all' }">
-        <section class="rounded-[1.75rem] border border-slate-200/70 bg-white px-6 py-6 shadow-sm sm:px-8">
-            <div class="max-w-3xl">
-                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-primaryLight">Student Dashboard</p>
-                <h1 class="mt-3 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">My Enrollments</h1>
-                <p class="mt-3 text-base leading-8 text-slate-600">
-                    Keep track of every course you have joined, monitor progress, and continue learning from one focused view.
-                </p>
-            </div>
-        </section>
+    <div class="mx-auto max-w-6xl"
+        x-data="{
+            selectedProject: 'portfolio-platform',
+            projects: @js($projects),
+            tasks: @js($tasks),
+            get currentProject() {
+                return this.projects.find((project) => project.id === this.selectedProject) || this.projects[0];
+            }
+        }">
+        <div class="mb-6">
+            <p class="text-sm font-semibold text-primary">Student Dashboard</p>
+            <h1 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950">My Enrolled Course</h1>
+            <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+                Continue your course, choose one project, and complete the related tasks from the same workspace.
+            </p>
+        </div>
 
-        <section class="mt-8 rounded-[1.75rem] border border-slate-200/70 bg-white p-3 shadow-sm sm:p-4">
-            <div class="flex flex-wrap gap-3">
-                @foreach ($tabs as $tab)
-                    <button type="button"
-                        class="inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition"
-                        :class="activeTab === '{{ $tab['key'] }}'
-                            ? 'bg-primary text-white shadow-sm'
-                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'"
-                        @click="activeTab = '{{ $tab['key'] }}'">
-                        {{ $tab['label'] }}
-                    </button>
-                @endforeach
-            </div>
+        @if ($activeCourse)
+            <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                <div class="grid gap-5 lg:grid-cols-[5.5rem_minmax(0,1fr)_auto] lg:items-center">
+                    <div class="overflow-hidden rounded-lg bg-slate-100">
+                        <img src="{{ $activeCourse['image'] }}" alt="{{ $activeCourse['title'] }}" class="h-24 w-full object-cover" />
+                    </div>
 
-            @foreach ($tabs as $tab)
-                <div x-show="activeTab === '{{ $tab['key'] }}'" x-cloak class="mt-6">
-                    @if (!empty($tab['courses']))
-                        <div class="space-y-3">
-                            @foreach ($tab['courses'] as $course)
-                                @include('dashboard.student-dashboard.components.enrollment-item', ['course' => $course])
-                            @endforeach
+                    <div class="min-w-0">
+                        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                            <div class="min-w-0">
+                                <p class="text-sm font-semibold text-primary">Active Course</p>
+                                <h2 class="mt-1 truncate text-2xl font-semibold text-slate-950">{{ $activeCourse['title'] }}</h2>
+                            </div>
+                            <span class="inline-flex w-fit rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 ring-1 ring-blue-200">
+                                {{ $activeCourse['status'] }}
+                            </span>
                         </div>
-                    @else
-                        <div class="flex min-h-[280px] flex-col items-center justify-center rounded-[1.5rem] bg-slate-50 px-6 text-center">
-                            <h2 class="text-2xl font-semibold text-slate-900">You have not enrolled in any courses yet</h2>
-                            <p class="mt-3 max-w-md text-base leading-7 text-slate-500">
-                                Explore available programs and start building momentum with a course aligned to your goals.
-                            </p>
-                            <a href="/"
-                                class="mt-6 inline-flex items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primaryLight">
-                                Browse Courses
-                            </a>
+
+                        <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-500">{{ $activeCourse['description'] }}</p>
+                        <div class="mt-4">
+                            <div class="flex justify-between text-sm">
+                                <span class="font-medium text-slate-600">{{ $activeCourse['completed_lessons'] }}/{{ $activeCourse['total_lessons'] }} lessons completed</span>
+                                <span class="font-semibold text-slate-900">{{ $activeCourse['progress'] }}%</span>
+                            </div>
+                            <div class="mt-2 h-2 rounded-full bg-slate-100">
+                                <div class="h-2 rounded-full bg-primary" style="width: {{ $activeCourse['progress'] }}%"></div>
+                            </div>
                         </div>
-                    @endif
+                    </div>
+
+                    <a href="{{ route('student.course.detail', ['id' => $activeCourse['id']]) }}"
+                        class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
+                        Continue Learning
+                    </a>
                 </div>
-            @endforeach
+            </section>
+        @endif
+
+        <section class="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
+            <div class="space-y-6">
+                <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                        <div>
+                            <p class="text-sm font-semibold text-primary">Project Selection</p>
+                            <h2 class="mt-2 text-xl font-semibold text-slate-950">Choose 1 project to complete</h2>
+                        </div>
+                        <p class="text-sm text-slate-500">You can change before final submission.</p>
+                    </div>
+
+                    <div class="mt-5 grid gap-4 xl:grid-cols-3">
+                        @foreach ($projects as $project)
+                            <article
+                                class="flex flex-col rounded-xl border bg-white p-4 shadow-sm transition hover:border-primary hover:shadow-md"
+                                :class="selectedProject === '{{ $project['id'] }}' ? 'border-primary ring-2 ring-blue-100' : 'border-slate-200'">
+                                <div class="flex items-start justify-between gap-3">
+                                    <h3 class="text-base font-semibold leading-6 text-slate-950">{{ $project['title'] }}</h3>
+                                    @if ($project['recommended'])
+                                        <span class="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-primary ring-1 ring-blue-200">Recommended</span>
+                                    @endif
+                                </div>
+                                <p class="mt-3 flex-1 text-sm leading-6 text-slate-500">{{ $project['description'] }}</p>
+                                <div class="mt-4 flex items-center justify-between text-sm">
+                                    <span class="text-slate-500">{{ $project['time'] }}</span>
+                                    <span class="font-semibold text-slate-900">{{ $project['points'] }} pts</span>
+                                </div>
+                                <button type="button" @click="selectedProject = '{{ $project['id'] }}'"
+                                    class="mt-4 inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-semibold transition"
+                                    :class="selectedProject === '{{ $project['id'] }}'
+                                        ? 'bg-primary text-white'
+                                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
+                                    <span x-text="selectedProject === '{{ $project['id'] }}' ? 'Selected' : 'Start Project'"></span>
+                                </button>
+                            </article>
+                        @endforeach
+                    </div>
+                </section>
+
+                <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                        <div>
+                            <p class="text-sm font-semibold text-primary">Selected Project</p>
+                            <h2 class="mt-2 text-xl font-semibold text-slate-950" x-text="currentProject.title"></h2>
+                            <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500" x-text="currentProject.description"></p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="button"
+                                class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
+                                Continue Project
+                            </button>
+                            <button type="button" @click="$el.closest('section').previousElementSibling.scrollIntoView({ behavior: 'smooth' })"
+                                class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                                Change Project
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                    <div class="flex items-center justify-between gap-4">
+                        <div>
+                            <p class="text-sm font-semibold text-primary">Project Tasks</p>
+                            <h2 class="mt-2 text-xl font-semibold text-slate-950">Task workflow</h2>
+                        </div>
+                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">3 tasks</span>
+                    </div>
+
+                    <div class="mt-5 divide-y divide-slate-100 rounded-lg border border-slate-200">
+                        <template x-for="task in tasks[selectedProject]" :key="task.title">
+                            <div class="flex flex-col gap-4 px-4 py-4 transition hover:bg-slate-50 sm:flex-row sm:items-center">
+                                <div class="min-w-0 flex-1">
+                                    <p class="font-medium text-slate-950" x-text="task.title"></p>
+                                    <p class="mt-1 text-sm text-slate-500" x-text="task.meta"></p>
+                                </div>
+                                <span class="w-fit rounded-full px-2.5 py-1 text-xs font-semibold ring-1" :class="task.tone" x-text="task.status"></span>
+                                <button type="button"
+                                    class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-primary hover:text-primary"
+                                    x-text="task.action"></button>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+            </div>
+
+            <aside class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div>
+                    <p class="text-sm font-semibold text-primary">Other Courses</p>
+                    <h2 class="mt-2 text-xl font-semibold text-slate-950">Remaining enrollments</h2>
+                </div>
+
+                <div class="mt-5 space-y-3">
+                    @forelse ($otherCourses as $course)
+                        <a href="{{ route('student.course.detail', ['id' => $course['id']]) }}"
+                            class="block rounded-lg border border-slate-200 p-4 transition hover:border-primary hover:bg-slate-50">
+                            <div class="flex items-start justify-between gap-3">
+                                <h3 class="text-sm font-semibold leading-6 text-slate-950">{{ $course['title'] }}</h3>
+                                <span class="rounded-full px-2.5 py-1 text-xs font-semibold {{ $course['status'] === 'Completed' ? 'bg-emerald-50 text-emerald-700' : 'bg-blue-50 text-blue-700' }}">
+                                    {{ $course['status'] }}
+                                </span>
+                            </div>
+                            <div class="mt-3 flex items-center gap-3">
+                                <div class="h-1.5 flex-1 rounded-full bg-slate-100">
+                                    <div class="h-1.5 rounded-full bg-primary" style="width: {{ $course['progress'] }}%"></div>
+                                </div>
+                                <span class="text-xs font-semibold text-slate-500">{{ $course['progress'] }}%</span>
+                            </div>
+                        </a>
+                    @empty
+                        <p class="rounded-lg bg-slate-50 px-4 py-6 text-center text-sm text-slate-500">
+                            No other courses yet.
+                        </p>
+                    @endforelse
+                </div>
+            </aside>
         </section>
     </div>
 @endsection

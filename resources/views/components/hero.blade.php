@@ -1,5 +1,5 @@
 <section id="heroSection"
-    class="relative overflow-hidden min-h-[85vh] flex items-center pt-16 pb-10"
+    class="relative overflow-hidden min-h-[85vh] flex items-center pt-12 pb-10 sm:pt-16"
     style="background: linear-gradient(135deg, var(--color-auroraLeft) 0%, var(--color-auroraMid) 50%, var(--color-auroraRight) 100%);">
 
     <!-- PARTICLES BACKGROUND -->
@@ -13,9 +13,9 @@
             style="background: theme('colors.glowPink');"></div>
     </div>
 
-    <div class="relative z-[2] max-w-7xl mx-auto px-6 w-full">
+    <div class="relative z-[2] max-w-7xl mx-auto px-5 sm:px-6 w-full">
 
-        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div class="grid gap-10 lg:grid-cols-2 lg:gap-16 items-center">
 
             <!-- LEFT -->
             <div>
@@ -27,12 +27,12 @@
                     </span>
                 </div>
 
-                <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6 text-textPrimary">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 text-textPrimary">
                     <span class="bg-gradient-to-r from-brand via-brandLight to-secondary bg-clip-text text-transparent">
                         Forge Your Future
                     </span>
                     <br>
-                    with Expert-Led Courses
+                    with Expert-Led Internship
                 </h1>
 
                 <p class="text-lg mb-8 max-w-xl text-textSecondary">
@@ -40,19 +40,19 @@
                     Join thousands of learners advancing their careers.
                 </p>
 
-                <div class="flex gap-5 mb-10">
+                <div class="flex flex-col gap-4 mb-10 sm:flex-row sm:gap-5">
                     <button
-                        class="px-8 py-4 rounded-xl font-semibold shadow-md hover:scale-[1.02] transition bg-secondary text-textPrimary">
-                        Browse Courses →
+                        class="w-full px-8 py-4 rounded-xl font-semibold shadow-md hover:scale-[1.02] transition bg-secondary text-textPrimary sm:w-auto">
+                        Browse Internship →
                     </button>
 
                     <button
-                        class="px-8 py-4 rounded-xl font-semibold transition border bg-cardBg border-cardBorder text-textPrimary">
+                        class="w-full px-8 py-4 rounded-xl font-semibold transition border bg-cardBg border-cardBorder text-textPrimary sm:w-auto">
                         View Pricing
                     </button>
                 </div>
 
-                <div class="flex items-center gap-6">
+                <div class="flex flex-wrap items-center gap-4 sm:gap-6">
                     <div class="flex -space-x-3">
                         <img src="https://i.pravatar.cc/40?img=1" class="w-9 h-9 rounded-full border-2 border-cardBorder">
                         <img src="https://i.pravatar.cc/40?img=2" class="w-9 h-9 rounded-full border-2 border-cardBorder">
@@ -75,12 +75,12 @@
             <div class="relative flex justify-center">
 
                 <!-- BLOBS -->
-                <div class="absolute -top-10 -left-10 w-[300px] h-[300px] rounded-full blur-3xl opacity-60 bg-glowPurple"></div>
-                <div class="absolute -bottom-10 -right-10 w-[300px] h-[300px] rounded-full blur-3xl opacity-60 bg-glowPink"></div>
+                <div class="absolute -top-10 -left-10 h-48 w-48 rounded-full blur-3xl opacity-60 bg-glowPurple sm:h-[300px] sm:w-[300px]"></div>
+                <div class="absolute -bottom-10 -right-10 h-48 w-48 rounded-full blur-3xl opacity-60 bg-glowPink sm:h-[300px] sm:w-[300px]"></div>
 
                 <div class="relative w-full max-w-md">
 
-                    <div class="backdrop-blur rounded-2xl shadow-[0_20px_60px_rgba(22,8,64,0.10)] border p-8
+                    <div class="backdrop-blur rounded-2xl shadow-[0_20px_60px_rgba(22,8,64,0.10)] border p-6 sm:p-8
                                 bg-cardBg border-cardBorder">
 
                         <!-- Badge -->
@@ -148,14 +148,30 @@
     #particles-js {
         position: absolute;
         inset: 0;
+        width: 100%;
+        height: 100%;
         z-index: 0;
+        overflow: hidden;
         opacity: 1;
         filter: drop-shadow(0 0 10px theme('colors.glowPurple'));
+    }
+
+    #particles-js canvas {
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
     }
 
     #heroSection > *:not(#particles-js) {
         position: relative;
         z-index: 2;
+    }
+
+    @media (max-width: 640px) {
+        #particles-js {
+            opacity: 0.6;
+            filter: none;
+        }
     }
 </style>
 
@@ -164,6 +180,9 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        if (typeof particlesJS === "undefined") {
+            return;
+        }
 
         const colors = {
             brand:        tailwind.config.theme.extend.colors.brand,
@@ -173,42 +192,83 @@
             auroraRight:  tailwind.config.theme.extend.colors.auroraRight,
         };
 
-        particlesJS("particles-js", {
-            particles: {
-                number: { value: 60 },
+        const getParticleSettings = () => {
+            const isMobile = window.matchMedia("(max-width: 640px)").matches;
+            const isTablet = window.matchMedia("(max-width: 1024px)").matches;
 
-                color: { value: [colors.brand, colors.brandLight, colors.auroraMid, colors.auroraRight] },
+            return {
+                count: isMobile ? 22 : (isTablet ? 38 : 60),
+                size: isMobile ? 3 : (isTablet ? 4 : 5),
+                distance: isMobile ? 95 : (isTablet ? 130 : 170),
+                speed: isMobile ? 0.8 : 1.6,
+                lineOpacity: isMobile ? 0.22 : 0.40,
+                hover: !isMobile
+            };
+        };
 
-                shape: { type: "circle" },
+        const destroyParticles = () => {
+            if (!window.pJSDom || !window.pJSDom.length) {
+                return;
+            }
 
-                opacity: { value: 0.55, random: true },
+            window.pJSDom.forEach((instance) => {
+                instance.pJS.fn.vendors.destroypJS();
+            });
 
-                size: { value: 5, random: true },
+            window.pJSDom = [];
+        };
 
-                line_linked: {
-                    enable: true,
-                    distance: 170,
-                    color: colors.brand,
-                    opacity: 0.40,
-                    width: 1.2
+        const initHeroParticles = () => {
+            const settings = getParticleSettings();
+
+            destroyParticles();
+
+            particlesJS("particles-js", {
+                particles: {
+                    number: { value: settings.count },
+
+                    color: { value: [colors.brand, colors.brandLight, colors.auroraMid, colors.auroraRight] },
+
+                    shape: { type: "circle" },
+
+                    opacity: { value: 0.55, random: true },
+
+                    size: { value: settings.size, random: true },
+
+                    line_linked: {
+                        enable: true,
+                        distance: settings.distance,
+                        color: colors.brand,
+                        opacity: settings.lineOpacity,
+                        width: 1.2
+                    },
+
+                    move: { enable: true, speed: settings.speed }
                 },
 
-                move: { enable: true, speed: 1.6 }
-            },
-
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: { enable: true, mode: "grab" },
-                    onclick: { enable: true, mode: "push" }
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: { enable: settings.hover, mode: "grab" },
+                        onclick: { enable: true, mode: "push" },
+                        resize: true
+                    },
+                    modes: {
+                        grab: { distance: 220, line_linked: { opacity: 1 } },
+                        push: { particles_nb: settings.hover ? 4 : 2 }
+                    }
                 },
-                modes: {
-                    grab: { distance: 220, line_linked: { opacity: 1 } },
-                    push: { particles_nb: 4 }
-                }
-            },
 
-            retina_detect: true
+                retina_detect: true
+            });
+        };
+
+        initHeroParticles();
+
+        let resizeTimer;
+        window.addEventListener("resize", () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(initHeroParticles, 250);
         });
     });
 </script>

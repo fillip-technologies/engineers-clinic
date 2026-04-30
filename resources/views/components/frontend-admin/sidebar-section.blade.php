@@ -15,6 +15,7 @@
                 :label="$item['label']"
                 :icon="$item['icon']"
                 :href="$item['href']"
+                :method="$item['method'] ?? 'GET'"
                 :active="($item['key'] ?? null) === $activePage" />
         @endforeach
     </div>
