@@ -1,6 +1,6 @@
 @extends('Admin.layouts.layout')
 
-<?php dd('THIS FILE IS LOADED'); ?>
+
 @section('content')
 @php
 $studentsCount = \App\Models\Student::count();
