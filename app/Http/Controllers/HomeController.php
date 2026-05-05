@@ -2,8 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
+use App\Models\Enrollment;
+use App\Models\Course;
+use App\Models\QuizResult;
+use App\Models\Quiz;
+use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
@@ -141,38 +150,41 @@ class HomeController extends Controller
 
     public function enrolledCourses()
     {
-        $enrolledCourses = [
-            [
-                'id' => 1,
-                'title' => 'Full Stack Development Internship',
-                'image' => '/images/courses/full-stack-development.svg',
-                'description' => 'Build production-ready applications with frontend, backend, and deployment workflows.',
-                'completed_lessons' => 2,
-                'total_lessons' => 16,
-                'progress' => 13,
-                'status' => 'Active',
-            ],
-            [
-                'id' => 2,
-                'title' => 'Frontend Development Internship',
-                'image' => '/images/courses/frontend-development.svg',
-                'description' => 'Create polished, responsive interfaces using modern frontend engineering practices.',
-                'completed_lessons' => 8,
-                'total_lessons' => 16,
-                'progress' => 50,
-                'status' => 'Active',
-            ],
-            [
-                'id' => 3,
-                'title' => 'UI/UX Design Internship',
-                'image' => '/images/courses/ui-ux-design.svg',
-                'description' => 'Design intuitive product flows, wireframes, and high-fidelity interface systems.',
-                'completed_lessons' => 16,
-                'total_lessons' => 16,
-                'progress' => 100,
-                'status' => 'Completed',
-            ],
-        ];
+        $user = Auth::user();
+        
+        if (!$user) {
+            return redirect()->route('login');
+        }
+        
+        // Get the student record for this user
+        $student = Student::where('user_id', $user->id)->first();
+        
+        if (!$student) {
+            // If no student record, show empty or demo data
+            $enrolledCourses = [];
+        } else {
+            // Fetch enrollments with course details
+            $enrollments = Enrollment::with('course')
+                ->where('student_id', $student->id)
+                ->orderBy('enrollment_date', 'desc')
+                ->get();
+            
+            $enrolledCourses = $enrollments->map(function ($enrollment) {
+                $course = $enrollment->course;
+                return [
+                    'id' => $enrollment->id,
+                    'course_id' => $course?->id,
+                    'title' => $course?->title ?? 'Unknown Course',
+                    'image' => '/images/courses/' . ($course?->slug ?? 'default') . '.svg',
+                    'description' => $course?->description ?? '',
+                    'completed_lessons' => $enrollment->progress ?? 0,
+                    'total_lessons' => 100, // Default total
+                    'progress' => $enrollment->progress ?? 0,
+                    'status' => $enrollment->status ?? 'Active',
+                    'enrollment_date' => $enrollment->enrollment_date?->format('M d, Y'),
+                ];
+            })->toArray();
+        }
 
         return view('dashboard.student-dashboard.enrollments.index', [
             'enrolledCourses' => $enrolledCourses,
@@ -182,40 +194,290 @@ class HomeController extends Controller
 
     public function studentCourse($id)
     {
+        $user = Auth::user();
+        
+        if (!$user) {
+            return redirect()->route('login');
+        }
+        
+        // Get the student record for this user
+        $student = Student::where('user_id', $user->id)->first();
+        
+        if (!$student) {
+            return redirect()->route('dashboard.enrolled-courses');
+        }
+        
+        // Fetch the enrollment with course details
+        $enrollment = Enrollment::with('course')
+            ->where('student_id', $student->id)
+            ->where('id', $id)
+            ->first();
+        
+        if (!$enrollment) {
+            // Try to find by course ID as fallback
+            $enrollment = Enrollment::with('course')
+                ->where('student_id', $student->id)
+                ->get()
+                ->firstWhere('course_id', $id);
+        }
+        
+        if (!$enrollment) {
+            abort(404, 'Course not found');
+        }
+        
+        $course = $enrollment->course;
+        
+        // Build course data from database
+        $courseData = [
+            'id' => $enrollment->id,
+            'course_id' => $course?->id,
+            'title' => $course?->title ?? 'Unknown Course',
+            'completed_lessons' => $enrollment->progress ?? 0,
+            'total_lessons' => 100,
+            'progress' => $enrollment->progress ?? 0,
+            'current_module' => 'module-1',
+            'description' => $course?->description ?? '',
+            'status' => $enrollment->status ?? 'Active',
+            'enrollment_date' => $enrollment->enrollment_date?->format('M d, Y'),
+            'phases' => $this->getCoursePhases($course),
+            'module_content' => $this->getCourseModules($course),
+        ];
+
         return view('dashboard.student-dashboard.course.show', [
-            'course' => $this->studentCourseWorkspaceData((int) $id),
+            'course' => $courseData,
             ...$this->frontendAdminData('student-enrolled-courses'),
         ]);
+    }
+    
+    /**
+     * Get course phases/modules structure
+     */
+    protected function getCoursePhases($course): array
+    {
+        if (!$course) {
+            return [];
+        }
+        
+        // Get tasks for this course as modules
+        $tasks = $course->tasks()->orderBy('created_at')->get();
+        
+        if ($tasks->isEmpty()) {
+            // Return default phases if no tasks
+            return [
+                [
+                    'title' => 'Month 1: Getting Started',
+                    'modules' => [
+                        ['id' => 'module-1', 'title' => 'Introduction', 'state' => 'active'],
+                        ['id' => 'module-2', 'title' => 'Basics', 'state' => 'locked'],
+                    ],
+                ],
+            ];
+        }
+        
+        $phases = [];
+        $phaseIndex = 1;
+        $modules = [];
+        
+        foreach ($tasks as $index => $task) {
+            $modules[] = [
+                'id' => 'module-' . ($index + 1),
+                'title' => $task->title,
+                'state' => $index === 0 ? 'active' : 'locked',
+            ];
+            
+            // Create a new phase every 3 modules
+            if (($index + 1) % 3 === 0 || $index === $tasks->count() - 1) {
+                $phases[] = [
+                    'title' => 'Month ' . $phaseIndex . ': Learning',
+                    'modules' => $modules,
+                ];
+                $modules = [];
+                $phaseIndex++;
+            }
+        }
+        
+        return $phases;
+    }
+    
+    /**
+     * Get course module content
+     */
+    protected function getCourseModules($course): array
+    {
+        if (!$course) {
+            return [];
+        }
+        
+        $tasks = $course->tasks()->orderBy('created_at')->get();
+        
+        $modules = [];
+        foreach ($tasks as $index => $task) {
+            $modules['module-' . ($index + 1)] = [
+                'title' => $task->title,
+                'description' => $task->description ?? 'Complete this module to progress.',
+            ];
+        }
+        
+        return $modules;
     }
 
     public function studentProfile()
     {
+        $user = Auth::user();
+        
+        if (!$user) {
+            return redirect()->route('login');
+        }
+        
+        // Get the student record for this user
+        $student = Student::where('user_id', $user->id)->first();
+        
+        // Build profile data from user and student records
+        $profile = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->phone ?? '',
+            'avatar' => $user->avatar ?? 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80',
+            'student_id' => $student?->id,
+            'college_id' => $student?->college_id,
+            'course_name' => $student?->course_name ?? '',
+            'created_at' => $user->created_at?->format('M d, Y'),
+        ];
+        
+        // If no student record exists, create basic profile from user
+        if (!$student) {
+            $profile['course_name'] = 'Not enrolled';
+        }
+
         return view('dashboard.student-dashboard.profile.index', [
-            'profile' => $this->studentProfileData(),
+            'profile' => $profile,
             ...$this->frontendAdminData('student-profile'),
         ]);
     }
 
-    public function studentProfileEdit()
+    public function studentProfileEdit(Request $request)
     {
+        $user = Auth::user();
+        
+        if (!$user) {
+            return redirect()->route('login');
+        }
+        
+        // Handle form submission for profile update
+        if ($request->isMethod('post')) {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'phone' => 'nullable|string|max:20',
+            ]);
+            
+            // Update user profile
+            $user->name = $validated['name'];
+            if (isset($validated['phone'])) {
+                $user->phone = $validated['phone'];
+            }
+            $user->save();
+            
+            return redirect()->route('dashboard.student.profile')
+                ->with('success', 'Profile updated successfully!');
+        }
+        
+        // Get the student record for this user
+        $student = Student::where('user_id', $user->id)->first();
+        
+        // Build profile data for editing
+        $profile = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->phone ?? '',
+            'avatar' => $user->avatar ?? 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80',
+            'student_id' => $student?->id,
+            'college_id' => $student?->college_id,
+            'course_name' => $student?->course_name ?? '',
+        ];
+
         return view('dashboard.student-dashboard.profile.edit', [
-            'profile' => $this->studentProfileData(),
+            'profile' => $profile,
             ...$this->frontendAdminData('student-profile'),
         ]);
     }
 
     public function quizAttempts()
     {
+        $user = Auth::user();
+        
+        if (!$user) {
+            return redirect()->route('login');
+        }
+        
+        // Get the student record for this user
+        $student = Student::where('user_id', $user->id)->first();
+        
+        if (!$student) {
+            $quizAttempts = [];
+        } else {
+            // Fetch quiz results with quiz and course details
+            $quizResults = QuizResult::with(['quiz', 'quiz.course'])
+                ->where('student_id', $student->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+            
+            $quizAttempts = $quizResults->map(function ($result, $index) {
+                $quiz = $result->quiz;
+                return [
+                    'id' => $result->id,
+                    'title' => $quiz?->title ?? 'Unknown Quiz',
+                    'course' => $quiz?->course?->title ?? 'Unknown Course',
+                    'attempt' => 'Attempt ' . ($index + 1),
+                    'score' => $result->score ? $result->score . '%' : 'Pending',
+                    'status' => $result->passed ? 'Passed' : ($result->score !== null ? 'Failed' : 'Upcoming'),
+                    'updated_at' => $result->created_at?->format('F j, Y'),
+                    'action' => $result->passed ? 'View Summary' : 'Review Attempt',
+                ];
+            })->toArray();
+        }
+
         return view('dashboard.student-dashboard.quiz-attempts.index', [
-            'quizAttempts' => $this->studentQuizAttemptsData(),
+            'quizAttempts' => $quizAttempts,
             ...$this->frontendAdminData('student-quiz-attempts'),
         ]);
     }
 
     public function orderHistory()
     {
+        $user = Auth::user();
+        
+        if (!$user) {
+            return redirect()->route('login');
+        }
+        
+        // Get the student record for this user
+        $student = Student::where('user_id', $user->id)->first();
+        
+        if (!$student) {
+            $orders = [];
+        } else {
+            // Fetch payments with course details
+            $payments = Payment::with('course')
+                ->where('student_id', $student->id)
+                ->orderBy('payment_date', 'desc')
+                ->get();
+            
+            $orders = $payments->map(function ($payment) {
+                $course = $payment->course;
+                return [
+                    'id' => $payment->id,
+                    'title' => $course?->title ?? 'Unknown Course',
+                    'order_id' => 'ORD-' . str_pad($payment->id, 4, '0', STR_PAD_LEFT),
+                    'purchase_date' => $payment->payment_date?->format('F j, Y') ?? 'N/A',
+                    'price' => $payment->amount ? 'Rs. ' . number_format($payment->amount, 0) : 'N/A',
+                    'payment_status' => ucfirst($payment->status ?? 'Pending'),
+                    'access_status' => $payment->status === 'completed' ? 'Active' : 'Pending',
+                ];
+            })->toArray();
+        }
+
         return view('dashboard.student-dashboard.order-history.index', [
-            'orders' => $this->studentOrderHistoryData(),
+            'orders' => $orders,
             ...$this->frontendAdminData('student-order-history'),
         ]);
     }
