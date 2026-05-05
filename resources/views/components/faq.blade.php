@@ -6,7 +6,7 @@
         <div class="mb-10 text-center">
             <h2 class="text-2xl md:text-4xl font-bold text-textPrimary">
                 Frequently Asked 
-                <span class="bg-gradient-to-r from-green-600 via-green-500 to-orange-500 bg-clip-text text-transparent">
+                <span class="bg-gradient-to-r from-brand via-brandLight to-secondary bg-clip-text text-transparent">
                     Questions
                 </span>
             </h2>
@@ -17,7 +17,7 @@
 
             <!-- ITEM -->
             <div x-data="{ open: false }"
-                class="border border-borderLight rounded-xl p-5 transition hover:shadow-sm">
+                class="border border-borderLight bg-cardBg rounded-xl p-5 transition hover:border-brandLight hover:shadow-sm">
 
                 <button @click="open = !open"
                     class="w-full flex justify-between items-center text-left">
@@ -26,7 +26,7 @@
                         What is this internship program?
                     </span>
 
-                    <span class="text-xl text-textSecondary" x-text="open ? '-' : '+'"></span>
+                    <span class="text-xl text-brand" x-text="open ? '-' : '+'"></span>
                 </button>
 
                 <p x-show="open" x-transition
@@ -38,7 +38,7 @@
 
             <!-- ITEM -->
             <div x-data="{ open: false }"
-                class="border border-borderLight rounded-xl p-5 transition hover:shadow-sm">
+                class="border border-borderLight bg-cardBg rounded-xl p-5 transition hover:border-brandLight hover:shadow-sm">
 
                 <button @click="open = !open"
                     class="w-full flex justify-between items-center text-left">
@@ -47,7 +47,7 @@
                         Will I get a certificate?
                     </span>
 
-                    <span class="text-xl text-textSecondary" x-text="open ? '-' : '+'"></span>
+                    <span class="text-xl text-brand" x-text="open ? '-' : '+'"></span>
                 </button>
 
                 <p x-show="open" x-transition
@@ -59,7 +59,7 @@
 
             <!-- ITEM -->
             <div x-data="{ open: false }"
-                class="border border-borderLight rounded-xl p-5 transition hover:shadow-sm">
+                class="border border-borderLight bg-cardBg rounded-xl p-5 transition hover:border-brandLight hover:shadow-sm">
 
                 <button @click="open = !open"
                     class="w-full flex justify-between items-center text-left">
@@ -68,7 +68,7 @@
                         Is this internship beginner friendly?
                     </span>
 
-                    <span class="text-xl text-textSecondary" x-text="open ? '-' : '+'"></span>
+                    <span class="text-xl text-brand" x-text="open ? '-' : '+'"></span>
                 </button>
 
                 <p x-show="open" x-transition
@@ -80,7 +80,7 @@
 
             <!-- ITEM -->
             <div x-data="{ open: false }"
-                class="border border-borderLight rounded-xl p-5 transition hover:shadow-sm">
+                class="border border-borderLight bg-cardBg rounded-xl p-5 transition hover:border-brandLight hover:shadow-sm">
 
                 <button @click="open = !open"
                     class="w-full flex justify-between items-center text-left">
@@ -89,7 +89,7 @@
                         How long does the internship last?
                     </span>
 
-                    <span class="text-xl text-textSecondary" x-text="open ? '-' : '+'"></span>
+                    <span class="text-xl text-brand" x-text="open ? '-' : '+'"></span>
                 </button>
 
                 <p x-show="open" x-transition
@@ -101,7 +101,7 @@
 
             <!-- ITEM -->
             <div x-data="{ open: false }"
-                class="border border-borderLight rounded-xl p-5 transition hover:shadow-sm">
+                class="border border-borderLight bg-cardBg rounded-xl p-5 transition hover:border-brandLight hover:shadow-sm">
 
                 <button @click="open = !open"
                     class="w-full flex justify-between items-center text-left">
@@ -110,7 +110,7 @@
                         Do I get placement support?
                     </span>
 
-                    <span class="text-xl text-textSecondary" x-text="open ? '-' : '+'"></span>
+                    <span class="text-xl text-brand" x-text="open ? '-' : '+'"></span>
                 </button>
 
                 <p x-show="open" x-transition

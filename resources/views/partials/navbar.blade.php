@@ -1,51 +1,51 @@
 @php
-    $internshipLevels = [
-        'Beginner Level' => [
-            ['label' => 'Web Ecosystems & Frontend Architecture', 'slug' => 'web-ecosystems-frontend'],
-            ['label' => 'Core Python & Computational Logic', 'slug' => 'core-python-computational-logic'],
-            ['label' => 'UI/UX Design', 'slug' => 'ui-ux-design'],
-            ['label' => 'Data Analytics', 'slug' => 'data-analytics'],
-            ['label' => 'AutoCAD Drafting', 'slug' => 'autocad-drafting'],
-            ['label' => 'Manufacturing Basics', 'slug' => 'manufacturing-basics'],
-            ['label' => 'Civil Drafting', 'slug' => 'civil-drafting'],
-            ['label' => 'Site Surveying', 'slug' => 'site-surveying'],
-            ['label' => 'Legal Research', 'slug' => 'legal-research'],
-            ['label' => 'Digital Journalism', 'slug' => 'digital-journalism'],
-        ],
-        'Intermediate Level' => [
-            ['label' => 'Cloud & Backend Systems', 'slug' => 'cloud-backend-systems'],
-            ['label' => 'Machine Learning', 'slug' => 'machine-learning'],
-            ['label' => 'Ethical Hacking', 'slug' => 'ethical-hacking'],
-            ['label' => 'Mobile Development', 'slug' => 'mobile-development'],
-            ['label' => 'CAD/CAM', 'slug' => 'cad-cam'],
-            ['label' => 'HVAC Design', 'slug' => 'hvac-design'],
-            ['label' => 'Structural Design', 'slug' => 'structural-design'],
-            ['label' => 'Project Estimation', 'slug' => 'project-estimation'],
-            ['label' => 'Corporate Law', 'slug' => 'corporate-law'],
-            ['label' => 'PR Strategy', 'slug' => 'pr-strategy'],
-        ],
-        'Advanced Level' => [
-            ['label' => 'Generative AI', 'slug' => 'generative-ai'],
-            ['label' => 'Cloud Architecture', 'slug' => 'cloud-architecture'],
-            ['label' => 'Blockchain Systems', 'slug' => 'blockchain-systems'],
-            ['label' => 'Big Data Systems', 'slug' => 'big-data-systems'],
-            ['label' => 'CFD & FEA', 'slug' => 'cfd-fea'],
-            ['label' => 'Robotics Automation', 'slug' => 'robotics-automation'],
-            ['label' => 'BIM Infrastructure', 'slug' => 'bim-infrastructure'],
-            ['label' => 'Geotechnical Engineering', 'slug' => 'geotechnical-engineering'],
-            ['label' => 'Digital Law', 'slug' => 'digital-law'],
-            ['label' => 'Corporate Communication', 'slug' => 'corporate-communication'],
-        ],
-    ];
+$internshipLevels = [
+'Beginner Level' => [
+['label' => 'Web Ecosystems & Frontend Architecture', 'slug' => 'web-ecosystems-frontend'],
+['label' => 'Core Python & Computational Logic', 'slug' => 'core-python-computational-logic'],
+['label' => 'UI/UX Design', 'slug' => 'ui-ux-design'],
+['label' => 'Data Analytics', 'slug' => 'data-analytics'],
+['label' => 'AutoCAD Drafting', 'slug' => 'autocad-drafting'],
+['label' => 'Manufacturing Basics', 'slug' => 'manufacturing-basics'],
+['label' => 'Civil Drafting', 'slug' => 'civil-drafting'],
+['label' => 'Site Surveying', 'slug' => 'site-surveying'],
+['label' => 'Legal Research', 'slug' => 'legal-research'],
+['label' => 'Digital Journalism', 'slug' => 'digital-journalism'],
+],
+'Intermediate Level' => [
+['label' => 'Cloud & Backend Systems', 'slug' => 'cloud-backend-systems'],
+['label' => 'Machine Learning', 'slug' => 'machine-learning'],
+['label' => 'Ethical Hacking', 'slug' => 'ethical-hacking'],
+['label' => 'Mobile Development', 'slug' => 'mobile-development'],
+['label' => 'CAD/CAM', 'slug' => 'cad-cam'],
+['label' => 'HVAC Design', 'slug' => 'hvac-design'],
+['label' => 'Structural Design', 'slug' => 'structural-design'],
+['label' => 'Project Estimation', 'slug' => 'project-estimation'],
+['label' => 'Corporate Law', 'slug' => 'corporate-law'],
+['label' => 'PR Strategy', 'slug' => 'pr-strategy'],
+],
+'Advanced Level' => [
+['label' => 'Generative AI', 'slug' => 'generative-ai'],
+['label' => 'Cloud Architecture', 'slug' => 'cloud-architecture'],
+['label' => 'Blockchain Systems', 'slug' => 'blockchain-systems'],
+['label' => 'Big Data Systems', 'slug' => 'big-data-systems'],
+['label' => 'CFD & FEA', 'slug' => 'cfd-fea'],
+['label' => 'Robotics Automation', 'slug' => 'robotics-automation'],
+['label' => 'BIM Infrastructure', 'slug' => 'bim-infrastructure'],
+['label' => 'Geotechnical Engineering', 'slug' => 'geotechnical-engineering'],
+['label' => 'Digital Law', 'slug' => 'digital-law'],
+['label' => 'Corporate Communication', 'slug' => 'corporate-communication'],
+],
+];
 @endphp
 
-<header class="w-full bg-bgMain" x-data="{ mobileOpen: false, mobileInternshipOpen: false }">
+<header class="w-full bg-bgMain" x-data="{ mobileOpen: false, mobileInternshipOpen: false, mobileInternshipLevel: 'beginner' }">
 
     <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
 
         <div class="text-xl font-semibold text-textPrimary">
             <!-- Engineers <span class="text-textPrimary">Clinic</span> -->
-             <img src="/images/Engineers-clinic.png" class="h-14"/>
+            <img src="/images/Engineers-clinic-logo-black.png" class="h-14" />
         </div>
 
         <nav class="hidden items-center gap-2 px-3 py-2 md:flex">
@@ -118,19 +118,32 @@
 
                 <div x-show="mobileInternshipOpen" x-cloak x-transition class="border-t border-borderLight px-4 py-4">
                     <div>
-                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-brand">Internships</p>
+                        <div class="flex items-center justify-between gap-4">
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-brand">Internships</p>
+                        </div>
                         <p class="mt-1 text-xs text-textMuted">Grouped by learning level</p>
-                        <div class="mt-3 space-y-4">
+                        <div class="mt-3 flex gap-2 overflow-x-auto">
                             @foreach ($internshipLevels as $level => $programs)
-                                <div>
-                                    <p class="px-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-textMuted">{{ $level }}</p>
-                                    <div class="mt-2 space-y-1">
-                                        @foreach ($programs as $program)
-                                            <a href="{{ route('course.detail', $program['slug']) }}"
-                                                class="block rounded-xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">{{ $program['label'] }}</a>
-                                        @endforeach
-                                    </div>
+                            @php $levelKey = strtolower(str_replace(' Level', '', $level)); @endphp
+                            <button type="button" @click="mobileInternshipLevel = @js($levelKey)"
+                                class="block shrink-0 rounded-xl px-3 py-2 text-left text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary"
+                                :class="mobileInternshipLevel === @js($levelKey) ? 'bg-bgSoft text-textPrimary' : ''">
+                                {{ str_replace(' Level', '', $level) }}
+                            </button>
+                            @endforeach
+                        </div>
+                        <div class="mt-3">
+                            @foreach ($internshipLevels as $level => $programs)
+                            @php $levelKey = strtolower(str_replace(' Level', '', $level)); @endphp
+                            <div x-show="mobileInternshipLevel === @js($levelKey)" x-transition>
+                                <p class="px-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-textMuted">{{ $level }}</p>
+                                <div class="mt-2 grid grid-cols-1 gap-1">
+                                    @foreach ($programs as $program)
+                                    <a href="{{ route('course.detail', $program['slug']) }}"
+                                        class="block rounded-xl px-3 py-2 text-sm text-textSecondary transition hover:bg-bgSoft hover:text-textPrimary">{{ $program['label'] }}</a>
+                                    @endforeach
                                 </div>
+                            </div>
                             @endforeach
                         </div>
                     </div>

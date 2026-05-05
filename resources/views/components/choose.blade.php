@@ -6,7 +6,7 @@
         <div class="text-center mb-14">
             <h2 class="text-3xl md:text-5xl font-bold text-textPrimary">
                 Why Choose 
-                <span class="bg-gradient-to-r from-green-600 via-green-500 to-orange-500 bg-clip-text text-transparent">
+                <span class="bg-gradient-to-r from-brand via-brandLight to-secondary bg-clip-text text-transparent">
                     Engineers Clinic
                 </span>
             </h2>
@@ -20,7 +20,7 @@
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
             <!-- CARD -->
-            <div class="group relative p-7 rounded-2xl border border-borderLight bg-white shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div class="group relative p-7 rounded-2xl border border-borderLight bg-cardBg shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
 
                 <!-- glow -->
                 <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition">
@@ -46,7 +46,7 @@
             </div>
 
             <!-- CARD -->
-            <div class="group relative p-7 rounded-2xl border border-borderLight bg-white shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div class="group relative p-7 rounded-2xl border border-borderLight bg-cardBg shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
 
                 <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition">
                     <div class="absolute -top-10 -right-10 w-32 h-32 bg-secondarySoft blur-2xl rounded-full"></div>
@@ -71,15 +71,15 @@
             </div>
 
             <!-- CARD -->
-            <div class="group relative p-7 rounded-2xl border border-borderLight bg-white shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div class="group relative p-7 rounded-2xl border border-borderLight bg-cardBg shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
 
                 <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition">
-                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-accentSoft blur-2xl rounded-full"></div>
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-glowPink blur-2xl rounded-full"></div>
                 </div>
 
                 <div class="relative">
 
-                    <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-accentSoft text-accent text-xl mb-5">
+                    <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-glowPink text-brand text-xl mb-5">
                         🎓
                     </div>
 
@@ -96,7 +96,7 @@
             </div>
 
             <!-- CARD -->
-            <div class="group relative p-7 rounded-2xl border border-borderLight bg-white shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div class="group relative p-7 rounded-2xl border border-borderLight bg-cardBg shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
 
                 <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition">
                     <div class="absolute -top-10 -right-10 w-32 h-32 bg-brandSoft blur-2xl rounded-full"></div>
@@ -121,7 +121,7 @@
             </div>
 
             <!-- CARD -->
-            <div class="group relative p-7 rounded-2xl border border-borderLight bg-white shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div class="group relative p-7 rounded-2xl border border-borderLight bg-cardBg shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
 
                 <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition">
                     <div class="absolute -top-10 -right-10 w-32 h-32 bg-secondarySoft blur-2xl rounded-full"></div>
@@ -146,15 +146,15 @@
             </div>
 
             <!-- CARD -->
-            <div class="group relative p-7 rounded-2xl border border-borderLight bg-white shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div class="group relative p-7 rounded-2xl border border-borderLight bg-cardBg shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
 
                 <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition">
-                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-accentSoft blur-2xl rounded-full"></div>
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-glowBlue blur-2xl rounded-full"></div>
                 </div>
 
                 <div class="relative">
 
-                    <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-accentSoft text-accent text-xl mb-5">
+                    <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-glowBlue text-brandDark text-xl mb-5">
                         💼
                     </div>
 

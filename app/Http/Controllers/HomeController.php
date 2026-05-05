@@ -662,6 +662,7 @@ class HomeController extends Controller
                 'label' => 'Logout',
                 'icon' => 'fi fi-rr-exit',
                 'href' => route('logout'),
+                'method' => 'POST',
             ],
         ];
 
@@ -697,7 +698,7 @@ class HomeController extends Controller
                         ],
                         [
                             'key' => 'student-order-history',
-                            'label' => 'Order History',
+                            'label' => 'Billing & Purchases',
                             'icon' => 'fi fi-rr-shopping-cart',
                             'href' => route('dashboard.orders'),
                         ],

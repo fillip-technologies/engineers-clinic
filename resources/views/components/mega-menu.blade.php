@@ -39,7 +39,7 @@ $internshipLevels = [
 ];
 @endphp
 
-<div class="relative flex h-full items-center" x-data="{ academyOpen: false }" @mouseenter="academyOpen = true"
+<div class="relative flex h-full items-center" x-data="{ academyOpen: false, activeLevel: 'beginner' }" @mouseenter="academyOpen = true"
     @mouseleave="academyOpen = false" @keydown.escape.window="academyOpen = false">
     <button type="button" @click="academyOpen = !academyOpen"
         class="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all duration-300"
@@ -60,7 +60,7 @@ $internshipLevels = [
         x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100 translate-y-0"
         x-transition:leave-end="opacity-0 translate-y-2"
-        class="absolute left-1/2 top-full z-50 mt-3 hidden w-[min(calc(100vw-2rem),72rem)] -translate-x-1/2 rounded-[1.5rem] border border-slate-200/80 bg-white/95 shadow-xl shadow-slate-300/20 backdrop-blur-xl lg:block">
+        class="absolute left-1/2 top-full z-50 mt-3 block w-[min(calc(100vw-2rem),72rem)] -translate-x-1/2 rounded-[1.5rem] border border-slate-200/80 bg-white/95 shadow-xl shadow-slate-300/20 backdrop-blur-xl">
         <div class="p-5">
             <div class="mb-4 flex items-center justify-between gap-4 border-b border-slate-200/80 pb-3">
                 <!-- <div>
@@ -72,23 +72,43 @@ $internshipLevels = [
                 </span> -->
             </div>
 
-            <div class="grid gap-5 xl:grid-cols-3">
-                @foreach ($internshipLevels as $level => $programs)
-                <div class="rounded-[1.25rem] border border-slate-200/80 bg-slate-50/60 p-4">
-                    <div class="border-b border-slate-200/80 pb-3">
-                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{{ $level }}</p>
-                    </div>
-
-                    <div class="mt-4 space-y-2">
-                        @foreach ($programs as $program)
-                        <a href="{{ route('course.detail', $program['slug']) }}"
-                            class="group block rounded-[1rem] border border-slate-200/80 bg-white px-4 py-3 text-sm font-medium leading-5 text-slate-700 transition hover:-translate-y-0.5 hover:border-primary/30 hover:bg-white hover:text-primary">
-                            {{ $program['label'] }}
-                        </a>
-                        @endforeach
-                    </div>
+            <div class="grid gap-5 lg:grid-cols-[14rem_1fr]">
+                <div class="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
+                    @foreach ($internshipLevels as $level => $programs)
+                    @php $levelKey = strtolower(str_replace(' Level', '', $level)); @endphp
+                    <button type="button" @click="activeLevel = @js($levelKey)"
+                        class="shrink-0 rounded-[1.25rem] border border-slate-200/80 bg-slate-50/60 p-4 text-left transition hover:-translate-y-0.5 hover:border-primary/30"
+                        :class="activeLevel === @js($levelKey) ? 'border-primary/30 bg-white text-primary shadow-sm' : 'text-slate-700'">
+                        <div class="border-b border-slate-200/80 pb-3">
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500"
+                                :class="activeLevel === @js($levelKey) ? 'text-primary' : 'text-slate-500'">
+                                {{ str_replace(' Level', '', $level) }}
+                            </p>
+                        </div>
+                    </button>
+                    @endforeach
                 </div>
-                @endforeach
+
+                <div class="min-w-0">
+                    @foreach ($internshipLevels as $level => $programs)
+                    @php $levelKey = strtolower(str_replace(' Level', '', $level)); @endphp
+                    <div x-show="activeLevel === @js($levelKey)"
+                        class="rounded-[1.25rem] border border-slate-200/80 bg-slate-50/60 p-4">
+                        <div class="border-b border-slate-200/80 pb-3">
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{{ $level }}</p>
+                        </div>
+
+                        <div class="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                            @foreach ($programs as $program)
+                            <a href="{{ route('course.detail', $program['slug']) }}"
+                                class="group block rounded-[1rem] border border-slate-200/80 bg-white px-4 py-3 text-sm font-medium leading-5 text-slate-700 transition hover:-translate-y-0.5 hover:border-primary/30 hover:bg-white hover:text-primary">
+                                {{ $program['label'] }}
+                            </a>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
