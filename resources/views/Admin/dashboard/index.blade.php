@@ -68,12 +68,21 @@ $quickActions = [
 ['label' => 'Assign Permission', 'route' => 'admin.role-permissions.create', 'icon' => 'fi-rr-key'],
 ];
 
-$lineMonths = collect(range(5, 0))->map(fn ($offset) => now()->subMonths($offset));
-$lineValues = $lineMonths->map(fn ($date) => \App\Models\Enrollment::whereYear('created_at', $date->year)->whereMonth('created_at', $date->month)->count());
+$lineMonths = collect(range(5, 0))->map(function ($offset) {
+return now()->subMonths($offset);
+});
+
+$lineValues = $lineMonths->map(function ($date) {
+return \App\Models\Enrollment::whereYear('created_at', $date->year)
+->whereMonth('created_at', $date->month)
+->count();
+});
+
 $lineMax = max($lineValues->max(), 1);
 $linePoints = $lineValues->values()->map(function ($value, $index) use ($lineMax) {
 $x = 40 + ($index * 64);
 $y = 170 - (($value / $lineMax) * 120);
+
 return round($x, 1) . ',' . round($y, 1);
 })->implode(' ');
 
@@ -83,6 +92,7 @@ $barData = [
 ['label' => 'Enrollments', 'value' => $enrollmentsCount, 'color' => 'bg-orange-400', 'fill' => '#FB923C'],
 ['label' => 'Certificates', 'value' => $certificatesCount, 'color' => 'bg-emerald-500', 'fill' => '#10B981'],
 ];
+
 $barMax = max(collect($barData)->max('value'), 1);
 @endphp
 
@@ -167,7 +177,9 @@ $barMax = max(collect($barData)->max('value'), 1);
 
             <div class="mt-6 space-y-4">
                 @foreach($barData as $item)
-                @php($width = max(($item['value'] / $barMax) * 100, $item['value'] > 0 ? 8 : 2))
+                @php
+                $width = max(($item['value'] / $barMax) * 100, $item['value'] > 0 ? 8 : 2);
+                @endphp
                 <div>
                     <div class="mb-2 flex items-center justify-between text-sm">
                         <span class="font-medium text-gray-700">{{ $item['label'] }}</span>
