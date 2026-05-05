@@ -15,7 +15,7 @@ $stats = [
 'label' => 'Total Users',
 'value' => $usersCount,
 'icon' => 'fi-rr-users',
-'accent' => 'bg-indigo-50 text-indigo-600',
+'accent' => 'from-brand to-brandLight',
 'trend' => '+' . \App\Models\User::where('created_at', '>=', $weekStart)->count() . ' this week',
 'trendTone' => 'text-emerald-600',
 ],
@@ -23,7 +23,7 @@ $stats = [
 'label' => 'Students',
 'value' => $studentsCount,
 'icon' => 'fi-rr-user',
-'accent' => 'bg-sky-50 text-sky-600',
+'accent' => 'from-sky-500 to-blue-500',
 'trend' => '+' . \App\Models\Student::where('created_at', '>=', $weekStart)->count() . ' this week',
 'trendTone' => 'text-emerald-600',
 ],
@@ -31,7 +31,7 @@ $stats = [
 'label' => 'Courses',
 'value' => $coursesCount,
 'icon' => 'fi-rr-book-bookmark',
-'accent' => 'bg-violet-50 text-violet-600',
+'accent' => 'from-violet-500 to-fuchsia-500',
 'trend' => '+' . \App\Models\Course::where('created_at', '>=', $weekStart)->count() . ' this week',
 'trendTone' => 'text-emerald-600',
 ],
@@ -39,7 +39,7 @@ $stats = [
 'label' => 'Enrollments',
 'value' => $enrollmentsCount,
 'icon' => 'fi-rr-clipboard-list',
-'accent' => 'bg-orange-50 text-orange-600',
+'accent' => 'from-orange-500 to-amber-400',
 'trend' => '+' . \App\Models\Enrollment::where('created_at', '>=', $weekStart)->count() . ' this week',
 'trendTone' => 'text-emerald-600',
 ],
@@ -47,7 +47,7 @@ $stats = [
 'label' => 'Payments',
 'value' => $paymentsCount,
 'icon' => 'fi-rr-credit-card',
-'accent' => 'bg-emerald-50 text-emerald-600',
+'accent' => 'from-emerald-500 to-teal-400',
 'trend' => '+' . \App\Models\Payment::where('created_at', '>=', $weekStart)->count() . ' this week',
 'trendTone' => 'text-emerald-600',
 ],
@@ -55,7 +55,7 @@ $stats = [
 'label' => 'Certificates',
 'value' => $certificatesCount,
 'icon' => 'fi-rr-medal',
-'accent' => 'bg-amber-50 text-amber-600',
+'accent' => 'from-yellow-500 to-secondary',
 'trend' => '+' . \App\Models\Certificate::where('created_at', '>=', $weekStart)->count() . ' this week',
 'trendTone' => 'text-emerald-600',
 ],
@@ -86,54 +86,72 @@ $barData = [
 $barMa = max(collect($barData)->max('value'), 1);
 @endphp
 
-<div class="space-y-6">
-    <section class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-            <h1 class="text-2xl font-semibold tracking-tight text-gray-950">Dashboard</h1>
-            <p class="mt-1 text-sm text-gray-600">
-                Track platform activity, learning operations, and access workflows.
-            </p>
-        </div>
-        <div class="flex flex-wrap items-center gap-3">
-            <span class="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600">
-                <span class="font-semibold text-gray-950">{{ $usersCount }}</span> total users
-            </span>
-            <span
-                class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700">
-                <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-                Operational
-            </span>
+<div class="space-y-7">
+    <section
+        class="relative overflow-hidden rounded-[2rem] border border-white/80 bg-white/75 p-6 shadow-2xl shadow-brand/10 backdrop-blur-2xl sm:p-8">
+        <div class="absolute right-0 top-0 h-40 w-40 rounded-full bg-brandSoft blur-3xl"></div>
+        <div class="absolute bottom-0 right-36 h-32 w-32 rounded-full bg-secondarySoft blur-3xl"></div>
+
+        <div class="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand">Admin Dashboard</p>
+                <h1 class="mt-3 text-3xl font-semibold tracking-tight text-textPrimary sm:text-4xl">
+                    Welcome back, {{ Auth::user()->name }}.
+                </h1>
+                <p class="mt-3 max-w-2xl text-sm leading-7 text-textSecondary sm:text-base">
+                    Track platform activity, learning operations, access workflows, and student progress from one
+                    focused workspace.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:w-[24rem]">
+                <div class="rounded-2xl border border-glassBorder bg-white/70 p-4 shadow-sm">
+                    <p class="text-2xl font-semibold text-textPrimary">{{ $usersCount }}</p>
+                    <p class="mt-1 text-xs font-medium text-textMuted">Users</p>
+                </div>
+                <div class="rounded-2xl border border-glassBorder bg-white/70 p-4 shadow-sm">
+                    <p class="text-2xl font-semibold text-textPrimary">{{ $studentsCount }}</p>
+                    <p class="mt-1 text-xs font-medium text-textMuted">Students</p>
+                </div>
+                <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 shadow-sm">
+                    <p class="text-sm font-semibold text-emerald-700">Operational</p>
+                    <p class="mt-2 text-xs font-medium text-emerald-600">Live system</p>
+                </div>
+            </div>
         </div>
     </section>
 
     <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         @foreach($stats as $stat)
-        <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:border-gray-300 hover:shadow-md">
+        <div class="group rounded-[1.5rem] border border-white/80 bg-white/75 p-5 shadow-lg shadow-brand/5 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-brand/10">
             <div class="flex items-start justify-between gap-4">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">{{ $stat['label'] }}</p>
-                    <p class="mt-3 text-3xl font-semibold tracking-tight text-gray-950">{{ $stat['value'] }}</p>
+                    <p class="text-sm font-medium text-textMuted">{{ $stat['label'] }}</p>
+                    <p class="mt-3 text-3xl font-semibold tracking-tight text-textPrimary">{{ $stat['value'] }}</p>
                 </div>
-                <span class="flex h-10 w-10 items-center justify-center rounded-lg {{ $stat['accent'] }}">
+                <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br {{ $stat['accent'] }} text-white shadow-lg shadow-brand/20">
                     <i class="fi {{ $stat['icon'] }} text-base leading-none"></i>
                 </span>
             </div>
-            <div class="mt-4 flex items-center gap-2 text-xs font-medium {{ $stat['trendTone'] }}">
-                <i class="fi fi-rr-arrow-trend-up leading-none"></i>
-                {{ $stat['trend'] }}
+            <div class="mt-5 flex items-center justify-between border-t border-glassBorder pt-4">
+                <div class="flex items-center gap-2 text-xs font-semibold {{ $stat['trendTone'] }}">
+                    <i class="fi fi-rr-arrow-trend-up leading-none"></i>
+                    {{ $stat['trend'] }}
+                </div>
+                <span class="h-2 w-12 rounded-full bg-gradient-to-r {{ $stat['accent'] }} opacity-70 transition group-hover:w-16"></span>
             </div>
         </div>
         @endforeach
     </section>
 
     <section class="grid gap-6 xl:grid-cols-[1.35fr_1fr]">
-        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div class="rounded-[1.75rem] border border-white/80 bg-white/75 p-6 shadow-xl shadow-brand/5 backdrop-blur-xl">
             <div class="flex items-start justify-between gap-4">
                 <div>
-                    <h2 class="text-base font-semibold text-gray-950">Enrollments Over Time</h2>
-                    <p class="mt-1 text-sm text-gray-600">Monthly enrollment activity for the last 6 months.</p>
+                    <h2 class="text-lg font-semibold text-textPrimary">Enrollments Over Time</h2>
+                    <p class="mt-1 text-sm text-textSecondary">Monthly enrollment activity for the last 6 months.</p>
                 </div>
-                <span class="rounded-full bg-brandSoft px-3 py-1 text-xs font-medium text-brand">Live data</span>
+                <span class="rounded-full bg-brandSoft px-3 py-1 text-xs font-semibold text-brand">Live data</span>
             </div>
 
             <div class="mt-6 overflow-hidden">
@@ -159,10 +177,10 @@ $barMa = max(collect($barData)->max('value'), 1);
             </div>
         </div>
 
-        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div class="rounded-[1.75rem] border border-white/80 bg-white/75 p-6 shadow-xl shadow-brand/5 backdrop-blur-xl">
             <div>
-                <h2 class="text-base font-semibold text-gray-950">Platform Distribution</h2>
-                <p class="mt-1 text-sm text-gray-600">Core records across learning operations.</p>
+                <h2 class="text-lg font-semibold text-textPrimary">Platform Distribution</h2>
+                <p class="mt-1 text-sm text-textSecondary">Core records across learning operations.</p>
             </div>
 
             <div class="mt-6 space-y-4">
@@ -170,8 +188,8 @@ $barMa = max(collect($barData)->max('value'), 1);
                 @php($width = max(($item['value'] / $barMa) * 100, $item['value'] > 0 ? 8 : 2))
                 <div>
                     <div class="mb-2 flex items-center justify-between text-sm">
-                        <span class="font-medium text-gray-700">{{ $item['label'] }}</span>
-                        <span class="text-gray-500">{{ $item['value'] }}</span>
+                        <span class="font-medium text-textSecondary">{{ $item['label'] }}</span>
+                        <span class="text-textMuted">{{ $item['value'] }}</span>
                     </div>
                     <div class="h-3 overflow-hidden rounded-full bg-gray-100">
                         <div class="h-full rounded-full {{ $item['color'] }}" style="width: {{ $width }}%"></div>
@@ -183,14 +201,14 @@ $barMa = max(collect($barData)->max('value'), 1);
     </section>
 
     <section class="grid gap-6 xl:grid-cols-[1fr_22rem]">
-        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div class="rounded-[1.75rem] border border-white/80 bg-white/75 p-6 shadow-xl shadow-brand/5 backdrop-blur-xl">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h2 class="text-base font-semibold text-gray-950">Quick Actions</h2>
-                    <p class="mt-1 text-sm text-gray-600">Common admin workflows, ready when you need them.</p>
+                    <h2 class="text-lg font-semibold text-textPrimary">Quick Actions</h2>
+                    <p class="mt-1 text-sm text-textSecondary">Common admin workflows, ready when you need them.</p>
                 </div>
                 <a href="{{ route('admin.notifications.index') }}"
-                    class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:border-brand hover:bg-brandSoft hover:text-brand">
+                    class="inline-flex items-center justify-center rounded-2xl border border-glassBorder bg-white px-4 py-2 text-sm font-semibold text-textSecondary transition hover:border-brand/40 hover:bg-brandSoft hover:text-brand">
                     View notifications
                 </a>
             </div>
@@ -198,9 +216,9 @@ $barMa = max(collect($barData)->max('value'), 1);
             <div class="mt-5 grid gap-3 sm:grid-cols-2">
                 @foreach($quickActions as $action)
                 <a href="{{ route($action['route']) }}"
-                    class="flex items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-800 transition hover:border-brand/40 hover:bg-brandSoft hover:text-brand">
+                    class="flex items-center justify-between rounded-2xl border border-glassBorder bg-white/70 px-4 py-3 text-sm font-semibold text-textPrimary transition hover:-translate-y-0.5 hover:border-brand/40 hover:bg-white hover:text-brand hover:shadow-lg hover:shadow-brand/10">
                     <span class="flex items-center gap-3">
-                        <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-50 text-gray-500">
+                        <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-bgDark text-textMuted">
                             <i class="fi {{ $action['icon'] }} text-base leading-none"></i>
                         </span>
                         {{ $action['label'] }}
@@ -211,23 +229,22 @@ $barMa = max(collect($barData)->max('value'), 1);
             </div>
         </div>
 
-        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-            <div class="h-1.5 bg-brand"></div>
+        <div class="overflow-hidden rounded-[1.75rem] border border-white/80 bg-gradient-to-br from-brandDark via-brand to-brandLight text-white shadow-2xl shadow-brand/20">
             <div class="p-6">
-                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-brand">
+                <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/20 text-white">
                     <i class="fi fi-rr-shield-check text-base leading-none"></i>
                 </div>
-                <h2 class="mt-4 text-base font-semibold text-gray-950">Access Control</h2>
-                <p class="mt-2 text-sm leading-6 text-gray-600">
+                <h2 class="mt-4 text-lg font-semibold">Access Control</h2>
+                <p class="mt-2 text-sm leading-6 text-white/70">
                     Keep roles and permission sets aligned with current admin responsibilities.
                 </p>
                 <div class="mt-5 grid gap-3">
                     <a href="{{ route('admin.roles.index') }}"
-                        class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:border-brand hover:bg-brandSoft hover:text-brand">
+                        class="inline-flex items-center justify-center rounded-2xl bg-white/15 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/25">
                         Roles
                     </a>
                     <a href="{{ route('admin.permissions.index') }}"
-                        class="inline-flex items-center justify-center rounded-lg bg-brand px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brandDark">
+                        class="inline-flex items-center justify-center rounded-2xl bg-white px-4 py-2.5 text-sm font-semibold text-brand transition hover:bg-bgDark">
                         Permissions
                     </a>
                 </div>
