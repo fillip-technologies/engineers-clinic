@@ -67,7 +67,7 @@ $navigationGroups = [
 ['label' => 'Dashboard', 'route' => 'admin.dashboard', 'active' => 'admin.dashboard', 'icon' => 'fi-rr-dashboard'],
 ],
 'Access' => [
-['label' => 'Roles', 'route' => 'admin.roles.index', 'active' => 'admin.roles.*', 'icon' => 'fi-rr-shield-user'],
+['label' => 'Rolessssssssssssssssssssss', 'route' => 'admin.roles.index', 'active' => 'admin.roles.*', 'icon' => 'fi-rr-shield-user'],
 ['label' => 'Permissions', 'route' => 'admin.permissions.index', 'active' => 'admin.permissions.*', 'icon' => 'fi-rr-lock'],
 ['label' => 'Role Permissions', 'route' => 'admin.role-permissions.index', 'active' => 'admin.role-permissions.*', 'icon' => 'fi-rr-keys'],
 ],
