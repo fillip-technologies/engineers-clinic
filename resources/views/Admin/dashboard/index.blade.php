@@ -83,7 +83,7 @@ $barData = [
 ['label' => 'Enrollments', 'value' => $enrollmentsCount, 'color' => 'bg-orange-400', 'fill' => '#FB923C'],
 ['label' => 'Certificates', 'value' => $certificatesCount, 'color' => 'bg-emerald-500', 'fill' => '#10B981'],
 ];
-$barMax = max(collect($barData)->max('value'), 1);
+$barMa = max(collect($barData)->max('value'), 1);
 @endphp
 
 <div class="space-y-6">
@@ -167,7 +167,7 @@ $barMax = max(collect($barData)->max('value'), 1);
 
             <div class="mt-6 space-y-4">
                 @foreach($barData as $item)
-                @php($width = max(($item['value'] / $barMax) * 100, $item['value'] > 0 ? 8 : 2))
+                @php($width = max(($item['value'] / $barMa) * 100, $item['value'] > 0 ? 8 : 2))
                 <div>
                     <div class="mb-2 flex items-center justify-between text-sm">
                         <span class="font-medium text-gray-700">{{ $item['label'] }}</span>
