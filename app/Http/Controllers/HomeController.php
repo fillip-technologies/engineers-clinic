@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Models\Enrollment;
 use App\Models\Course;
+use App\Models\College;
 use App\Models\QuizResult;
 use App\Models\Quiz;
 use App\Models\Payment;
@@ -151,14 +152,14 @@ class HomeController extends Controller
     public function enrolledCourses()
     {
         $user = Auth::user();
-        
+
         if (!$user) {
             return redirect()->route('login');
         }
-        
+
         // Get the student record for this user
         $student = Student::where('user_id', $user->id)->first();
-        
+
         if (!$student) {
             // If no student record, show empty or demo data
             $enrolledCourses = [];
@@ -168,7 +169,7 @@ class HomeController extends Controller
                 ->where('student_id', $student->id)
                 ->orderBy('enrollment_date', 'desc')
                 ->get();
-            
+
             $enrolledCourses = $enrollments->map(function ($enrollment) {
                 $course = $enrollment->course;
                 return [
@@ -195,24 +196,24 @@ class HomeController extends Controller
     public function studentCourse($id)
     {
         $user = Auth::user();
-        
+
         if (!$user) {
             return redirect()->route('login');
         }
-        
+
         // Get the student record for this user
         $student = Student::where('user_id', $user->id)->first();
-        
+
         if (!$student) {
             return redirect()->route('dashboard.enrolled-courses');
         }
-        
+
         // Fetch the enrollment with course details
         $enrollment = Enrollment::with('course')
             ->where('student_id', $student->id)
             ->where('id', $id)
             ->first();
-        
+
         if (!$enrollment) {
             // Try to find by course ID as fallback
             $enrollment = Enrollment::with('course')
@@ -220,13 +221,13 @@ class HomeController extends Controller
                 ->get()
                 ->firstWhere('course_id', $id);
         }
-        
+
         if (!$enrollment) {
             abort(404, 'Course not found');
         }
-        
+
         $course = $enrollment->course;
-        
+
         // Build course data from database
         $courseData = [
             'id' => $enrollment->id,
@@ -248,7 +249,7 @@ class HomeController extends Controller
             ...$this->frontendAdminData('student-enrolled-courses'),
         ]);
     }
-    
+
     /**
      * Get course phases/modules structure
      */
@@ -257,10 +258,10 @@ class HomeController extends Controller
         if (!$course) {
             return [];
         }
-        
+
         // Get tasks for this course as modules
         $tasks = $course->tasks()->orderBy('created_at')->get();
-        
+
         if ($tasks->isEmpty()) {
             // Return default phases if no tasks
             return [
@@ -273,18 +274,18 @@ class HomeController extends Controller
                 ],
             ];
         }
-        
+
         $phases = [];
         $phaseIndex = 1;
         $modules = [];
-        
+
         foreach ($tasks as $index => $task) {
             $modules[] = [
                 'id' => 'module-' . ($index + 1),
                 'title' => $task->title,
                 'state' => $index === 0 ? 'active' : 'locked',
             ];
-            
+
             // Create a new phase every 3 modules
             if (($index + 1) % 3 === 0 || $index === $tasks->count() - 1) {
                 $phases[] = [
@@ -295,10 +296,10 @@ class HomeController extends Controller
                 $phaseIndex++;
             }
         }
-        
+
         return $phases;
     }
-    
+
     /**
      * Get course module content
      */
@@ -307,9 +308,9 @@ class HomeController extends Controller
         if (!$course) {
             return [];
         }
-        
+
         $tasks = $course->tasks()->orderBy('created_at')->get();
-        
+
         $modules = [];
         foreach ($tasks as $index => $task) {
             $modules['module-' . ($index + 1)] = [
@@ -317,21 +318,21 @@ class HomeController extends Controller
                 'description' => $task->description ?? 'Complete this module to progress.',
             ];
         }
-        
+
         return $modules;
     }
 
     public function studentProfile()
     {
         $user = Auth::user();
-        
+
         if (!$user) {
             return redirect()->route('login');
         }
-        
+
         // Get the student record for this user
         $student = Student::where('user_id', $user->id)->first();
-        
+
         // Build profile data from user and student records
         $profile = [
             'name' => $user->name,
@@ -343,7 +344,7 @@ class HomeController extends Controller
             'course_name' => $student?->course_name ?? '',
             'created_at' => $user->created_at?->format('M d, Y'),
         ];
-        
+
         // If no student record exists, create basic profile from user
         if (!$student) {
             $profile['course_name'] = 'Not enrolled';
@@ -358,32 +359,32 @@ class HomeController extends Controller
     public function studentProfileEdit(Request $request)
     {
         $user = Auth::user();
-        
+
         if (!$user) {
             return redirect()->route('login');
         }
-        
+
         // Handle form submission for profile update
         if ($request->isMethod('post')) {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'phone' => 'nullable|string|max:20',
             ]);
-            
+
             // Update user profile
             $user->name = $validated['name'];
             if (isset($validated['phone'])) {
                 $user->phone = $validated['phone'];
             }
             $user->save();
-            
+
             return redirect()->route('dashboard.student.profile')
                 ->with('success', 'Profile updated successfully!');
         }
-        
+
         // Get the student record for this user
         $student = Student::where('user_id', $user->id)->first();
-        
+
         // Build profile data for editing
         $profile = [
             'name' => $user->name,
@@ -404,14 +405,14 @@ class HomeController extends Controller
     public function quizAttempts()
     {
         $user = Auth::user();
-        
+
         if (!$user) {
             return redirect()->route('login');
         }
-        
+
         // Get the student record for this user
         $student = Student::where('user_id', $user->id)->first();
-        
+
         if (!$student) {
             $quizAttempts = [];
         } else {
@@ -420,7 +421,7 @@ class HomeController extends Controller
                 ->where('student_id', $student->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
-            
+
             $quizAttempts = $quizResults->map(function ($result, $index) {
                 $quiz = $result->quiz;
                 return [
@@ -445,14 +446,14 @@ class HomeController extends Controller
     public function orderHistory()
     {
         $user = Auth::user();
-        
+
         if (!$user) {
             return redirect()->route('login');
         }
-        
+
         // Get the student record for this user
         $student = Student::where('user_id', $user->id)->first();
-        
+
         if (!$student) {
             $orders = [];
         } else {
@@ -461,7 +462,7 @@ class HomeController extends Controller
                 ->where('student_id', $student->id)
                 ->orderBy('payment_date', 'desc')
                 ->get();
-            
+
             $orders = $payments->map(function ($payment) {
                 $course = $payment->course;
                 return [
@@ -500,8 +501,10 @@ class HomeController extends Controller
 
     public function studentEdit()
     {
+        $students = $this->collegeStudentManagementData();
+
         return view('dashboard.college.student-edit', [
-            'student' => $this->collegeStudentManagementData()[1],
+            'student' => $students[1] ?? $students[0] ?? null,
             'courseOptions' => $this->collegeStudentCourseOptions(),
             ...$this->frontendAdminData('college-students'),
         ]);
@@ -509,8 +512,10 @@ class HomeController extends Controller
 
     public function studentShow()
     {
+        $students = $this->collegeStudentManagementData();
+
         return view('dashboard.college.student-show', [
-            'student' => $this->collegeStudentManagementData()[0],
+            'student' => $students[0] ?? null,
             ...$this->frontendAdminData('college-students'),
         ]);
     }
@@ -535,8 +540,10 @@ class HomeController extends Controller
 
     public function enrollmentEdit()
     {
+        $enrollments = $this->collegeEnrollmentsData();
+
         return view('dashboard.college.enrollments.edit', [
-            'enrollment' => $this->collegeEnrollmentsData()[1],
+            'enrollment' => $enrollments[1] ?? $enrollments[0] ?? null,
             'students' => $this->collegeEnrollmentStudentOptions(),
             'courses' => $this->collegeEnrollmentCourseOptions(),
             ...$this->frontendAdminData('college-enrollments'),
@@ -545,8 +552,10 @@ class HomeController extends Controller
 
     public function enrollmentShow()
     {
+        $enrollments = $this->collegeEnrollmentsData();
+
         return view('dashboard.college.enrollments.show', [
-            'enrollment' => $this->collegeEnrollmentsData()[0],
+            'enrollment' => $enrollments[0] ?? null,
             ...$this->frontendAdminData('college-enrollments'),
         ]);
     }
@@ -801,313 +810,157 @@ class HomeController extends Controller
 
     protected function dashboardCollegeStudents(): array
     {
-        return [
-            ['name' => 'Aarav Sharma', 'email' => 'aarav.sharma@abccollege.edu', 'course' => 'Full Stack Development', 'progress' => '78%', 'status' => 'Active'],
-            ['name' => 'Priya Verma', 'email' => 'priya.verma@abccollege.edu', 'course' => 'Frontend Development', 'progress' => '64%', 'status' => 'Active'],
-            ['name' => 'Rohan Mehta', 'email' => 'rohan.mehta@abccollege.edu', 'course' => 'UI/UX Design', 'progress' => '100%', 'status' => 'Completed'],
-            ['name' => 'Sneha Iyer', 'email' => 'sneha.iyer@abccollege.edu', 'course' => 'Data Analytics', 'progress' => '52%', 'status' => 'Active'],
-        ];
+        $query = Student::with([
+            'user',
+            'enrollments' => function ($query) {
+                $query->latest('enrollment_date')->limit(1)->with('course');
+            },
+        ]);
+
+        if (Auth::check() && Auth::user()->role?->name === 'college') {
+            $college = College::where('user_id', Auth::id())->first();
+            if ($college) {
+                $query->where('college_id', $college->id);
+            }
+        }
+
+        return $query->limit(5)->get()->map(function (Student $student) {
+            $latestEnrollment = $student->enrollments->first();
+            $progress = $latestEnrollment?->progress;
+
+            return [
+                'name' => $student->user?->name ?? 'Unknown Student',
+                'email' => $student->user?->email ?? '',
+                'course' => $student->course_name ?? $latestEnrollment?->course?->title ?? 'Not enrolled',
+                'progress' => $progress !== null ? $progress . '%' : '0%',
+                'status' => $latestEnrollment?->status === 'completed' ? 'Completed' : 'Active',
+            ];
+        })->toArray();
     }
 
     protected function collegeStudentManagementData(): array
     {
-        return [
-            [
-                'name' => 'Aarav Sharma',
-                'email' => 'aarav.sharma@abccollege.edu',
-                'course' => 'Full Stack Development',
-                'status' => 'Active',
-                'joined_date' => 'April 12, 2026',
-            ],
-            [
-                'name' => 'Priya Verma',
-                'email' => 'priya.verma@abccollege.edu',
-                'course' => 'Frontend Development',
-                'status' => 'Active',
-                'joined_date' => 'April 08, 2026',
-            ],
-            [
-                'name' => 'Rohan Mehta',
-                'email' => 'rohan.mehta@abccollege.edu',
-                'course' => 'UI/UX Design',
-                'status' => 'Inactive',
-                'joined_date' => 'March 30, 2026',
-            ],
-            [
-                'name' => 'Sneha Iyer',
-                'email' => 'sneha.iyer@abccollege.edu',
-                'course' => 'Data Analytics',
-                'status' => 'Active',
-                'joined_date' => 'March 18, 2026',
-            ],
-            [
-                'name' => 'Karan Malhotra',
-                'email' => 'karan.malhotra@abccollege.edu',
-                'course' => 'Cloud Computing',
-                'status' => 'Inactive',
-                'joined_date' => 'February 27, 2026',
-            ],
-        ];
+        $query = Student::with([
+            'user',
+            'enrollments' => function ($query) {
+                $query->latest('enrollment_date')->limit(1)->with('course');
+            },
+        ]);
+
+        if (Auth::check() && Auth::user()->role?->name === 'college') {
+            $college = College::where('user_id', Auth::id())->first();
+            if ($college) {
+                $query->where('college_id', $college->id);
+            }
+        }
+
+        return $query->get()->map(function (Student $student) {
+            $latestEnrollment = $student->enrollments->first();
+
+            return [
+                'name' => $student->user?->name ?? 'Unknown Student',
+                'email' => $student->user?->email ?? '',
+                'course' => $student->course_name ?? $latestEnrollment?->course?->title ?? 'Not enrolled',
+                'status' => $latestEnrollment?->status === 'completed' ? 'Completed' : 'Active',
+                'joined_date' => $student->created_at?->format('F d, Y') ?? 'N/A',
+            ];
+        })->toArray();
     }
 
     protected function collegeStudentCourseOptions(): array
     {
-        return [
-            'Full Stack Development',
-            'Frontend Development',
-            'UI/UX Design',
-            'Data Analytics',
-            'Cloud Computing',
-        ];
+        return Course::orderBy('title')->pluck('title')->toArray();
     }
 
     protected function collegeEnrollmentsData(): array
     {
-        return [
-            [
-                'student_name' => 'Aarav Sharma',
-                'course_name' => 'Full Stack Development',
-                'enrollment_date' => 'April 12, 2026',
-                'progress' => 78,
-                'status' => 'Active',
-                'last_activity' => 'Completed Module 5 yesterday',
-            ],
-            [
-                'student_name' => 'Priya Verma',
-                'course_name' => 'Frontend Development',
-                'enrollment_date' => 'April 08, 2026',
-                'progress' => 64,
-                'status' => 'Active',
-                'last_activity' => 'Submitted assignment 2 hours ago',
-            ],
-            [
-                'student_name' => 'Rohan Mehta',
-                'course_name' => 'UI/UX Design',
-                'enrollment_date' => 'March 30, 2026',
-                'progress' => 100,
-                'status' => 'Completed',
-                'last_activity' => 'Course completed on April 20, 2026',
-            ],
-            [
-                'student_name' => 'Sneha Iyer',
-                'course_name' => 'Data Analytics',
-                'enrollment_date' => 'March 18, 2026',
-                'progress' => 52,
-                'status' => 'Active',
-                'last_activity' => 'Joined live session 1 day ago',
-            ],
-            [
-                'student_name' => 'Karan Malhotra',
-                'course_name' => 'Cloud Computing',
-                'enrollment_date' => 'February 27, 2026',
-                'progress' => 24,
-                'status' => 'Dropped',
-                'last_activity' => 'No activity for 3 weeks',
-            ],
-        ];
+        return Enrollment::with(['student.user', 'course'])
+            ->orderBy('enrollment_date', 'desc')
+            ->get()
+            ->map(function (Enrollment $enrollment) {
+                return [
+                    'student_name' => $enrollment->student->user?->name ?? 'Unknown Student',
+                    'course_name' => $enrollment->course?->title ?? 'Unknown Course',
+                    'enrollment_date' => $enrollment->enrollment_date?->format('F d, Y') ?? 'N/A',
+                    'progress' => $enrollment->progress,
+                    'status' => $enrollment->status === 'completed' ? 'Completed' : 'Active',
+                    'last_activity' => $enrollment->updated_at?->diffForHumans() ?? 'No activity yet',
+                ];
+            })->toArray();
     }
 
     protected function collegeEnrollmentStudentOptions(): array
     {
-        return [
-            'Aarav Sharma',
-            'Priya Verma',
-            'Rohan Mehta',
-            'Sneha Iyer',
-            'Karan Malhotra',
-        ];
+        return Student::with('user')
+            ->get()
+            ->map(fn (Student $student) => $student->user?->name ?? 'Unknown Student')
+            ->toArray();
     }
 
     protected function collegeEnrollmentCourseOptions(): array
     {
-        return [
-            'Full Stack Development',
-            'Frontend Development',
-            'UI/UX Design',
-            'Data Analytics',
-            'Cloud Computing',
-        ];
-    }
-
-    protected function studentProfileData(): array
-    {
-        return [
-            'name' => 'John Doe',
-            'email' => 'john.doe@example.com',
-            'age' => '22',
-            'avatar' => 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80',
-        ];
-    }
-
-    protected function studentQuizAttemptsData(): array
-    {
-        return [
-            [
-                'title' => 'Frontend Foundations Quiz',
-                'course' => 'Frontend Development Internship',
-                'attempt' => 'Attempt 2 of 3',
-                'score' => '82%',
-                'status' => 'Passed',
-                'updated_at' => 'Last attempted on April 26, 2026',
-                'action' => 'Review Attempt',
-            ],
-            [
-                'title' => 'API Basics Assessment',
-                'course' => 'Full Stack Development Internship',
-                'attempt' => 'Attempt 1 of 2',
-                'score' => 'Pending',
-                'status' => 'Upcoming',
-                'updated_at' => 'Available until April 30, 2026',
-                'action' => 'Start Quiz',
-            ],
-            [
-                'title' => 'User Research Checkpoint',
-                'course' => 'UI/UX Design Internship',
-                'attempt' => 'Attempt 1 of 1',
-                'score' => '91%',
-                'status' => 'Completed',
-                'updated_at' => 'Submitted on April 18, 2026',
-                'action' => 'View Summary',
-            ],
-        ];
-    }
-
-    protected function studentOrderHistoryData(): array
-    {
-        return [
-            [
-                'title' => 'Full Stack Internship',
-                'order_id' => 'ORD-1023',
-                'purchase_date' => 'April 21, 2026',
-                'price' => 'Rs. 4,999',
-                'payment_status' => 'Paid',
-                'access_status' => 'Active',
-            ],
-            [
-                'title' => 'AI Automation Program',
-                'order_id' => 'ORD-1041',
-                'purchase_date' => 'April 10, 2026',
-                'price' => 'Rs. 6,499',
-                'payment_status' => 'Pending',
-                'access_status' => 'Active',
-            ],
-            [
-                'title' => 'UI/UX Design Course',
-                'order_id' => 'ORD-0988',
-                'purchase_date' => 'March 28, 2026',
-                'price' => 'Rs. 3,799',
-                'payment_status' => 'Failed',
-                'access_status' => 'Expired',
-            ],
-        ];
+        return Course::orderBy('title')->pluck('title')->toArray();
     }
 
     protected function studentCourseWorkspaceData(int $id): array
     {
-        $courses = [
-            1 => [
-                'id' => 1,
-                'title' => 'Full Stack Development Internship',
-                'completed_lessons' => 2,
-                'total_lessons' => 16,
-                'progress' => 13,
-                'current_module' => 'module-2',
-                'description' => 'Build practical full-stack delivery skills across frontend, backend, APIs, and deployment.',
-                'phases' => [
-                    [
-                        'title' => 'Month 1: Learning & Frameworks',
-                        'modules' => [
-                            ['id' => 'module-1', 'title' => 'Module 1: Foundations', 'state' => 'completed'],
-                            ['id' => 'module-2', 'title' => 'Module 2: UI Planning', 'state' => 'active'],
-                            ['id' => 'module-3', 'title' => 'Module 3: Frontend Build', 'state' => 'locked'],
-                        ],
-                    ],
-                    [
-                        'title' => 'Month 2: Product Buildout',
-                        'modules' => [
-                            ['id' => 'module-4', 'title' => 'Module 4: Backend Workflows', 'state' => 'locked'],
-                            ['id' => 'module-5', 'title' => 'Module 5: Deployment Flow', 'state' => 'locked'],
-                        ],
-                    ],
-                ],
-                'module_content' => [
-                    'module-1' => [
-                        'title' => 'Module 1: Foundations',
-                        'description' => 'Understand the program workflow, project expectations, and how product tasks map to real-world outcomes.',
-                    ],
-                    'module-2' => [
-                        'title' => 'Module 2: UI Planning',
-                        'description' => 'Choose one focused practical task and complete it end to end with structured deliverables and submission steps.',
-                    ],
-                    'module-3' => [
-                        'title' => 'Module 3: Frontend Build',
-                        'description' => 'Move from planning into implementation using reusable components, layouts, and real interface states.',
-                    ],
-                ],
-            ],
-            2 => [
-                'id' => 2,
-                'title' => 'Frontend Development Internship',
-                'completed_lessons' => 8,
-                'total_lessons' => 16,
-                'progress' => 50,
-                'current_module' => 'module-2',
-                'description' => 'Learn how to ship polished, responsive UI systems with real workflows and feedback loops.',
-                'phases' => [
-                    [
-                        'title' => 'Month 1: Design to UI',
-                        'modules' => [
-                            ['id' => 'module-1', 'title' => 'Module 1: Visual Systems', 'state' => 'completed'],
-                            ['id' => 'module-2', 'title' => 'Module 2: Landing Page Tasks', 'state' => 'active'],
-                            ['id' => 'module-3', 'title' => 'Module 3: Interaction States', 'state' => 'locked'],
-                        ],
-                    ],
-                ],
-                'module_content' => [
-                    'module-1' => [
-                        'title' => 'Module 1: Visual Systems',
-                        'description' => 'Build clarity around typography, spacing, alignment, and repeatable UI structure.',
-                    ],
-                    'module-2' => [
-                        'title' => 'Module 2: Landing Page Tasks',
-                        'description' => 'Select one frontend build task and take it from brief to clean implementation.',
-                    ],
-                    'module-3' => [
-                        'title' => 'Module 3: Interaction States',
-                        'description' => 'Focus on hover states, tabs, selection patterns, and polished product motion.',
-                    ],
-                ],
-            ],
-            3 => [
-                'id' => 3,
-                'title' => 'UI/UX Design Internship',
-                'completed_lessons' => 16,
-                'total_lessons' => 16,
-                'progress' => 100,
-                'current_module' => 'module-1',
-                'description' => 'Create research-backed flows, product wireframes, and delivery-ready UI systems.',
-                'phases' => [
-                    [
-                        'title' => 'Month 1: Product Thinking',
-                        'modules' => [
-                            ['id' => 'module-1', 'title' => 'Module 1: Research and Framing', 'state' => 'completed'],
-                            ['id' => 'module-2', 'title' => 'Module 2: Wireframe Practice', 'state' => 'completed'],
-                        ],
-                    ],
-                ],
-                'module_content' => [
-                    'module-1' => [
-                        'title' => 'Module 1: Research and Framing',
-                        'description' => 'Explore user context, task framing, and how to translate problem statements into design decisions.',
-                    ],
-                    'module-2' => [
-                        'title' => 'Module 2: Wireframe Practice',
-                        'description' => 'Build and iterate simple, useful wireframes with clear content hierarchy and flow.',
-                    ],
-                ],
-            ],
-        ];
+        $course = Course::with('tasks')->find($id);
 
+        if (!$course) {
+            // Return default if course not found
+            return [
+                'id' => $id,
+                'title' => 'Unknown Course',
+                'completed_lessons' => 0,
+                'total_lessons' => 16,
+                'progress' => 0,
+                'current_module' => 'module-1',
+                'description' => 'Course not found.',
+                'phases' => [],
+                'module_content' => [],
+                'tasks' => [],
+            ];
+        }
+
+        $tasks = $course->tasks()->orderBy('created_at')->get();
+
+        // Build phases and modules from tasks
+        $phases = [];
+        $modules = [];
+        $moduleContent = [];
+        $phaseIndex = 1;
+
+        foreach ($tasks as $index => $task) {
+            $moduleId = 'module-' . ($index + 1);
+            $modules[] = [
+                'id' => $moduleId,
+                'title' => $task->title,
+                'state' => $index === 0 ? 'active' : 'locked',
+            ];
+            $moduleContent[$moduleId] = [
+                'title' => $task->title,
+                'description' => $task->description ?? 'Complete this module to progress.',
+            ];
+
+            // Create a new phase every 3 modules
+            if (($index + 1) % 3 === 0 || $index === $tasks->count() - 1) {
+                $phases[] = [
+                    'title' => 'Month ' . $phaseIndex . ': Learning',
+                    'modules' => $modules,
+                ];
+                $modules = [];
+                $phaseIndex++;
+            }
+        }
+
+        // Get student progress if available
+        $user = Auth::user();
+        $student = $user ? Student::where('user_id', $user->id)->first() : null;
+        $enrollment = $student ? Enrollment::where('student_id', $student->id)->where('course_id', $course->id)->first() : null;
+        $progress = $enrollment ? $enrollment->progress : 0;
+        $currentModule = 'module-' . max(1, min($tasks->count(), ceil($progress / 10) + 1));
+
+        // Default tasks (assuming Task model has tasks, but here it's static)
         $defaultTasks = [
             ['id' => 'task-1', 'title' => 'Digital Persona Card'],
             ['id' => 'task-2', 'title' => 'Product Waitlist Landing Page'],
@@ -1121,11 +974,10 @@ class HomeController extends Controller
             ['id' => 'task-10', 'title' => 'AI Tool Comparison Table'],
         ];
 
-        $selectedCourse = $courses[$id] ?? $courses[1];
-        $selectedCourse['tasks'] = array_map(function (array $task) use ($selectedCourse) {
+        $tasksWithDetails = array_map(function (array $task) use ($course) {
             return [
                 ...$task,
-                'instructions' => "Create a polished {$task['title']} solution that fits the tone and workflow of {$selectedCourse['title']}.",
+                'instructions' => "Create a polished {$task['title']} solution that fits the tone and workflow of {$course->title}.",
                 'requirements' => [
                     'Use clear information hierarchy and intentional spacing.',
                     'Include responsive states for desktop and mobile.',
@@ -1134,7 +986,18 @@ class HomeController extends Controller
             ];
         }, $defaultTasks);
 
-        return $selectedCourse;
+        return [
+            'id' => $course->id,
+            'title' => $course->title,
+            'completed_lessons' => $progress,
+            'total_lessons' => 16, // Default, could be calculated
+            'progress' => $progress,
+            'current_module' => $currentModule,
+            'description' => $course->description ?? 'Build practical skills.',
+            'phases' => $phases,
+            'module_content' => $moduleContent,
+            'tasks' => $tasksWithDetails,
+        ];
     }
 
     public function about()
