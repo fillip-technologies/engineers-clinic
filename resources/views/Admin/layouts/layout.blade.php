@@ -17,29 +17,29 @@
             theme: {
                 extend: {
                     colors: {
-                        bgDark: '#F6F4FF',
+                        bgDark: '#F8FAFC',
                         bgDarkSoft: '#FFFFFF',
                         bgIndigo: '#EEF2FF',
-                        brand: '#7C5CFC',
-                        brandLight: '#A78BFA',
-                        brandDark: '#160840',
-                        brandSoft: 'rgba(124,92,252,0.12)',
-                        primary: '#7C5CFC',
-                        primaryLight: '#A78BFA',
-                        primarySoft: 'rgba(124,92,252,0.12)',
-                        secondary: '#F5C842',
-                        secondaryLight: '#FFE68A',
-                        secondaryDark: '#160840',
-                        secondarySoft: 'rgba(245,200,66,0.16)',
+                        brand: '#4F46E5',
+                        brandLight: '#6366F1',
+                        brandDark: '#3730A3',
+                        brandSoft: 'rgba(79,70,229,0.08)',
+                        primary: '#4F46E5',
+                        primaryLight: '#6366F1',
+                        primarySoft: 'rgba(79,70,229,0.08)',
+                        secondary: '#111827',
+                        secondaryLight: '#374151',
+                        secondaryDark: '#111827',
+                        secondarySoft: 'rgba(17,24,39,0.05)',
                         accent: '#FFFFFF',
                         accentLight: '#F8FAFC',
                         accentSoft: 'rgba(148,163,184,0.10)',
-                        textPrimary: '#160840',
-                        textSecondary: '#3D2090',
-                        textMuted: '#8B7FBF',
-                        glass: 'rgba(255,255,255,0.78)',
-                        glassBorder: 'rgba(226,217,255,0.9)',
-                        borderLight: '#E2D9FF'
+                        textPrimary: '#111827',
+                        textSecondary: '#4B5563',
+                        textMuted: '#6B7280',
+                        glass: '#FFFFFF',
+                        glassBorder: '#E5E7EB',
+                        borderLight: '#E5E7EB'
                     }
                 }
             }
@@ -91,14 +91,8 @@ $navigationGroups = [
 ];
 @endphp
 
-<body class="min-h-screen bg-gradient-to-br from-bgDark via-white to-secondarySoft text-textPrimary" x-data="{ sidebarOpen: false, sidebarCollapsed: false }" @keydown.escape.window="sidebarOpen = false">
+<body class="min-h-screen bg-gray-50 text-textPrimary" x-data="{ sidebarOpen: false, sidebarCollapsed: false }" @keydown.escape.window="sidebarOpen = false">
     <div class="min-h-screen flex">
-        <div class="pointer-events-none fixed inset-0 overflow-hidden">
-            <div class="absolute -left-24 top-8 h-72 w-72 rounded-full bg-brandSoft blur-3xl"></div>
-            <div class="absolute right-0 top-1/3 h-96 w-96 rounded-full bg-secondarySoft blur-3xl"></div>
-            <div class="absolute left-1/2 top-12 h-64 w-64 -translate-x-1/2 rounded-full bg-sky-100/70 blur-3xl"></div>
-        </div>
-
         <!-- Mobile Overlay -->
         <div x-show="sidebarOpen" x-cloak
             x-transition:enter="transition-opacity ease-linear duration-300"
@@ -117,7 +111,7 @@ $navigationGroups = [
                 sidebarCollapsed ? 'lg:w-20' : 'lg:w-64',
                 sidebarOpen ? '!translate-x-0' : ''
             ]"
-            class="fixed inset-y-0 left-0 z-50 flex w-72 -translate-x-full transform flex-col border-r border-white/70 bg-white/90 shadow-2xl shadow-brand/10 backdrop-blur-2xl sidebar-transition lg:translate-x-0"
+            class="fixed inset-y-0 left-0 z-50 flex w-72 -translate-x-full transform flex-col border-r border-gray-200 bg-white shadow-sm sidebar-transition lg:translate-x-0"
             aria-label="Admin navigation"
             x-transition:enter="transition ease-in-out duration-300"
             x-transition:enter-start="-translate-x-full"
@@ -127,17 +121,17 @@ $navigationGroups = [
             x-transition:leave-end="-translate-x-full">
 
             <!-- Logo -->
-            <div class="flex items-center justify-between h-20 px-4 border-b border-glassBorder">
+            <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
-                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-brand to-secondary flex items-center justify-center shadow-lg shadow-brand/25">
+                    <div class="w-10 h-10 rounded-xl bg-brand flex items-center justify-center shadow-sm">
                         <span class="text-white font-bold text-sm">EC</span>
                     </div>
                     <span x-show="!sidebarCollapsed" x-transition class="min-w-0">
-                        <span class="block text-textPrimary font-semibold text-base leading-5">Engineers Clinic</span>
-                        <span class="block text-xs font-medium text-textMuted">Admin workspace</span>
+                        <span class="block text-gray-950 font-semibold text-sm leading-5">Engineers Clinic</span>
+                        <span class="block text-xs font-medium text-gray-500">Admin workspace</span>
                     </span>
                 </a>
-                <button type="button" @click="sidebarOpen = false" class="lg:hidden text-textMuted hover:text-textPrimary"
+                <button type="button" @click="sidebarOpen = false" class="lg:hidden text-gray-500 hover:text-gray-950"
                     aria-label="Close admin menu">
                     <i class="fi fi-rr-cross"></i>
                 </button>
@@ -145,7 +139,7 @@ $navigationGroups = [
 
             <!-- Toggle Button -->
             <button @click="sidebarCollapsed = !sidebarCollapsed"
-                class="hidden lg:flex items-center justify-center h-10 border-b border-glassBorder text-textMuted transition hover:bg-brandSoft hover:text-brand">
+                class="hidden lg:flex items-center justify-center h-10 border-b border-gray-200 text-gray-500 transition hover:bg-gray-50 hover:text-gray-950">
                 <i class="fi" :class="sidebarCollapsed ? 'fi-rr-angle-right' : 'fi-rr-angle-left'"></i>
             </button>
 
@@ -154,7 +148,7 @@ $navigationGroups = [
                 @foreach($navigationGroups as $group => $items)
                 <div class="{{ !$loop->first ? 'mt-6' : '' }}">
                     <p x-show="!sidebarCollapsed" x-transition
-                        class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-textMuted">
+                        class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-400">
                         {{ $group }}
                     </p>
                     <ul class="space-y-1">
@@ -162,8 +156,8 @@ $navigationGroups = [
                         @php($isActive = request()->routeIs($item['active']))
                         <li>
                             <a href="{{ route($item['route']) }}" @click="sidebarOpen = false"
-                                class="group relative flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold transition {{ $isActive ? 'bg-gradient-to-r from-brand to-brandLight text-white shadow-lg shadow-brand/20' : 'text-textSecondary hover:bg-brandSoft hover:text-brand' }}">
-                                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition {{ $isActive ? 'bg-white/20 text-white' : 'bg-white text-textMuted shadow-sm group-hover:text-brand' }}">
+                                class="group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition {{ $isActive ? 'bg-brandSoft text-brand' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-950' }}">
+                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition {{ $isActive ? 'bg-white text-brand shadow-sm' : 'text-gray-500 group-hover:text-gray-700' }}">
                                     <i class="fi {{ $item['icon'] }} text-base leading-none"></i>
                                 </span>
                                 <span x-show="!sidebarCollapsed" x-transition class="truncate">{{ $item['label'] }}</span>
@@ -176,17 +170,17 @@ $navigationGroups = [
             </nav>
 
             <!-- Logout -->
-            <div class="px-3 py-4 border-t border-glassBorder">
+            <div class="px-3 py-4 border-t border-gray-200">
                 <div x-show="!sidebarCollapsed" x-transition
-                    class="mb-3 rounded-2xl border border-glassBorder bg-bgDark/70 p-3">
-                    <p class="text-sm font-semibold text-textPrimary">{{ Auth::user()->name ?? 'Admin' }}</p>
-                    <p class="mt-1 truncate text-xs text-textMuted">{{ Auth::user()->email ?? 'admin@engineersclinic.in' }}</p>
+                    class="mb-3 rounded-lg border border-gray-200 bg-gray-50 p-3">
+                    <p class="text-sm font-semibold text-gray-950">{{ Auth::user()->name ?? 'Admin' }}</p>
+                    <p class="mt-1 truncate text-xs text-gray-500">{{ Auth::user()->email ?? 'admin@engineersclinic.in' }}</p>
                 </div>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit"
-                        class="flex items-center gap-3 w-full px-3 py-2.5 rounded-2xl text-textSecondary transition hover:bg-red-50 hover:text-red-700">
-                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white shadow-sm">
+                        class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-gray-600 transition hover:bg-red-50 hover:text-red-700">
+                        <span class="flex h-8 w-8 items-center justify-center rounded-lg">
                             <i class="fi fi-rr-sign-out text-base leading-none"></i>
                         </span>
                         <span x-show="!sidebarCollapsed" x-transition>Logout</span>
@@ -198,7 +192,7 @@ $navigationGroups = [
         <!-- Main Content -->
         <div class="relative flex-1 lg:ml-64" :class="sidebarCollapsed ? 'lg:!ml-20' : 'lg:!ml-64'">
             <!-- Mobile Header -->
-            <header class="sticky top-0 z-30 lg:hidden flex items-center justify-between h-16 px-4 bg-white/90 border-b border-glassBorder backdrop-blur-xl">
+            <header class="sticky top-0 z-30 lg:hidden flex items-center justify-between h-16 px-4 bg-white border-b border-glassBorder">
                 <button type="button"
                     @click="sidebarCollapsed = false; sidebarOpen = true"
                     class="flex h-10 w-10 items-center justify-center rounded-2xl border border-borderLight bg-white text-textPrimary shadow-sm transition-colors duration-200 hover:bg-brandSoft hover:text-brand"
