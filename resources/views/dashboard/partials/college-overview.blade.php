@@ -1,37 +1,9 @@
 @php
-    $recentStudents = [
-        ['name' => 'Aarav Sharma', 'course' => 'Full Stack Development', 'status' => 'Active', 'joined' => '2 hours ago'],
-        ['name' => 'Priya Verma', 'course' => 'Frontend Development', 'status' => 'Active', 'joined' => 'Today'],
-        ['name' => 'Rohan Mehta', 'course' => 'UI/UX Design', 'status' => 'Completed', 'joined' => 'Yesterday'],
-        ['name' => 'Sneha Iyer', 'course' => 'Data Analytics', 'status' => 'Active', 'joined' => '2 days ago'],
-    ];
-
-    $topCourses = [
-        ['name' => 'Full Stack Development', 'enrollments' => 128, 'completion' => '82%'],
-        ['name' => 'Data Analytics', 'enrollments' => 104, 'completion' => '76%'],
-        ['name' => 'Frontend Development', 'enrollments' => 96, 'completion' => '71%'],
-        ['name' => 'UI/UX Design', 'enrollments' => 88, 'completion' => '68%'],
-    ];
-
-    $activities = [
-        ['title' => 'Aarav Sharma enrolled in Full Stack Development', 'time' => '10 minutes ago', 'tone' => 'blue'],
-        ['title' => 'Priya Verma completed Module 4 assessment', 'time' => '1 hour ago', 'tone' => 'green'],
-        ['title' => 'Placement drive updated for 24 students', 'time' => '3 hours ago', 'tone' => 'orange'],
-        ['title' => 'New internship batch created for Data Analytics', 'time' => 'Yesterday', 'tone' => 'purple'],
-    ];
-
-    $announcements = [
-        ['title' => 'Placement readiness review scheduled for Friday', 'meta' => 'Academic coordination'],
-        ['title' => 'Q3 student engagement report is now available', 'meta' => 'Analytics update'],
-        ['title' => 'Internship mentor session opens next week', 'meta' => 'Program notice'],
-    ];
-
-    $statCards = [
-        ['label' => 'Total Students', 'value' => '2,480', 'change' => '+12%', 'icon' => 'fi fi-rr-users', 'classes' => 'from-blue-500/15 to-cyan-400/10 text-blue-700'],
-        ['label' => 'Active Students', 'value' => '1,964', 'change' => '+8%', 'icon' => 'fi fi-rr-chart-line-up', 'classes' => 'from-violet-500/15 to-indigo-400/10 text-violet-700'],
-        ['label' => 'Total Enrollments', 'value' => '4,126', 'change' => '+15%', 'icon' => 'fi fi-rr-book-alt', 'classes' => 'from-emerald-500/15 to-lime-400/10 text-emerald-700'],
-        ['label' => 'Placement Rate', 'value' => '78%', 'change' => '+6%', 'icon' => 'fi fi-rr-briefcase', 'classes' => 'from-orange-500/15 to-amber-400/10 text-orange-700'],
-    ];
+    $recentStudents = $recentStudents ?? [];
+    $topCourses = $topCourses ?? [];
+    $activities = $activities ?? [];
+    $announcements = $announcements ?? [];
+    $statCards = $statCards ?? [];
 @endphp
 
 <!-- <section class="relative overflow-hidden rounded-[2rem] border border-white/60 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 px-6 py-8 shadow-[0_24px_60px_rgba(15,23,42,0.18)] sm:px-8">

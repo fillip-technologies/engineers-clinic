@@ -6,6 +6,7 @@ use App\Models\Student;
 use App\Models\Enrollment;
 use App\Models\Course;
 use App\Models\College;
+use App\Models\Notification;
 use App\Models\QuizResult;
 use App\Models\Quiz;
 use App\Models\Payment;
@@ -86,12 +87,18 @@ class HomeController extends Controller
         return view('pages.login');
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         $user = Auth::user();
 
         // Determine role and set appropriate values
         $roleName = $user?->role?->name ?? 'student';
+        $routeName = $request->route()?->getName();
+
+        // Redirect users away from college routes if they are not college users
+        if (str_starts_with($routeName ?? '', 'college.') && $roleName !== 'college') {
+            return redirect()->route('dashboard')->with('error', 'You do not have permission to access the college dashboard.');
+        }
 
         $activePage = $roleName . '-dashboard';
 
@@ -637,7 +644,7 @@ class HomeController extends Controller
         $role = Auth::check() ? Auth::user()->role->name : 'student';
         // dd($role);
 
-        return [
+        $data = [
             'sidebarSections' => $this->dashboardSidebarSections($role),
             'activeDashboardPage' => $activePage,
             'sidebarUserName' => $user ? $user->name : 'Guest',
@@ -645,6 +652,16 @@ class HomeController extends Controller
             'navbarUserName' => $user ? explode(' ', $user->name)[0] : 'Guest',
             'collegeStudents' => $this->dashboardCollegeStudents(),
         ];
+
+        if ($role === 'college') {
+            $data = array_merge($data, $this->dashboardCollegeOverviewData());
+        }
+
+        if ($role === 'student') {
+            $data = array_merge($data, $this->dashboardStudentOverviewData());
+        }
+
+        return $data;
     }
 
     protected function dashboardSidebarSections(string $role = 'student'): array
@@ -835,8 +852,207 @@ class HomeController extends Controller
                 'course' => $student->course_name ?? $latestEnrollment?->course?->title ?? 'Not enrolled',
                 'progress' => $progress !== null ? $progress . '%' : '0%',
                 'status' => $latestEnrollment?->status === 'completed' ? 'Completed' : 'Active',
+                'joined' => $student->created_at?->diffForHumans() ?? 'Just now',
             ];
         })->toArray();
+    }
+
+    protected function dashboardCollegeOverviewData(): array
+    {
+        $college = Auth::check() && Auth::user()->role?->name === 'college'
+            ? College::where('user_id', Auth::id())->first()
+            : null;
+
+        if (! $college) {
+            return [
+                'recentStudents' => [],
+                'topCourses' => [],
+                'activities' => [],
+                'announcements' => [],
+                'statCards' => [],
+            ];
+        }
+
+        $studentIds = Student::where('college_id', $college->id)->pluck('id');
+
+        $totalStudents = $studentIds->count();
+        $totalEnrollments = Enrollment::whereIn('student_id', $studentIds)->count();
+        $completedEnrollments = Enrollment::whereIn('student_id', $studentIds)
+            ->where('status', 'completed')
+            ->count();
+        $activeStudents = Student::where('college_id', $college->id)
+            ->whereHas('enrollments', fn ($query) => $query->where('status', 'active'))
+            ->count();
+        $placementRate = $totalEnrollments ? round($completedEnrollments * 100 / $totalEnrollments) : 0;
+
+        $recentStudents = Student::with(['user', 'enrollments.course'])
+            ->whereIn('id', $studentIds)
+            ->latest('created_at')
+            ->limit(4)
+            ->get()
+            ->map(function (Student $student) {
+                $latestEnrollment = $student->enrollments->sortByDesc('enrollment_date')->first();
+
+                return [
+                    'name' => $student->user?->name ?? 'Unknown Student',
+                    'course' => $student->course_name ?? $latestEnrollment?->course?->title ?? 'Not enrolled',
+                    'status' => $latestEnrollment?->status === 'completed' ? 'Completed' : 'Active',
+                    'joined' => $student->created_at?->diffForHumans() ?? 'Just now',
+                ];
+            })->toArray();
+
+        $enrollments = Enrollment::with(['student.user', 'course'])
+            ->whereIn('student_id', $studentIds)
+            ->orderByDesc('updated_at')
+            ->get();
+
+        $topCourses = $enrollments
+            ->groupBy(fn (Enrollment $enrollment) => $enrollment->course?->title ?? 'Unknown')
+            ->map(function ($group, $courseName) {
+                $count = $group->count();
+                $completed = $group->where('status', 'completed')->count();
+
+                return [
+                    'name' => $courseName,
+                    'enrollments' => $count,
+                    'completion' => $count ? round($completed * 100 / $count) . '%' : '0%',
+                ];
+            })
+            ->sortByDesc(fn ($course) => $course['enrollments'])
+            ->take(4)
+            ->values()
+            ->toArray();
+
+        if (empty($topCourses)) {
+            $topCourses = Course::orderBy('title')
+                ->limit(4)
+                ->get()
+                ->map(fn (Course $course) => [
+                    'name' => $course->title,
+                    'enrollments' => 0,
+                    'completion' => '0%',
+                ])->toArray();
+        }
+
+        $activities = $enrollments->take(4)->map(function (Enrollment $enrollment) {
+            $studentName = $enrollment->student->user?->name ?? 'Student';
+            $courseTitle = $enrollment->course?->title ?? 'course';
+            $isCompleted = $enrollment->status === 'completed';
+
+            return [
+                'title' => $isCompleted
+                    ? "{$studentName} completed {$courseTitle}"
+                    : "{$studentName} enrolled in {$courseTitle}",
+                'time' => $enrollment->updated_at?->diffForHumans() ?? 'Just now',
+                'tone' => $isCompleted ? 'green' : 'blue',
+            ];
+        })->toArray();
+
+        $announcements = Notification::where('user_id', Auth::id())
+            ->latest()
+            ->limit(3)
+            ->get()
+            ->map(function (Notification $notification) {
+                return [
+                    'title' => $notification->message,
+                    'meta' => 'College update',
+                ];
+            })->toArray();
+
+        if (empty($announcements)) {
+            $announcements = [
+                ['title' => 'Placement readiness review scheduled for Friday', 'meta' => 'Academic coordination'],
+                ['title' => 'Q3 student engagement report is now available', 'meta' => 'Analytics update'],
+                ['title' => 'Internship mentor session opens next week', 'meta' => 'Program notice'],
+            ];
+        }
+
+        $statCards = [
+            [
+                'label' => 'Total Students',
+                'value' => number_format($totalStudents),
+                'change' => '+0%',
+                'icon' => 'fi fi-rr-users',
+                'classes' => 'from-blue-500/15 to-cyan-400/10 text-blue-700',
+            ],
+            [
+                'label' => 'Active Students',
+                'value' => number_format($activeStudents),
+                'change' => '+0%',
+                'icon' => 'fi fi-rr-chart-line-up',
+                'classes' => 'from-violet-500/15 to-indigo-400/10 text-violet-700',
+            ],
+            [
+                'label' => 'Total Enrollments',
+                'value' => number_format($totalEnrollments),
+                'change' => '+0%',
+                'icon' => 'fi fi-rr-book-alt',
+                'classes' => 'from-emerald-500/15 to-lime-400/10 text-emerald-700',
+            ],
+            [
+                'label' => 'Placement Rate',
+                'value' => "{$placementRate}%",
+                'change' => '+0%',
+                'icon' => 'fi fi-rr-briefcase',
+                'classes' => 'from-orange-500/15 to-amber-400/10 text-orange-700',
+            ],
+        ];
+
+        return compact('recentStudents', 'topCourses', 'activities', 'announcements', 'statCards');
+    }
+
+    protected function dashboardStudentOverviewData(): array
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            return [
+                'currentTrack' => 'Full Stack Development Internship',
+                'totalEnrolled' => 0,
+                'activeCourses' => 0,
+                'completedCourses' => 0,
+                'tasks' => [],
+            ];
+        }
+
+        $student = Student::with(['enrollments.course.tasks'])
+            ->where('user_id', $user->id)
+            ->first();
+
+        $enrollments = $student?->enrollments ?? collect();
+        $totalEnrolled = $enrollments->count();
+        $activeCourses = $enrollments->where('status', 'active')->count();
+        $completedCourses = $enrollments->where('status', 'completed')->count();
+
+        $latestEnrollment = $enrollments->sortByDesc('enrollment_date')->first();
+        $currentTrack = $latestEnrollment?->course?->title ?? $student?->course_name ?? 'Learning Track';
+
+        $courseTasks = $latestEnrollment?->course?->tasks ?? collect();
+        $statuses = ['Pending', 'Review', 'Done'];
+        $tones = [
+            'bg-amber-50 text-amber-700 ring-amber-200',
+            'bg-blue-50 text-blue-700 ring-blue-200',
+            'bg-emerald-50 text-emerald-700 ring-emerald-200',
+        ];
+
+        $tasks = $courseTasks->take(3)->values()->map(function ($task, $index) use ($statuses, $tones) {
+            return [
+                'title' => $task->title,
+                'deadline' => ['Due today', 'Mentor review', 'Submitted'][$index] ?? 'Soon',
+                'status' => $statuses[$index] ?? 'Pending',
+                'tone' => $tones[$index] ?? 'bg-slate-100 text-slate-700 ring-slate-200',
+            ];
+        })->toArray();
+
+        if (empty($tasks)) {
+            $tasks = [
+                ['title' => 'Build portfolio API', 'deadline' => 'Due today', 'status' => 'Pending', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
+                ['title' => 'React dashboard checkpoint', 'deadline' => 'Mentor review', 'status' => 'Review', 'tone' => 'bg-blue-50 text-blue-700 ring-blue-200'],
+                ['title' => 'Git deployment lab', 'deadline' => 'Submitted', 'status' => 'Done', 'tone' => 'bg-emerald-50 text-emerald-700 ring-emerald-200'],
+            ];
+        }
+
+        return compact('currentTrack', 'totalEnrolled', 'activeCourses', 'completedCourses', 'tasks');
     }
 
     protected function collegeStudentManagementData(): array

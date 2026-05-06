@@ -23,7 +23,7 @@
             </div>
             <div class="rounded-lg border border-slate-200 px-4 py-3">
                 <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Age</dt>
-                <dd class="mt-1 text-sm font-medium text-slate-950">{{ $profile['age'] }}</dd>
+                {{-- <dd class="mt-1 text-sm font-medium text-slate-950">{{ $profile['age'] }}</dd> --}}
             </div>
             <div class="rounded-lg border border-slate-200 px-4 py-3">
                 <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Profile photo</dt>
