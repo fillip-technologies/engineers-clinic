@@ -1,5 +1,6 @@
 @extends('Admin.layouts.layout')
 
+
 @section('content')
 @php
 $studentsCount = \App\Models\Student::count();

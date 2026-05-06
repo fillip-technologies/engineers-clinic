@@ -28,6 +28,6 @@ class DashboardController extends Controller
             'totalRoles' => Role::count(),
         ];
 
-        return view('admin.dashboard.index', compact('stats'));
+        return view('Admin.dashboard.index', compact('stats'));
     }
 }
