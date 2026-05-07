@@ -45,6 +45,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/student-dashboard/quiz-attempts', [HomeController::class, 'quizAttempts'])->name('dashboard.quiz-attempts');
     Route::get('/student-dashboard/orders', [HomeController::class, 'orderHistory'])->name('dashboard.orders');
     Route::get('/student-dashboard/course/{id}', [HomeController::class, 'studentCourse'])->name('student.course.detail');
+
+    // Payment Routes
+    Route::prefix('payments')->name('payments.')->group(function () {
+        Route::post('/create-order', [App\Http\Controllers\PaymentController::class, 'createOrder'])->name('create-order');
+        Route::post('/verify', [App\Http\Controllers\PaymentController::class, 'verifyPayment'])->name('verify');
+        Route::get('/history', [App\Http\Controllers\PaymentController::class, 'paymentHistory'])->name('history');
+        Route::get('/available-courses', [App\Http\Controllers\PaymentController::class, 'availableCourses'])->name('available-courses');
+    });
 });
 
 // Public course detail route
