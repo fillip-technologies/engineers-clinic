@@ -47,19 +47,33 @@
                                     </p>
                                 </div>
 
-                                <form method="POST" action="#" class="mt-8">
+                                <form method="POST" action="{{ route('signup.submit', ['role' => $role]) }}" class="mt-8">
                                     @csrf
 
                                     <div class="grid gap-5">
                                         @foreach ($signup['fields'] as $field)
-                                            <div>
+                                            <div class="{{ isset($field['conditional']) && $field['conditional'] ? 'college-other hidden' : '' }}">
                                                 <label class="text-sm font-medium text-textSecondary"
                                                     for="{{ $field['name'] }}">
                                                     {{ $field['label'] }}
                                                 </label>
-                                                <input id="{{ $field['name'] }}" type="{{ $field['type'] }}"
-                                                    name="{{ $field['name'] }}" placeholder="{{ $field['placeholder'] }}"
-                                                    class="mt-2 w-full rounded-2xl border border-borderLight bg-bgSoft px-4 py-3 text-sm text-textPrimary outline-none transition placeholder:text-textMuted focus:border-brand focus:bg-bgWhite focus:ring-4 focus:ring-brandSoft" />
+                                                @if($field['type'] === 'select')
+                                                    <select id="{{ $field['name'] }}" name="{{ $field['name'] }}"
+                                                        class="mt-2 w-full rounded-2xl border border-borderLight bg-bgSoft px-4 py-3 text-sm text-textPrimary outline-none transition placeholder:text-textMuted focus:border-brand focus:bg-bgWhite focus:ring-4 focus:ring-brandSoft">
+                                                        <option value="">Select an option</option>
+                                                        @foreach($field['options'] as $value => $label)
+                                                            <option value="{{ $value }}" {{ old($field['name']) == $value ? 'selected' : '' }}>{{ $label }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                @else
+                                                    <input id="{{ $field['name'] }}" type="{{ $field['type'] }}"
+                                                        name="{{ $field['name'] }}" value="{{ old($field['name']) }}"
+                                                        placeholder="{{ $field['placeholder'] }}"
+                                                        class="mt-2 w-full rounded-2xl border border-borderLight bg-bgSoft px-4 py-3 text-sm text-textPrimary outline-none transition placeholder:text-textMuted focus:border-brand focus:bg-bgWhite focus:ring-4 focus:ring-brandSoft" />
+                                                @endif
+                                                @error($field['name'])
+                                                    <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
+                                                @enderror
                                             </div>
                                         @endforeach
                                     </div>
@@ -76,4 +90,17 @@
             </div>
         </div>
     </section>
+
+    <script>
+        @if($role === 'student')
+        document.getElementById('student_college').addEventListener('change', function() {
+            const otherField = document.querySelector('.college-other');
+            if (this.value === 'other') {
+                otherField.classList.remove('hidden');
+            } else {
+                otherField.classList.add('hidden');
+            }
+        });
+        @endif
+    </script>
 @endsection

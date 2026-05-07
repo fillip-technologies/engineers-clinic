@@ -17,6 +17,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 });
 Route::get('/signup/{role}', [HomeController::class, 'signup'])->name('signup');
+Route::post('/signup/{role}', [HomeController::class, 'signupSubmit'])->name('signup.submit');
 
 // Unified dashboard - redirects based on user role
 Route::middleware(['auth'])->group(function () {

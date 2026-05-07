@@ -131,6 +131,7 @@ class HomeController extends Controller
                     ['label' => 'Student Email', 'type' => 'email', 'name' => 'student_email', 'placeholder' => 'Enter your student email'],
                     ['label' => 'College Name', 'type' => 'text', 'name' => 'student_college', 'placeholder' => 'Enter your college name'],
                     ['label' => 'Password', 'type' => 'password', 'name' => 'student_password', 'placeholder' => 'Create a password'],
+                    ['label' => 'Confirm Password', 'type' => 'password', 'name' => 'student_password_confirmation', 'placeholder' => 'Confirm your password'],
                 ],
             ],
             'college' => [
@@ -144,16 +145,101 @@ class HomeController extends Controller
                     ['label' => 'Official Email', 'type' => 'email', 'name' => 'college_email', 'placeholder' => 'Enter your official email'],
                     ['label' => 'Contact Person', 'type' => 'text', 'name' => 'college_contact', 'placeholder' => 'Enter contact person name'],
                     ['label' => 'Password', 'type' => 'password', 'name' => 'college_password', 'placeholder' => 'Create a password'],
+                    ['label' => 'Confirm Password', 'type' => 'password', 'name' => 'college_password_confirmation', 'placeholder' => 'Confirm your password'],
                 ],
             ],
         ];
 
         abort_unless(isset($roles[$role]), 404);
 
-        return view('pages.signup', [
+        $data = [
             'role' => $role,
             'signup' => $roles[$role],
-        ]);
+        ];
+
+        if ($role === 'student') {
+            $colleges = College::all()->pluck('college_name', 'id')->toArray();
+            $data['colleges'] = $colleges;
+            $data['signup']['fields'][2]['options'] = array_merge(['other' => 'Other'], $colleges); // Add 'Other' option
+        }
+
+        return view('pages.signup', $data);
+    }
+
+    public function signupSubmit(Request $request, string $role)
+    {
+        $roles = ['student', 'college'];
+        abort_unless(in_array($role, $roles, true), 404);
+
+        if ($role === 'student') {
+            $rules = [
+                'student_name' => 'required|string|max:255',
+                'student_email' => 'required|string|email|max:255|unique:users,email',
+                'student_college' => 'required|string',
+                'student_password' => 'required|string|min:8|confirmed',
+            ];
+
+            if ($request->student_college === 'other') {
+                $rules['student_college_other'] = 'required|string|max:255';
+            }
+
+            $validated = $request->validate($rules);
+
+            $roleRecord = Role::where('name', 'student')->firstOrFail();
+
+            $user = User::create([
+                'name' => $validated['student_name'],
+                'email' => $validated['student_email'],
+                'password' => Hash::make($validated['student_password']),
+                'role_id' => $roleRecord->id,
+            ]);
+
+            // Handle college
+            if ($validated['student_college'] === 'other') {
+                $college = College::create([
+                    'user_id' => null, // No user associated yet
+                    'college_name' => $validated['student_college_other'],
+                    'address' => null,
+                    'contact_number' => null,
+                ]);
+            } else {
+                $college = College::findOrFail($validated['student_college']);
+            }
+
+            $user->student()->create([
+                'college_id' => $college->id,
+                'course_name' => null,
+            ]);
+        } else {
+            $validated = $request->validate([
+                'college_name' => 'required|string|max:255',
+                'college_email' => 'required|string|email|max:255|unique:users,email',
+                'college_contact' => 'required|string|max:255',
+                'college_password' => 'required|string|min:8|confirmed',
+            ]);
+
+            $roleRecord = Role::where('name', 'college')->firstOrFail();
+
+            $user = User::create([
+                'name' => $validated['college_contact'],
+                'email' => $validated['college_email'],
+                'password' => Hash::make($validated['college_password']),
+                'role_id' => $roleRecord->id,
+            ]);
+
+            $user->college()->create([
+                'college_name' => $validated['college_name'],
+                'address' => null,
+                'contact_number' => null,
+            ]);
+        }
+
+        Auth::login($user);
+
+        return match ($role) {
+            'college' => redirect('/college/dashboard'),
+            'student' => redirect('/dashboard'),
+        };
     }
 
     public function enrolledCourses()
