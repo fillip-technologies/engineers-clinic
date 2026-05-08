@@ -50,7 +50,7 @@ class CourseController extends Controller
     public function show(Course $course)
     {
         $course->load('enrollments', 'tasks', 'quizzes', 'certificates');
-        return view('admin.courses.show', compact('course'));
+        return view('Admin.courses.show', compact('course'));
     }
 
     public function edit(Course $course)
