@@ -11,12 +11,12 @@ class CourseController extends Controller
     public function index()
     {
         $courses = Course::paginate(10);
-        return view('admin.courses.index', compact('courses'));
+        return view('Admin.courses.index', compact('courses'));
     }
 
     public function create()
     {
-        return view('admin.courses.create');
+        return view('Admin.courses.create');
     }
 
     public function store(Request $request)
@@ -50,12 +50,12 @@ class CourseController extends Controller
     public function show(Course $course)
     {
         $course->load('enrollments', 'tasks', 'quizzes', 'certificates');
-        return view('admin.courses.show', compact('course'));
+        return view('Admin.courses.show', compact('course'));
     }
 
     public function edit(Course $course)
     {
-        return view('admin.courses.edit', compact('course'));
+        return view('Admin.courses.edit', compact('course'));
     }
 
     public function update(Request $request, Course $course)
