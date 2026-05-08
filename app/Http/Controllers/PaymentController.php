@@ -13,9 +13,9 @@ class PaymentController extends Controller
 {
     protected $razorpay;
 
-    public function __construct()
+    public function __construct(Api $razorpay = null)
     {
-        $this->razorpay = new Api(
+        $this->razorpay = $razorpay ?: new Api(
             config('services.razorpay.key'),
             config('services.razorpay.secret')
         );

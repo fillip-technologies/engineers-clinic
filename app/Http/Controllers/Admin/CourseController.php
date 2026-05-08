@@ -10,7 +10,7 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::all();
+        $courses = Course::paginate(10);
         return view('admin.courses.index', compact('courses'));
     }
 
@@ -21,16 +21,30 @@ class CourseController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'slug' => 'required|string|unique:courses|max:255',
             'description' => 'nullable|string',
+            'level' => 'required|string|in:Beginner,Intermediate,Advanced',
+            'category' => 'required|string|max:255',
+            'image' => 'nullable|string|url',
+            'hero_badge' => 'nullable|string',
+            'career_path' => 'nullable|string',
             'duration_months' => 'required|integer|min:1',
             'fee' => 'required|numeric|min:0',
+            'program_overview' => 'nullable|json',
+            'why_choose' => 'nullable|json',
+            'testimonials' => 'nullable|json',
+            'faq' => 'nullable|json',
+            'curriculum' => 'nullable|json',
+            'modules' => 'nullable|json',
+            'phases' => 'nullable|json',
+            'outcome' => 'nullable|json',
         ]);
 
-        Course::create($request->all());
+        Course::create($validated);
 
-        return redirect()->route('courses.index')->with('success', 'Course created successfully.');
+        return redirect()->route('admin.courses.index')->with('success', 'Course created successfully.');
     }
 
     public function show(Course $course)
@@ -46,22 +60,36 @@ class CourseController extends Controller
 
     public function update(Request $request, Course $course)
     {
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'slug' => 'required|string|unique:courses,slug,' . $course->id . '|max:255',
             'description' => 'nullable|string',
+            'level' => 'required|string|in:Beginner,Intermediate,Advanced',
+            'category' => 'required|string|max:255',
+            'image' => 'nullable|string|url',
+            'hero_badge' => 'nullable|string',
+            'career_path' => 'nullable|string',
             'duration_months' => 'required|integer|min:1',
             'fee' => 'required|numeric|min:0',
+            'program_overview' => 'nullable|json',
+            'why_choose' => 'nullable|json',
+            'testimonials' => 'nullable|json',
+            'faq' => 'nullable|json',
+            'curriculum' => 'nullable|json',
+            'modules' => 'nullable|json',
+            'phases' => 'nullable|json',
+            'outcome' => 'nullable|json',
         ]);
 
-        $course->update($request->all());
+        $course->update($validated);
 
-        return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
+        return redirect()->route('admin.courses.index')->with('success', 'Course updated successfully.');
     }
 
     public function destroy(Course $course)
     {
         $course->delete();
 
-        return redirect()->route('courses.index')->with('success', 'Course deleted successfully.');
+        return redirect()->route('admin.courses.index')->with('success', 'Course deleted successfully.');
     }
 }

@@ -12,13 +12,35 @@ class Course extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'description',
+        'level',
+        'category',
+        'image',
+        'hero_badge',
+        'career_path',
         'duration_months',
         'fee',
+        'program_overview',
+        'why_choose',
+        'testimonials',
+        'faq',
+        'curriculum',
+        'modules',
+        'phases',
+        'outcome',
     ];
 
     protected $casts = [
         'fee' => 'decimal:2',
+        'program_overview' => 'json',
+        'why_choose' => 'json',
+        'testimonials' => 'json',
+        'faq' => 'json',
+        'curriculum' => 'json',
+        'modules' => 'json',
+        'phases' => 'json',
+        'outcome' => 'json',
     ];
 
     public function enrollments(): HasMany
