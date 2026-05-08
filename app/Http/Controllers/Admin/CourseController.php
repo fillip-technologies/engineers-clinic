@@ -27,7 +27,7 @@ class CourseController extends Controller
             'description' => 'nullable|string',
             'level' => 'required|string|in:Beginner,Intermediate,Advanced',
             'category' => 'required|string|max:255',
-            'image' => 'nullable|string|url',
+            'image' => 'nullable|string|max:255',
             'hero_badge' => 'nullable|string',
             'career_path' => 'nullable|string',
             'duration_months' => 'required|integer|min:1',
