@@ -4,6 +4,9 @@
     $activeCourses = array_values(array_filter($enrolledCourses, fn ($course) => $course['status'] === 'Active'));
     $activeCourse = $activeCourses[0] ?? ($enrolledCourses[0] ?? null);
     $otherCourses = array_values(array_filter($enrolledCourses, fn ($course) => ! $activeCourse || $course['id'] !== $activeCourse['id']));
+    $workspaceUrl = $activeCourse
+        ? route('student.course.workspace', ['id' => $activeCourse['id']])
+        : route('student.course.workspace.default');
 
     $projects = [
         [
@@ -99,7 +102,7 @@
                         </div>
                     </div>
 
-                    <a href="{{ route('student.course.detail', ['id' => $activeCourse['id']]) }}"
+                    <a href="{{ route('student.course.workspace', ['id' => $activeCourse['id']]) }}"
                         class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
                         Continue Learning
                     </a>
@@ -120,8 +123,10 @@
 
                     <div class="mt-5 grid gap-4 xl:grid-cols-3">
                         @foreach ($projects as $project)
-                            <article
-                                class="flex flex-col rounded-xl border bg-white p-4 shadow-sm transition hover:border-primary hover:shadow-md"
+                            <a href="{{ $workspaceUrl }}?project={{ $project['id'] }}"
+                                @mouseenter="selectedProject = '{{ $project['id'] }}'"
+                                @focus="selectedProject = '{{ $project['id'] }}'"
+                                class="flex cursor-pointer flex-col rounded-xl border bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-1 hover:border-primary hover:shadow-xl hover:shadow-blue-100"
                                 :class="selectedProject === '{{ $project['id'] }}' ? 'border-primary ring-2 ring-blue-100' : 'border-slate-200'">
                                 <div class="flex items-start justify-between gap-3">
                                     <h3 class="text-base font-semibold leading-6 text-slate-950">{{ $project['title'] }}</h3>
@@ -134,14 +139,14 @@
                                     <span class="text-slate-500">{{ $project['time'] }}</span>
                                     <span class="font-semibold text-slate-900">{{ $project['points'] }} pts</span>
                                 </div>
-                                <button type="button" @click="selectedProject = '{{ $project['id'] }}'"
+                                <span
                                     class="mt-4 inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-semibold transition"
                                     :class="selectedProject === '{{ $project['id'] }}'
                                         ? 'bg-primary text-white'
                                         : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
-                                    <span x-text="selectedProject === '{{ $project['id'] }}' ? 'Selected' : 'Start Project'"></span>
-                                </button>
-                            </article>
+                                    <span x-text="selectedProject === '{{ $project['id'] }}' ? 'Continue Project' : 'Start Project'"></span>
+                                </span>
+                            </a>
                         @endforeach
                     </div>
                 </section>
@@ -154,10 +159,11 @@
                             <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500" x-text="currentProject.description"></p>
                         </div>
                         <div class="flex gap-2">
-                            <button type="button"
+                            <a href="{{ $workspaceUrl }}?project=portfolio-platform"
+                                :href="`{{ $workspaceUrl }}?project=${selectedProject}`"
                                 class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
                                 Continue Project
-                            </button>
+                            </a>
                             <button type="button" @click="$el.closest('section').previousElementSibling.scrollIntoView({ behavior: 'smooth' })"
                                 class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
                                 Change Project
@@ -183,9 +189,10 @@
                                     <p class="mt-1 text-sm text-slate-500" x-text="task.meta"></p>
                                 </div>
                                 <span class="w-fit rounded-full px-2.5 py-1 text-xs font-semibold ring-1" :class="task.tone" x-text="task.status"></span>
-                                <button type="button"
+                                <a href="{{ $workspaceUrl }}?project=portfolio-platform#tasks"
+                                    :href="`{{ $workspaceUrl }}?project=${selectedProject}#tasks`"
                                     class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-primary hover:text-primary"
-                                    x-text="task.action"></button>
+                                    x-text="task.action"></a>
                             </div>
                         </template>
                     </div>
@@ -200,7 +207,7 @@
 
                 <div class="mt-5 space-y-3">
                     @forelse ($otherCourses as $course)
-                        <a href="{{ route('student.course.detail', ['id' => $course['id']]) }}"
+                        <a href="{{ route('student.course.workspace', ['id' => $course['id']]) }}"
                             class="block rounded-lg border border-slate-200 p-4 transition hover:border-primary hover:bg-slate-50">
                             <div class="flex items-start justify-between gap-3">
                                 <h3 class="text-sm font-semibold leading-6 text-slate-950">{{ $course['title'] }}</h3>

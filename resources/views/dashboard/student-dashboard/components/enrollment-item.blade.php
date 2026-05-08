@@ -30,7 +30,7 @@
                 </div>
             </div>
 
-            <a href="{{ route('student.course.detail', ['id' => $course['id']]) }}"
+            <a href="{{ route('student.course.workspace', ['id' => $course['id']]) }}"
                 class="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primaryLight">
                 Continue Learning
             </a>

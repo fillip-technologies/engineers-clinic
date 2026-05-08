@@ -61,12 +61,12 @@
                     <td class="whitespace-nowrap px-5 py-4 font-medium text-slate-900">{{ $order['price'] }}</td>
                     <td class="px-5 py-4 text-right sm:px-6">
                         <div class="flex justify-end gap-2">
-                            <a href="{{ $status === 'Active' ? route('dashboard.enrolled-courses') : '#' }}"
+                            <a href="{{ $status === 'Active' ? route('student.course.workspace.default') : route('payments.history') }}"
                                 class="inline-flex items-center justify-center rounded-lg px-3.5 py-2 text-xs font-semibold transition {{ $actionClasses }}">
                                 {{ $actionLabel }}
                             </a>
                             @if ($status === 'Active')
-                                <a href="#"
+                                <a href="{{ route('payments.history') }}"
                                     class="hidden items-center justify-center rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 md:inline-flex">
                                     Invoice
                                 </a>
