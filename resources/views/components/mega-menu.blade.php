@@ -1,6 +1,10 @@
+@props([
+    'mobile' => false,
+])
+
 @php
 $internshipLevels = [
-'Beginner Level' => [
+'Beginner' => [
 ['label' => 'Web Ecosystems & Frontend Architecture', 'slug' => 'web-ecosystems-frontend'],
 ['label' => 'Core Python & Computational Logic', 'slug' => 'core-python-computational-logic'],
 ['label' => 'UI/UX Design', 'slug' => 'ui-ux-design'],
@@ -12,7 +16,7 @@ $internshipLevels = [
 ['label' => 'Legal Research', 'slug' => 'legal-research'],
 ['label' => 'Digital Journalism', 'slug' => 'digital-journalism'],
 ],
-'Intermediate Level' => [
+'Intermediate' => [
 ['label' => 'Cloud & Backend Systems', 'slug' => 'cloud-backend-systems'],
 ['label' => 'Machine Learning', 'slug' => 'machine-learning'],
 ['label' => 'Ethical Hacking', 'slug' => 'ethical-hacking'],
@@ -24,7 +28,7 @@ $internshipLevels = [
 ['label' => 'Corporate Law', 'slug' => 'corporate-law'],
 ['label' => 'PR Strategy', 'slug' => 'pr-strategy'],
 ],
-'Advanced Level' => [
+'Advanced' => [
 ['label' => 'Generative AI', 'slug' => 'generative-ai'],
 ['label' => 'Cloud Architecture', 'slug' => 'cloud-architecture'],
 ['label' => 'Blockchain Systems', 'slug' => 'blockchain-systems'],
@@ -39,77 +43,55 @@ $internshipLevels = [
 ];
 @endphp
 
-<div class="relative flex h-full items-center" x-data="{ academyOpen: false, activeLevel: 'beginner' }" @mouseenter="academyOpen = true"
-    @mouseleave="academyOpen = false" @keydown.escape.window="academyOpen = false">
-    <button type="button" @click="academyOpen = !academyOpen"
-        class="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all duration-300"
-        :class="academyOpen ? 'bg-bgWhite text-textPrimary shadow-sm' : 'text-textSecondary hover:bg-bgWhite hover:text-textPrimary'"
-        :aria-expanded="academyOpen.toString()">
-        <span>Internships</span>
-        <svg class="h-4 w-4 transition duration-300" :class="academyOpen ? 'rotate-180' : ''"
-            viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-            stroke-linejoin="round" aria-hidden="true">
-            <path d="m5 7.5 5 5 5-5" />
+@if ($mobile)
+<div x-data="{ level: 'Beginner' }">
+    <div class="grid grid-cols-3 gap-2">
+        <template x-for="lvl in ['Beginner', 'Intermediate', 'Advanced']">
+            <button type="button"
+                @click="level = lvl"
+                class="rounded-xl px-3 py-2 text-xs font-semibold transition"
+                :class="level === lvl ? 'bg-black text-white' : 'bg-[#f7f7f7] text-neutral-700 hover:bg-neutral-100'"
+                x-text="lvl">
+            </button>
+        </template>
+    </div>
+
+    <div class="mt-4 max-h-80 space-y-2 overflow-y-auto">
+        <template x-for="program in {{ json_encode($internshipLevels) }}[level]">
+            <a :href="'/course/' + program.slug"
+                class="block rounded-xl bg-[#f7f7f7] px-4 py-3 text-sm font-medium text-neutral-700 transition hover:bg-neutral-100 hover:text-black"
+                x-text="program.label"></a>
+        </template>
+    </div>
+</div>
+@else
+<div class="relative" x-data="{ open: false, level: 'Beginner' }" @mouseenter="open = true" @mouseleave="open = false">
+    <button class="px-4 py-2 text-sm transition hover:text-gray-700" :class="open ? 'text-gray-900' : 'text-gray-500'">
+        Internships
+        <svg class="ml-1 inline h-3 w-3 transition" :class="open ? 'rotate-180' : ''" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
         </svg>
     </button>
 
-    <div x-cloak x-show="academyOpen"
-        x-transition:enter="transition ease-out duration-200"
-        x-transition:enter-start="opacity-0 translate-y-2"
-        x-transition:enter-end="opacity-100 translate-y-0"
-        x-transition:leave="transition ease-in duration-150"
-        x-transition:leave-start="opacity-100 translate-y-0"
-        x-transition:leave-end="opacity-0 translate-y-2"
-        class="absolute left-1/2 top-full z-50 mt-3 block w-[min(calc(100vw-2rem),72rem)] -translate-x-1/2 rounded-[1.5rem] border border-slate-200/80 bg-white/95 shadow-xl shadow-slate-300/20 backdrop-blur-xl">
-        <div class="p-5">
-            <div class="mb-4 flex items-center justify-between gap-4 border-b border-slate-200/80 pb-3">
-                <!-- <div>
-                    <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">Internships</p>
-                    <p class="mt-1 text-sm text-slate-500">Choose a level and open any internship through the shared course system</p>
-                </div> -->
-                <!-- <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
-                    {{ collect($internshipLevels)->flatten(1)->count() }} Tracks
-                </span> -->
+    <div x-cloak x-show="open" x-transition class="absolute left-0 top-full mt-2 w-80 rounded-lg border bg-white shadow-lg">
+        <div class="p-2">
+            <!-- Levels -->
+            <div class="flex gap-1 border-b pb-2">
+                <template x-for="lvl in ['Beginner', 'Intermediate', 'Advanced']">
+                    <button @click="level = lvl" class="flex-1 rounded px-3 py-1.5 text-sm capitalize transition"
+                        :class="level === lvl ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'"
+                        x-text="lvl.toLowerCase()">
+                    </button>
+                </template>
             </div>
 
-            <div class="grid gap-5 lg:grid-cols-[14rem_1fr]">
-                <div class="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
-                    @foreach ($internshipLevels as $level => $programs)
-                    @php $levelKey = strtolower(str_replace(' Level', '', $level)); @endphp
-                    <button type="button" @click="activeLevel = @js($levelKey)"
-                        class="shrink-0 rounded-[1.25rem] border border-slate-200/80 bg-slate-50/60 p-4 text-left transition hover:-translate-y-0.5 hover:border-primary/30"
-                        :class="activeLevel === @js($levelKey) ? 'border-primary/30 bg-white text-primary shadow-sm' : 'text-slate-700'">
-                        <div class="border-b border-slate-200/80 pb-3">
-                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500"
-                                :class="activeLevel === @js($levelKey) ? 'text-primary' : 'text-slate-500'">
-                                {{ str_replace(' Level', '', $level) }}
-                            </p>
-                        </div>
-                    </button>
-                    @endforeach
-                </div>
-
-                <div class="min-w-0">
-                    @foreach ($internshipLevels as $level => $programs)
-                    @php $levelKey = strtolower(str_replace(' Level', '', $level)); @endphp
-                    <div x-show="activeLevel === @js($levelKey)"
-                        class="rounded-[1.25rem] border border-slate-200/80 bg-slate-50/60 p-4">
-                        <div class="border-b border-slate-200/80 pb-3">
-                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{{ $level }}</p>
-                        </div>
-
-                        <div class="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
-                            @foreach ($programs as $program)
-                            <a href="{{ route('course.detail', $program['slug']) }}"
-                                class="group block rounded-[1rem] border border-slate-200/80 bg-white px-4 py-3 text-sm font-medium leading-5 text-slate-700 transition hover:-translate-y-0.5 hover:border-primary/30 hover:bg-white hover:text-primary">
-                                {{ $program['label'] }}
-                            </a>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
+            <!-- Programs -->
+            <div class="mt-2 max-h-96 overflow-y-auto">
+                <template x-for="program in {{ json_encode($internshipLevels) }}[level]">
+                    <a :href="'/course/' + program.slug" class="block rounded px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-100 hover:text-gray-900" x-text="program.label"></a>
+                </template>
             </div>
         </div>
     </div>
 </div>
+@endif

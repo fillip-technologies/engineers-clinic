@@ -111,7 +111,7 @@ $levelConfig = [
      Colors: existing master Tailwind config (brand, secondary, etc.)
      ============================================================ --}}
 
-<section class="relative overflow-hidden  py-20 md:py-28">
+<section class="relative overflow-hidden py-16 md:py-24 lg:py-28">
 
     {{-- Background glow blobs --}}
     <div class="pointer-events-none absolute -left-24 -top-24 h-80 w-80 rounded-full bg-glowPurple blur-3xl"></div>
@@ -120,12 +120,12 @@ $levelConfig = [
     <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         {{-- Section Header --}}
-        <div class="mb-14 text-center">
+        <div class="mb-10 text-center sm:mb-14">
             <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brandSoft px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand">
                 <span class="h-1.5 w-1.5 rounded-full bg-brand opacity-70"></span>
                 Internship Tracks
             </div>
-            <h2 class="text-4xl font-extrabold leading-tight text-textPrimary md:text-5xl lg:text-6xl">
+            <h2 class="text-3xl font-extrabold leading-tight text-textPrimary sm:text-4xl md:text-5xl lg:text-6xl">
                 Explore Our
                 <span class="bg-gradient-to-r from-brand via-brandLight to-secondary bg-clip-text text-transparent">
                     Internship Tracks
@@ -217,7 +217,7 @@ $levelConfig = [
                     "></div>
 
                     {{-- Footer: stat + button --}}
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div class="flex items-center gap-1.5 text-[11px]
                             @if($cfg['stat_class'] === 'stat-b') text-textMuted
                             @elseif($cfg['stat_class'] === 'stat-i') text-[#9B8020]
@@ -231,7 +231,7 @@ $levelConfig = [
                             {{ count($programs) }} Modules · {{ $cfg['exp'] }}
                         </div>
                         <a href="{{ route('course.detail', $programs[0]['slug']) }}"
-                            class="rounded-[10px] px-4 py-2 text-[11.5px] font-bold transition-transform duration-200 hover:scale-105 active:scale-95
+                            class="inline-flex items-center justify-center rounded-[10px] px-4 py-2 text-[11.5px] font-bold transition-transform duration-200 hover:scale-105 active:scale-95 sm:self-auto
                             @if($cfg['enroll_class'] === 'enroll-b')
                                 bg-gradient-to-r from-brand to-brandLight text-white shadow-md
                             @elseif($cfg['enroll_class'] === 'enroll-i')
@@ -256,7 +256,7 @@ $levelConfig = [
                 <div class="flex flex-col gap-1.5">
                     @foreach ($programs as $program)
                     <a href="{{ route('course.detail', $program['slug']) }}"
-                        class="group flex items-center gap-2.5  border bg-white/82 px-3.5 py-2.5 text-[16px] font-normal text-textPrimary no-underline
+                        class="group flex items-center gap-2.5 border bg-white/82 px-3.5 py-2.5 text-sm font-normal text-textPrimary no-underline sm:text-[16px]
                         transition-all duration-200 hover:-translate-y-px hover:translate-x-1
                         @if($cfg['mc_class'] === 'mb')
                             border-brand/13 shadow-[0_2px_8px_rgba(124,92,252,0.05)]

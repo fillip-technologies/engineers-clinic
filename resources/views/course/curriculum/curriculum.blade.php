@@ -5,7 +5,7 @@ $curriculum = $course['curriculum'] ?? [];
 $totalModules = count($curriculum);
 @endphp
 
-<section class="relative overflow-hidden bg-gradient-to-b from-bgWhite via-bgMain/60 to-bgSoft px-6 py-20 sm:px-10 lg:px-14">
+<section id="curriculum" class="relative overflow-hidden bg-gradient-to-b from-bgWhite via-bgMain/60 to-bgSoft px-6 py-20 sm:px-10 lg:px-14">
     <div
         class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(34,197,94,0.08),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(249,115,22,0.08),_transparent_34%)]">
     </div>

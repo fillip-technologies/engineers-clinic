@@ -1,5 +1,5 @@
 <section id="heroSection"
-    class="relative overflow-hidden min-h-[85vh] flex items-center pt-12 pb-10 sm:pt-16"
+    class="relative overflow-hidden flex items-center pt-10 pb-12 sm:min-h-[85vh] sm:pt-16"
     style="background: linear-gradient(135deg, var(--color-auroraLeft) 0%, var(--color-auroraMid) 50%, var(--color-auroraRight) 100%);">
 
     <!-- PARTICLES BACKGROUND -->
@@ -7,9 +7,9 @@
 
     <!-- SOFT AURORA GLOW -->
     <div class="absolute inset-0 pointer-events-none z-[1]">
-        <div class="absolute top-0 left-0 w-[400px] h-[400px] rounded-full blur-[140px]"
+        <div class="absolute top-0 left-0 h-64 w-64 rounded-full blur-[100px] sm:h-[400px] sm:w-[400px] sm:blur-[140px]"
             style="background: theme('colors.glowPurple');"></div>
-        <div class="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full blur-[140px]"
+        <div class="absolute bottom-0 right-0 h-64 w-64 rounded-full blur-[100px] sm:h-[400px] sm:w-[400px] sm:blur-[140px]"
             style="background: theme('colors.glowPink');"></div>
     </div>
 
@@ -27,7 +27,7 @@
                     </span>
                 </div>
 
-                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 text-textPrimary">
+                <h1 class="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 text-textPrimary">
                     <span class="bg-gradient-to-r from-brand via-brandLight to-secondary bg-clip-text text-transparent">
                         Forge Your Future
                     </span>
@@ -35,7 +35,7 @@
                     with Expert-Led Internship
                 </h1>
 
-                <p class="text-lg mb-8 max-w-xl text-textSecondary">
+                <p class="text-base leading-7 sm:text-lg mb-8 max-w-xl text-textSecondary">
                     Master in-demand skills with hands-on projects and real-world applications.
                     Join thousands of learners advancing their careers.
                 </p>

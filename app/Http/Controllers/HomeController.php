@@ -82,6 +82,16 @@ class HomeController extends Controller
         return view('pages.home', compact('courses'));
     }
 
+    public function collegeTieup()
+    {
+        return view('pages.college-tieup');
+    }
+
+    public function companyBranding()
+    {
+        return view('pages.company-branding');
+    }
+
     public function login()
     {
         return view('pages.login');
@@ -979,7 +989,96 @@ PHP,
         $course['hero_badge'] = $course['hero_badge'] ?? $meta['hero_badge'];
         $course['career_path'] = $course['career_path'] ?? $meta['career_path'];
 
+        $course['hero'] = $this->buildCourseHero($course);
+
         return $course;
+    }
+
+    protected function buildCourseHero(array $course): array
+    {
+        $overview = $course['program_overview'] ?? [];
+        $overviewStats = is_array($overview) ? ($overview['stats'] ?? []) : [];
+        $heroConfig = $course['hero'] ?? [];
+        $primaryCta = is_array($heroConfig['primary_cta'] ?? null) ? $heroConfig['primary_cta'] : [];
+        $secondaryCta = is_array($heroConfig['secondary_cta'] ?? null) ? $heroConfig['secondary_cta'] : [];
+
+        $features = $heroConfig['features']
+            ?? $course['feature_points']
+            ?? $course['features']
+            ?? [];
+
+        if (empty($features)) {
+            $features = array_values(array_filter([
+                'Choose any 3 projects from your selected level',
+                ! empty($course['level']) ? "{$course['level']} internship certificate & mentor-guided learning" : 'Internship certificate & mentor-guided learning',
+                ! empty($course['modules'][0]) ? "Real-world assignments in {$course['modules'][0]}" : 'Real-world assignments designed for career growth',
+            ]));
+        }
+
+        $features = collect($features)
+            ->map(function ($feature) {
+                if (is_array($feature)) {
+                    return $feature['title'] ?? $feature['label'] ?? $feature['text'] ?? null;
+                }
+
+                return is_string($feature) ? $feature : null;
+            })
+            ->filter()
+            ->take(4)
+            ->values()
+            ->all();
+
+        $logos = $heroConfig['logos']
+            ?? $course['company_logos']
+            ?? [];
+
+        $stats = [
+            'learners' => $heroConfig['learner_count'] ?? $course['learner_count'] ?? null,
+            'mentors' => $heroConfig['mentor_count'] ?? $course['mentor_count'] ?? null,
+            'projects' => $heroConfig['projects_count'] ?? $course['projects_count'] ?? $this->countCourseProjects($course),
+        ];
+
+        return [
+            'title' => $heroConfig['title'] ?? $course['title'] ?? null,
+            'subtitle' => $heroConfig['subtitle'] ?? $course['subtitle'] ?? $course['description'] ?? null,
+            'trusted_badge' => $heroConfig['trusted_badge'] ?? $course['hero_badge'] ?? $course['menu_group_label'] ?? $course['category'] ?? null,
+            'level' => $heroConfig['level'] ?? $course['level'] ?? null,
+            'duration' => $heroConfig['duration'] ?? $course['duration'] ?? null,
+            'features' => $features,
+            'primary_cta' => [
+                'label' => $primaryCta['label'] ?? 'Reserve Your Seat',
+                'href' => $primaryCta['href'] ?? '#enroll-now',
+            ],
+            'secondary_cta' => [
+                'label' => $secondaryCta['label'] ?? 'View Curriculum',
+                'href' => $secondaryCta['href'] ?? (! empty($course['curriculum']) ? '#curriculum' : null),
+            ],
+            'trust_label' => $heroConfig['trust_label'] ?? (! empty($logos) ? 'Trusted by learners from' : null),
+            'logos' => $logos,
+            'stats' => array_filter($stats),
+            'overview_stats' => is_array($overviewStats) ? $overviewStats : [],
+        ];
+    }
+
+    protected function countCourseProjects(array $course): ?int
+    {
+        $count = 0;
+
+        foreach (($course['phases'] ?? []) as $phase) {
+            foreach (($phase['modules'] ?? []) as $module) {
+                $count += count($module['tasks'] ?? []);
+            }
+        }
+
+        if ($count > 0) {
+            return $count;
+        }
+
+        foreach (($course['curriculum'] ?? []) as $section) {
+            $count += count($section['tasks'] ?? []);
+        }
+
+        return $count > 0 ? $count : null;
     }
 
     protected function frontendAdminData(string $activePage, string $role = 'student'): array

@@ -6,6 +6,8 @@ use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
+Route::get('/college-tieup', [HomeController::class, 'collegeTieup'])->name('college.tieup');
+Route::get('/company-branding', [HomeController::class, 'companyBranding'])->name('company.branding');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('loginpost');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
