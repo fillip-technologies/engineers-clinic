@@ -33,7 +33,7 @@
                                 <span>{{ $order['price'] }}</span>
                             </div>
                         </div>
-                        <a href="{{ route('dashboard.enrolled-courses') }}"
+                        <a href="{{ route('student.course.workspace.default') }}"
                             class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
                             Continue Learning
                         </a>

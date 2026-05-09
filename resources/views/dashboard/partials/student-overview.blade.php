@@ -45,7 +45,7 @@
                     </div>
                 </div>
 
-                <a href="{{ route('dashboard.enrolled-courses') }}"
+                <a href="{{ route('student.course.workspace.default') }}"
                     class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
                     <i class="fi fi-rr-play-alt text-base"></i>
                     <span>Continue Learning</span>
@@ -78,7 +78,7 @@
 
                 <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <p class="text-sm text-slate-500">Next lesson: Secure login flow and API guards</p>
-                    <a href="{{ route('dashboard.enrolled-courses') }}"
+                    <a href="{{ route('student.course.workspace.default') }}"
                         class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
                         Resume
                     </a>

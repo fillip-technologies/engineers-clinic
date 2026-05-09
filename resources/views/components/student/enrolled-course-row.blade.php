@@ -45,7 +45,7 @@
         </div>
 
         <div class="flex items-center lg:justify-end">
-            <a href="#"
+            <a href="{{ !empty($course['id']) ? route('student.course.workspace', ['id' => $course['id']]) : route('student.course.workspace.default') }}"
                 class="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">
                 Continue Learning
             </a>
