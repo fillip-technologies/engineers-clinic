@@ -1,5 +1,5 @@
 <section id="heroSection"
-    class="relative overflow-hidden flex items-center pt-10 pb-12 sm:min-h-[78vh] sm:pt-14 sm:pb-14 lg:min-h-[82vh] lg:pt-16 lg:pb-16 xl:min-h-[760px]"
+    class="relative overflow-hidden flex items-center pt-10 pb-12 sm:min-h-[85vh] sm:pt-16"
     style="background: linear-gradient(135deg, var(--color-auroraLeft) 0%, var(--color-auroraMid) 50%, var(--color-auroraRight) 100%);">
 
     <!-- PARTICLES BACKGROUND -->
@@ -13,12 +13,12 @@
             style="background: theme('colors.glowPink');"></div>
     </div>
 
-    <div class="relative z-[2] w-full max-w-[1180px] mx-auto px-5 sm:px-6 lg:px-8 xl:max-w-[1240px] 2xl:max-w-[1320px]">
+    <div class="relative z-[2] max-w-7xl mx-auto px-5 sm:px-6 w-full">
 
-        <div class="grid grid-cols-1 items-center gap-10 md:gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:gap-10 xl:grid-cols-[1.12fr_0.88fr] xl:gap-16">
+        <div class="grid gap-10 lg:grid-cols-2 lg:gap-16 items-center">
 
             <!-- LEFT -->
-            <div class="max-w-2xl lg:max-w-[620px] xl:max-w-[680px]">
+            <div>
 
                 <div class="mb-6">
                     <span class="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full border"
@@ -27,7 +27,7 @@
                     </span>
                 </div>
 
-                <h1 class="max-w-[11ch] text-3xl sm:max-w-none sm:text-5xl md:text-6xl lg:text-[3.35rem] xl:text-6xl font-bold leading-tight mb-6 text-textPrimary">
+                <h1 class="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 text-textPrimary">
                     <span class="bg-gradient-to-r from-brand via-brandLight to-secondary bg-clip-text text-transparent">
                         Forge Your Future
                     </span>
@@ -35,12 +35,12 @@
                     with Expert-Led Internship
                 </h1>
 
-                <p class="text-base leading-7 sm:text-lg mb-8 max-w-xl lg:max-w-[540px] text-textSecondary">
+                <p class="text-base leading-7 sm:text-lg mb-8 max-w-xl text-textSecondary">
                     Master in-demand skills with hands-on projects and real-world applications.
                     Join thousands of learners advancing their careers.
                 </p>
 
-                <div class="flex flex-col gap-4 mb-10 sm:flex-row sm:flex-wrap sm:gap-5">
+                <div class="flex flex-col gap-4 mb-10 sm:flex-row sm:gap-5">
                     <button
                         class="w-full px-8 py-4 rounded-xl font-semibold shadow-md hover:scale-[1.02] transition bg-secondary text-textPrimary sm:w-auto">
                         Browse Internship →
@@ -72,13 +72,13 @@
             </div>
 
             <!-- RIGHT (FORM) -->
-            <div class="relative flex justify-center lg:justify-end">
+            <div class="relative flex justify-center">
 
                 <!-- BLOBS -->
                 <div class="absolute -top-10 -left-10 h-48 w-48 rounded-full blur-3xl opacity-60 bg-glowPurple sm:h-[300px] sm:w-[300px]"></div>
                 <div class="absolute -bottom-10 -right-10 h-48 w-48 rounded-full blur-3xl opacity-60 bg-glowPink sm:h-[300px] sm:w-[300px]"></div>
 
-                <div class="relative w-full max-w-md lg:max-w-[420px] xl:max-w-[450px]">
+                <div class="relative w-full max-w-md">
 
                     <div class="backdrop-blur rounded-2xl shadow-[0_20px_60px_rgba(22,8,64,0.10)] border p-6 sm:p-8
                                 bg-cardBg border-cardBorder">
