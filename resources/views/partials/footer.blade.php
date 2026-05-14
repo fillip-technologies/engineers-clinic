@@ -1,14 +1,53 @@
 @php
-$footerPrograms = [
-['label' => 'UI/UX & Product Design Professional', 'slug' => 'ui-ux-product-design-professional'],
-['label' => 'Data Science & Analytics Expert', 'slug' => 'data-science-analytics-expert'],
-['label' => 'B2B Digital Marketing & Automation (MBA/BBA)', 'slug' => 'b2b-digital-marketing-automation-mba-bba'],
-['label' => 'AWS Cloud Solutions Architect', 'slug' => 'aws-cloud-solutions-architect'],
-['label' => 'B.Tech Civil Engineering (Smart City & BIM Infrastructure)', 'slug' => 'btech-civil-engineering-smart-city-bim-infrastructure'],
-['label' => 'B.Tech Mechanical Engineering (Digital Twin & Automation)', 'slug' => 'btech-mechanical-engineering-digital-twin-automation'],
-['label' => 'B.Tech Electrical & Electronics (IoT & Power Grids)', 'slug' => 'btech-electrical-electronics-iot-power-grids'],
-['label' => 'LLB & Corporate Law (Legal Tech & Tech Law)', 'slug' => 'llb-corporate-law-legal-tech-tech-law'],
-['label' => 'Mass Communication & Journalism (Digital Media & PR Tech)', 'slug' => 'mass-communication-journalism-digital-media-pr-tech'],
+$internshipLevels = [
+'Beginner' => [
+['label' => 'Web Ecosystems & Frontend Architecture', 'slug' => 'web-ecosystems-frontend'],
+['label' => 'Core Python & Computational Logic', 'slug' => 'core-python-computational-logic'],
+['label' => 'UI/UX Design', 'slug' => 'ui-ux-design'],
+['label' => 'Data Analytics', 'slug' => 'data-analytics'],
+['label' => 'AutoCAD Drafting', 'slug' => 'autocad-drafting'],
+['label' => 'Manufacturing Basics', 'slug' => 'manufacturing-basics'],
+['label' => 'Civil Drafting', 'slug' => 'civil-drafting'],
+['label' => 'Site Surveying', 'slug' => 'site-surveying'],
+['label' => 'Legal Research', 'slug' => 'legal-research'],
+['label' => 'Digital Journalism', 'slug' => 'digital-journalism'],
+],
+'Intermediate' => [
+['label' => 'Cloud & Backend Systems', 'slug' => 'cloud-backend-systems'],
+['label' => 'Machine Learning', 'slug' => 'machine-learning'],
+['label' => 'Ethical Hacking', 'slug' => 'ethical-hacking'],
+['label' => 'Mobile Development', 'slug' => 'mobile-development'],
+['label' => 'CAD/CAM', 'slug' => 'cad-cam'],
+['label' => 'HVAC Design', 'slug' => 'hvac-design'],
+['label' => 'Structural Design', 'slug' => 'structural-design'],
+['label' => 'Project Estimation', 'slug' => 'project-estimation'],
+['label' => 'Corporate Law', 'slug' => 'corporate-law'],
+['label' => 'PR Strategy', 'slug' => 'pr-strategy'],
+],
+'Advanced' => [
+['label' => 'Generative AI', 'slug' => 'generative-ai'],
+['label' => 'Cloud Architecture', 'slug' => 'cloud-architecture'],
+['label' => 'Blockchain Systems', 'slug' => 'blockchain-systems'],
+['label' => 'Big Data Systems', 'slug' => 'big-data-systems'],
+['label' => 'CFD & FEA', 'slug' => 'cfd-fea'],
+['label' => 'Robotics Automation', 'slug' => 'robotics-automation'],
+['label' => 'BIM Infrastructure', 'slug' => 'bim-infrastructure'],
+['label' => 'Geotechnical Engineering', 'slug' => 'geotechnical-engineering'],
+['label' => 'Digital Law', 'slug' => 'digital-law'],
+['label' => 'Corporate Communication', 'slug' => 'corporate-communication'],
+],
+];
+
+$enterpriseLinks = [
+['label' => 'Company For Branding', 'href' => route('company.branding')],
+['label' => 'For Selling Services & Products', 'href' => '#'],
+];
+
+$moreLinks = [
+['label' => 'AI Tools', 'href' => '#'],
+['label' => 'Refer & Earn', 'href' => '#'],
+['label' => 'Blog', 'href' => '#'],
+['label' => 'About Us', 'href' => '#'],
 ];
 @endphp
 
@@ -77,7 +116,7 @@ $footerPrograms = [
     }
 </style>
 
-<footer class="footer-aurora-bg relative isolate overflow-hidden text-white {{ request()->is('login') ? 'mt-0' : 'mt-16' }}">
+<footer class="footer-aurora-bg relative isolate overflow-hidden text-white {{ request()->is('login') || request()->is('course/*') ? 'mt-0' : 'mt-16' }}">
 
     <!-- AURORA GLOW -->
     <div class="absolute inset-0 pointer-events-none">
@@ -91,7 +130,7 @@ $footerPrograms = [
     <div class="relative max-w-7xl mx-auto px-5 py-12 sm:px-6 sm:py-16">
 
         <!-- GRID -->
-        <div class="grid min-w-0 gap-10 md:grid-cols-2 lg:grid-cols-[1.1fr_1.8fr_1fr_1fr]">
+        <div class="grid min-w-0 gap-10 lg:grid-cols-[1.05fr_2.2fr_1fr]">
 
             <!-- BRAND -->
             <div class="min-w-0">
@@ -106,51 +145,92 @@ $footerPrograms = [
                 <p class="mt-4 text-sm text-[#EEF5FF]/80 leading-relaxed max-w-xs">
                     Build real skills through internships, AI tools, and structured learning designed for engineers.
                 </p>
+
+                <div class="mt-6 space-y-3 text-sm text-[#EEF5FF]/80">
+                    <a href="mailto:info@engineersclinic.com" class="flex items-start gap-3 transition hover:text-[#F5C842]">
+                        <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-[#F5C842]"></span>
+                        <span class="break-all">info@engineersclinic.com</span>
+                    </a>
+                    <a href="tel:+917545999990" class="flex items-start gap-3 transition hover:text-[#F5C842]">
+                        <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-[#F5C842]"></span>
+                        <span>+91-75459-99990</span>
+                    </a>
+                    <a href="tel:+917979030298" class="flex items-start gap-3 transition hover:text-[#F5C842]">
+                        <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-[#F5C842]"></span>
+                        <span>+91-79790-30298</span>
+                    </a>
+                    <p class="flex items-start gap-3">
+                        <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-[#F5C842]"></span>
+                        <span>Property No. 22, Second Floor, Gurunanak Market, Lajpat Nagar, New Delhi - 110024</span>
+                    </p>
+                    <p class="flex items-start gap-3">
+                        <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-[#F5C842]"></span>
+                        <span>Ground Floor, A3, Kangkar Bagh Road, beside Kalyan Jewellers, near Chandan Hero, PC Colony, RBI Flats Colony, Bankman Colony, Patna, Bihar 800020</span>
+                    </p>
+                </div>
             </div>
 
-            <!-- PROGRAMS -->
+            <!-- INTERNSHIP MEGA MENU -->
             <div class="min-w-0">
                 <h3 class="text-xs font-semibold uppercase tracking-wider text-[#A78BFA]">
-                    Internship Programs
+                    Internship Mega Menu
                 </h3>
 
-                <div class="mt-4 grid min-w-0 gap-x-6 gap-y-2 text-sm text-[#EEF5FF]/80 sm:grid-cols-2">
-                    @foreach ($footerPrograms as $program)
-                    <a href="{{ route('course.detail', $program['slug']) }}"
-                        class="break-words hover:text-[#F5C842] transition">{{ $program['label'] }}</a>
+                <div class="mt-4 grid min-w-0 gap-6 md:grid-cols-3">
+                    @foreach ($internshipLevels as $level => $programs)
+                    <div class="min-w-0">
+                        <p class="text-sm font-semibold text-white">{{ $level }}</p>
+                        <div class="mt-3 space-y-2 text-sm text-[#EEF5FF]/80">
+                            @foreach ($programs as $program)
+                            <a href="{{ route('course.detail', $program['slug']) }}"
+                                class="block break-words leading-5 transition hover:text-[#F5C842]">{{ $program['label'] }}</a>
+                            @endforeach
+                        </div>
+                    </div>
                     @endforeach
                 </div>
             </div>
 
-            <!-- COMPANY -->
+            <!-- MENU DETAILS -->
             <div class="min-w-0">
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-[#A78BFA]">
-                    Company
-                </h3>
+                <div>
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-[#A78BFA]">
+                        Main Links
+                    </h3>
 
-                <ul class="mt-4 space-y-2 text-sm text-[#EEF5FF]/80">
-                    <li><a href="#" class="hover:text-[#F5C842] transition">About</a></li>
-                    <li><a href="#" class="hover:text-[#F5C842] transition">Contact</a></li>
-                    <li><a href="#" class="hover:text-[#F5C842] transition">Privacy Policy</a></li>
-                    <li><a href="#" class="hover:text-[#F5C842] transition">Terms</a></li>
-                </ul>
-            </div>
+                    <ul class="mt-4 space-y-2 text-sm text-[#EEF5FF]/80">
+                        <li><a href="/" class="hover:text-[#F5C842] transition">Home</a></li>
+                        <li><a href="{{ route('college.tieup') }}" class="hover:text-[#F5C842] transition">College Tie-ups</a></li>
+                        <li><a href="{{ url('/login') }}" class="hover:text-[#F5C842] transition">Login</a></li>
+                    </ul>
+                </div>
 
-            <!-- CONTACT -->
-            <div class="min-w-0">
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-[#A78BFA]">
-                    Get in Touch
-                </h3>
+                <div class="mt-8">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-[#A78BFA]">
+                        For Enterprises & Employers
+                    </h3>
 
-                <ul class="mt-4 space-y-2 text-sm text-[#EEF5FF]/80">
-                    <li>support@engineersclinic.com</li>
-                    <li>+91 98765 43210</li>
-                    <li>India</li>
-                </ul>
+                    <ul class="mt-4 space-y-2 text-sm text-[#EEF5FF]/80">
+                        @foreach ($enterpriseLinks as $link)
+                        <li><a href="{{ $link['href'] }}" class="hover:text-[#F5C842] transition">{{ $link['label'] }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
 
-                <!-- CTA -->
-                <a href="#"
-                    class="inline-flex w-full items-center justify-center rounded-lg bg-gradient-to-r from-[#A78BFA] to-[#F5C842] px-5 py-2.5 text-sm font-medium text-[#160840] shadow transition hover:opacity-90 sm:w-auto">
+                <div class="mt-8">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-[#A78BFA]">
+                        More
+                    </h3>
+
+                    <ul class="mt-4 space-y-2 text-sm text-[#EEF5FF]/80">
+                        @foreach ($moreLinks as $link)
+                        <li><a href="{{ $link['href'] }}" class="hover:text-[#F5C842] transition">{{ $link['label'] }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <a href="mailto:info@engineersclinic.com"
+                    class="mt-8 inline-flex w-full items-center justify-center rounded-lg bg-gradient-to-r from-[#A78BFA] to-[#F5C842] px-5 py-2.5 text-sm font-medium text-[#160840] shadow transition hover:opacity-90 sm:w-auto">
                     Contact Us
                 </a>
             </div>
@@ -161,7 +241,7 @@ $footerPrograms = [
         <div class="mt-12 border-t border-[#E2D9FF]/20 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left text-sm text-[#EEF5FF]/70">
 
             <p>
-                © {{ date('Y') }} Engineers Clinic. All rights reserved.
+                &copy; {{ date('Y') }} Engineers Clinic. All rights reserved.
             </p>
 
             <div class="flex items-center gap-6">

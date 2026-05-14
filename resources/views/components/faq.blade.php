@@ -1,10 +1,10 @@
-<section class="bg-bgWhite py-20">
+<section class="bg-bgWhite py-16 sm:py-20">
 
     <div class="max-w-4xl mx-auto px-6">
 
         <!-- TITLE -->
         <div class="mb-10 text-center">
-            <h2 class="text-2xl md:text-4xl font-bold text-textPrimary">
+            <h2 class="text-2xl md:text-4xl font-bold leading-tight text-textPrimary">
                 Frequently Asked 
                 <span class="bg-gradient-to-r from-brand via-brandLight to-secondary bg-clip-text text-transparent">
                     Questions
@@ -17,10 +17,10 @@
 
             <!-- ITEM -->
             <div x-data="{ open: false }"
-                class="border border-borderLight bg-cardBg rounded-xl p-5 transition hover:border-brandLight hover:shadow-sm">
+                class="border border-borderLight bg-cardBg rounded-xl p-4 transition hover:border-brandLight hover:shadow-sm sm:p-5">
 
                 <button @click="open = !open"
-                    class="w-full flex justify-between items-center text-left">
+                    class="w-full flex items-start justify-between gap-4 text-left">
 
                     <span class="font-medium text-textPrimary">
                         What is this internship program?
@@ -38,10 +38,10 @@
 
             <!-- ITEM -->
             <div x-data="{ open: false }"
-                class="border border-borderLight bg-cardBg rounded-xl p-5 transition hover:border-brandLight hover:shadow-sm">
+                class="border border-borderLight bg-cardBg rounded-xl p-4 transition hover:border-brandLight hover:shadow-sm sm:p-5">
 
                 <button @click="open = !open"
-                    class="w-full flex justify-between items-center text-left">
+                    class="w-full flex items-start justify-between gap-4 text-left">
 
                     <span class="font-medium text-textPrimary">
                         Will I get a certificate?
@@ -59,10 +59,10 @@
 
             <!-- ITEM -->
             <div x-data="{ open: false }"
-                class="border border-borderLight bg-cardBg rounded-xl p-5 transition hover:border-brandLight hover:shadow-sm">
+                class="border border-borderLight bg-cardBg rounded-xl p-4 transition hover:border-brandLight hover:shadow-sm sm:p-5">
 
                 <button @click="open = !open"
-                    class="w-full flex justify-between items-center text-left">
+                    class="w-full flex items-start justify-between gap-4 text-left">
 
                     <span class="font-medium text-textPrimary">
                         Is this internship beginner friendly?
@@ -80,10 +80,10 @@
 
             <!-- ITEM -->
             <div x-data="{ open: false }"
-                class="border border-borderLight bg-cardBg rounded-xl p-5 transition hover:border-brandLight hover:shadow-sm">
+                class="border border-borderLight bg-cardBg rounded-xl p-4 transition hover:border-brandLight hover:shadow-sm sm:p-5">
 
                 <button @click="open = !open"
-                    class="w-full flex justify-between items-center text-left">
+                    class="w-full flex items-start justify-between gap-4 text-left">
 
                     <span class="font-medium text-textPrimary">
                         How long does the internship last?
@@ -101,10 +101,10 @@
 
             <!-- ITEM -->
             <div x-data="{ open: false }"
-                class="border border-borderLight bg-cardBg rounded-xl p-5 transition hover:border-brandLight hover:shadow-sm">
+                class="border border-borderLight bg-cardBg rounded-xl p-4 transition hover:border-brandLight hover:shadow-sm sm:p-5">
 
                 <button @click="open = !open"
-                    class="w-full flex justify-between items-center text-left">
+                    class="w-full flex items-start justify-between gap-4 text-left">
 
                     <span class="font-medium text-textPrimary">
                         Do I get placement support?

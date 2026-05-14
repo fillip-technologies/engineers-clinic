@@ -1,10 +1,10 @@
-<section class="bg-bgWhite py-24">
+<section class="bg-bgWhite py-16 sm:py-20 lg:py-24">
 
     <div class="max-w-7xl mx-auto px-6">
 
         <!-- HEADING -->
-        <div class="mb-16">
-            <h2 class="text-3xl md:text-5xl font-bold text-textPrimary">
+        <div class="mb-10 text-center sm:mb-16 lg:text-left">
+            <h2 class="text-3xl md:text-5xl font-bold leading-tight text-textPrimary">
                 Real Results from
                 <span class="bg-gradient-to-r from-brand via-secondary to-accent bg-clip-text text-transparent">
                     Internship Students
@@ -12,12 +12,12 @@
             </h2>
         </div>
 
-        <div class="grid lg:grid-cols-2 gap-12 items-start">
+        <div class="grid gap-8 lg:grid-cols-2 lg:gap-12 items-start">
 
             <!-- LEFT FEATURED -->
-            <div class="relative bg-bgWhite border border-borderLight rounded-3xl p-8 shadow-lg transition">
+            <div class="relative bg-bgWhite border border-borderLight rounded-3xl p-6 shadow-lg transition sm:p-8">
 
-                <p id="featuredText" class="text-lg text-textPrimary leading-relaxed mb-8">
+                <p id="featuredText" class="text-base text-textPrimary leading-relaxed mb-6 sm:mb-8 sm:text-lg">
                     “Before joining, I had zero confidence in building projects. This internship gave me real-world tasks and clarity.”
                 </p>
 
@@ -111,7 +111,7 @@
 <!-- CSS -->
 <style>
     .vertical-marquee {
-        height: 420px;
+        height: 320px;
         overflow: hidden;
         position: relative;
     }
@@ -162,6 +162,12 @@
     .card span {
         font-size: 12px;
         font-weight: 600;
+    }
+
+    @media (min-width: 640px) {
+        .vertical-marquee {
+            height: 420px;
+        }
     }
 </style>
 

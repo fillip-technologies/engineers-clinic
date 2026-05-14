@@ -13,7 +13,7 @@ $testimonialMeta = $course['menu_group'] ?? 'Engineers Clinic Learner';
 @endphp
 
 @if (!empty($whyChoose) || !empty($testimonials) || !empty($faqItems))
-<section class="relative overflow-hidden bg-bgWhite px-6 py-20 sm:px-10 lg:px-14">
+<section class="relative overflow-hidden bg-bgWhite px-6 pt-20 pb-12 sm:px-10 sm:pb-14 lg:px-14 lg:pb-16">
     <div
         class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(34,197,94,0.08),_transparent_28%),radial-gradient(circle_at_bottom_left,_rgba(249,115,22,0.08),_transparent_32%)]">
     </div>
@@ -182,7 +182,7 @@ $testimonialMeta = $course['menu_group'] ?? 'Engineers Clinic Learner';
         </div>
         @endif
 
-        <div class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand via-brandDark to-textPrimary px-6 py-12 text-center shadow-[0_30px_80px_rgba(15,23,42,0.2)] sm:px-10">
+        <div class="relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand via-brandDark to-textPrimary px-6 py-12 text-center shadow-[0_30px_80px_rgba(15,23,42,0.2)] sm:px-10 lg:py-14">
             <div
                 class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.18),_transparent_34%),radial-gradient(circle_at_bottom_right,_rgba(249,115,22,0.24),_transparent_35%)]">
             </div>

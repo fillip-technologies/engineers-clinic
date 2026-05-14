@@ -11,10 +11,21 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
     <style>
-        html { scroll-behavior: smooth; }
-        body { font-family: Inter, sans-serif; }
-        [x-cloak] { display: none !important; }
-        [id] { scroll-margin-top: 6rem; }
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Inter, sans-serif;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        [id] {
+            scroll-margin-top: 6rem;
+        }
     </style>
 </head>
 
@@ -102,7 +113,7 @@
                 this.submission.error = '';
 
                 try {
-                    const response = await fetch('https://hook.eu1.make.com/49sjdews8fwc4yem03926rp24hw6fcq8', {
+                    const response = await fetch('https://hook.eu1.make.com/548hncude0u8tbidojofh6d3w7t72fvz', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -116,9 +127,11 @@
                         })
                     });
 
-                    if (!response.ok) {
-                        throw new Error('Submission failed');
-                    }
+                   if (!response.ok) {
+    const text = await response.text();
+    console.log(text);
+    throw new Error(text || 'Submission failed');
+}
 
                     this.submission.submitted = true;
                 } catch (error) {
@@ -174,7 +187,7 @@
                         </div>
 
                         @foreach ($steps as $step)
-                            @include('dashboard.student-dashboard.components.workspace-step-card', ['step' => $step])
+                        @include('dashboard.student-dashboard.components.workspace-step-card', ['step' => $step])
                         @endforeach
                     </section>
 
@@ -183,21 +196,21 @@
                         <h2 class="mt-2 text-2xl font-bold tracking-tight text-slate-950">Helpful links for this project</h2>
                         <div class="mt-6 grid gap-5 md:grid-cols-3">
                             @foreach ($resources as $group)
-                                <div class="rounded-2xl bg-slate-50 p-4">
-                                    <h3 class="text-sm font-bold text-slate-950">{{ $group['category'] }}</h3>
-                                    <div class="mt-3 space-y-2">
-                                        @foreach ($group['items'] as $resource)
-                                            <a href="{{ $resource['href'] }}" target="_blank" rel="noreferrer"
-                                                class="block rounded-xl border border-slate-200 bg-white p-3 transition hover:border-blue-200 hover:bg-blue-50">
-                                                <span class="flex items-center gap-2 text-sm font-semibold text-slate-800">
-                                                    <i class="{{ $resource['icon'] }} text-blue-600"></i>
-                                                    {{ $resource['label'] }}
-                                                </span>
-                                                <span class="mt-1 block text-xs leading-5 text-slate-500">{{ $resource['description'] }}</span>
-                                            </a>
-                                        @endforeach
-                                    </div>
+                            <div class="rounded-2xl bg-slate-50 p-4">
+                                <h3 class="text-sm font-bold text-slate-950">{{ $group['category'] }}</h3>
+                                <div class="mt-3 space-y-2">
+                                    @foreach ($group['items'] as $resource)
+                                    <a href="{{ $resource['href'] }}" target="_blank" rel="noreferrer"
+                                        class="block rounded-xl border border-slate-200 bg-white p-3 transition hover:border-blue-200 hover:bg-blue-50">
+                                        <span class="flex items-center gap-2 text-sm font-semibold text-slate-800">
+                                            <i class="{{ $resource['icon'] }} text-blue-600"></i>
+                                            {{ $resource['label'] }}
+                                        </span>
+                                        <span class="mt-1 block text-xs leading-5 text-slate-500">{{ $resource['description'] }}</span>
+                                    </a>
+                                    @endforeach
                                 </div>
+                            </div>
                             @endforeach
                         </div>
                     </section>
