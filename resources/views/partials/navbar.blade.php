@@ -308,10 +308,10 @@
             </div>
 
             <!-- Login -->
-            <a href="{{ url('/login') }}"
+            <!-- <a href="{{ url('/login') }}"
                 class="mt-4 flex items-center justify-center rounded-2xl bg-black px-5 py-4 text-sm font-semibold text-white">
                 Login
-            </a>
+            </a> -->
 
         </nav>
     </div>
