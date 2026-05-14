@@ -36,11 +36,12 @@
                         </ul>
 
                         <div class="flex flex-col gap-3 pt-4 sm:flex-row sm:flex-wrap sm:gap-4">
-                            <a href="#college-tie-up-form"
+                            <button type="button"
+                                onclick="window.dispatchEvent(new CustomEvent('open-partnership-discussion'))"
                                 class="inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-brand px-4 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-brandDark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brandLight focus-visible:ring-offset-2">
                                 Request College Tie-up
-                            </a>
-                            <a href="#college-benefits"
+                            </button>
+                            <a href="{{ route('college.tieup') }}#college-benefits"
                                 class="inline-flex min-h-10 items-center justify-center gap-2 rounded-md border border-brand bg-bgWhite px-4 py-2 text-center text-sm font-medium text-brand transition-colors hover:bg-brand hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brandLight focus-visible:ring-offset-2">
                                 View Benefits
                             </a>

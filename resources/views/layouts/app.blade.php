@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ config('app.name', 'Engineers Clinic') }}</title>
+    <title>{{ config( 'Engineers Clinic') }}</title>
 
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -46,7 +46,7 @@
     </style> -->
 
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
-    
+
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -109,6 +109,8 @@
     <main>
         @yield('content')
     </main>
+
+    @include('form.college-partnership-discussion')
 
     @include('partials.footer')
 

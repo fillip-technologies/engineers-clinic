@@ -13,8 +13,13 @@
                 </div>
 
                 <div class="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                    <a href="{{ route('signup', ['role' => 'college']) }}"
+                    <button type="button"
+                        onclick="window.dispatchEvent(new CustomEvent('open-partnership-discussion'))"
                         class="inline-flex items-center justify-center rounded-lg bg-secondary px-6 py-3 text-sm font-semibold text-brandDark transition hover:bg-white">
+                        Request discussion
+                    </button>
+                    <a href="{{ route('signup', ['role' => 'college']) }}"
+                        class="inline-flex items-center justify-center rounded-lg border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
                         Register college account
                     </a>
                     <a href="tel:+917545999990"
