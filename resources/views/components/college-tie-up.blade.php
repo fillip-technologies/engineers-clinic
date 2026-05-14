@@ -57,6 +57,7 @@
                             <p class="text-sm leading-6 text-textMuted">
                                 Talk to our partnership team:
                                 <span class="whitespace-nowrap font-semibold text-textPrimary">+91-75459-99990</span>
+                                <span class="whitespace-nowrap font-semibold text-textPrimary">+91-79790-30298</span>
                             </p>
                         </div>
                     </div>

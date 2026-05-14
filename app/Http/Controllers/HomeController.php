@@ -6,6 +6,7 @@ use App\Models\Student;
 use App\Models\Enrollment;
 use App\Models\Course;
 use App\Models\College;
+use App\Models\CollegePartnershipDiscussion;
 use App\Models\Notification;
 use App\Models\QuizResult;
 use App\Models\Quiz;
@@ -85,6 +86,30 @@ class HomeController extends Controller
     public function collegeTieup()
     {
         return view('pages.college-tieup');
+    }
+
+    public function storeCollegePartnershipDiscussion(Request $request)
+    {
+        $validated = $request->validateWithBag('partnershipDiscussion', [
+            'full_name' => ['required', 'string', 'max:255'],
+            'institution_name' => ['required', 'string', 'max:255'],
+            'official_email' => ['required', 'email', 'max:255'],
+            'phone' => ['required', 'regex:/^[0-9+\-\s()]{7,20}$/'],
+            'designation' => ['required', 'string', 'max:255'],
+            'number_of_students' => ['required', 'integer', 'min:1', 'max:1000000'],
+            'department_stream' => ['required', 'string', 'max:255'],
+            'message' => ['required', 'string', 'max:2000'],
+        ], [
+            'institution_name.required' => 'College / institution name is required.',
+            'official_email.required' => 'Official email is required.',
+            'official_email.email' => 'Enter a valid official email address.',
+            'phone.regex' => 'Enter a valid phone number.',
+            'department_stream.required' => 'Department / stream is required.',
+        ]);
+
+        CollegePartnershipDiscussion::create($validated);
+
+        return back()->with('partnership_discussion_success', 'Your partnership discussion request has been submitted. Our team will contact you shortly.');
     }
 
     public function companyBranding()

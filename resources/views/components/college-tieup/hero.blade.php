@@ -18,10 +18,11 @@
             </p>
 
             <div class="mt-9 flex flex-col gap-3 sm:flex-row">
-                <a href="#partnership-enquiry"
+                <button type="button"
+                    onclick="window.dispatchEvent(new CustomEvent('open-partnership-discussion'))"
                     class="inline-flex items-center justify-center rounded-lg bg-brand px-6 py-3 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(124,92,252,0.20)] transition hover:bg-brandDark">
-                    Request partnership discussion
-                </a>
+                    Request Partnership Discussion
+                </button>
                 <a href="#how-it-works"
                     class="inline-flex items-center justify-center rounded-lg border border-borderLight bg-bgWhite px-6 py-3 text-sm font-semibold text-textPrimary transition hover:border-brand hover:text-brand">
                     See operating model

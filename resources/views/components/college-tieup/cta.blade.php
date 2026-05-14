@@ -21,6 +21,10 @@
                         class="inline-flex items-center justify-center rounded-lg border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
                         Call +91-75459-99990
                     </a>
+                    <a href="tel:+917979030298"
+                        class="inline-flex items-center justify-center rounded-lg border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
+                        Call +91-79790-30298
+                    </a>
                 </div>
             </div>
         </div>

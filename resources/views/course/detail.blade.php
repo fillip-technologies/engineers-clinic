@@ -165,9 +165,9 @@ $selectedLevel = $hero['level'] ?? 'Beginner';
 @include('course.program-overview.program-overview', ['course' => $course])
 @endif
 
-@if(!empty($course['curriculum']))
+<!-- @if(!empty($course['curriculum']))
 @include('course.curriculum.curriculum', ['course' => $course])
-@endif
+@endif -->
 
 @if(!empty($course['why_choose']) || !empty($course['testimonials']) || !empty($course['faq']))
 @include('course.conversion.sections', ['course' => $course])

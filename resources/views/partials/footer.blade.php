@@ -116,7 +116,7 @@ $moreLinks = [
     }
 </style>
 
-<footer class="footer-aurora-bg relative isolate overflow-hidden text-white {{ request()->is('login') ? 'mt-0' : 'mt-16' }}">
+<footer class="footer-aurora-bg relative isolate overflow-hidden text-white {{ request()->is('login') || request()->is('course/*') ? 'mt-0' : 'mt-16' }}">
 
     <!-- AURORA GLOW -->
     <div class="absolute inset-0 pointer-events-none">
@@ -155,9 +155,17 @@ $moreLinks = [
                         <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-[#F5C842]"></span>
                         <span>+91-75459-99990</span>
                     </a>
+                    <a href="tel:+917979030298" class="flex items-start gap-3 transition hover:text-[#F5C842]">
+                        <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-[#F5C842]"></span>
+                        <span>+91-79790-30298</span>
+                    </a>
                     <p class="flex items-start gap-3">
                         <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-[#F5C842]"></span>
-                        <span>Engineers Clinic, India</span>
+                        <span>Property No. 22, Second Floor, Gurunanak Market, Lajpat Nagar, New Delhi - 110024</span>
+                    </p>
+                    <p class="flex items-start gap-3">
+                        <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-[#F5C842]"></span>
+                        <span>Ground Floor, A3, Kangkar Bagh Road, beside Kalyan Jewellers, near Chandan Hero, PC Colony, RBI Flats Colony, Bankman Colony, Patna, Bihar 800020</span>
                     </p>
                 </div>
             </div>

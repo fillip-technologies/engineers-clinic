@@ -10,4 +10,5 @@
     <x-college-tieup.testimonials />
     <x-college-tieup.faq />
     <x-college-tieup.cta />
+    @include('form.college-partnership-discussion')
 @endsection
