@@ -3,7 +3,10 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\CheckRole;
+use App\Http\Controllers\CounsellingController;
 use Illuminate\Support\Facades\Route;
+
+
 
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -11,6 +14,8 @@ Route::post('/login', [AuthController::class, 'login'])->name('loginpost');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -23,6 +28,11 @@ Route::post('/signup/{role}', [HomeController::class, 'signupSubmit'])->name('si
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 });
+
+Route::post('/counselling-submit', [CounsellingController::class, 'store'])
+    ->name('counselling.store');
+
+
 
 Route::middleware(['auth', CheckRole::class . ':college'])->group(function () {
     Route::get('/college/dashboard', [HomeController::class, 'dashboard'])->name('college.dashboard');

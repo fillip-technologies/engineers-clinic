@@ -101,32 +101,41 @@
                         </p>
 
                         <!-- FORM -->
-                        <form class="space-y-4">
+                        <form action="{{ route('counselling.store') }}" method="POST" class="space-y-4">
+                            @csrf
 
-                            <input type="text" placeholder="Full Name"
+                            <input type="text"
+                                name="name"
+                                placeholder="Full Name"
+                                required
                                 class="w-full rounded-lg px-4 py-3 outline-none transition
-                                       border border-borderLight bg-bgWhite text-textPrimary
-                                       focus:ring-2 focus:ring-brand focus:border-brand
-                                       placeholder:text-textMuted">
+                                    border border-borderLight bg-bgWhite text-textPrimary
+                                    focus:ring-2 focus:ring-brand focus:border-brand
+                                    placeholder:text-textMuted">
 
-                            <input type="tel" placeholder="Phone Number"
+                            <input type="tel"
+                                name="phone"
+                                placeholder="Phone Number"
+                                required
                                 class="w-full rounded-lg px-4 py-3 outline-none transition
-                                       border border-borderLight bg-bgWhite text-textPrimary
-                                       focus:ring-2 focus:ring-brand focus:border-brand
-                                       placeholder:text-textMuted">
+                                    border border-borderLight bg-bgWhite text-textPrimary
+                                    focus:ring-2 focus:ring-brand focus:border-brand
+                                    placeholder:text-textMuted">
 
-                            <input type="email" placeholder="Email Address (optional)"
+                            <input type="email"
+                                name="email"
+                                placeholder="Email Address (optional)"
                                 class="w-full rounded-lg px-4 py-3 outline-none transition
-                                       border border-borderLight bg-bgWhite text-textPrimary
-                                       focus:ring-2 focus:ring-brand focus:border-brand
-                                       placeholder:text-textMuted">
+                                    border border-borderLight bg-bgWhite text-textPrimary
+                                    focus:ring-2 focus:ring-brand focus:border-brand
+                                    placeholder:text-textMuted">
 
                             <button
+                                type="submit"
                                 class="w-full py-3 rounded-lg font-semibold shadow-md transition
-                                       hover:scale-[1.02] bg-secondary text-textPrimary">
+                                    hover:scale-[1.02] bg-secondary text-textPrimary">
                                 Get Free Counselling
                             </button>
-
                         </form>
 
                         <p class="text-xs mt-4 text-center text-textMuted">
