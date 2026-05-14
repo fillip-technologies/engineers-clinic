@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/college-tieup', [HomeController::class, 'collegeTieup'])->name('college.tieup');
-Route::post('/college-tieup/partnership-discussion', [HomeController::class, 'storeCollegePartnershipDiscussion'])->name('college.partnership-discussion.store');
 Route::get('/company-branding', [HomeController::class, 'companyBranding'])->name('company.branding');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('loginpost');
@@ -34,6 +33,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::post('/counselling-submit', [CounsellingController::class, 'store'])
     ->name('counselling.store');
+Route::post('/college-tieup/partnership-discussion', [CounsellingController::class, 'storeCollegePartnershipDiscussion'])->name('college.partnership-discussion.store');
+
 
 
 

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CourseDataHelper;
 use App\Models\Student;
 use App\Models\Enrollment;
 use App\Models\Course;
 use App\Models\College;
-use App\Models\CollegePartnershipDiscussion;
 use App\Models\Notification;
 use App\Models\QuizResult;
 use App\Models\Quiz;
@@ -19,66 +19,9 @@ use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
-    protected array $courseFamilies = [
-        'ui-ux-product-design-professional' => [
-            'menu_group' => 'Design & Product',
-            'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Design product experiences end to end',
-            'career_path' => 'UI, UX, and product systems track',
-        ],
-        'data-science-analytics-expert' => [
-            'menu_group' => 'Data & Analytics',
-            'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Turn data into practical decisions',
-            'career_path' => 'Analytics, dashboards, and insight track',
-        ],
-        'b2b-digital-marketing-automation-mba-bba' => [
-            'menu_group' => 'Business & Marketing',
-            'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Build growth systems for B2B brands',
-            'career_path' => 'Digital funnels and automation track',
-        ],
-        'aws-cloud-solutions-architect' => [
-            'menu_group' => 'Cloud & Infrastructure',
-            'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Architect and scale cloud systems',
-            'career_path' => 'AWS infrastructure and deployment track',
-        ],
-        'btech-civil-engineering-smart-city-bim-infrastructure' => [
-            'menu_group' => 'Civil Engineering',
-            'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Plan smarter infrastructure systems',
-            'career_path' => 'BIM and smart city engineering track',
-        ],
-        'btech-mechanical-engineering-digital-twin-automation' => [
-            'menu_group' => 'Mechanical Engineering',
-            'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Connect machines with digital intelligence',
-            'career_path' => 'Automation and digital twin track',
-        ],
-        'btech-electrical-electronics-iot-power-grids' => [
-            'menu_group' => 'Electrical & Electronics',
-            'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Work with IoT-enabled power systems',
-            'career_path' => 'Connected devices and smart grids track',
-        ],
-        'llb-corporate-law-legal-tech-tech-law' => [
-            'menu_group' => 'Law & Legal Tech',
-            'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Navigate legal work in digital contexts',
-            'career_path' => 'Corporate law and legal tech track',
-        ],
-        'mass-communication-journalism-digital-media-pr-tech' => [
-            'menu_group' => 'Media & Communication',
-            'menu_group_label' => 'AI Remote Internships',
-            'hero_badge' => 'Build digital-first media communication skills',
-            'career_path' => 'Journalism, media, and PR tech track',
-        ],
-    ];
-
     public function index()
     {
-        $courses = $this->loadAllCourses();
+        $courses = CourseDataHelper::loadAllCourses();
 
         return view('pages.home', compact('courses'));
     }
@@ -88,29 +31,7 @@ class HomeController extends Controller
         return view('pages.college-tieup');
     }
 
-    public function storeCollegePartnershipDiscussion(Request $request)
-    {
-        $validated = $request->validateWithBag('partnershipDiscussion', [
-            'full_name' => ['required', 'string', 'max:255'],
-            'institution_name' => ['required', 'string', 'max:255'],
-            'official_email' => ['required', 'email', 'max:255'],
-            'phone' => ['required', 'regex:/^[0-9+\-\s()]{7,20}$/'],
-            'designation' => ['required', 'string', 'max:255'],
-            'number_of_students' => ['required', 'integer', 'min:1', 'max:1000000'],
-            'department_stream' => ['required', 'string', 'max:255'],
-            'message' => ['required', 'string', 'max:2000'],
-        ], [
-            'institution_name.required' => 'College / institution name is required.',
-            'official_email.required' => 'Official email is required.',
-            'official_email.email' => 'Enter a valid official email address.',
-            'phone.regex' => 'Enter a valid phone number.',
-            'department_stream.required' => 'Department / stream is required.',
-        ]);
-
-        CollegePartnershipDiscussion::create($validated);
-
-        return back()->with('partnership_discussion_success', 'Your partnership discussion request has been submitted. Our team will contact you shortly.');
-    }
+    
 
     public function companyBranding()
     {
@@ -1137,157 +1058,11 @@ public function studentCourseWorkspace($id)
 
     public function show($slug)
     {
-        $course = $this->loadCourseBySlug($slug);
+        $course = CourseDataHelper::loadCourseBySlug($slug);
 
         abort_unless($course, 404);
 
         return view('course.detail', compact('course'));
-    }
-
-    protected function loadAllCourses(): array
-    {
-        $courseFiles = glob(resource_path('data/courses/*.json')) ?: [];
-
-        $courses = [];
-
-        foreach ($courseFiles as $courseFile) {
-            $course = json_decode(file_get_contents($courseFile), true);
-
-            if (! is_array($course) || ! isset($course['slug'])) {
-                continue;
-            }
-
-            $courses[] = $this->attachCourseMeta($course);
-        }
-
-        usort($courses, fn (array $first, array $second) => strcmp($first['title'], $second['title']));
-
-        return $courses;
-    }
-
-    protected function loadCourseBySlug(string $slug): ?array
-    {
-        $courseFile = resource_path("data/courses/{$slug}.json");
-
-        if (! is_file($courseFile)) {
-            return null;
-        }
-
-        $course = json_decode(file_get_contents($courseFile), true);
-
-        if (! is_array($course)) {
-            return null;
-        }
-
-        return $this->attachCourseMeta($course);
-    }
-
-    protected function attachCourseMeta(array $course): array
-    {
-        $slug = $course['slug'] ?? '';
-
-        $meta = $this->courseFamilies[$slug] ?? [
-            'menu_group' => 'AI Remote Internships',
-            'menu_group_label' => 'Our Programs',
-            'hero_badge' => 'Structured practical learning',
-            'career_path' => 'Career-focused guided track',
-        ];
-
-        $course['menu_group'] = $meta['menu_group'];
-        $course['menu_group_label'] = $meta['menu_group_label'];
-        $course['hero_badge'] = $course['hero_badge'] ?? $meta['hero_badge'];
-        $course['career_path'] = $course['career_path'] ?? $meta['career_path'];
-
-        $course['hero'] = $this->buildCourseHero($course);
-
-        return $course;
-    }
-
-    protected function buildCourseHero(array $course): array
-    {
-        $overview = $course['program_overview'] ?? [];
-        $overviewStats = is_array($overview) ? ($overview['stats'] ?? []) : [];
-        $heroConfig = $course['hero'] ?? [];
-        $primaryCta = is_array($heroConfig['primary_cta'] ?? null) ? $heroConfig['primary_cta'] : [];
-        $secondaryCta = is_array($heroConfig['secondary_cta'] ?? null) ? $heroConfig['secondary_cta'] : [];
-
-        $features = $heroConfig['features']
-            ?? $course['feature_points']
-            ?? $course['features']
-            ?? [];
-
-        if (empty($features)) {
-            $features = array_values(array_filter([
-                'Choose any 3 projects from your selected level',
-                ! empty($course['level']) ? "{$course['level']} internship certificate & mentor-guided learning" : 'Internship certificate & mentor-guided learning',
-                ! empty($course['modules'][0]) ? "Real-world assignments in {$course['modules'][0]}" : 'Real-world assignments designed for career growth',
-            ]));
-        }
-
-        $features = collect($features)
-            ->map(function ($feature) {
-                if (is_array($feature)) {
-                    return $feature['title'] ?? $feature['label'] ?? $feature['text'] ?? null;
-                }
-
-                return is_string($feature) ? $feature : null;
-            })
-            ->filter()
-            ->take(4)
-            ->values()
-            ->all();
-
-        $logos = $heroConfig['logos']
-            ?? $course['company_logos']
-            ?? [];
-
-        $stats = [
-            'learners' => $heroConfig['learner_count'] ?? $course['learner_count'] ?? null,
-            'mentors' => $heroConfig['mentor_count'] ?? $course['mentor_count'] ?? null,
-            'projects' => $heroConfig['projects_count'] ?? $course['projects_count'] ?? $this->countCourseProjects($course),
-        ];
-
-        return [
-            'title' => $heroConfig['title'] ?? $course['title'] ?? null,
-            'subtitle' => $heroConfig['subtitle'] ?? $course['subtitle'] ?? $course['description'] ?? null,
-            'trusted_badge' => $heroConfig['trusted_badge'] ?? $course['hero_badge'] ?? $course['menu_group_label'] ?? $course['category'] ?? null,
-            'level' => $heroConfig['level'] ?? $course['level'] ?? null,
-            'duration' => $heroConfig['duration'] ?? $course['duration'] ?? null,
-            'features' => $features,
-            'primary_cta' => [
-                'label' => $primaryCta['label'] ?? 'Reserve Your Seat',
-                'href' => $primaryCta['href'] ?? '#enroll-now',
-            ],
-            'secondary_cta' => [
-                'label' => $secondaryCta['label'] ?? 'View Curriculum',
-                'href' => $secondaryCta['href'] ?? (! empty($course['curriculum']) ? '#curriculum' : null),
-            ],
-            'trust_label' => $heroConfig['trust_label'] ?? (! empty($logos) ? 'Trusted by learners from' : null),
-            'logos' => $logos,
-            'stats' => array_filter($stats),
-            'overview_stats' => is_array($overviewStats) ? $overviewStats : [],
-        ];
-    }
-
-    protected function countCourseProjects(array $course): ?int
-    {
-        $count = 0;
-
-        foreach (($course['phases'] ?? []) as $phase) {
-            foreach (($phase['modules'] ?? []) as $module) {
-                $count += count($module['tasks'] ?? []);
-            }
-        }
-
-        if ($count > 0) {
-            return $count;
-        }
-
-        foreach (($course['curriculum'] ?? []) as $section) {
-            $count += count($section['tasks'] ?? []);
-        }
-
-        return $count > 0 ? $count : null;
     }
 
     protected function frontendAdminData(string $activePage, string $role = 'student'): array

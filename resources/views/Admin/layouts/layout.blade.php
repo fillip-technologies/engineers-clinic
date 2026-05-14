@@ -88,6 +88,13 @@ $navigationGroups = [
 ['label' => 'Attendance', 'route' => 'admin.attendances.index', 'active' => 'admin.attendances.*', 'icon' => 'fi-rr-calendar-check'],
 ['label' => 'Notifications', 'route' => 'admin.notifications.index', 'active' => 'admin.notifications.*', 'icon' => 'fi-rr-bell'],
 ],
+
+'Form Data' => [
+['label' => 'Counselling Form', 'route' => 'admin.counselling.index', 'active' => 'admin.counselling.*', 'icon' => 'fi-rr-task'],
+['label' => 'College Partnership', 'route' => 'admin.quizzes.index', 'active' => 'admin.quizzes.*', 'icon' => 'fi-rr-form'],
+['label' => 'Quiz Results', 'route' => 'admin.quiz-results.index', 'active' => 'admin.quiz-results.*', 'icon' => 'fi-rr-chart'],
+['label' => 'Certificates', 'route' => 'admin.certificates.index', 'active' => 'admin.certificates.*', 'icon' => 'fi-rr-medal'],
+],
 ];
 @endphp
 
