@@ -299,424 +299,242 @@ class HomeController extends Controller
         ]);
     }
 
-//     public function studentCourseWorkspace($id)
-//     {
-//         $user = Auth::user();
+    public function studentCourseWorkspace($id)
+    {
+        $user = Auth::user();
 
-//         if (!$user) {
-//             return redirect()->route('login');
-//         }
+        if (!$user) {
+            return redirect()->route('login');
+        }
 
-//         $student = Student::where('user_id', $user->id)->first();
-//         $enrollment = null;
+        $student = Student::where('user_id', $user->id)->first();
+        $enrollment = null;
 
-//         if ($student) {
-//             $enrollment = Enrollment::with('course')
-//                 ->where('student_id', $student->id)
-//                 ->where('id', $id)
-//                 ->first();
-
-//             if (!$enrollment) {
-//                 $enrollment = Enrollment::with('course')
-//                     ->where('student_id', $student->id)
-//                     ->get()
-//                     ->firstWhere('course_id', $id);
-//             }
-//         }
-
-//         $course = $enrollment?->course;
-//         $project = request('project', 'portfolio-platform');
-//         $progress = (int) ($enrollment?->progress ?? 42);
-//         $title = match ($project) {
-//             'task-manager' => 'Team Task Manager',
-//             'analytics-dashboard' => 'Learning Analytics Dashboard',
-//             default => 'Developer Portfolio Platform',
-//         };
-
-//         $workspace = [
-//             'title' => $title,
-//             'track' => $course?->title ?? 'Full Stack Engineering Bootcamp',
-//             'headline' => $title,
-//             'summary' => 'Follow the steps one by one. Read the explanation, try the code, check the output, and mark the step complete when you are done.',
-//             'progress' => 20,
-//             'next_milestone' => 'Continue from Authentication',
-//             'student_name' => $user->name ?? 'Student',
-//             'student_email' => $user->email ?? 'student@example.com',
-//         ];
-
-//         $steps = [
-//             [
-//                 'number' => 1,
-//                 'slug' => 'setup-project',
-//                 'nav_label' => 'Setup Project',
-//                 'title' => 'Setup Project',
-//                 'description' => 'Create a clean Laravel project structure and prepare your first commit.',
-//                 'status' => 'Completed',
-//                 'state' => 'completed',
-//                 'active' => false,
-//                 'build' => 'A clean starter project with Git initialized, routes ready, and a short README.',
-//                 'why' => 'A clear foundation prevents confusion later when the project grows.',
-//                 'lesson' => 'Before building features, make sure your folders, routes, and README explain what the project is about.',
-//                 'file' => 'terminal',
-//                 'code' => "mkdir portfolio-platform\ncd portfolio-platform\ngit init\nphp artisan serve",
-//                 'expected_output' => 'The local Laravel app opens in your browser and your terminal shows the development server URL.',
-//                 'preview_title' => 'Your browser should show the Laravel welcome screen or your starter homepage.',
-//                 'preview_points' => ['Project opens locally', 'README explains the goal', 'Git repository is ready'],
-//                 'task' => 'Create a README.md and write the project goal, features, and setup command.',
-//                 'mistakes' => ['Starting feature work before Git is initialized', 'Keeping the README empty', 'Putting all files in one messy folder'],
-//                 'tips' => ['Commit early with a simple message like setup project foundation.', 'Keep your first version small and working.'],
-//                 'hint' => 'If php artisan serve fails, check that dependencies are installed with composer install.',
-//                 'mentor_tip' => 'A clean setup is not wasted time. It makes debugging much easier later.',
-//             ],
-//             [
-//                 'number' => 2,
-//                 'slug' => 'authentication',
-//                 'nav_label' => 'Authentication',
-//                 'title' => 'Authentication',
-//                 'description' => 'Build a simple login flow with validation and clear error messages.',
-//                 'status' => 'In Progress',
-//                 'state' => 'active',
-//                 'active' => true,
-//                 'build' => 'A login page where students can enter email and password safely.',
-//                 'why' => 'Authentication protects private dashboards, student data, and project submissions.',
-//                 'lesson' => 'A beginner-friendly login page should be simple: email, password, validation errors, and one clear submit button.',
-//                 'file' => 'routes/web.php',
-//                 'code' => "Route::get('/login', [AuthController::class, 'showLogin'])->name('login');\nRoute::post('/login', [AuthController::class, 'login'])->name('login.submit');",
-//                 'expected_output' => 'The login page opens. Empty fields show helpful validation messages instead of confusing errors.',
-//                 'preview_title' => 'Your login page should look like a centered form with email, password, and a blue login button.',
-//                 'preview_points' => ['Email input is visible', 'Password input is visible', 'Validation message appears below the field'],
-//                 'task' => 'Create the login form and show validation errors for empty email and password fields.',
-//                 'mistakes' => ['Hiding validation errors', 'Using unclear button text', 'Redirecting users without feedback'],
-//                 'tips' => ['Use labels above inputs.', 'Keep the form narrow so it is easy to scan.', 'Test with empty fields before testing correct login.'],
-//                 'hint' => 'Start with the Blade form first, then connect the controller after the layout is clear.',
-//                 'mentor_tip' => 'Authentication feels hard because it has several small pieces. Build one piece at a time.',
-//             ],
-//             [
-//                 'number' => 3,
-//                 'slug' => 'dashboard-ui',
-//                 'nav_label' => 'Dashboard UI',
-//                 'title' => 'Dashboard UI',
-//                 'description' => 'Create the first student dashboard screen with one clear next action.',
-//                 'status' => 'Locked',
-//                 'state' => 'locked',
-//                 'active' => false,
-//                 'build' => 'A simple dashboard that welcomes the student and shows what to do next.',
-//                 'why' => 'The dashboard is the student home base. It should reduce confusion, not add more choices.',
-//                 'lesson' => 'Keep the first dashboard version focused: welcome text, progress, and one continue button.',
-//                 'file' => 'dashboard.blade.php',
-//                 'code' => "<section class=\"space-y-4\">\n    <h1>Welcome back</h1>\n    <p>Continue your latest project task.</p>\n    <a href=\"#steps\">Continue learning</a>\n</section>",
-//                 'expected_output' => 'A calm dashboard screen with a welcome message and one obvious next step.',
-//                 'preview_title' => 'Your dashboard should show a welcome message, current project, and continue button.',
-//                 'preview_points' => ['No clutter', 'One primary button', 'Readable spacing on mobile'],
-//                 'task' => 'Build a dashboard header with project name, progress bar, and continue button.',
-//                 'mistakes' => ['Adding too many stats too early', 'Making every button look primary', 'Using tiny text'],
-//                 'tips' => ['Use one main action per section.', 'Check mobile spacing before adding more content.'],
-//                 'hint' => 'Sketch the dashboard on paper first: title, progress, button.',
-//                 'mentor_tip' => 'Simple screens are not incomplete. Simple screens are easier for users to trust.',
-//             ],
-//             [
-//                 'number' => 4,
-//                 'slug' => 'crud',
-//                 'nav_label' => 'CRUD',
-//                 'title' => 'CRUD Features',
-//                 'description' => 'Add create, read, update, and delete actions for project records.',
-//                 'status' => 'Locked',
-//                 'state' => 'locked',
-//                 'active' => false,
-//                 'build' => 'A small feature where users can add, edit, view, and delete a project item.',
-//                 'why' => 'Most real web apps are built around CRUD. Learning it gives you practical backend confidence.',
-//                 'lesson' => 'Start with Create and Read before adding Update and Delete. This keeps the workflow easier.',
-//                 'file' => 'ProjectController.php',
-//                 'code' => <<<'PHP'
-// public function store(Request $request)
-// {
-//     $data = $request->validate([
-//         'title' => ['required', 'max:100'],
-//     ]);
-
-//     Project::create($data);
-
-//     return redirect()->back();
-// }
-// PHP,
-//                 'expected_output' => 'Submitting the form creates a new project item and shows it in the list.',
-//                 'preview_title' => 'Your CRUD screen should show a form on top and a list of saved items below.',
-//                 'preview_points' => ['Create form works', 'Items appear after submit', 'Validation errors are readable'],
-//                 'task' => 'Create the add-project form and show saved items in a simple list.',
-//                 'mistakes' => ['Skipping validation', 'Deleting records without confirmation', 'Mixing too much logic in Blade'],
-//                 'tips' => ['Validate first.', 'Build create/read before update/delete.', 'Use clear empty states.'],
-//                 'hint' => 'If data does not save, check fillable fields on the model.',
-//                 'mentor_tip' => 'CRUD becomes easier when you treat each action as its own small lesson.',
-//             ],
-//             [
-//                 'number' => 5,
-//                 'slug' => 'deployment',
-//                 'nav_label' => 'Deployment',
-//                 'title' => 'Deployment',
-//                 'description' => 'Prepare your project for sharing with a mentor or reviewer.',
-//                 'status' => 'Locked',
-//                 'state' => 'locked',
-//                 'active' => false,
-//                 'build' => 'A final project link, screenshots, and notes about what you learned.',
-//                 'why' => 'Deployment turns your local work into something other people can review and use.',
-//                 'lesson' => 'Before sharing, check environment variables, screenshots, README, and basic mobile layout.',
-//                 'file' => '.env.example',
-//                 'code' => "APP_NAME=\"Portfolio Platform\"\nAPP_ENV=production\nAPP_DEBUG=false\nAPP_URL=https://your-project-url.com",
-//                 'expected_output' => 'Your deployed project opens from a public URL without debug errors.',
-//                 'preview_title' => 'Your final project should open from a public link and show the main screen correctly.',
-//                 'preview_points' => ['Public link works', 'README has setup steps', 'Screenshots are attached'],
-//                 'task' => 'Prepare your GitHub link, screenshot, and short learning summary.',
-//                 'mistakes' => ['Leaving APP_DEBUG=true', 'Forgetting screenshots', 'Submitting without testing the link'],
-//                 'tips' => ['Open your link in an incognito window.', 'Add screenshots to your README.', 'Write what you learned in plain words.'],
-//                 'hint' => 'If the deployed page is blank, check logs and environment variables first.',
-//                 'mentor_tip' => 'A clear submission makes your effort easy to review.',
-//             ],
-//         ];
-
-//         $sidebarItems = array_map(function (array $step) {
-//             return [
-//                 'label' => $step['nav_label'],
-//                 'target' => 'step-' . $step['slug'],
-//                 'state' => $step['state'],
-//                 'number' => $step['number'],
-//             ];
-//         }, $steps);
-
-//         $sidebarItems[] = [
-//             'label' => 'Submission',
-//             'target' => 'submission',
-//             'state' => 'locked',
-//             'number' => count($steps) + 1,
-//         ];
-
-//         $resources = [
-//             [
-//                 'category' => 'Documentation',
-//                 'items' => [
-//                     ['label' => 'Laravel Docs', 'description' => 'Routes, controllers, validation, and Blade basics.', 'icon' => 'fi fi-rr-document', 'href' => 'https://laravel.com/docs'],
-//                     ['label' => 'Laravel Validation', 'description' => 'Learn how request validation works.', 'icon' => 'fi fi-rr-shield-check', 'href' => 'https://laravel.com/docs/validation'],
-//                 ],
-//             ],
-//             [
-//                 'category' => 'Videos',
-//                 'items' => [
-//                     ['label' => 'YouTube Laravel Basics', 'description' => 'Watch a beginner route/controller walkthrough.', 'icon' => 'fi fi-rr-play-alt', 'href' => 'https://www.youtube.com/results?search_query=laravel+beginner+project+tutorial'],
-//                     ['label' => 'Authentication Tutorial', 'description' => 'See how login forms are usually built.', 'icon' => 'fi fi-rr-user-lock', 'href' => 'https://www.youtube.com/results?search_query=laravel+authentication+tutorial'],
-//                 ],
-//             ],
-//             [
-//                 'category' => 'Examples',
-//                 'items' => [
-//                     ['label' => 'GitHub Example', 'description' => 'Review a simple Laravel project structure.', 'icon' => 'fi fi-rr-code-branch', 'href' => 'https://github.com/search?q=laravel+portfolio+project&type=repositories'],
-//                     ['label' => 'UI Inspiration', 'description' => 'Look at simple login and dashboard layouts.', 'icon' => 'fi fi-rr-layout-fluid', 'href' => 'https://dribbble.com/search/dashboard-login'],
-//                 ],
-//             ],
-//         ];
-
-//         $mentorTip = [
-//             'title' => 'Think in tiny shippable checkpoints',
-//             'body' => 'Before adding another feature, open your current screen on mobile and desktop. A polished simple flow beats an unfinished complicated one every time.',
-//         ];
-
-//         $todayGoal = [
-//             'title' => 'Complete Step 2',
-//             'body' => 'Build the login form and check that validation errors are easy to understand.',
-//             'time' => '45-60 min',
-//         ];
-
-//         return view('dashboard.student-dashboard.course.workspace', compact(
-//             'workspace',
-//             'sidebarItems',
-//             'steps',
-//             'mentorTip',
-//             'todayGoal',
-//             'resources'
-//         ));
-//     }
-
-public function studentCourseWorkspace($id)
-{
-    $user = Auth::user();
-
-    if (!$user) {
-        return redirect()->route('login');
-    }
-
-    $student = Student::where('user_id', $user->id)->first();
-
-    $enrollment = null;
-
-    if ($student) {
-
-        $enrollment = Enrollment::with('course')
-            ->where('student_id', $student->id)
-            ->where('id', $id)
-            ->first();
-
-        if (!$enrollment) {
-
+        if ($student) {
             $enrollment = Enrollment::with('course')
                 ->where('student_id', $student->id)
-                ->get()
-                ->firstWhere('course_id', $id);
-        }
-    }
+                ->where('id', $id)
+                ->first();
 
-    if (!$enrollment || !$enrollment->course) {
-        abort(404, 'Course not found');
-    }
-
-    $course = $enrollment->course;
-
-    $progress = (int) ($enrollment->progress ?? 0);
-
-    $workspace = [
-        'title' => $course->title,
-        'track' => $course->title,
-        'headline' => $course->title,
-        'summary' => $course->description,
-        'progress' => $progress,
-        'next_milestone' => 'Continue Learning',
-        'student_name' => $user->name ?? 'Student',
-        'student_email' => $user->email ?? 'student@example.com',
-    ];
-
-    /*
-    |--------------------------------------------------------------------------
-    | Curriculum Mapping
-    |--------------------------------------------------------------------------
-    */
-
-    $curriculumMap = [];
-
-    if (is_array($course->curriculum)) {
-
-        foreach ($course->curriculum as $group) {
-
-            foreach (($group['tasks'] ?? []) as $task) {
-
-                $curriculumMap[$task['title']] = $task;
+            if (!$enrollment) {
+                $enrollment = Enrollment::with('course')
+                    ->where('student_id', $student->id)
+                    ->get()
+                    ->firstWhere('course_id', $id);
             }
         }
-    }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Generate Dynamic Steps
-    |--------------------------------------------------------------------------
-    */
+        $course = $enrollment?->course;
+        $project = request('project', 'portfolio-platform');
+        $progress = (int) ($enrollment?->progress ?? 42);
+        $title = match ($project) {
+            'task-manager' => 'Team Task Manager',
+            'analytics-dashboard' => 'Learning Analytics Dashboard',
+            default => 'Developer Portfolio Platform',
+        };
 
-    $steps = [];
+        $workspace = [
+            'title' => $title,
+            'track' => $course?->title ?? 'Full Stack Engineering Bootcamp',
+            'headline' => $title,
+            'summary' => 'Follow the steps one by one. Read the explanation, try the code, check the output, and mark the step complete when you are done.',
+            'progress' => 20,
+            'next_milestone' => 'Continue from Authentication',
+            'student_name' => $user->name ?? 'Student',
+            'student_email' => $user->email ?? 'student@example.com',
+        ];
 
-    $stepNumber = 1;
+        $steps = [
+            [
+                'number' => 1,
+                'slug' => 'setup-project',
+                'nav_label' => 'Setup Project',
+                'title' => 'Setup Project',
+                'description' => 'Create a clean Laravel project structure and prepare your first commit.',
+                'status' => 'Completed',
+                'state' => 'completed',
+                'active' => false,
+                'build' => 'A clean starter project with Git initialized, routes ready, and a short README.',
+                'why' => 'A clear foundation prevents confusion later when the project grows.',
+                'lesson' => 'Before building features, make sure your folders, routes, and README explain what the project is about.',
+                'file' => 'terminal',
+                'code' => "mkdir portfolio-platform\ncd portfolio-platform\ngit init\nphp artisan serve",
+                'expected_output' => 'The local Laravel app opens in your browser and your terminal shows the development server URL.',
+                'preview_title' => 'Your browser should show the Laravel welcome screen or your starter homepage.',
+                'preview_points' => ['Project opens locally', 'README explains the goal', 'Git repository is ready'],
+                'task' => 'Create a README.md and write the project goal, features, and setup command.',
+                'mistakes' => ['Starting feature work before Git is initialized', 'Keeping the README empty', 'Putting all files in one messy folder'],
+                'tips' => ['Commit early with a simple message like setup project foundation.', 'Keep your first version small and working.'],
+                'hint' => 'If php artisan serve fails, check that dependencies are installed with composer install.',
+                'mentor_tip' => 'A clean setup is not wasted time. It makes debugging much easier later.',
+            ],
+            [
+                'number' => 2,
+                'slug' => 'authentication',
+                'nav_label' => 'Authentication',
+                'title' => 'Authentication',
+                'description' => 'Build a simple login flow with validation and clear error messages.',
+                'status' => 'In Progress',
+                'state' => 'active',
+                'active' => true,
+                'build' => 'A login page where students can enter email and password safely.',
+                'why' => 'Authentication protects private dashboards, student data, and project submissions.',
+                'lesson' => 'A beginner-friendly login page should be simple: email, password, validation errors, and one clear submit button.',
+                'file' => 'routes/web.php',
+                'code' => "Route::get('/login', [AuthController::class, 'showLogin'])->name('login');\nRoute::post('/login', [AuthController::class, 'login'])->name('login.submit');",
+                'expected_output' => 'The login page opens. Empty fields show helpful validation messages instead of confusing errors.',
+                'preview_title' => 'Your login page should look like a centered form with email, password, and a blue login button.',
+                'preview_points' => ['Email input is visible', 'Password input is visible', 'Validation message appears below the field'],
+                'task' => 'Create the login form and show validation errors for empty email and password fields.',
+                'mistakes' => ['Hiding validation errors', 'Using unclear button text', 'Redirecting users without feedback'],
+                'tips' => ['Use labels above inputs.', 'Keep the form narrow so it is easy to scan.', 'Test with empty fields before testing correct login.'],
+                'hint' => 'Start with the Blade form first, then connect the controller after the layout is clear.',
+                'mentor_tip' => 'Authentication feels hard because it has several small pieces. Build one piece at a time.',
+            ],
+            [
+                'number' => 3,
+                'slug' => 'dashboard-ui',
+                'nav_label' => 'Dashboard UI',
+                'title' => 'Dashboard UI',
+                'description' => 'Create the first student dashboard screen with one clear next action.',
+                'status' => 'Locked',
+                'state' => 'locked',
+                'active' => false,
+                'build' => 'A simple dashboard that welcomes the student and shows what to do next.',
+                'why' => 'The dashboard is the student home base. It should reduce confusion, not add more choices.',
+                'lesson' => 'Keep the first dashboard version focused: welcome text, progress, and one continue button.',
+                'file' => 'dashboard.blade.php',
+                'code' => "<section class=\"space-y-4\">\n    <h1>Welcome back</h1>\n    <p>Continue your latest project task.</p>\n    <a href=\"#steps\">Continue learning</a>\n</section>",
+                'expected_output' => 'A calm dashboard screen with a welcome message and one obvious next step.',
+                'preview_title' => 'Your dashboard should show a welcome message, current project, and continue button.',
+                'preview_points' => ['No clutter', 'One primary button', 'Readable spacing on mobile'],
+                'task' => 'Build a dashboard header with project name, progress bar, and continue button.',
+                'mistakes' => ['Adding too many stats too early', 'Making every button look primary', 'Using tiny text'],
+                'tips' => ['Use one main action per section.', 'Check mobile spacing before adding more content.'],
+                'hint' => 'Sketch the dashboard on paper first: title, progress, button.',
+                'mentor_tip' => 'Simple screens are not incomplete. Simple screens are easier for users to trust.',
+            ],
+            [
+                'number' => 4,
+                'slug' => 'crud',
+                'nav_label' => 'CRUD',
+                'title' => 'CRUD Features',
+                'description' => 'Add create, read, update, and delete actions for project records.',
+                'status' => 'Locked',
+                'state' => 'locked',
+                'active' => false,
+                'build' => 'A small feature where users can add, edit, view, and delete a project item.',
+                'why' => 'Most real web apps are built around CRUD. Learning it gives you practical backend confidence.',
+                'lesson' => 'Start with Create and Read before adding Update and Delete. This keeps the workflow easier.',
+                'file' => 'ProjectController.php',
+                'code' => <<<'PHP'
+public function store(Request $request)
+{
+    $data = $request->validate([
+        'title' => ['required', 'max:100'],
+    ]);
 
-    if (is_array($course->phases)) {
+    Project::create($data);
 
-        foreach ($course->phases as $phaseIndex => $phase) {
-
-            foreach (($phase['modules'] ?? []) as $moduleIndex => $module) {
-
-                foreach (($module['tasks'] ?? []) as $taskIndex => $task) {
-
-                    $curriculumTask = $curriculumMap[$task] ?? [];
-
-                    $steps[] = [
-
-                        'number' => $stepNumber,
-
-                        'slug' => \Illuminate\Support\Str::slug($task),
-
-                        'nav_label' => $task,
-
-                        'title' => $task,
-
-                        'description' => $curriculumTask['assignment']
-                            ?? 'Complete the task and submit your implementation.',
-
-                        'status' => $stepNumber == 1
-                            ? 'In Progress'
-                            : 'Locked',
-
-                        'state' => $stepNumber == 1
-                            ? 'active'
-                            : 'locked',
-
-                        'active' => $stepNumber == 1,
-
-                        'build' => $task,
-
-                        'why' => 'This task improves practical implementation skills.',
-
-                        'lesson' => $module['title'] ?? '',
-
-                        'file' => 'resources/views/project.blade.php',
-
-                        'code' => '// Complete this task implementation',
-
-                        'expected_output' => $curriculumTask['submission']
-                            ?? 'Submit your completed implementation.',
-
-                        'preview_title' => $task,
-
-                        'preview_points' => [
-                            'Task completed',
-                            'Submission uploaded',
-                            'Review ready',
-                        ],
-
-                        'task' => $task,
-
-                        'mistakes' => [
-                            'Skipping validation',
-                            'Incomplete submission',
-                            'Not testing before submit',
-                        ],
-
-                        'tips' => [
-                            'Break the task into smaller parts',
-                            'Test before submitting',
-                            'Read requirements carefully',
-                        ],
-
-                        'hint' => 'Read the task carefully before starting.',
-
-                        'mentor_tip' => $curriculumTask['ai_review']
-                            ?? 'Focus on understanding before optimization.',
-
-                        'phase' => $phase['title'] ?? '',
-
-                        'module' => $module['title'] ?? '',
-                    ];
-
-                    $stepNumber++;
-                }
-            }
-        }
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Active Step
-    |--------------------------------------------------------------------------
-    */
-
-    $activeStep = collect($steps)->firstWhere('active', true);
-
-    if (!$activeStep && count($steps)) {
-        $activeStep = $steps[0];
-    }
-
-    return view(
-        'dashboard.student-dashboard.course.workspace',
-        compact(
-            'workspace',
-            'steps',
-            'activeStep',
-            'course',
-            'enrollment'
-        )
-    );
+    return redirect()->back();
 }
+PHP,
+                'expected_output' => 'Submitting the form creates a new project item and shows it in the list.',
+                'preview_title' => 'Your CRUD screen should show a form on top and a list of saved items below.',
+                'preview_points' => ['Create form works', 'Items appear after submit', 'Validation errors are readable'],
+                'task' => 'Create the add-project form and show saved items in a simple list.',
+                'mistakes' => ['Skipping validation', 'Deleting records without confirmation', 'Mixing too much logic in Blade'],
+                'tips' => ['Validate first.', 'Build create/read before update/delete.', 'Use clear empty states.'],
+                'hint' => 'If data does not save, check fillable fields on the model.',
+                'mentor_tip' => 'CRUD becomes easier when you treat each action as its own small lesson.',
+            ],
+            [
+                'number' => 5,
+                'slug' => 'deployment',
+                'nav_label' => 'Deployment',
+                'title' => 'Deployment',
+                'description' => 'Prepare your project for sharing with a mentor or reviewer.',
+                'status' => 'Locked',
+                'state' => 'locked',
+                'active' => false,
+                'build' => 'A final project link, screenshots, and notes about what you learned.',
+                'why' => 'Deployment turns your local work into something other people can review and use.',
+                'lesson' => 'Before sharing, check environment variables, screenshots, README, and basic mobile layout.',
+                'file' => '.env.example',
+                'code' => "APP_NAME=\"Portfolio Platform\"\nAPP_ENV=production\nAPP_DEBUG=false\nAPP_URL=https://your-project-url.com",
+                'expected_output' => 'Your deployed project opens from a public URL without debug errors.',
+                'preview_title' => 'Your final project should open from a public link and show the main screen correctly.',
+                'preview_points' => ['Public link works', 'README has setup steps', 'Screenshots are attached'],
+                'task' => 'Prepare your GitHub link, screenshot, and short learning summary.',
+                'mistakes' => ['Leaving APP_DEBUG=true', 'Forgetting screenshots', 'Submitting without testing the link'],
+                'tips' => ['Open your link in an incognito window.', 'Add screenshots to your README.', 'Write what you learned in plain words.'],
+                'hint' => 'If the deployed page is blank, check logs and environment variables first.',
+                'mentor_tip' => 'A clear submission makes your effort easy to review.',
+            ],
+        ];
+
+        $sidebarItems = array_map(function (array $step) {
+            return [
+                'label' => $step['nav_label'],
+                'target' => 'step-' . $step['slug'],
+                'state' => $step['state'],
+                'number' => $step['number'],
+            ];
+        }, $steps);
+
+        $sidebarItems[] = [
+            'label' => 'Submission',
+            'target' => 'submission',
+            'state' => 'locked',
+            'number' => count($steps) + 1,
+        ];
+
+        $resources = [
+            [
+                'category' => 'Documentation',
+                'items' => [
+                    ['label' => 'Laravel Docs', 'description' => 'Routes, controllers, validation, and Blade basics.', 'icon' => 'fi fi-rr-document', 'href' => 'https://laravel.com/docs'],
+                    ['label' => 'Laravel Validation', 'description' => 'Learn how request validation works.', 'icon' => 'fi fi-rr-shield-check', 'href' => 'https://laravel.com/docs/validation'],
+                ],
+            ],
+            [
+                'category' => 'Videos',
+                'items' => [
+                    ['label' => 'YouTube Laravel Basics', 'description' => 'Watch a beginner route/controller walkthrough.', 'icon' => 'fi fi-rr-play-alt', 'href' => 'https://www.youtube.com/results?search_query=laravel+beginner+project+tutorial'],
+                    ['label' => 'Authentication Tutorial', 'description' => 'See how login forms are usually built.', 'icon' => 'fi fi-rr-user-lock', 'href' => 'https://www.youtube.com/results?search_query=laravel+authentication+tutorial'],
+                ],
+            ],
+            [
+                'category' => 'Examples',
+                'items' => [
+                    ['label' => 'GitHub Example', 'description' => 'Review a simple Laravel project structure.', 'icon' => 'fi fi-rr-code-branch', 'href' => 'https://github.com/search?q=laravel+portfolio+project&type=repositories'],
+                    ['label' => 'UI Inspiration', 'description' => 'Look at simple login and dashboard layouts.', 'icon' => 'fi fi-rr-layout-fluid', 'href' => 'https://dribbble.com/search/dashboard-login'],
+                ],
+            ],
+        ];
+
+        $mentorTip = [
+            'title' => 'Think in tiny shippable checkpoints',
+            'body' => 'Before adding another feature, open your current screen on mobile and desktop. A polished simple flow beats an unfinished complicated one every time.',
+        ];
+
+        $todayGoal = [
+            'title' => 'Complete Step 2',
+            'body' => 'Build the login form and check that validation errors are easy to understand.',
+            'time' => '45-60 min',
+        ];
+
+        return view('dashboard.student-dashboard.course.workspace', compact(
+            'workspace',
+            'sidebarItems',
+            'steps',
+            'mentorTip',
+            'todayGoal',
+            'resources'
+        ));
+    }
+
+
 
     public function studentDefaultCourseWorkspace()
     {
