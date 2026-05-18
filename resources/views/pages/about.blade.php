@@ -78,23 +78,23 @@
 
         <div class="grid gap-5 md:grid-cols-2">
             <article class="overflow-hidden rounded-lg border border-borderLight bg-bgWhite shadow-sm">
-                <img src="/images/founder-portrait.png" alt="Founder of Engineers Clinic" class="aspect-[4/5] w-full object-cover object-top">
+                <img src="/images/founder-portrait.webp" alt="Founder of Engineers Clinic" class="aspect-[4/5] w-full object-cover object-top">
                 <div>
                     <div class="p-5">
-                    <p class="text-sm font-semibold uppercase tracking-[0.16em] text-brand">Founder</p>
-                    <h3 class="mt-1 text-xl font-semibold text-textPrimary">Founder Name</h3>
-                    <p class="mt-2 text-sm leading-6 text-textSecondary">Guiding the vision, learning model, and long-term growth of Engineers Clinic.</p>
+                        <p class="text-sm font-semibold uppercase tracking-[0.16em] text-brand">Founder</p>
+                        <h3 class="mt-1 text-xl font-semibold text-textPrimary">Shreekant Pratap Singh</h3>
+                        <p class="mt-2 text-sm leading-6 text-textSecondary">Guiding the vision, learning model, and long-term growth of Engineers Clinic.</p>
                     </div>
                 </div>
             </article>
 
             <article class="overflow-hidden rounded-lg border border-borderLight bg-bgWhite shadow-sm">
-                <img src="/images/cofounder-portrait.png" alt="Co-Founder of Engineers Clinic" class="aspect-[4/5] w-full object-cover object-top">
+                <img src="/images/cofounder-portrait.jpeg" alt="Co-Founder of Engineers Clinic" class="aspect-[4/5] w-full object-cover object-top">
                 <div>
                     <div class="p-5">
-                    <p class="text-sm font-semibold uppercase tracking-[0.16em] text-brand">Co-Founder</p>
-                    <h3 class="mt-1 text-xl font-semibold text-textPrimary">Co-Founder Name</h3>
-                    <p class="mt-2 text-sm leading-6 text-textSecondary">Shaping execution, partnerships, and the learner experience across programs.</p>
+                        <p class="text-sm font-semibold uppercase tracking-[0.16em] text-brand">Co-Founder</p>
+                        <h3 class="mt-1 text-xl font-semibold text-textPrimary">Vikash Kumar</h3>
+                        <p class="mt-2 text-sm leading-6 text-textSecondary">Shaping execution, partnerships, and the learner experience across programs.</p>
                     </div>
                 </div>
             </article>
