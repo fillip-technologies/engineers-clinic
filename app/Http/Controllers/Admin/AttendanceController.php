@@ -13,14 +13,14 @@ class AttendanceController extends Controller
     public function index()
     {
         $attendances = Attendance::with('student.user', 'course')->get();
-        return view('admin.attendances.index', compact('attendances'));
+        return view('Admin.attendances.index', compact('attendances'));
     }
 
     public function create()
     {
         $students = Student::with('user')->get();
         $courses = Course::all();
-        return view('admin.attendances.create', compact('students', 'courses'));
+        return view('Admin.attendances.create', compact('students', 'courses'));
     }
 
     public function store(Request $request)
@@ -34,20 +34,20 @@ class AttendanceController extends Controller
 
         Attendance::create($request->all());
 
-        return redirect()->route('attendances.index')->with('success', 'Attendance created successfully.');
+        return redirect()->route('admin.attendances.index')->with('success', 'Attendance created successfully.');
     }
 
     public function show(Attendance $attendance)
     {
         $attendance->load('student.user', 'course');
-        return view('admin.attendances.show', compact('attendance'));
+        return view('Admin.attendances.show', compact('attendance'));
     }
 
     public function edit(Attendance $attendance)
     {
         $students = Student::with('user')->get();
         $courses = Course::all();
-        return view('admin.attendances.edit', compact('attendance', 'students', 'courses'));
+        return view('Admin.attendances.edit', compact('attendance', 'students', 'courses'));
     }
 
     public function update(Request $request, Attendance $attendance)
@@ -61,13 +61,13 @@ class AttendanceController extends Controller
 
         $attendance->update($request->all());
 
-        return redirect()->route('attendances.index')->with('success', 'Attendance updated successfully.');
+        return redirect()->route('admin.attendances.index')->with('success', 'Attendance updated successfully.');
     }
 
     public function destroy(Attendance $attendance)
     {
         $attendance->delete();
 
-        return redirect()->route('attendances.index')->with('success', 'Attendance deleted successfully.');
+        return redirect()->route('admin.attendances.index')->with('success', 'Attendance deleted successfully.');
     }
 }

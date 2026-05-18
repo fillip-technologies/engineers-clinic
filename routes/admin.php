@@ -33,3 +33,8 @@ Route::resource('payments', PaymentController::class);
 Route::resource('role-permissions', RolePermissionController::class);
 Route::resource('attendances', AttendanceController::class);
 Route::resource('notifications', NotificationController::class);
+Route::get('/admin/counselling-leads', [CounsellingController::class, 'index'])
+    ->name('admin.counselling.index');
+Route::get('/admin/college-partner', [CounsellingController::class, 'index_college'])
+    ->name('admin.counselling.index');    
+
