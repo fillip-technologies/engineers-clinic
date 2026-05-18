@@ -52,59 +52,62 @@
 </section>
 
 <style>
-.counter {
-    transition: transform 0.3s ease;
-}
-.counter:hover {
-    transform: scale(1.05);
-}
+    .counter {
+        transition: transform 0.3s ease;
+    }
+
+    .counter:hover {
+        transform: scale(1.05);
+    }
 </style>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", () => {
 
-    const counters = document.querySelectorAll('.counter');
+        const counters = document.querySelectorAll('.counter');
 
-    const animateCounter = (counter) => {
-        const target = parseFloat(counter.getAttribute('data-target'));
-        let count = 0;
+        const animateCounter = (counter) => {
+            const target = parseFloat(counter.getAttribute('data-target'));
+            let count = 0;
 
-        const duration = 1500;
-        const startTime = performance.now();
+            const duration = 1500;
+            const startTime = performance.now();
 
-        const update = (currentTime) => {
-            const progress = Math.min((currentTime - startTime) / duration, 1);
-            count = target * progress;
+            const update = (currentTime) => {
+                const progress = Math.min((currentTime - startTime) / duration, 1);
+                count = target * progress;
 
-            counter.innerText = formatNumber(count);
+                counter.innerText = formatNumber(count);
 
-            if (progress < 1) {
-                requestAnimationFrame(update);
-            } else {
-                counter.innerText = formatNumber(target);
-            }
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    counter.innerText = formatNumber(target);
+                }
+            };
+
+            requestAnimationFrame(update);
         };
 
-        requestAnimationFrame(update);
-    };
+        const formatNumber = (num) => {
+            if (num >= 100000) return (num / 1000).toFixed(0) + "K+";
+            if (num >= 1000) return (num / 1000).toFixed(1) + "K+";
+            if (num % 1 !== 0) return num.toFixed(1);
+            return Math.floor(num);
+        };
 
-    const formatNumber = (num) => {
-        if (num >= 100000) return (num / 1000).toFixed(0) + "K+";
-        if (num >= 1000)   return (num / 1000).toFixed(1) + "K+";
-        if (num % 1 !== 0) return num.toFixed(1);
-        return Math.floor(num);
-    };
-
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateCounter(entry.target);
-                observer.unobserve(entry.target);
-            }
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.6
         });
-    }, { threshold: 0.6 });
 
-    counters.forEach(counter => observer.observe(counter));
+        counters.forEach(counter => observer.observe(counter));
 
-});
+    });
 </script>

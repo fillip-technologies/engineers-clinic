@@ -126,14 +126,13 @@ $levelConfig = [
                 Internship Tracks
             </div>
             <h2 class="text-3xl font-extrabold leading-tight text-textPrimary sm:text-4xl md:text-5xl lg:text-6xl">
-                Explore Our
+                Explore internship tracks
                 <span class="bg-gradient-to-r from-brand via-brandLight to-secondary bg-clip-text text-transparent">
-                    Internship Tracks
+                    built around real skills.
                 </span>
             </h2>
             <p class="mx-auto mt-4 max-w-xl text-base leading-relaxed text-textSecondary opacity-70 md:text-lg">
-                Choose from industry-focused internship tracks designed to build real-world skills across every experience level.
-            </p>
+Choose from practical learning tracks designed for different engineering domains and career paths.            </p>
         </div>
 
         {{-- 3-Column Grid --}}
