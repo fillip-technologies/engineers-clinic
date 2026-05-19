@@ -7,7 +7,7 @@
 
     <title>{{ $title ?? config('app.name', 'Engineers Clinic') }}</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,800,900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
@@ -17,29 +17,32 @@
             theme: {
                 extend: {
                     colors: {
-                        bgDark: '#F8FAFC',
-                        bgDarkSoft: '#FFFFFF',
-                        bgIndigo: '#EEF2FF',
-                        brand: '#4F46E5',
-                        brandLight: '#6366F1',
-                        brandDark: '#3730A3',
-                        brandSoft: 'rgba(79,70,229,0.08)',
-                        primary: '#4F46E5',
-                        primaryLight: '#6366F1',
-                        primarySoft: 'rgba(79,70,229,0.08)',
-                        secondary: '#111827',
-                        secondaryLight: '#374151',
-                        secondaryDark: '#111827',
-                        secondarySoft: 'rgba(17,24,39,0.05)',
-                        accent: '#FFFFFF',
-                        accentLight: '#F8FAFC',
-                        accentSoft: 'rgba(148,163,184,0.10)',
-                        textPrimary: '#111827',
-                        textSecondary: '#4B5563',
-                        textMuted: '#6B7280',
-                        glass: '#FFFFFF',
-                        glassBorder: '#E5E7EB',
-                        borderLight: '#E5E7EB'
+                        bgDark: '#F5F0FF',
+                        bgDarkSoft: '#ffffff',
+                        bgIndigo: '#EEF5FF',
+                        brand: '#7C5CFC',
+                        brandLight: '#A78BFA',
+                        brandDark: '#160840',
+                        brandSoft: 'rgba(124,92,252,0.15)',
+                        primary: '#7C5CFC',
+                        primaryLight: '#A78BFA',
+                        primarySoft: 'rgba(124,92,252,0.15)',
+                        secondary: '#F5C842',
+                        secondaryLight: '#A78BFA',
+                        secondaryDark: '#160840',
+                        secondarySoft: 'rgba(245,200,66,0.18)',
+                        accent: '#ffffff',
+                        accentLight: '#FAF7FF',
+                        accentSoft: 'rgba(184,222,255,0.35)',
+                        textPrimary: '#160840',
+                        textSecondary: '#3D2090',
+                        textMuted: '#8B7FBF',
+                        glass: '#ffffff',
+                        glassBorder: '#E2D9FF',
+                        borderLight: '#E2D9FF',
+                        success: '#22C55E',
+                        warning: '#F59E0B',
+                        danger: '#EF4444'
                     }
                 }
             }
@@ -48,7 +51,7 @@
 
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
         }
 
         .sidebar-transition {

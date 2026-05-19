@@ -1,178 +1,95 @@
-<section id="heroSection"
-    class="relative overflow-hidden flex items-center pt-10 pb-12 sm:min-h-[85vh] sm:pt-16"
-    style="background: linear-gradient(135deg, var(--color-auroraLeft) 0%, var(--color-auroraMid) 50%, var(--color-auroraRight) 100%);">
+<section id="heroSection" class="section-surface relative isolate overflow-hidden section-padding-sm">
+    <div id="particles-js" class="absolute inset-0 z-0"></div>
 
-    <!-- PARTICLES BACKGROUND -->
-    <div id="particles-js"></div>
-
-    <!-- SOFT AURORA GLOW -->
-    <div class="absolute inset-0 pointer-events-none z-[1]">
-        <div class="absolute top-0 left-0 h-64 w-64 rounded-full blur-[100px] sm:h-[400px] sm:w-[400px] sm:blur-[140px]"
-            style="background: theme('colors.glowPurple');"></div>
-        <div class="absolute bottom-0 right-0 h-64 w-64 rounded-full blur-[100px] sm:h-[400px] sm:w-[400px] sm:blur-[140px]"
-            style="background: theme('colors.glowPink');"></div>
+    <div class="pointer-events-none absolute inset-0 z-0">
+        <div class="absolute -left-24 top-0 h-72 w-72 rounded-full bg-glowPurple blur-3xl"></div>
+        <div class="absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-glowPink blur-3xl"></div>
     </div>
 
-    <div class="relative z-[2] max-w-7xl mx-auto px-5 sm:px-6 w-full">
-
-        <div class="grid gap-10 lg:grid-cols-2 lg:gap-16 items-center">
-
-            <!-- LEFT -->
+    <div class="container-main relative z-10">
+        <div class="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
             <div>
+                <span class="badge-pill">
+                    <span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>
+                    Industry-Led Internship Platform
+                </span>
 
-                <div class="mb-6">
-                    <span class="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full border"
-                        style="background: bg-cardBg; border-color: theme('colors.cardBorder'); color: theme('colors.textPrimary');">
-                        ● The market has already changed
-                    </span>
-                </div>
-
-                <h1 class="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 text-textPrimary">
-                    <span class="bg-gradient-to-r from-brand via-brandLight to-secondary bg-clip-text text-transparent">
-                        Forge Your Future
-                    </span>
-                    <br>
-                    with Expert-Led Internship
+                <h1 class="text-hero mt-6 max-w-4xl">
+                    Learn by building
+                    <span class="gradient-text block">real-world</span>
+                    workflows
                 </h1>
 
-                <p class="text-base leading-7 sm:text-lg mb-8 max-w-xl text-textSecondary">
-                    Choose your level, work on real-world projects, complete tasks, build practical skills, and earn industry-focused certifications.
+                <p class="text-body-lg mt-6 max-w-2xl">
+                    Choose your level, work on real projects, complete tasks, build practical skills, and earn industry-focused certifications.
                 </p>
 
-                <div class="flex flex-col gap-4 mb-10 sm:flex-row sm:gap-5">
-                    <button
-                        class="w-full px-8 py-4 rounded-xl font-semibold shadow-md hover:scale-[1.02] transition bg-secondary text-textPrimary sm:w-auto">
-                        Start Internship
-                    </button>
-
-                    <button
-                        class="w-full px-8 py-4 rounded-xl font-semibold transition border bg-cardBg border-cardBorder text-textPrimary sm:w-auto">
-                        Explore Tracks
-                    </button>
+                <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <a href="#courses" class="btn-primary">Start Internship</a>
+                    <a href="#courses" class="btn-secondary">Explore Tracks</a>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-4 sm:gap-6">
+                <div class="mt-9 flex flex-wrap items-center gap-5">
                     <div class="flex -space-x-3">
-                        <img src="https://i.pravatar.cc/40?img=1" class="w-9 h-9 rounded-full border-2 border-cardBorder">
-                        <img src="https://i.pravatar.cc/40?img=2" class="w-9 h-9 rounded-full border-2 border-cardBorder">
-                        <img src="https://i.pravatar.cc/40?img=3" class="w-9 h-9 rounded-full border-2 border-cardBorder">
-                        <img src="https://i.pravatar.cc/40?img=4" class="w-9 h-9 rounded-full border-2 border-cardBorder">
+                        @foreach ([1, 2, 3, 4] as $image)
+                        <img src="https://i.pravatar.cc/48?img={{ $image }}" alt="" class="h-10 w-10 rounded-full border-2 border-cardBorder object-cover">
+                        @endforeach
                     </div>
 
-                    <p class="text-sm text-textSecondary">
-                        <span class="font-semibold text-textPrimary">100K+</span> learners
+                    <p class="text-caption">
+                        <span class="font-bold text-textPrimary">100K+</span> learners
                     </p>
 
-                    <p class="text-sm text-textSecondary">
-                        ⭐ <span class="font-semibold text-textPrimary">4.9</span> avg. rating
+                    <p class="text-caption">
+                        <span class="font-bold text-textPrimary">4.9</span> average rating
                     </p>
                 </div>
-
             </div>
 
-            <!-- RIGHT (FORM) -->
-            <div class="relative flex justify-center">
+            <div class="relative">
+                <div class="glass-card mx-auto max-w-md p-6 sm:p-8">
+                    <span class="badge-pill">
+                        <span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>
+                        Free Career Guidance
+                    </span>
 
-                <!-- BLOBS -->
-                <div class="absolute -top-10 -left-10 h-48 w-48 rounded-full blur-3xl opacity-60 bg-glowPurple sm:h-[300px] sm:w-[300px]"></div>
-                <div class="absolute -bottom-10 -right-10 h-48 w-48 rounded-full blur-3xl opacity-60 bg-glowPink sm:h-[300px] sm:w-[300px]"></div>
+                    <h2 class="text-card-title mt-5">Book a Free Call</h2>
+                    <p class="text-body mt-2">Talk to our expert and plan your career path.</p>
 
-                <div class="relative w-full max-w-md">
+                    <form action="{{ route('counselling.store') }}" method="POST" class="mt-6 space-y-4">
+                        @csrf
 
-                    <div class="backdrop-blur rounded-2xl shadow-[0_20px_60px_rgba(22,8,64,0.10)] border p-6 sm:p-8
-                                bg-cardBg border-cardBorder">
+                        <input type="text" name="name" placeholder="Full Name" required class="input-primary">
+                        <input type="tel" name="phone" placeholder="Phone Number" required class="input-primary">
+                        <input type="email" name="email" placeholder="Email Address (optional)" class="input-primary">
 
-                        <!-- Badge -->
-                        <div class="mb-4">
-                            <span class="inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full border
-                                         bg-cardBg border-borderLight text-textSecondary">
-                                ● Free Career Guidance
-                            </span>
-                        </div>
+                        <button type="submit" class="btn-primary w-full">
+                            Get Free Counselling
+                        </button>
+                    </form>
 
-                        <!-- Heading -->
-                        <h3 class="text-xl font-semibold mb-1 text-textPrimary">
-                            Book a Free Call
-                        </h3>
-
-                        <p class="text-sm mb-6 text-textMuted">
-                            Talk to our expert & plan your career path
-                        </p>
-
-                        <!-- FORM -->
-                        <form action="{{ route('counselling.store') }}" method="POST" class="space-y-4">
-                            @csrf
-
-                            <input type="text"
-                                name="name"
-                                placeholder="Full Name"
-                                required
-                                class="w-full rounded-lg px-4 py-3 outline-none transition
-                                    border border-borderLight bg-bgWhite text-textPrimary
-                                    focus:ring-2 focus:ring-brand focus:border-brand
-                                    placeholder:text-textMuted">
-
-                            <input type="tel"
-                                name="phone"
-                                placeholder="Phone Number"
-                                required
-                                class="w-full rounded-lg px-4 py-3 outline-none transition
-                                    border border-borderLight bg-bgWhite text-textPrimary
-                                    focus:ring-2 focus:ring-brand focus:border-brand
-                                    placeholder:text-textMuted">
-
-                            <input type="email"
-                                name="email"
-                                placeholder="Email Address (optional)"
-                                class="w-full rounded-lg px-4 py-3 outline-none transition
-                                    border border-borderLight bg-bgWhite text-textPrimary
-                                    focus:ring-2 focus:ring-brand focus:border-brand
-                                    placeholder:text-textMuted">
-
-                            <button
-                                type="submit"
-                                class="w-full py-3 rounded-lg font-semibold shadow-md transition
-                                    hover:scale-[1.02] bg-secondary text-textPrimary">
-                                Get Free Counselling
-                            </button>
-                        </form>
-
-                        <p class="text-xs mt-4 text-center text-textMuted">
-                            🔒 No spam. Only helpful guidance.
-                        </p>
-
-                    </div>
-
+                    <p class="text-caption mt-4 text-center">
+                        No spam. Only helpful guidance.
+                    </p>
                 </div>
-
             </div>
-
         </div>
     </div>
 </section>
 
-<!-- PARTICLES CSS -->
 <style>
     #particles-js {
-        position: absolute;
-        inset: 0;
-        width: 100%;
         height: 100%;
-        z-index: 0;
-        overflow: hidden;
+        width: 100%;
         opacity: 1;
-        filter: drop-shadow(0 0 10px theme('colors.glowPurple'));
+        overflow: hidden;
+        filter: drop-shadow(0 0 10px var(--color-glow-purple));
     }
 
     #particles-js canvas {
         display: block;
-        width: 100% !important;
         height: 100% !important;
-    }
-
-    #heroSection>*:not(#particles-js) {
-        position: relative;
-        z-index: 2;
+        width: 100% !important;
     }
 
     @media (max-width: 640px) {
@@ -183,7 +100,6 @@
     }
 </style>
 
-<!-- PARTICLES JS -->
 <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
 <script>
@@ -192,13 +108,7 @@
             return;
         }
 
-        const colors = {
-            brand: tailwind.config.theme.extend.colors.brand,
-            brandLight: tailwind.config.theme.extend.colors.brandLight,
-            auroraLeft: tailwind.config.theme.extend.colors.auroraLeft,
-            auroraMid: tailwind.config.theme.extend.colors.auroraMid,
-            auroraRight: tailwind.config.theme.extend.colors.auroraRight,
-        };
+        const colors = tailwind.config.theme.extend.colors;
 
         const getParticleSettings = () => {
             const isMobile = window.matchMedia("(max-width: 640px)").matches;
@@ -219,16 +129,12 @@
                 return;
             }
 
-            window.pJSDom.forEach((instance) => {
-                instance.pJS.fn.vendors.destroypJS();
-            });
-
+            window.pJSDom.forEach((instance) => instance.pJS.fn.vendors.destroypJS());
             window.pJSDom = [];
         };
 
         const initHeroParticles = () => {
             const settings = getParticleSettings();
-
             destroyParticles();
 
             particlesJS("particles-js", {
@@ -236,25 +142,20 @@
                     number: {
                         value: settings.count
                     },
-
                     color: {
                         value: [colors.brand, colors.brandLight, colors.auroraMid, colors.auroraRight]
                     },
-
                     shape: {
                         type: "circle"
                     },
-
                     opacity: {
                         value: 0.55,
                         random: true
                     },
-
                     size: {
                         value: settings.size,
                         random: true
                     },
-
                     line_linked: {
                         enable: true,
                         distance: settings.distance,
@@ -262,13 +163,11 @@
                         opacity: settings.lineOpacity,
                         width: 1.2
                     },
-
                     move: {
                         enable: true,
                         speed: settings.speed
                     }
                 },
-
                 interactivity: {
                     detect_on: "canvas",
                     events: {
@@ -294,7 +193,6 @@
                         }
                     }
                 },
-
                 retina_detect: true
             });
         };

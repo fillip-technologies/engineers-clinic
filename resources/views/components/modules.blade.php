@@ -125,7 +125,7 @@ $levelConfig = [
                 <span class="h-1.5 w-1.5 rounded-full bg-brand opacity-70"></span>
                 Internship Tracks
             </div>
-            <h2 class="text-3xl font-extrabold leading-tight text-textPrimary sm:text-4xl md:text-5xl lg:text-6xl">
+            <h2 class="text-3xl font-bold leading-tight text-textPrimary sm:text-4xl md:text-5xl lg:text-6xl">
                 Explore internship tracks
                 <span class="bg-gradient-to-r from-brand via-brandLight to-secondary bg-clip-text text-transparent">
                     built around real skills.
