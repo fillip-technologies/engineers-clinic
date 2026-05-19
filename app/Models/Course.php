@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Course extends Model
 {
@@ -42,6 +43,30 @@ class Course extends Model
         'phases' => 'json',
         'outcome' => 'json',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Course $course) {
+            if (blank($course->slug) && filled($course->title)) {
+                $course->slug = static::uniqueSlug($course->title);
+            }
+        });
+    }
+
+    private static function uniqueSlug(string $title): string
+    {
+        $slug = Str::slug($title);
+        $slug = $slug !== '' ? $slug : 'course';
+        $candidate = $slug;
+        $count = 2;
+
+        while (static::where('slug', $candidate)->exists()) {
+            $candidate = "{$slug}-{$count}";
+            $count++;
+        }
+
+        return $candidate;
+    }
 
     public function enrollments(): HasMany
     {

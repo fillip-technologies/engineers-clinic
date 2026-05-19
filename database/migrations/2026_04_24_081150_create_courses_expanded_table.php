@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (! Schema::hasTable('courses')) {
+            return;
+        }
+
         // Add new columns to courses table if they don't exist
         Schema::table('courses', function (Blueprint $table) {
             if (!Schema::hasColumn('courses', 'slug')) {
@@ -60,8 +64,12 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (! Schema::hasTable('courses')) {
+            return;
+        }
+
         Schema::table('courses', function (Blueprint $table) {
-            $table->dropColumn([
+            foreach ([
                 'slug',
                 'level',
                 'category',
@@ -75,7 +83,11 @@ return new class extends Migration
                 'curriculum',
                 'modules',
                 'phases',
-            ]);
+            ] as $column) {
+                if (Schema::hasColumn('courses', $column)) {
+                    $table->dropColumn($column);
+                }
+            }
         });
     }
 };

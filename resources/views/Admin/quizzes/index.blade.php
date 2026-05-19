@@ -27,6 +27,7 @@
                     <tr>
                         <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Quiz</th>
                         <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Course</th>
+                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Questions</th>
                         <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Marks</th>
                         <th class="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">Actions</th>
                     </tr>
@@ -39,6 +40,9 @@
                                 <p class="mt-1 text-xs text-gray-500">#{{ $quiz->id }}</p>
                             </td>
                             <td class="px-5 py-4 text-sm text-gray-700">{{ $quiz->course->title ?? 'N/A' }}</td>
+                            <td class="px-5 py-4">
+                                <span class="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700">{{ $quiz->questions_count }} questions</span>
+                            </td>
                             <td class="px-5 py-4">
                                 <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700">{{ $quiz->total_marks }} marks</span>
                             </td>
@@ -62,7 +66,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-5 py-12 text-center">
+                            <td colspan="5" class="px-5 py-12 text-center">
                                 <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-gray-100 text-gray-500">
                                     <i class="fi fi-rr-form text-xl"></i>
                                 </div>
