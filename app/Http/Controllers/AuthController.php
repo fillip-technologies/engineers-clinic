@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\OnboardingMailer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -95,6 +96,8 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
             'role_id' => $validated['role_id'],
         ]);
+
+        app(OnboardingMailer::class)->send($user, $validated['password']);
 
         Auth::login($user);
 
