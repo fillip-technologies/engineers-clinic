@@ -5,6 +5,8 @@
 
 <x-stat />
 
+<x-master-internship />
+
 <x-modules :courses="$courses" />
 <x-how-work />
 <x-hero-2 />
