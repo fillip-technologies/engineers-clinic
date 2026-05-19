@@ -11,8 +11,10 @@ use App\Models\Notification;
 use App\Models\QuizResult;
 use App\Models\Quiz;
 use App\Models\Payment;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\CourseWorkspace;
+use App\Services\OnboardingMailer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -167,6 +169,8 @@ class HomeController extends Controller
                 'college_id' => $college->id,
                 'course_name' => null,
             ]);
+
+            app(OnboardingMailer::class)->send($user, $validated['student_password'], 'student');
         } else {
             $validated = $request->validate([
                 'college_name' => 'required|string|max:255',
@@ -189,6 +193,8 @@ class HomeController extends Controller
                 'address' => null,
                 'contact_number' => null,
             ]);
+
+            app(OnboardingMailer::class)->send($user, $validated['college_password'], 'college');
         }
 
         Auth::login($user);
