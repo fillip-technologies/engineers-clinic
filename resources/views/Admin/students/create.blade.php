@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Create New Student</h1>
-        <form action="{{ route('students.store') }}" method="POST">
+        <form action="{{ route('admin.students.store') }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="user_id" class="form-label">User</label>
@@ -34,7 +34,7 @@
                 <input type="text" name="course_name" id="course_name" class="form-control">
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
-            <a href="{{ route('students.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.students.index') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

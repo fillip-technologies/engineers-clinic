@@ -12,6 +12,7 @@ use App\Models\QuizResult;
 use App\Models\Quiz;
 use App\Models\Payment;
 use App\Models\User;
+use App\Models\CourseWorkspace;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -289,8 +290,8 @@ class HomeController extends Controller
             'description' => $course?->description ?? '',
             'status' => $enrollment->status ?? 'Active',
             'enrollment_date' => $enrollment->enrollment_date?->format('M d, Y'),
-            'phases' => $this->getCoursePhases($course),
-            'module_content' => $this->getCourseModules($course),
+            'phases' => CourseDataHelper::getCoursePhases($course),
+            'module_content' => CourseDataHelper::getCourseModules($course),
         ];
 
         return view('dashboard.student-dashboard.course.show', [
@@ -324,155 +325,117 @@ class HomeController extends Controller
             }
         }
 
-        $course = $enrollment?->course;
-        $project = request('project', 'portfolio-platform');
-        $progress = (int) ($enrollment?->progress ?? 42);
-        $title = match ($project) {
-            'task-manager' => 'Team Task Manager',
-            'analytics-dashboard' => 'Learning Analytics Dashboard',
-            default => 'Developer Portfolio Platform',
-        };
+        abort_if($student && ! $enrollment && $id !== 'demo', 404, 'Course enrollment not found.');
 
-        $workspace = [
-            'title' => $title,
-            'track' => $course?->title ?? 'Full Stack Engineering Bootcamp',
-            'headline' => $title,
-            'summary' => 'Follow the steps one by one. Read the explanation, try the code, check the output, and mark the step complete when you are done.',
-            'progress' => 20,
-            'next_milestone' => 'Continue from Authentication',
+        $course = $enrollment?->course;
+        $courseWorkspace = CourseWorkspace::with([
+            'course',
+            'steps' => fn ($query) => $query->orderBy('sort_order')->orderBy('step_no'),
+            'steps.taskProgress' => fn ($query) => $query->where('student_id', $user->id),
+            'resources' => fn ($query) => $query->orderBy('sort_order'),
+            'goals',
+        ])
+            ->when($course, fn ($query) => $query->where('course_id', $course->id))
+            ->where('status', true)
+            ->orderByDesc('updated_at')
+            ->first();
+
+        abort_unless($courseWorkspace, 404, 'No active workspace found for this course.');
+
+        $course = $course ?: $courseWorkspace->course;
+        $steps = $this->studentWorkspaceSteps($courseWorkspace);
+
+        abort_if(empty($steps), 404, 'This workspace does not have any steps yet.');
+
+        $workspace = $this->studentWorkspaceData($courseWorkspace, $course, $user, $steps, $enrollment);
+        $sidebarItems = $this->studentWorkspaceSidebarItems($steps);
+        $resources = $this->studentWorkspaceResources($courseWorkspace);
+        $mentorTip = $this->studentWorkspaceMentorTip($steps);
+        $todayGoal = $this->studentWorkspaceTodayGoal($courseWorkspace, $steps);
+
+        return view('dashboard.student-dashboard.course.workspace', compact(
+            'workspace',
+            'sidebarItems',
+            'steps',
+            'mentorTip',
+            'todayGoal',
+            'resources'
+        ));
+    }
+
+    protected function studentWorkspaceData(CourseWorkspace $courseWorkspace, $course, $user, array $steps, $enrollment = null): array
+    {
+        $stepsCollection = collect($steps);
+        $completedSteps = $stepsCollection->where('state', 'completed')->count();
+        $progress = $stepsCollection->isNotEmpty()
+            ? (int) round(($completedSteps / $stepsCollection->count()) * 100)
+            : (int) ($enrollment?->progress ?? $courseWorkspace->progress);
+        $currentStep = $stepsCollection->firstWhere('active', true)
+            ?? $stepsCollection->first(fn (array $step) => $step['state'] !== 'completed')
+            ?? $stepsCollection->first();
+
+        return [
+            'title' => $courseWorkspace->title,
+            'track' => $courseWorkspace->track ?: ($course?->title ?? 'Student Project Workspace'),
+            'headline' => $courseWorkspace->headline ?: $courseWorkspace->title,
+            'summary' => $courseWorkspace->summary ?: 'Follow the steps one by one and complete your project checkpoints.',
+            'progress' => $progress,
+            'next_milestone' => $courseWorkspace->next_milestone ?: ('Continue ' . ($currentStep['title'] ?? 'your current workspace step')),
+            'current_step_slug' => $currentStep['slug'] ?? null,
+            'current_step_number' => $currentStep['number'] ?? null,
+            'current_step_label' => isset($currentStep['number']) ? 'Continue Step ' . $currentStep['number'] : 'Continue',
             'student_name' => $user->name ?? 'Student',
             'student_email' => $user->email ?? 'student@example.com',
         ];
+    }
 
-        $steps = [
-            [
-                'number' => 1,
-                'slug' => 'setup-project',
-                'nav_label' => 'Setup Project',
-                'title' => 'Setup Project',
-                'description' => 'Create a clean Laravel project structure and prepare your first commit.',
-                'status' => 'Completed',
-                'state' => 'completed',
-                'active' => false,
-                'build' => 'A clean starter project with Git initialized, routes ready, and a short README.',
-                'why' => 'A clear foundation prevents confusion later when the project grows.',
-                'lesson' => 'Before building features, make sure your folders, routes, and README explain what the project is about.',
-                'file' => 'terminal',
-                'code' => "mkdir portfolio-platform\ncd portfolio-platform\ngit init\nphp artisan serve",
-                'expected_output' => 'The local Laravel app opens in your browser and your terminal shows the development server URL.',
-                'preview_title' => 'Your browser should show the Laravel welcome screen or your starter homepage.',
-                'preview_points' => ['Project opens locally', 'README explains the goal', 'Git repository is ready'],
-                'task' => 'Create a README.md and write the project goal, features, and setup command.',
-                'mistakes' => ['Starting feature work before Git is initialized', 'Keeping the README empty', 'Putting all files in one messy folder'],
-                'tips' => ['Commit early with a simple message like setup project foundation.', 'Keep your first version small and working.'],
-                'hint' => 'If php artisan serve fails, check that dependencies are installed with composer install.',
-                'mentor_tip' => 'A clean setup is not wasted time. It makes debugging much easier later.',
-            ],
-            [
-                'number' => 2,
-                'slug' => 'authentication',
-                'nav_label' => 'Authentication',
-                'title' => 'Authentication',
-                'description' => 'Build a simple login flow with validation and clear error messages.',
-                'status' => 'In Progress',
-                'state' => 'active',
-                'active' => true,
-                'build' => 'A login page where students can enter email and password safely.',
-                'why' => 'Authentication protects private dashboards, student data, and project submissions.',
-                'lesson' => 'A beginner-friendly login page should be simple: email, password, validation errors, and one clear submit button.',
-                'file' => 'routes/web.php',
-                'code' => "Route::get('/login', [AuthController::class, 'showLogin'])->name('login');\nRoute::post('/login', [AuthController::class, 'login'])->name('login.submit');",
-                'expected_output' => 'The login page opens. Empty fields show helpful validation messages instead of confusing errors.',
-                'preview_title' => 'Your login page should look like a centered form with email, password, and a blue login button.',
-                'preview_points' => ['Email input is visible', 'Password input is visible', 'Validation message appears below the field'],
-                'task' => 'Create the login form and show validation errors for empty email and password fields.',
-                'mistakes' => ['Hiding validation errors', 'Using unclear button text', 'Redirecting users without feedback'],
-                'tips' => ['Use labels above inputs.', 'Keep the form narrow so it is easy to scan.', 'Test with empty fields before testing correct login.'],
-                'hint' => 'Start with the Blade form first, then connect the controller after the layout is clear.',
-                'mentor_tip' => 'Authentication feels hard because it has several small pieces. Build one piece at a time.',
-            ],
-            [
-                'number' => 3,
-                'slug' => 'dashboard-ui',
-                'nav_label' => 'Dashboard UI',
-                'title' => 'Dashboard UI',
-                'description' => 'Create the first student dashboard screen with one clear next action.',
-                'status' => 'Locked',
-                'state' => 'locked',
-                'active' => false,
-                'build' => 'A simple dashboard that welcomes the student and shows what to do next.',
-                'why' => 'The dashboard is the student home base. It should reduce confusion, not add more choices.',
-                'lesson' => 'Keep the first dashboard version focused: welcome text, progress, and one continue button.',
-                'file' => 'dashboard.blade.php',
-                'code' => "<section class=\"space-y-4\">\n    <h1>Welcome back</h1>\n    <p>Continue your latest project task.</p>\n    <a href=\"#steps\">Continue learning</a>\n</section>",
-                'expected_output' => 'A calm dashboard screen with a welcome message and one obvious next step.',
-                'preview_title' => 'Your dashboard should show a welcome message, current project, and continue button.',
-                'preview_points' => ['No clutter', 'One primary button', 'Readable spacing on mobile'],
-                'task' => 'Build a dashboard header with project name, progress bar, and continue button.',
-                'mistakes' => ['Adding too many stats too early', 'Making every button look primary', 'Using tiny text'],
-                'tips' => ['Use one main action per section.', 'Check mobile spacing before adding more content.'],
-                'hint' => 'Sketch the dashboard on paper first: title, progress, button.',
-                'mentor_tip' => 'Simple screens are not incomplete. Simple screens are easier for users to trust.',
-            ],
-            [
-                'number' => 4,
-                'slug' => 'crud',
-                'nav_label' => 'CRUD',
-                'title' => 'CRUD Features',
-                'description' => 'Add create, read, update, and delete actions for project records.',
-                'status' => 'Locked',
-                'state' => 'locked',
-                'active' => false,
-                'build' => 'A small feature where users can add, edit, view, and delete a project item.',
-                'why' => 'Most real web apps are built around CRUD. Learning it gives you practical backend confidence.',
-                'lesson' => 'Start with Create and Read before adding Update and Delete. This keeps the workflow easier.',
-                'file' => 'ProjectController.php',
-                'code' => <<<'PHP'
-public function store(Request $request)
-{
-    $data = $request->validate([
-        'title' => ['required', 'max:100'],
-    ]);
+    protected function studentWorkspaceSteps(CourseWorkspace $courseWorkspace): array
+    {
+        $steps = $courseWorkspace->steps->map(function ($step, $index) {
+            $number = $step->step_no ?: $index + 1;
+            $progress = $step->taskProgress->first();
+            $isCompleted = (bool) ($progress?->completed ?? false);
 
-    Project::create($data);
+            return [
+                'number' => $number,
+                'slug' => $step->slug ?: 'step-' . $number,
+                'nav_label' => $step->nav_label ?: $step->title,
+                'title' => $step->title,
+                'description' => $step->description ?: '',
+                'status' => $isCompleted ? 'Completed' : $step->status,
+                'state' => $isCompleted ? 'completed' : $step->state,
+                'active' => $isCompleted ? false : $step->active,
+                'build' => $step->build_goal ?: '',
+                'why' => $step->why_text ?: '',
+                'lesson' => $step->lesson ?: '',
+                'file' => $step->file_name ?: 'workspace',
+                'code' => $step->code_snippet ?: '',
+                'expected_output' => $step->expected_output ?: '',
+                'preview_title' => $step->preview_title ?: '',
+                'preview_points' => $step->preview_points ?: [],
+                'task' => $step->task ?: '',
+                'mistakes' => $step->mistakes ?: [],
+                'tips' => $step->tips ?: [],
+                'hint' => $step->hint ?: '',
+                'mentor_tip' => $step->mentor_tip ?: '',
+            ];
+        })->values()->all();
 
-    return redirect()->back();
-}
-PHP,
-                'expected_output' => 'Submitting the form creates a new project item and shows it in the list.',
-                'preview_title' => 'Your CRUD screen should show a form on top and a list of saved items below.',
-                'preview_points' => ['Create form works', 'Items appear after submit', 'Validation errors are readable'],
-                'task' => 'Create the add-project form and show saved items in a simple list.',
-                'mistakes' => ['Skipping validation', 'Deleting records without confirmation', 'Mixing too much logic in Blade'],
-                'tips' => ['Validate first.', 'Build create/read before update/delete.', 'Use clear empty states.'],
-                'hint' => 'If data does not save, check fillable fields on the model.',
-                'mentor_tip' => 'CRUD becomes easier when you treat each action as its own small lesson.',
-            ],
-            [
-                'number' => 5,
-                'slug' => 'deployment',
-                'nav_label' => 'Deployment',
-                'title' => 'Deployment',
-                'description' => 'Prepare your project for sharing with a mentor or reviewer.',
-                'status' => 'Locked',
-                'state' => 'locked',
-                'active' => false,
-                'build' => 'A final project link, screenshots, and notes about what you learned.',
-                'why' => 'Deployment turns your local work into something other people can review and use.',
-                'lesson' => 'Before sharing, check environment variables, screenshots, README, and basic mobile layout.',
-                'file' => '.env.example',
-                'code' => "APP_NAME=\"Portfolio Platform\"\nAPP_ENV=production\nAPP_DEBUG=false\nAPP_URL=https://your-project-url.com",
-                'expected_output' => 'Your deployed project opens from a public URL without debug errors.',
-                'preview_title' => 'Your final project should open from a public link and show the main screen correctly.',
-                'preview_points' => ['Public link works', 'README has setup steps', 'Screenshots are attached'],
-                'task' => 'Prepare your GitHub link, screenshot, and short learning summary.',
-                'mistakes' => ['Leaving APP_DEBUG=true', 'Forgetting screenshots', 'Submitting without testing the link'],
-                'tips' => ['Open your link in an incognito window.', 'Add screenshots to your README.', 'Write what you learned in plain words.'],
-                'hint' => 'If the deployed page is blank, check logs and environment variables first.',
-                'mentor_tip' => 'A clear submission makes your effort easy to review.',
-            ],
-        ];
+        if (! collect($steps)->contains(fn (array $step) => $step['active'])) {
+            $firstAvailableIndex = collect($steps)->search(fn (array $step) => $step['state'] !== 'completed');
 
+            if ($firstAvailableIndex !== false) {
+                $steps[$firstAvailableIndex]['state'] = 'active';
+                $steps[$firstAvailableIndex]['active'] = true;
+                $steps[$firstAvailableIndex]['status'] = 'In Progress';
+            }
+        }
+
+        return $steps;
+    }
+
+    protected function studentWorkspaceSidebarItems(array $steps): array
+    {
         $sidebarItems = array_map(function (array $step) {
             return [
                 'label' => $step['nav_label'],
@@ -489,49 +452,48 @@ PHP,
             'number' => count($steps) + 1,
         ];
 
-        $resources = [
-            [
-                'category' => 'Documentation',
-                'items' => [
-                    ['label' => 'Laravel Docs', 'description' => 'Routes, controllers, validation, and Blade basics.', 'icon' => 'fi fi-rr-document', 'href' => 'https://laravel.com/docs'],
-                    ['label' => 'Laravel Validation', 'description' => 'Learn how request validation works.', 'icon' => 'fi fi-rr-shield-check', 'href' => 'https://laravel.com/docs/validation'],
-                ],
-            ],
-            [
-                'category' => 'Videos',
-                'items' => [
-                    ['label' => 'YouTube Laravel Basics', 'description' => 'Watch a beginner route/controller walkthrough.', 'icon' => 'fi fi-rr-play-alt', 'href' => 'https://www.youtube.com/results?search_query=laravel+beginner+project+tutorial'],
-                    ['label' => 'Authentication Tutorial', 'description' => 'See how login forms are usually built.', 'icon' => 'fi fi-rr-user-lock', 'href' => 'https://www.youtube.com/results?search_query=laravel+authentication+tutorial'],
-                ],
-            ],
-            [
-                'category' => 'Examples',
-                'items' => [
-                    ['label' => 'GitHub Example', 'description' => 'Review a simple Laravel project structure.', 'icon' => 'fi fi-rr-code-branch', 'href' => 'https://github.com/search?q=laravel+portfolio+project&type=repositories'],
-                    ['label' => 'UI Inspiration', 'description' => 'Look at simple login and dashboard layouts.', 'icon' => 'fi fi-rr-layout-fluid', 'href' => 'https://dribbble.com/search/dashboard-login'],
-                ],
-            ],
-        ];
+        return $sidebarItems;
+    }
 
-        $mentorTip = [
-            'title' => 'Think in tiny shippable checkpoints',
-            'body' => 'Before adding another feature, open your current screen on mobile and desktop. A polished simple flow beats an unfinished complicated one every time.',
-        ];
+    protected function studentWorkspaceResources(CourseWorkspace $courseWorkspace): array
+    {
+        return $courseWorkspace->resources
+            ->groupBy(fn ($resource) => $resource->category ?: 'Resources')
+            ->map(function ($items, $category) {
+                return [
+                    'category' => $category,
+                    'items' => $items->map(fn ($resource) => [
+                        'label' => $resource->label,
+                        'description' => $resource->description ?: '',
+                        'icon' => $resource->icon ?: 'fi fi-rr-link',
+                        'href' => $resource->href ?: '#',
+                    ])->values()->all(),
+                ];
+            })
+            ->values()
+            ->all();
+    }
 
-        $todayGoal = [
-            'title' => 'Complete Step 2',
-            'body' => 'Build the login form and check that validation errors are easy to understand.',
-            'time' => '45-60 min',
-        ];
+    protected function studentWorkspaceMentorTip(array $steps): array
+    {
+        $activeStep = collect($steps)->firstWhere('active', true) ?? $steps[0] ?? [];
 
-        return view('dashboard.student-dashboard.course.workspace', compact(
-            'workspace',
-            'sidebarItems',
-            'steps',
-            'mentorTip',
-            'todayGoal',
-            'resources'
-        ));
+        return [
+            'title' => 'Mentor tip',
+            'body' => $activeStep['mentor_tip'] ?? 'Complete one small checkpoint at a time and keep your project easy to review.',
+        ];
+    }
+
+    protected function studentWorkspaceTodayGoal(CourseWorkspace $courseWorkspace, array $steps): array
+    {
+        $goal = $courseWorkspace->goals->firstWhere('type', 'daily') ?? $courseWorkspace->goals->first();
+        $activeStep = collect($steps)->firstWhere('active', true) ?? $steps[0] ?? [];
+
+        return [
+            'title' => $goal?->title ?? ($activeStep['title'] ?? 'Continue your workspace'),
+            'body' => $goal?->body ?? ($activeStep['task'] ?? 'Complete the next available step.'),
+            'time' => $goal?->duration ?? '45-60 min',
+        ];
     }
 
 
@@ -557,78 +519,6 @@ PHP,
         }
 
         return redirect()->route('student.course.workspace', ['id' => $enrollment->id]);
-    }
-
-    /**
-     * Get course phases/modules structure
-     */
-    protected function getCoursePhases($course): array
-    {
-        if (!$course) {
-            return [];
-        }
-
-        // Get tasks for this course as modules
-        $tasks = $course->tasks()->orderBy('created_at')->get();
-
-        if ($tasks->isEmpty()) {
-            // Return default phases if no tasks
-            return [
-                [
-                    'title' => 'Month 1: Getting Started',
-                    'modules' => [
-                        ['id' => 'module-1', 'title' => 'Introduction', 'state' => 'active'],
-                        ['id' => 'module-2', 'title' => 'Basics', 'state' => 'locked'],
-                    ],
-                ],
-            ];
-        }
-
-        $phases = [];
-        $phaseIndex = 1;
-        $modules = [];
-
-        foreach ($tasks as $index => $task) {
-            $modules[] = [
-                'id' => 'module-' . ($index + 1),
-                'title' => $task->title,
-                'state' => $index === 0 ? 'active' : 'locked',
-            ];
-
-            // Create a new phase every 3 modules
-            if (($index + 1) % 3 === 0 || $index === $tasks->count() - 1) {
-                $phases[] = [
-                    'title' => 'Month ' . $phaseIndex . ': Learning',
-                    'modules' => $modules,
-                ];
-                $modules = [];
-                $phaseIndex++;
-            }
-        }
-
-        return $phases;
-    }
-
-    /**
-     * Get course module content
-     */
-    protected function getCourseModules($course): array
-    {
-        if (!$course) {
-            return [];
-        }
-
-        $tasks = $course->tasks()->orderBy('created_at')->get();
-
-        $modules = [];
-        foreach ($tasks as $index => $task) {
-            $modules['module-' . ($index + 1)] = [
-                'title' => $task->title,
-                'description' => $task->description ?? 'Complete this module to progress.',
-            ];
-        }
-
-        return $modules;
     }
 
     public function studentProfile()

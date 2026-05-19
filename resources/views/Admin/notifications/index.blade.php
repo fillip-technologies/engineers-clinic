@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Notifications</h1>
-        <a href="{{ route('notifications.create') }}" class="btn btn-primary mb-3">Create New Notification</a>
+        <a href="{{ route('admin.notifications.create') }}" class="btn btn-primary mb-3">Create New Notification</a>
         
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -33,9 +33,9 @@
                     <td>{{ substr($notification->message, 0, 50) }}{{ strlen($notification->message) > 50 ? '...' : '' }}</td>
                     <td>{{ $notification->is_read ? 'Yes' : 'No' }}</td>
                     <td>
-                        <a href="{{ route('notifications.show', $notification->id) }}" class="btn btn-sm btn-info">View</a>
-                        <a href="{{ route('notifications.edit', $notification->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <form action="{{ route('notifications.destroy', $notification->id) }}" method="POST" style="display:inline;">
+                        <a href="{{ route('admin.notifications.show', $notification->id) }}" class="btn btn-sm btn-info">View</a>
+                        <a href="{{ route('admin.notifications.edit', $notification->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ route('admin.notifications.destroy', $notification->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>

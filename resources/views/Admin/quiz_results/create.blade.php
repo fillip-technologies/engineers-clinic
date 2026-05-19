@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Create New Quiz Result</h1>
-        <form action="{{ route('quiz-results.store') }}" method="POST">
+        <form action="{{ route('admin.quiz-results.store') }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="student_id" class="form-label">Student</label>
@@ -41,7 +41,7 @@
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
-            <a href="{{ route('quiz-results.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.quiz-results.index') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Payments</h1>
-        <a href="{{ route('payments.create') }}" class="btn btn-primary mb-3">Create New Payment</a>
+        <a href="{{ route('admin.payments.create') }}" class="btn btn-primary mb-3">Create New Payment</a>
         
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -37,9 +37,9 @@
                     <td>{{ $payment->status }}</td>
                     <td>{{ $payment->payment_date }}</td>
                     <td>
-                        <a href="{{ route('payments.show', $payment->id) }}" class="btn btn-sm btn-info">View</a>
-                        <a href="{{ route('payments.edit', $payment->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <form action="{{ route('payments.destroy', $payment->id) }}" method="POST" style="display:inline;">
+                        <a href="{{ route('admin.payments.show', $payment->id) }}" class="btn btn-sm btn-info">View</a>
+                        <a href="{{ route('admin.payments.edit', $payment->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ route('admin.payments.destroy', $payment->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>

@@ -99,6 +99,76 @@ class CourseDataHelper
         return self::attachCourseMeta($course);
     }
 
+    /**
+     * Get course phases/modules structure.
+     */
+    public static function getCoursePhases($course): array
+    {
+        if (! $course) {
+            return [];
+        }
+
+        $tasks = $course->tasks()->orderBy('created_at')->get();
+
+        if ($tasks->isEmpty()) {
+            return [
+                [
+                    'title' => 'Month 1: Getting Started',
+                    'modules' => [
+                        ['id' => 'module-1', 'title' => 'Introduction', 'state' => 'active'],
+                        ['id' => 'module-2', 'title' => 'Basics', 'state' => 'locked'],
+                    ],
+                ],
+            ];
+        }
+
+        $phases = [];
+        $phaseIndex = 1;
+        $modules = [];
+
+        foreach ($tasks as $index => $task) {
+            $modules[] = [
+                'id' => 'module-' . ($index + 1),
+                'title' => $task->title,
+                'state' => $index === 0 ? 'active' : 'locked',
+            ];
+
+            if (($index + 1) % 3 === 0 || $index === $tasks->count() - 1) {
+                $phases[] = [
+                    'title' => 'Month ' . $phaseIndex . ': Learning',
+                    'modules' => $modules,
+                ];
+                $modules = [];
+                $phaseIndex++;
+            }
+        }
+
+        return $phases;
+    }
+
+    /**
+     * Get course module content.
+     */
+    public static function getCourseModules($course): array
+    {
+        if (! $course) {
+            return [];
+        }
+
+        $tasks = $course->tasks()->orderBy('created_at')->get();
+
+        $modules = [];
+
+        foreach ($tasks as $index => $task) {
+            $modules['module-' . ($index + 1)] = [
+                'title' => $task->title,
+                'description' => $task->description ?? 'Complete this module to progress.',
+            ];
+        }
+
+        return $modules;
+    }
+
     protected static function attachCourseMeta(array $course): array
     {
         $slug = $course['slug'] ?? '';

@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Enrollments</h1>
-        <a href="{{ route('enrollments.create') }}" class="btn btn-primary mb-3">Create New Enrollment</a>
+        <a href="{{ route('admin.enrollments.create') }}" class="btn btn-primary mb-3">Create New Enrollment</a>
         
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -35,9 +35,9 @@
                     <td>{{ $enrollment->enrollment_date }}</td>
                     <td>{{ $enrollment->status }}</td>
                     <td>
-                        <a href="{{ route('enrollments.show', $enrollment->id) }}" class="btn btn-sm btn-info">View</a>
-                        <a href="{{ route('enrollments.edit', $enrollment->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <form action="{{ route('enrollments.destroy', $enrollment->id) }}" method="POST" style="display:inline;">
+                        <a href="{{ route('admin.enrollments.show', $enrollment->id) }}" class="btn btn-sm btn-info">View</a>
+                        <a href="{{ route('admin.enrollments.edit', $enrollment->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ route('admin.enrollments.destroy', $enrollment->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>

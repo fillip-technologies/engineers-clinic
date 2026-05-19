@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Edit Student Task</h1>
-        <form action="{{ route('student-tasks.update', $studentTask->id) }}" method="POST">
+        <form action="{{ route('admin.student-tasks.update', $studentTask->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="mb-3">
@@ -36,7 +36,7 @@
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
-            <a href="{{ route('student-tasks.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.student-tasks.index') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

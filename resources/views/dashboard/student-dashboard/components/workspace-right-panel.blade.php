@@ -6,8 +6,8 @@
             <div class="h-2 rounded-full bg-blue-500 transition-all duration-500" :style="`width: ${progress}%`" style="width: {{ $workspace['progress'] }}%"></div>
         </div>
         <p class="mt-4 text-sm leading-6 text-slate-600">{{ $todayGoal['body'] }}</p>
-        <a href="#step-authentication" class="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
-            Continue Step 2
+        <a href="#step-{{ $workspace['current_step_slug'] ?? ($steps[0]['slug'] ?? 'steps') }}" class="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+            {{ $workspace['current_step_label'] ?? 'Continue' }}
         </a>
     </section>
 

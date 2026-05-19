@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Edit Student</h1>
-        <form action="{{ route('students.update', $student->id) }}" method="POST">
+        <form action="{{ route('admin.students.update', $student->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="mb-3">
@@ -33,7 +33,7 @@
                 <input type="text" name="course_name" id="course_name" class="form-control" value="{{ $student->course_name }}">
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
-            <a href="{{ route('students.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.students.index') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

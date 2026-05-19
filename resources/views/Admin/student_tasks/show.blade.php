@@ -18,7 +18,7 @@
                 <p class="card-text"><strong>Created:</strong> {{ $studentTask->created_at }}</p>
             </div>
         </div>
-        <a href="{{ route('student-tasks.index') }}" class="btn btn-secondary mt-3">Back</a>
+        <a href="{{ route('admin.student-tasks.index') }}" class="btn btn-secondary mt-3">Back</a>
     </div>
 </body>
 </html>

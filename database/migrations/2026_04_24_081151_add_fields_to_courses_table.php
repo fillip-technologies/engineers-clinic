@@ -63,8 +63,12 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (! Schema::hasTable('courses')) {
+            return;
+        }
+
         Schema::table('courses', function (Blueprint $table) {
-            $table->dropColumn([
+            foreach ([
                 'slug',
                 'level',
                 'category',
@@ -79,7 +83,11 @@ return new class extends Migration
                 'modules',
                 'phases',
                 'outcome',
-            ]);
+            ] as $column) {
+                if (Schema::hasColumn('courses', $column)) {
+                    $table->dropColumn($column);
+                }
+            }
         });
     }
 };

@@ -16,7 +16,7 @@
                 <p class="card-text">Created: {{ $role->created_at }}</p>
             </div>
         </div>
-        <a href="{{ route('roles.index') }}" class="btn btn-secondary mt-3">Back</a>
+        <a href="{{ route('admin.roles.index') }}" class="btn btn-secondary mt-3">Back</a>
     </div>
 </body>
 </html>

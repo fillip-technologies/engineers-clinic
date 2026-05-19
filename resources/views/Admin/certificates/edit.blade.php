@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Edit Certificate</h1>
-        <form action="{{ route('certificates.update', $certificate->id) }}" method="POST">
+        <form action="{{ route('admin.certificates.update', $certificate->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="mb-3">
@@ -37,7 +37,7 @@
                 <input type="text" name="certificate_url" id="certificate_url" class="form-control" value="{{ $certificate->certificate_url }}">
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
-            <a href="{{ route('certificates.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.certificates.index') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>
