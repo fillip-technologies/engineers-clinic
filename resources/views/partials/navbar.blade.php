@@ -146,7 +146,7 @@
                         Blog
                     </a>
 
-                    <a href="#"
+                    <a href="{{ route('about') }}"
                         class="mt-1 flex items-center rounded-2xl px-4 py-3 text-sm font-medium text-neutral-700 transition hover:bg-[#f7f7f7]">
                         About Us
                     </a>
@@ -299,7 +299,7 @@
                         Blog
                     </a>
 
-                    <a href="#"
+                    <a href="{{ route('about') }}"
                         class="block rounded-xl bg-[#f7f7f7] px-4 py-3 text-sm font-medium text-black">
                         About Us
                     </a>

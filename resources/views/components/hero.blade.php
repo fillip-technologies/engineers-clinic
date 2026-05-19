@@ -23,7 +23,7 @@
                 <div class="mb-6">
                     <span class="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full border"
                         style="background: bg-cardBg; border-color: theme('colors.cardBorder'); color: theme('colors.textPrimary');">
-                        ● New: AI & Machine Learning Track
+                        ● The market has already changed
                     </span>
                 </div>
 
@@ -36,19 +36,18 @@
                 </h1>
 
                 <p class="text-base leading-7 sm:text-lg mb-8 max-w-xl text-textSecondary">
-                    Master in-demand skills with hands-on projects and real-world applications.
-                    Join thousands of learners advancing their careers.
+                    Choose your level, work on real-world projects, complete tasks, build practical skills, and earn industry-focused certifications.
                 </p>
 
                 <div class="flex flex-col gap-4 mb-10 sm:flex-row sm:gap-5">
                     <button
                         class="w-full px-8 py-4 rounded-xl font-semibold shadow-md hover:scale-[1.02] transition bg-secondary text-textPrimary sm:w-auto">
-                        Browse Internship →
+                        Start Internship
                     </button>
 
                     <button
                         class="w-full px-8 py-4 rounded-xl font-semibold transition border bg-cardBg border-cardBorder text-textPrimary sm:w-auto">
-                        View Pricing
+                        Explore Tracks
                     </button>
                 </div>
 
@@ -171,7 +170,7 @@
         height: 100% !important;
     }
 
-    #heroSection > *:not(#particles-js) {
+    #heroSection>*:not(#particles-js) {
         position: relative;
         z-index: 2;
     }
@@ -188,17 +187,17 @@
 <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         if (typeof particlesJS === "undefined") {
             return;
         }
 
         const colors = {
-            brand:        tailwind.config.theme.extend.colors.brand,
-            brandLight:   tailwind.config.theme.extend.colors.brandLight,
-            auroraLeft:   tailwind.config.theme.extend.colors.auroraLeft,
-            auroraMid:    tailwind.config.theme.extend.colors.auroraMid,
-            auroraRight:  tailwind.config.theme.extend.colors.auroraRight,
+            brand: tailwind.config.theme.extend.colors.brand,
+            brandLight: tailwind.config.theme.extend.colors.brandLight,
+            auroraLeft: tailwind.config.theme.extend.colors.auroraLeft,
+            auroraMid: tailwind.config.theme.extend.colors.auroraMid,
+            auroraRight: tailwind.config.theme.extend.colors.auroraRight,
         };
 
         const getParticleSettings = () => {
@@ -234,15 +233,27 @@
 
             particlesJS("particles-js", {
                 particles: {
-                    number: { value: settings.count },
+                    number: {
+                        value: settings.count
+                    },
 
-                    color: { value: [colors.brand, colors.brandLight, colors.auroraMid, colors.auroraRight] },
+                    color: {
+                        value: [colors.brand, colors.brandLight, colors.auroraMid, colors.auroraRight]
+                    },
 
-                    shape: { type: "circle" },
+                    shape: {
+                        type: "circle"
+                    },
 
-                    opacity: { value: 0.55, random: true },
+                    opacity: {
+                        value: 0.55,
+                        random: true
+                    },
 
-                    size: { value: settings.size, random: true },
+                    size: {
+                        value: settings.size,
+                        random: true
+                    },
 
                     line_linked: {
                         enable: true,
@@ -252,19 +263,35 @@
                         width: 1.2
                     },
 
-                    move: { enable: true, speed: settings.speed }
+                    move: {
+                        enable: true,
+                        speed: settings.speed
+                    }
                 },
 
                 interactivity: {
                     detect_on: "canvas",
                     events: {
-                        onhover: { enable: settings.hover, mode: "grab" },
-                        onclick: { enable: true, mode: "push" },
+                        onhover: {
+                            enable: settings.hover,
+                            mode: "grab"
+                        },
+                        onclick: {
+                            enable: true,
+                            mode: "push"
+                        },
                         resize: true
                     },
                     modes: {
-                        grab: { distance: 220, line_linked: { opacity: 1 } },
-                        push: { particles_nb: settings.hover ? 4 : 2 }
+                        grab: {
+                            distance: 220,
+                            line_linked: {
+                                opacity: 1
+                            }
+                        },
+                        push: {
+                            particles_nb: settings.hover ? 4 : 2
+                        }
                     }
                 },
 

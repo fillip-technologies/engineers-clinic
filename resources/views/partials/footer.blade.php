@@ -47,7 +47,7 @@ $moreLinks = [
 ['label' => 'AI Tools', 'href' => '#'],
 ['label' => 'Refer & Earn', 'href' => '#'],
 ['label' => 'Blog', 'href' => '#'],
-['label' => 'About Us', 'href' => '#'],
+['label' => 'About Us', 'href' => route('about')],
 ];
 @endphp
 
