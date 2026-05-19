@@ -18,7 +18,7 @@
                 <p class="card-text"><strong>Created:</strong> {{ $enrollment->created_at }}</p>
             </div>
         </div>
-        <a href="{{ route('enrollments.index') }}" class="btn btn-secondary mt-3">Back</a>
+        <a href="{{ route('admin.enrollments.index') }}" class="btn btn-secondary mt-3">Back</a>
     </div>
 </body>
 </html>

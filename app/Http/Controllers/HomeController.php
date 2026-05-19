@@ -12,6 +12,7 @@ use App\Models\QuizResult;
 use App\Models\Quiz;
 use App\Models\Payment;
 use App\Models\User;
+use App\Models\CourseWorkspace;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -289,8 +290,8 @@ class HomeController extends Controller
             'description' => $course?->description ?? '',
             'status' => $enrollment->status ?? 'Active',
             'enrollment_date' => $enrollment->enrollment_date?->format('M d, Y'),
-            'phases' => $this->getCoursePhases($course),
-            'module_content' => $this->getCourseModules($course),
+            'phases' => CourseDataHelper::getCoursePhases($course),
+            'module_content' => CourseDataHelper::getCourseModules($course),
         ];
 
         return view('dashboard.student-dashboard.course.show', [
@@ -325,6 +326,36 @@ class HomeController extends Controller
         }
 
         $course = $enrollment?->course;
+        $courseWorkspace = CourseWorkspace::with([
+            'steps' => fn ($query) => $query->orderBy('sort_order')->orderBy('step_no'),
+            'resources' => fn ($query) => $query->orderBy('sort_order'),
+            'goals',
+        ])
+            ->when($course, fn ($query) => $query->where('course_id', $course->id))
+            ->where('status', true)
+            ->first();
+
+        if ($courseWorkspace) {
+            $workspace = $this->studentWorkspaceData($courseWorkspace, $course, $user);
+            $steps = $this->studentWorkspaceSteps($courseWorkspace);
+
+            if (! empty($steps)) {
+                $sidebarItems = $this->studentWorkspaceSidebarItems($steps);
+                $resources = $this->studentWorkspaceResources($courseWorkspace);
+                $mentorTip = $this->studentWorkspaceMentorTip($steps);
+                $todayGoal = $this->studentWorkspaceTodayGoal($courseWorkspace, $steps);
+
+                return view('dashboard.student-dashboard.course.workspace', compact(
+                    'workspace',
+                    'sidebarItems',
+                    'steps',
+                    'mentorTip',
+                    'todayGoal',
+                    'resources'
+                ));
+            }
+        }
+
         $project = request('project', 'portfolio-platform');
         $progress = (int) ($enrollment?->progress ?? 42);
         $title = match ($project) {
@@ -534,6 +565,113 @@ PHP,
         ));
     }
 
+    protected function studentWorkspaceData(CourseWorkspace $courseWorkspace, $course, $user): array
+    {
+        return [
+            'title' => $courseWorkspace->title,
+            'track' => $courseWorkspace->track ?: ($course?->title ?? 'Student Project Workspace'),
+            'headline' => $courseWorkspace->headline ?: $courseWorkspace->title,
+            'summary' => $courseWorkspace->summary ?: 'Follow the steps one by one and complete your project checkpoints.',
+            'progress' => $courseWorkspace->progress,
+            'next_milestone' => $courseWorkspace->next_milestone ?: 'Continue your current workspace step',
+            'student_name' => $user->name ?? 'Student',
+            'student_email' => $user->email ?? 'student@example.com',
+        ];
+    }
+
+    protected function studentWorkspaceSteps(CourseWorkspace $courseWorkspace): array
+    {
+        return $courseWorkspace->steps->map(function ($step, $index) {
+            $number = $step->step_no ?: $index + 1;
+
+            return [
+                'number' => $number,
+                'slug' => $step->slug ?: 'step-' . $number,
+                'nav_label' => $step->nav_label ?: $step->title,
+                'title' => $step->title,
+                'description' => $step->description ?: '',
+                'status' => $step->status,
+                'state' => $step->state,
+                'active' => $step->active,
+                'build' => $step->build_goal ?: '',
+                'why' => $step->why_text ?: '',
+                'lesson' => $step->lesson ?: '',
+                'file' => $step->file_name ?: 'workspace',
+                'code' => $step->code_snippet ?: '',
+                'expected_output' => $step->expected_output ?: '',
+                'preview_title' => $step->preview_title ?: '',
+                'preview_points' => $step->preview_points ?: [],
+                'task' => $step->task ?: '',
+                'mistakes' => $step->mistakes ?: [],
+                'tips' => $step->tips ?: [],
+                'hint' => $step->hint ?: '',
+                'mentor_tip' => $step->mentor_tip ?: '',
+            ];
+        })->values()->all();
+    }
+
+    protected function studentWorkspaceSidebarItems(array $steps): array
+    {
+        $sidebarItems = array_map(function (array $step) {
+            return [
+                'label' => $step['nav_label'],
+                'target' => 'step-' . $step['slug'],
+                'state' => $step['state'],
+                'number' => $step['number'],
+            ];
+        }, $steps);
+
+        $sidebarItems[] = [
+            'label' => 'Submission',
+            'target' => 'submission',
+            'state' => 'locked',
+            'number' => count($steps) + 1,
+        ];
+
+        return $sidebarItems;
+    }
+
+    protected function studentWorkspaceResources(CourseWorkspace $courseWorkspace): array
+    {
+        return $courseWorkspace->resources
+            ->groupBy(fn ($resource) => $resource->category ?: 'Resources')
+            ->map(function ($items, $category) {
+                return [
+                    'category' => $category,
+                    'items' => $items->map(fn ($resource) => [
+                        'label' => $resource->label,
+                        'description' => $resource->description ?: '',
+                        'icon' => $resource->icon ?: 'fi fi-rr-link',
+                        'href' => $resource->href ?: '#',
+                    ])->values()->all(),
+                ];
+            })
+            ->values()
+            ->all();
+    }
+
+    protected function studentWorkspaceMentorTip(array $steps): array
+    {
+        $activeStep = collect($steps)->firstWhere('active', true) ?? $steps[0] ?? [];
+
+        return [
+            'title' => 'Mentor tip',
+            'body' => $activeStep['mentor_tip'] ?? 'Complete one small checkpoint at a time and keep your project easy to review.',
+        ];
+    }
+
+    protected function studentWorkspaceTodayGoal(CourseWorkspace $courseWorkspace, array $steps): array
+    {
+        $goal = $courseWorkspace->goals->firstWhere('type', 'daily') ?? $courseWorkspace->goals->first();
+        $activeStep = collect($steps)->firstWhere('active', true) ?? $steps[0] ?? [];
+
+        return [
+            'title' => $goal?->title ?? ($activeStep['title'] ?? 'Continue your workspace'),
+            'body' => $goal?->body ?? ($activeStep['task'] ?? 'Complete the next available step.'),
+            'time' => $goal?->duration ?? '45-60 min',
+        ];
+    }
+
 
 
     public function studentDefaultCourseWorkspace()
@@ -557,78 +695,6 @@ PHP,
         }
 
         return redirect()->route('student.course.workspace', ['id' => $enrollment->id]);
-    }
-
-    /**
-     * Get course phases/modules structure
-     */
-    protected function getCoursePhases($course): array
-    {
-        if (!$course) {
-            return [];
-        }
-
-        // Get tasks for this course as modules
-        $tasks = $course->tasks()->orderBy('created_at')->get();
-
-        if ($tasks->isEmpty()) {
-            // Return default phases if no tasks
-            return [
-                [
-                    'title' => 'Month 1: Getting Started',
-                    'modules' => [
-                        ['id' => 'module-1', 'title' => 'Introduction', 'state' => 'active'],
-                        ['id' => 'module-2', 'title' => 'Basics', 'state' => 'locked'],
-                    ],
-                ],
-            ];
-        }
-
-        $phases = [];
-        $phaseIndex = 1;
-        $modules = [];
-
-        foreach ($tasks as $index => $task) {
-            $modules[] = [
-                'id' => 'module-' . ($index + 1),
-                'title' => $task->title,
-                'state' => $index === 0 ? 'active' : 'locked',
-            ];
-
-            // Create a new phase every 3 modules
-            if (($index + 1) % 3 === 0 || $index === $tasks->count() - 1) {
-                $phases[] = [
-                    'title' => 'Month ' . $phaseIndex . ': Learning',
-                    'modules' => $modules,
-                ];
-                $modules = [];
-                $phaseIndex++;
-            }
-        }
-
-        return $phases;
-    }
-
-    /**
-     * Get course module content
-     */
-    protected function getCourseModules($course): array
-    {
-        if (!$course) {
-            return [];
-        }
-
-        $tasks = $course->tasks()->orderBy('created_at')->get();
-
-        $modules = [];
-        foreach ($tasks as $index => $task) {
-            $modules['module-' . ($index + 1)] = [
-                'title' => $task->title,
-                'description' => $task->description ?? 'Complete this module to progress.',
-            ];
-        }
-
-        return $modules;
     }
 
     public function studentProfile()

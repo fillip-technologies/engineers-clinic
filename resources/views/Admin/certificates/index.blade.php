@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Certificates</h1>
-        <a href="{{ route('certificates.create') }}" class="btn btn-primary mb-3">Create New Certificate</a>
+        <a href="{{ route('admin.certificates.create') }}" class="btn btn-primary mb-3">Create New Certificate</a>
         
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -33,9 +33,9 @@
                     <td>{{ $certificate->course->title ?? 'N/A' }}</td>
                     <td>{{ $certificate->issued_date }}</td>
                     <td>
-                        <a href="{{ route('certificates.show', $certificate->id) }}" class="btn btn-sm btn-info">View</a>
-                        <a href="{{ route('certificates.edit', $certificate->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <form action="{{ route('certificates.destroy', $certificate->id) }}" method="POST" style="display:inline;">
+                        <a href="{{ route('admin.certificates.show', $certificate->id) }}" class="btn btn-sm btn-info">View</a>
+                        <a href="{{ route('admin.certificates.edit', $certificate->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ route('admin.certificates.destroy', $certificate->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>

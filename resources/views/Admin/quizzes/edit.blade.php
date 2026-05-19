@@ -1,36 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Quiz</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-4">
-        <h1>Edit Quiz</h1>
-        <form action="{{ route('quizzes.update', $quiz->id) }}" method="POST">
-            @csrf
-            @method('PUT')
-            <div class="mb-3">
-                <label for="course_id" class="form-label">Course</label>
-                <select name="course_id" id="course_id" class="form-control" required>
-                    @foreach($courses as $course)
-                        <option value="{{ $course->id }}" {{ $quiz->course_id == $course->id ? 'selected' : '' }}>{{ $course->title }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input type="text" name="title" id="title" class="form-control" value="{{ $quiz->title }}" required>
-            </div>
-            <div class="mb-3">
-                <label for="total_marks" class="form-label">Total Marks</label>
-                <input type="number" name="total_marks" id="total_marks" class="form-control" value="{{ $quiz->total_marks }}" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Update</button>
-            <a href="{{ route('quizzes.index') }}" class="btn btn-secondary">Cancel</a>
-        </form>
+@extends('Admin.layouts.layout')
+
+@section('content')
+<div class="mx-auto max-w-3xl space-y-6">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <p class="text-sm font-medium text-brand">Quizzes</p>
+            <h1 class="mt-1 text-2xl font-semibold text-gray-950">Edit Quiz</h1>
+            <p class="mt-1 text-sm text-gray-500">Update quiz course and total marks.</p>
+        </div>
+        <a href="{{ route('admin.quizzes.index') }}" class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50">
+            <i class="fi fi-rr-arrow-small-left"></i>
+            Back
+        </a>
     </div>
-</body>
-</html>
+
+    @include('Admin.quizzes.partials.form', [
+        'action' => route('admin.quizzes.update', $quiz->id),
+        'method' => 'PUT',
+        'buttonText' => 'Update Quiz',
+    ])
+</div>
+@endsection

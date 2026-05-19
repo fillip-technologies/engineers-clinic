@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Edit Payment</h1>
-        <form action="{{ route('payments.update', $payment->id) }}" method="POST">
+        <form action="{{ route('admin.payments.update', $payment->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="mb-3">
@@ -41,7 +41,7 @@
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
-            <a href="{{ route('payments.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.payments.index') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

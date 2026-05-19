@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Create New Payment</h1>
-        <form action="{{ route('payments.store') }}" method="POST">
+        <form action="{{ route('admin.payments.store') }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="student_id" class="form-label">Student</label>
@@ -42,7 +42,7 @@
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
-            <a href="{{ route('payments.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.payments.index') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

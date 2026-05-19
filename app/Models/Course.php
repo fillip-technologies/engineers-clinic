@@ -72,4 +72,14 @@ class Course extends Model
     {
         return $this->hasMany(Attendance::class);
     }
+
+    public function workspaces(): HasMany
+    {
+        return $this->hasMany(CourseWorkspace::class);
+    }
+
+    public function taskProgress(): HasMany
+    {
+        return $this->hasMany(TaskProgress::class);
+    }
 }

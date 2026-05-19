@@ -1,23 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Quiz</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-4">
-        <h1>Quiz Details</h1>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ $quiz->title }}</h5>
-                <p class="card-text"><strong>Course:</strong> {{ $quiz->course->title ?? 'N/A' }}</p>
-                <p class="card-text"><strong>Total Marks:</strong> {{ $quiz->total_marks }}</p>
-                <p class="card-text"><strong>Created:</strong> {{ $quiz->created_at }}</p>
-            </div>
+@extends('Admin.layouts.layout')
+
+@section('content')
+<div class="mx-auto max-w-3xl space-y-6">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <p class="text-sm font-medium text-brand">Quiz Details</p>
+            <h1 class="mt-1 text-2xl font-semibold text-gray-950">{{ $quiz->title }}</h1>
+            <p class="mt-1 text-sm text-gray-500">{{ $quiz->course->title ?? 'No course assigned' }}</p>
         </div>
-        <a href="{{ route('quizzes.index') }}" class="btn btn-secondary mt-3">Back</a>
+        <div class="flex gap-2">
+            <a href="{{ route('admin.quizzes.index') }}" class="rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50">Back</a>
+            <a href="{{ route('admin.quizzes.edit', $quiz->id) }}" class="rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brandLight">Edit</a>
+        </div>
     </div>
-</body>
-</html>
+
+    <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <dl class="grid gap-5 sm:grid-cols-2">
+            <div>
+                <dt class="text-xs font-semibold uppercase tracking-wide text-gray-400">Course</dt>
+                <dd class="mt-2 text-sm font-semibold text-gray-950">{{ $quiz->course->title ?? 'N/A' }}</dd>
+            </div>
+            <div>
+                <dt class="text-xs font-semibold uppercase tracking-wide text-gray-400">Total Marks</dt>
+                <dd class="mt-2 text-sm font-semibold text-gray-950">{{ $quiz->total_marks }}</dd>
+            </div>
+            <div>
+                <dt class="text-xs font-semibold uppercase tracking-wide text-gray-400">Created</dt>
+                <dd class="mt-2 text-sm font-semibold text-gray-950">{{ $quiz->created_at?->format('M d, Y') }}</dd>
+            </div>
+            <div>
+                <dt class="text-xs font-semibold uppercase tracking-wide text-gray-400">Updated</dt>
+                <dd class="mt-2 text-sm font-semibold text-gray-950">{{ $quiz->updated_at?->format('M d, Y') }}</dd>
+            </div>
+        </dl>
+    </div>
+</div>
+@endsection

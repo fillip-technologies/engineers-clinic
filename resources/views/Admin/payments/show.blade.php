@@ -19,7 +19,7 @@
                 <p class="card-text"><strong>Created:</strong> {{ $payment->created_at }}</p>
             </div>
         </div>
-        <a href="{{ route('payments.index') }}" class="btn btn-secondary mt-3">Back</a>
+        <a href="{{ route('admin.payments.index') }}" class="btn btn-secondary mt-3">Back</a>
     </div>
 </body>
 </html>

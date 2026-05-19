@@ -9,14 +9,14 @@
 <body>
     <div class="container mt-4">
         <h1>Create New Role</h1>
-        <form action="{{ route('roles.store') }}" method="POST">
+        <form action="{{ route('admin.roles.store') }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
                 <input type="text" name="name" id="name" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
-            <a href="{{ route('roles.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.roles.index') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

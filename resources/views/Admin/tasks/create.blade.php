@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Create New Task</h1>
-        <form action="{{ route('tasks.store') }}" method="POST">
+        <form action="{{ route('admin.tasks.store') }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="course_id" class="form-label">Course</label>
@@ -29,7 +29,7 @@
                 <textarea name="description" id="description" class="form-control"></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
-            <a href="{{ route('tasks.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.tasks.index') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Edit Permission</h1>
-        <form action="{{ route('permissions.update', $permission->id) }}" method="POST">
+        <form action="{{ route('admin.permissions.update', $permission->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="mb-3">
@@ -17,7 +17,7 @@
                 <input type="text" name="name" id="name" class="form-control" value="{{ $permission->name }}" required>
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
-            <a href="{{ route('permissions.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.permissions.index') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

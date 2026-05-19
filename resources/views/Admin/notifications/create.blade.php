@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Create New Notification</h1>
-        <form action="{{ route('notifications.store') }}" method="POST">
+        <form action="{{ route('admin.notifications.store') }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="user_id" class="form-label">User</label>
@@ -32,7 +32,7 @@
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
-            <a href="{{ route('notifications.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.notifications.index') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

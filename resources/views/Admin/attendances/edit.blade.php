@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Edit Attendance</h1>
-        <form action="{{ route('attendances.update', $attendance->id) }}" method="POST">
+        <form action="{{ route('admin.attendances.update', $attendance->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="mb-3">
@@ -40,7 +40,7 @@
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
-            <a href="{{ route('attendances.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.attendances.index') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Quiz Results</h1>
-        <a href="{{ route('quiz-results.create') }}" class="btn btn-primary mb-3">Create New Quiz Result</a>
+        <a href="{{ route('admin.quiz-results.create') }}" class="btn btn-primary mb-3">Create New Quiz Result</a>
         
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -35,9 +35,9 @@
                     <td>{{ $qr->score }}</td>
                     <td>{{ $qr->passed ? 'Yes' : 'No' }}</td>
                     <td>
-                        <a href="{{ route('quiz-results.show', $qr->id) }}" class="btn btn-sm btn-info">View</a>
-                        <a href="{{ route('quiz-results.edit', $qr->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <form action="{{ route('quiz-results.destroy', $qr->id) }}" method="POST" style="display:inline;">
+                        <a href="{{ route('admin.quiz-results.show', $qr->id) }}" class="btn btn-sm btn-info">View</a>
+                        <a href="{{ route('admin.quiz-results.edit', $qr->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ route('admin.quiz-results.destroy', $qr->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>

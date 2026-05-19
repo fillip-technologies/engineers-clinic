@@ -17,7 +17,7 @@
                 <p class="card-text"><strong>Created:</strong> {{ $notification->created_at }}</p>
             </div>
         </div>
-        <a href="{{ route('notifications.index') }}" class="btn btn-secondary mt-3">Back</a>
+        <a href="{{ route('admin.notifications.index') }}" class="btn btn-secondary mt-3">Back</a>
     </div>
 </body>
 </html>

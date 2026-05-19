@@ -75,6 +75,7 @@ $navigationGroups = [
 ['label' => 'Colleges', 'route' => 'admin.colleges.index', 'active' => 'admin.colleges.*', 'icon' => 'fi-rr-building'],
 ['label' => 'Students', 'route' => 'admin.students.index', 'active' => 'admin.students.*', 'icon' => 'fi-rr-user'],
 ['label' => 'Courses', 'route' => 'admin.courses.index', 'active' => 'admin.courses.*', 'icon' => 'fi-rr-book-bookmark'],
+['label' => 'Workspaces', 'route' => 'admin.course-workspaces.index', 'active' => 'admin.course-workspaces.*', 'icon' => 'fi-rr-briefcase'],
 ['label' => 'Enrollments', 'route' => 'admin.enrollments.index', 'active' => 'admin.enrollments.*', 'icon' => 'fi-rr-clipboard-list'],
 ],
 'Learning Ops' => [

@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1>Student Tasks</h1>
-        <a href="{{ route('student-tasks.create') }}" class="btn btn-primary mb-3">Create New Student Task</a>
+        <a href="{{ route('admin.student-tasks.create') }}" class="btn btn-primary mb-3">Create New Student Task</a>
         
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -35,9 +35,9 @@
                     <td>{{ $st->status }}</td>
                     <td>{{ $st->completed_at }}</td>
                     <td>
-                        <a href="{{ route('student-tasks.show', $st->id) }}" class="btn btn-sm btn-info">View</a>
-                        <a href="{{ route('student-tasks.edit', $st->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <form action="{{ route('student-tasks.destroy', $st->id) }}" method="POST" style="display:inline;">
+                        <a href="{{ route('admin.student-tasks.show', $st->id) }}" class="btn btn-sm btn-info">View</a>
+                        <a href="{{ route('admin.student-tasks.edit', $st->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ route('admin.student-tasks.destroy', $st->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
