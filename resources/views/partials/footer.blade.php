@@ -1,27 +1,22 @@
 @php
-    $internshipLevels = [
-        'Beginner' => [
-            ['label' => 'Web Ecosystems & Frontend Architecture', 'slug' => 'web-ecosystems-frontend'],
-            ['label' => 'Core Python & Computational Logic', 'slug' => 'core-python-computational-logic'],
-            ['label' => 'UI/UX Design', 'slug' => 'ui-ux-design'],
-            ['label' => 'Data Analytics', 'slug' => 'data-analytics'],
-            ['label' => 'AutoCAD Drafting', 'slug' => 'autocad-drafting'],
-        ],
-        'Intermediate' => [
-            ['label' => 'Cloud & Backend Systems', 'slug' => 'cloud-backend-systems'],
-            ['label' => 'Machine Learning', 'slug' => 'machine-learning'],
-            ['label' => 'Ethical Hacking', 'slug' => 'ethical-hacking'],
-            ['label' => 'Mobile Development', 'slug' => 'mobile-development'],
-            ['label' => 'Corporate Law', 'slug' => 'corporate-law'],
-        ],
-        'Advanced' => [
-            ['label' => 'Generative AI', 'slug' => 'generative-ai'],
-            ['label' => 'Cloud Architecture', 'slug' => 'cloud-architecture'],
-            ['label' => 'Blockchain Systems', 'slug' => 'blockchain-systems'],
-            ['label' => 'CFD & FEA', 'slug' => 'cfd-fea'],
-            ['label' => 'Digital Law', 'slug' => 'digital-law'],
-        ],
-    ];
+    $topicConfig = is_file(config_path('internship_topics.php')) ? require config_path('internship_topics.php') : [];
+
+    $internshipLevels = collect($topicConfig)
+        ->mapWithKeys(function ($levelData, $levelName) {
+            $programs = collect($levelData['categories'] ?? [])
+                ->flatMap(function ($topics) {
+                    return collect($topics)->map(fn ($topic) => [
+                        'label' => $topic,
+                        'slug' => \Illuminate\Support\Str::slug($topic),
+                    ]);
+                })
+                ->take(6)
+                ->values()
+                ->all();
+
+            return [$levelName => $programs];
+        })
+        ->all();
 
     $mainLinks = [
         ['label' => 'Home', 'href' => '/'],

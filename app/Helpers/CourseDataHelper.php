@@ -77,6 +77,16 @@ class CourseDataHelper
             $courses[] = self::attachCourseMeta($course);
         }
 
+        $existingSlugs = array_column($courses, 'slug');
+
+        foreach (self::topicCourses() as $course) {
+            if (in_array($course['slug'], $existingSlugs, true)) {
+                continue;
+            }
+
+            $courses[] = self::attachCourseMeta($course);
+        }
+
         usort($courses, fn (array $first, array $second) => strcmp($first['title'], $second['title']));
 
         return $courses;
@@ -87,7 +97,9 @@ class CourseDataHelper
         $courseFile = resource_path("data/courses/{$slug}.json");
 
         if (! is_file($courseFile)) {
-            return null;
+            $topicCourse = self::topicCourseBySlug($slug);
+
+            return $topicCourse ? self::attachCourseMeta($topicCourse) : null;
         }
 
         $course = json_decode(file_get_contents($courseFile), true);
@@ -188,6 +200,189 @@ class CourseDataHelper
         $course['hero'] = self::buildCourseHero($course);
 
         return $course;
+    }
+
+    protected static function topicCourseBySlug(string $slug): ?array
+    {
+        foreach (self::topicCourses() as $course) {
+            if (($course['slug'] ?? null) === $slug) {
+                return $course;
+            }
+        }
+
+        return null;
+    }
+
+    protected static function topicCourses(): array
+    {
+        $levels = self::topicConfig();
+        $courses = [];
+
+        foreach ($levels as $level => $levelData) {
+            foreach (($levelData['categories'] ?? []) as $category => $topics) {
+                foreach ($topics as $topic) {
+                    $courses[] = self::buildTopicCourse($topic, $level, $category, $levelData);
+                }
+            }
+        }
+
+        return $courses;
+    }
+
+    protected static function buildTopicCourse(string $topic, string $level, string $category, array $levelData): array
+    {
+        $slug = \Illuminate\Support\Str::slug($topic);
+        $duration = $levelData['duration'] ?? match ($level) {
+            'Intermediate' => '75 Days',
+            'Advanced' => '90 Days',
+            default => '45 Days',
+        };
+
+        $projects = $levelData['projects'] ?? 'Portfolio Projects Required';
+        $focus = $levelData['focus'] ?? 'Practical internship workflow with guided submissions.';
+        $domain = str_replace(' (BBA/MBA)', '', $category);
+
+        return [
+            'slug' => $slug,
+            'title' => $topic,
+            'category' => $category,
+            'level' => $level,
+            'duration' => $duration,
+            'image' => self::topicImage($category),
+            'description' => "{$topic} is a {$level} internship track focused on {$focus}",
+            'modules' => [
+                "{$domain} foundations",
+                'Guided workflow practice',
+                'Portfolio project submission',
+            ],
+            'phases' => [
+                [
+                    'title' => "Phase 1: {$topic} Foundations",
+                    'modules' => [
+                        [
+                            'title' => 'Module 1: Practical Skill Build',
+                            'tasks' => [
+                                'Concept mapping and tool setup',
+                                'Guided mini assignment',
+                                'Portfolio project draft',
+                                'Final submission and review',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'curriculum' => [
+                [
+                    'title' => "Task 1: {$topic} Portfolio Sprint",
+                    'tasks' => [
+                        [
+                            'title' => 'Applied internship assignment',
+                            'assignment' => "Complete a guided {$topic} task and turn it into a reviewable portfolio output.",
+                            'submission' => 'Project file, document, design link, repository, or report based on the track.',
+                            'ai_review' => 'The review checks clarity, structure, completeness, and practical alignment with the selected internship topic.',
+                        ],
+                    ],
+                ],
+            ],
+            'hero_badge' => strtoupper("{$level} {$domain} internship"),
+            'career_path' => "{$domain} skill-building and portfolio project track",
+            'program_overview' => [
+                'features' => [
+                    [
+                        'title' => "{$topic} workflow",
+                        'description' => "Learn the practical steps, tools, and decision points used in {$topic}.",
+                    ],
+                    [
+                        'title' => 'Portfolio-ready execution',
+                        'description' => 'Complete a structured assignment that can be explained in internships, interviews, and project discussions.',
+                    ],
+                ],
+                'stats' => [
+                    [
+                        'value' => $duration,
+                        'label' => "{$level} tier timeline",
+                    ],
+                    [
+                        'value' => $projects,
+                        'label' => 'Project requirement for this tier',
+                    ],
+                    [
+                        'value' => $domain,
+                        'label' => 'Career domain',
+                    ],
+                ],
+                'cta' => [
+                    'button_text' => "Explore {$topic} Program",
+                    'batch_info' => "Enrollment is open for the next {$topic} cohort.",
+                ],
+            ],
+            'why_choose' => [
+                [
+                    'title' => 'Guided Practical Workflow',
+                    'description' => "The track breaks {$topic} into clear tasks, checkpoints, and submission expectations.",
+                ],
+                [
+                    'title' => 'Career-Relevant Output',
+                    'description' => 'You finish with a concrete project artifact that helps show your learning progress.',
+                ],
+                [
+                    'title' => 'Structured Internship Path',
+                    'description' => 'The program is organized by tier, duration, and portfolio requirements so learners know exactly what to complete.',
+                ],
+            ],
+            'testimonials' => [
+                [
+                    'name' => 'Aarav Mehta',
+                    'role' => "{$domain} Learner",
+                    'text' => "The structure helped me understand {$topic} through practical tasks and clear checkpoints.",
+                ],
+                [
+                    'name' => 'Nisha Kapoor',
+                    'role' => 'College Student',
+                    'text' => 'I liked that every module ended with something concrete to submit, review, and improve.',
+                ],
+            ],
+            'faq' => [
+                [
+                    'question' => 'Do I need prior experience before joining?',
+                    'answer' => $level === 'Beginner'
+                        ? 'No. The beginner tier starts with foundations and then moves into applied tasks.'
+                        : 'Some basic familiarity helps, but the track still gives you a guided workflow and clear assignments.',
+                ],
+                [
+                    'question' => 'Will I build practical projects inside this course?',
+                    'answer' => 'Yes. The curriculum is organized around structured assignments, submissions, and reviewable portfolio outputs.',
+                ],
+                [
+                    'question' => 'What kind of certificate path does this follow?',
+                    'answer' => "This is a {$duration} {$level} tier track with {$projects}.",
+                ],
+            ],
+        ];
+    }
+
+    protected static function topicConfig(): array
+    {
+        $path = config_path('internship_topics.php');
+
+        if (! is_file($path)) {
+            return [];
+        }
+
+        $topics = require $path;
+
+        return is_array($topics) ? $topics : [];
+    }
+
+    protected static function topicImage(string $category): string
+    {
+        return match (true) {
+            str_contains($category, 'Business') => '/images/courses/digital-marketing.svg',
+            str_contains($category, 'Engineering') => '/images/courses/business-analytics.svg',
+            str_contains($category, 'Law') => '/images/courses/seo-search-engine-optimization.svg',
+            str_contains($category, 'Mass Communication') => '/images/courses/graphic-design.svg',
+            default => '/images/courses/backend-development.svg',
+        };
     }
 
     protected static function buildCourseHero(array $course): array

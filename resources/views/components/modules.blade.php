@@ -1,42 +1,20 @@
 @php
-$internshipLevels = [
-'Beginner Level' => [
-['label' => 'Web Ecosystems & Frontend Architecture', 'slug' => 'web-ecosystems-frontend'],
-['label' => 'Core Python & Computational Logic', 'slug' => 'core-python-computational-logic'],
-['label' => 'UI/UX Design', 'slug' => 'ui-ux-design'],
-['label' => 'Data Analytics', 'slug' => 'data-analytics'],
-['label' => 'AutoCAD Drafting', 'slug' => 'autocad-drafting'],
-['label' => 'Manufacturing Basics', 'slug' => 'manufacturing-basics'],
-['label' => 'Civil Drafting', 'slug' => 'civil-drafting'],
-['label' => 'Site Surveying', 'slug' => 'site-surveying'],
-['label' => 'Legal Research', 'slug' => 'legal-research'],
-['label' => 'Digital Journalism', 'slug' => 'digital-journalism'],
-],
-'Intermediate Level' => [
-['label' => 'Cloud & Backend Systems', 'slug' => 'cloud-backend-systems'],
-['label' => 'Machine Learning', 'slug' => 'machine-learning'],
-['label' => 'Ethical Hacking', 'slug' => 'ethical-hacking'],
-['label' => 'Mobile Development', 'slug' => 'mobile-development'],
-['label' => 'CAD/CAM', 'slug' => 'cad-cam'],
-['label' => 'HVAC Design', 'slug' => 'hvac-design'],
-['label' => 'Structural Design', 'slug' => 'structural-design'],
-['label' => 'Project Estimation', 'slug' => 'project-estimation'],
-['label' => 'Corporate Law', 'slug' => 'corporate-law'],
-['label' => 'PR Strategy', 'slug' => 'pr-strategy'],
-],
-'Advanced Level' => [
-['label' => 'Generative AI', 'slug' => 'generative-ai'],
-['label' => 'Cloud Architecture', 'slug' => 'cloud-architecture'],
-['label' => 'Blockchain Systems', 'slug' => 'blockchain-systems'],
-['label' => 'Big Data Systems', 'slug' => 'big-data-systems'],
-['label' => 'CFD & FEA', 'slug' => 'cfd-fea'],
-['label' => 'Robotics Automation', 'slug' => 'robotics-automation'],
-['label' => 'BIM Infrastructure', 'slug' => 'bim-infrastructure'],
-['label' => 'Geotechnical Engineering', 'slug' => 'geotechnical-engineering'],
-['label' => 'Digital Law', 'slug' => 'digital-law'],
-['label' => 'Corporate Communication', 'slug' => 'corporate-communication'],
-],
-];
+$topicConfig = is_file(config_path('internship_topics.php')) ? require config_path('internship_topics.php') : [];
+$internshipLevels = collect($topicConfig)
+    ->mapWithKeys(function ($levelData, $levelName) {
+        $programs = collect($levelData['categories'] ?? [])
+            ->flatMap(function ($topics) {
+                return collect($topics)->map(fn ($topic) => [
+                    'label' => $topic,
+                    'slug' => \Illuminate\Support\Str::slug($topic),
+                ]);
+            })
+            ->values()
+            ->all();
+
+        return [$levelName . ' Level' => $programs];
+    })
+    ->all();
 
 $levelConfig = [
 'Beginner Level' => [

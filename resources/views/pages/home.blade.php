@@ -3,14 +3,16 @@
 @section('content')
 <x-hero />
 
-<x-stat />
+
 
 <x-master-internship />
 
 <x-modules :courses="$courses" />
 <x-how-work />
 <x-hero-2 />
+
 <x-dashboard-preview />
+<x-stat />
 <x-college-tie-up />
 <x-partners />
 <!-- <x-services /> -->
