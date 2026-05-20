@@ -4,30 +4,78 @@
 
 @php
     $topicConfig = is_file(config_path('internship_topics.php')) ? require config_path('internship_topics.php') : [];
+    $levelOrder = ['Beginner', 'Intermediate', 'Advanced'];
+    $durationLabel = fn ($months) => $months ? $months . ' Month' . ((int) $months === 1 ? '' : 's') : '';
+    $courses = \Illuminate\Support\Facades\Schema::hasTable('courses')
+        ? \App\Models\Course::query()
+            ->select(['title', 'slug', 'level', 'category', 'duration_months'])
+            ->orderBy('title')
+            ->get()
+        : collect();
 
-    $menuLevels = collect($topicConfig)
-        ->mapWithKeys(function ($levelData, $levelName) {
-            $categories = collect($levelData['categories'] ?? [])
-                ->map(function ($topics, $category) {
+    $menuLevels = collect($levelOrder)
+        ->filter(fn ($levelName) => isset($topicConfig[$levelName]) || $courses->contains('level', $levelName))
+        ->mapWithKeys(function ($levelName) use ($courses, $topicConfig, $durationLabel) {
+            $levelData = $topicConfig[$levelName] ?? [];
+            $levelCourses = $courses->where('level', $levelName);
+
+            $categories = $levelCourses
+                ->groupBy(fn ($course) => $course->category ?: 'Internship')
+                ->map(function ($categoryCourses, $category) {
                     return [
                         'label' => $category,
-                        'topics' => collect($topics)->map(fn ($topic) => [
-                            'label' => $topic,
-                            'slug' => \Illuminate\Support\Str::slug($topic),
-                        ])->values()->all(),
+                        'topics' => $categoryCourses
+                            ->map(fn ($course) => [
+                                'label' => $course->title,
+                                'slug' => $course->slug,
+                            ])
+                            ->values()
+                            ->all(),
                     ];
                 })
                 ->values()
                 ->all();
 
             return [$levelName => [
-                'duration' => $levelData['duration'] ?? '',
+                'duration' => $levelData['duration'] ?? $durationLabel($levelCourses->first()?->duration_months),
                 'projects' => $levelData['projects'] ?? '',
                 'focus' => $levelData['focus'] ?? '',
                 'categories' => $categories,
             ]];
         })
         ->all();
+
+    $extraLevels = $courses
+        ->pluck('level')
+        ->filter()
+        ->unique()
+        ->reject(fn ($levelName) => in_array($levelName, $levelOrder, true))
+        ->mapWithKeys(function ($levelName) use ($courses, $durationLabel) {
+            $levelCourses = $courses->where('level', $levelName);
+
+            return [$levelName => [
+                'duration' => $durationLabel($levelCourses->first()?->duration_months),
+                'projects' => '',
+                'focus' => '',
+                'categories' => $levelCourses
+                    ->groupBy(fn ($course) => $course->category ?: 'Internship')
+                    ->map(fn ($categoryCourses, $category) => [
+                        'label' => $category,
+                        'topics' => $categoryCourses
+                            ->map(fn ($course) => [
+                                'label' => $course->title,
+                                'slug' => $course->slug,
+                            ])
+                            ->values()
+                            ->all(),
+                    ])
+                    ->values()
+                    ->all(),
+            ]];
+        })
+        ->all();
+
+    $menuLevels = array_merge($menuLevels, $extraLevels);
 
     $levels = array_keys($menuLevels);
     $defaultLevel = $levels[0] ?? 'Beginner';
