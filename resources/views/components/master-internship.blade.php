@@ -29,6 +29,10 @@
 
 <section
     x-data="{ enrollmentOpen: false }"
+    x-init="$watch('enrollmentOpen', value => {
+        document.documentElement.classList.toggle('overflow-hidden', value);
+        document.body.classList.toggle('overflow-hidden', value);
+    })"
     @keydown.escape.window="enrollmentOpen = false"
     class="section-surface section-padding-sm relative isolate overflow-hidden"
 >
@@ -131,9 +135,9 @@
                                 <button type="button" class="btn-primary w-full" @click="enrollmentOpen = true">
                                     Enroll Now
                                 </button>
-                                <a href="#courses" class="mt-3 inline-flex w-full justify-center text-sm font-bold text-brand transition hover:text-brandDark">
+                                {{-- <a href="#courses" class="mt-3 inline-flex w-full justify-center text-sm font-bold text-brand transition hover:text-brandDark">
                                     View task details
-                                </a>
+                                </a> --}}
                             </div>
                         </div>
                     </article>
