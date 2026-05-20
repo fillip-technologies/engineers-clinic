@@ -50,15 +50,15 @@
                     </div>
                 @endif
 
-                @if($existingEnrollment)
-                    <div class="rounded-card border border-green-200 bg-green-50 p-5">
-                        <p class="font-black text-green-800">You are already enrolled in this course.</p>
-                        <p class="mt-2 text-sm font-semibold text-green-700">You can continue from your enrolled courses dashboard.</p>
-                    </div>
-                @elseif($completedPayment)
+                @if($completedPayment)
                     <div class="rounded-card border border-green-200 bg-green-50 p-5">
                         <p class="font-black text-green-800">Payment is already completed.</p>
                         <p class="mt-2 text-sm font-semibold text-green-700">Your enrollment is ready in your dashboard.</p>
+                    </div>
+                @elseif($hasCompletedEnrollment)
+                    <div class="rounded-card border border-green-200 bg-green-50 p-5">
+                        <p class="font-black text-green-800">You are already enrolled in this course.</p>
+                        <p class="mt-2 text-sm font-semibold text-green-700">You can continue from your enrolled courses dashboard.</p>
                     </div>
                 @endif
             </div>
@@ -109,7 +109,7 @@
                     <div class="mt-5 rounded-control border border-green-100 bg-green-50 px-4 py-3 text-sm font-bold text-green-700" x-text="success"></div>
                 </template>
 
-                @if(!$existingEnrollment && !$completedPayment)
+                @if(!$hasCompletedEnrollment && !$completedPayment)
                     @if(!$isFree && blank($razorpayKey))
                         <div class="mt-5 rounded-control border border-amber-100 bg-amber-50 px-4 py-3 text-sm font-bold text-amber-800">
                             Razorpay key is missing. Add RAZORPAY_KEY and RAZORPAY_SECRET to enable paid checkout.

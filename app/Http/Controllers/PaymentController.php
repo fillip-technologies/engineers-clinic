@@ -39,17 +39,19 @@ class PaymentController extends Controller
 
         abort_unless((int) $validated['course_id'] === $course->id, 404);
 
-        session([
-            'checkout_intent' => [
-                ...$validated,
-                'course_slug' => $course->slug,
-            ],
-        ]);
+        $checkoutIntent = [
+            ...$validated,
+            'course_slug' => $course->slug,
+        ];
+
+        session(['checkout_intent' => $checkoutIntent]);
 
         if (! Auth::check()) {
             $user = User::where('email', $validated['email'])->first();
 
             if ($user) {
+                $request->session()->put('url.intended', route('payments.checkout', ['course' => $course->slug]));
+
                 return redirect()
                     ->route('login')
                     ->with('error', 'An account already exists with this email. Please log in to continue your purchase.');
@@ -83,6 +85,7 @@ class PaymentController extends Controller
 
             Auth::login($user);
             $request->session()->regenerate();
+            session(['checkout_intent' => $checkoutIntent]);
         } elseif (optional(Auth::user()->role)->name !== 'student') {
             return redirect()
                 ->route('course.detail', $course->slug)
@@ -108,12 +111,15 @@ class PaymentController extends Controller
             ->where('status', 'completed')
             ->latest()
             ->first();
+        $hasCompletedEnrollment = (bool) $existingEnrollment
+            && ((bool) $completedPayment || (float) $course->fee <= 0);
 
         return view('payments.checkout', [
             'course' => $course,
             'student' => $student,
             'checkoutIntent' => session('checkout_intent', []),
             'existingEnrollment' => $existingEnrollment,
+            'hasCompletedEnrollment' => $hasCompletedEnrollment,
             'completedPayment' => $completedPayment,
             'razorpayKey' => config('services.razorpay.key'),
         ]);
@@ -131,12 +137,6 @@ class PaymentController extends Controller
         $student = $this->currentStudent();
 
         $course = Course::findOrFail($request->course_id);
-
-        // Check if already enrolled
-        $existingEnrollment = $student->enrollments()->where('course_id', $course->id)->first();
-        if ($existingEnrollment) {
-            return response()->json(['error' => 'Already enrolled in this course'], 400);
-        }
 
         // Check if payment already exists
         $existingPayment = Payment::where('student_id', $student->id)
