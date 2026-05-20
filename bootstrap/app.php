@@ -22,6 +22,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth' => \App\Http\Middleware\RedirectBasedOnRole::class,
             'role' => \App\Http\Middleware\CheckRole::class,
         ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'course/*/reserve',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

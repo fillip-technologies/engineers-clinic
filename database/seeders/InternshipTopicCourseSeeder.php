@@ -56,7 +56,7 @@ class InternshipTopicCourseSeeder extends Seeder
             'hero_badge' => strtoupper("{$level} {$domain} internship"),
             'career_path' => "{$domain} skill-building and portfolio project track",
             'duration_months' => $this->durationMonths($duration),
-            'fee' => 0,
+            'fee' => $this->feeForLevel($level),
             'program_overview' => [
                 'features' => [
                     [
@@ -178,6 +178,15 @@ class InternshipTopicCourseSeeder extends Seeder
         $days = (int) ($matches[0] ?? 30);
 
         return max(1, (int) ceil($days / 30));
+    }
+
+    protected function feeForLevel(string $level): int
+    {
+        return match ($level) {
+            'Intermediate' => 4999,
+            'Advanced' => 7999,
+            default => 2999,
+        };
     }
 
     protected function topicImage(string $category): string

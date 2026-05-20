@@ -67,7 +67,24 @@
         </div>
 
         <!-- FORM -->
-        <div class="p-8">
+        <form method="POST" action="{{ $courseModel ? route('payments.checkout.start', ['course' => $courseModel->slug]) : '#' }}" class="p-8">
+            @csrf
+            @if($courseModel)
+                <input type="hidden" name="course_id" value="{{ $courseModel->id }}">
+            @endif
+            <input type="hidden" name="level" :value="level">
+
+            @if ($errors->any())
+                <div class="mb-5 rounded-2xl border border-red-100 bg-red-50 px-5 py-4 text-sm font-semibold text-red-700">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="mb-5 rounded-2xl border border-red-100 bg-red-50 px-5 py-4 text-sm font-semibold text-red-700">
+                    {{ session('error') }}
+                </div>
+            @endif
 
             <!-- STEP 1 -->
             <div x-show="step === 1" class="space-y-5">
@@ -76,6 +93,8 @@
                 <div class="relative">
 
                     <input type="text"
+                        name="name"
+                        value="{{ old('name', auth()->user()->name ?? '') }}"
                         placeholder=" "
                         class="peer w-full rounded-2xl border border-[#E2E8F0] bg-white px-5 pt-7 pb-3 text-[15px] text-[#111827] outline-none transition duration-300 focus:border-[#5B5BF6] focus:ring-4 focus:ring-[#5B5BF6]/10">
 
@@ -100,6 +119,8 @@
                 <div class="relative">
 
                     <input type="email"
+                        name="email"
+                        value="{{ old('email', auth()->user()->email ?? '') }}"
                         placeholder=" "
                         class="peer w-full rounded-2xl border border-[#E2E8F0] bg-white px-5 pt-7 pb-3 text-[15px] text-[#111827] outline-none transition duration-300 focus:border-[#5B5BF6] focus:ring-4 focus:ring-[#5B5BF6]/10">
 
@@ -129,6 +150,8 @@
                 <div class="relative">
 
                     <input type="tel"
+                        name="phone"
+                        value="{{ old('phone') }}"
                         placeholder=" "
                         class="peer w-full rounded-2xl border border-[#E2E8F0] bg-white px-5 pt-7 pb-3 text-[15px] text-[#111827] outline-none transition duration-300 focus:border-[#5B5BF6] focus:ring-4 focus:ring-[#5B5BF6]/10">
 
@@ -153,6 +176,8 @@
                 <div class="relative">
 
                     <input type="text"
+                        name="location"
+                        value="{{ old('location') }}"
                         placeholder=" "
                         class="peer w-full rounded-2xl border border-[#E2E8F0] bg-white px-5 pt-7 pb-3 text-[15px] text-[#111827] outline-none transition duration-300 focus:border-[#5B5BF6] focus:ring-4 focus:ring-[#5B5BF6]/10">
 
@@ -182,6 +207,8 @@
                 <div class="relative">
 
                     <input type="text"
+                        name="college"
+                        value="{{ old('college') }}"
                         placeholder=" "
                         class="peer w-full rounded-2xl border border-[#E2E8F0] bg-white px-5 pt-7 pb-3 text-[15px] text-[#111827] outline-none transition duration-300 focus:border-[#5B5BF6] focus:ring-4 focus:ring-[#5B5BF6]/10">
 
@@ -289,9 +316,10 @@
                 <!-- SUBMIT -->
                 <button type="submit"
                     x-show="step === 4"
+                    {{ $courseModel ? '' : 'disabled' }}
                     class="ml-auto rounded-xl bg-[#5B5BF6] px-7 py-3 text-sm font-semibold text-white transition duration-300 hover:bg-[#4F46E5]">
 
-                    Reserve Your Seat
+                    {{ $courseModel ? 'Reserve Your Seat' : 'Course Unavailable' }}
 
                 </button>
 
@@ -306,7 +334,7 @@
 
             </div>
 
-        </div>
+        </form>
 
     </div>
 

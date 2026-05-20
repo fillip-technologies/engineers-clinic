@@ -201,7 +201,7 @@ class HomeController extends Controller
 
         return match ($role) {
             'college' => redirect('/college/dashboard'),
-            'student' => redirect('/dashboard'),
+            'student' => redirect()->intended('/dashboard'),
         };
     }
 
@@ -776,7 +776,9 @@ class HomeController extends Controller
 
         abort_unless($course, 404);
 
-        return view('course.detail', compact('course'));
+        $dbCourse = Course::where('slug', $slug)->first();
+
+        return view('course.detail', compact('course', 'dbCourse'));
     }
 
     protected function frontendAdminData(string $activePage, string $role = 'student'): array

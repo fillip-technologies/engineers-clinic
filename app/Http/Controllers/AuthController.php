@@ -64,7 +64,7 @@ class AuthController extends Controller
         return match ($roleName) {
             'admin' => redirect('/admin/dashboard'),
             'college' => redirect('/college/dashboard'),
-            'student' => redirect('/dashboard'),
+            'student' => redirect()->intended('/dashboard'),
             default => redirect('/'),
         };
     }

@@ -4,6 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\CheckRole;
 use App\Http\Controllers\CounsellingController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -35,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/counselling-submit', [CounsellingController::class, 'store'])
     ->name('counselling.store');
 Route::post('/college-tieup/partnership-discussion', [CounsellingController::class, 'storeCollegePartnershipDiscussion'])->name('college.partnership-discussion.store');
+Route::post('/course/{course:slug}/reserve', [PaymentController::class, 'startCheckout'])->name('payments.checkout.start');
 
 
 
@@ -63,11 +65,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/student/course/{id}/workspace', [HomeController::class, 'studentCourseWorkspace'])->name('student.course.workspace');
     Route::get('/student-dashboard/course/{id}/workspace', [HomeController::class, 'studentCourseWorkspace']);
     Route::get('/student-dashboard/course/{id}', [HomeController::class, 'studentCourse'])->name('student.course.detail');
+    Route::get('/course/{course:slug}/checkout', [PaymentController::class, 'checkout'])->name('payments.checkout');
 
     // Payment Routes
     Route::prefix('payments')->name('payments.')->group(function () {
         Route::post('/create-order', [App\Http\Controllers\PaymentController::class, 'createOrder'])->name('create-order');
         Route::post('/verify', [App\Http\Controllers\PaymentController::class, 'verifyPayment'])->name('verify');
+        Route::post('/free-enroll', [App\Http\Controllers\PaymentController::class, 'completeFreeEnrollment'])->name('free-enroll');
         Route::get('/history', [App\Http\Controllers\PaymentController::class, 'paymentHistory'])->name('history');
         Route::get('/available-courses', [App\Http\Controllers\PaymentController::class, 'availableCourses'])->name('available-courses');
     });

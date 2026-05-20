@@ -150,7 +150,10 @@ $selectedLevel = $hero['level'] ?? 'Beginner';
 
                 </div>
 
-                @include('form.enrollment-form', ['selectedLevel' => $selectedLevel])
+                @include('form.enrollment-form', [
+                    'selectedLevel' => $selectedLevel,
+                    'courseModel' => $dbCourse ?? null,
+                ])
 
         </div>
 

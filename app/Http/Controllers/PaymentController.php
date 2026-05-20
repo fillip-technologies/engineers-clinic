@@ -5,8 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Payment;
 use App\Models\Course;
 use App\Models\Student;
+use App\Models\College;
+use App\Models\Role;
+use App\Models\User;
+use App\Services\OnboardingMailer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Razorpay\Api\Api;
 
 class PaymentController extends Controller
@@ -15,10 +22,101 @@ class PaymentController extends Controller
 
     public function __construct(Api $razorpay = null)
     {
-        $this->razorpay = $razorpay ?: new Api(
-            config('services.razorpay.key'),
-            config('services.razorpay.secret')
-        );
+        $this->razorpay = $razorpay;
+    }
+
+    public function startCheckout(Request $request, Course $course)
+    {
+        $validated = $request->validate([
+            'course_id' => ['required', 'exists:courses,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'phone' => ['required', 'string', 'max:30'],
+            'location' => ['required', 'string', 'max:255'],
+            'college' => ['required', 'string', 'max:255'],
+            'level' => ['required', 'string', 'max:50'],
+        ]);
+
+        abort_unless((int) $validated['course_id'] === $course->id, 404);
+
+        session([
+            'checkout_intent' => [
+                ...$validated,
+                'course_slug' => $course->slug,
+            ],
+        ]);
+
+        if (! Auth::check()) {
+            $user = User::where('email', $validated['email'])->first();
+
+            if ($user) {
+                return redirect()
+                    ->route('login')
+                    ->with('error', 'An account already exists with this email. Please log in to continue your purchase.');
+            }
+
+            $plainPassword = Str::password(12);
+            $role = Role::where('name', 'student')->firstOrFail();
+
+            $user = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => Hash::make($plainPassword),
+                'role_id' => $role->id,
+            ]);
+
+            $college = College::firstOrCreate(
+                ['college_name' => $validated['college']],
+                [
+                    'user_id' => null,
+                    'address' => $validated['location'],
+                    'contact_number' => $validated['phone'],
+                ]
+            );
+
+            $user->student()->create([
+                'college_id' => $college->id,
+                'course_name' => $course->title,
+            ]);
+
+            app(OnboardingMailer::class)->send($user, $plainPassword, 'student');
+
+            Auth::login($user);
+            $request->session()->regenerate();
+        } elseif (optional(Auth::user()->role)->name !== 'student') {
+            return redirect()
+                ->route('course.detail', $course->slug)
+                ->with('error', 'Please use a student account to purchase this course.');
+        }
+
+        return redirect()->route('payments.checkout', ['course' => $course->slug]);
+    }
+
+    public function checkout(Course $course)
+    {
+        if (! Auth::check()) {
+            return redirect()->guest(route('login'));
+        }
+
+        $student = $this->currentStudent();
+        $existingEnrollment = $student->enrollments()
+            ->where('course_id', $course->id)
+            ->first();
+
+        $completedPayment = Payment::where('student_id', $student->id)
+            ->where('course_id', $course->id)
+            ->where('status', 'completed')
+            ->latest()
+            ->first();
+
+        return view('payments.checkout', [
+            'course' => $course,
+            'student' => $student,
+            'checkoutIntent' => session('checkout_intent', []),
+            'existingEnrollment' => $existingEnrollment,
+            'completedPayment' => $completedPayment,
+            'razorpayKey' => config('services.razorpay.key'),
+        ]);
     }
 
     /**
@@ -30,12 +128,7 @@ class PaymentController extends Controller
             'course_id' => 'required|exists:courses,id',
         ]);
 
-        $user = Auth::user();
-        $student = Student::where('user_id', $user->id)->first();
-
-        if (!$student) {
-            return response()->json(['error' => 'Student not found'], 404);
-        }
+        $student = $this->currentStudent();
 
         $course = Course::findOrFail($request->course_id);
 
@@ -56,15 +149,19 @@ class PaymentController extends Controller
         }
 
         try {
+            if ((float) $course->fee <= 0) {
+                return response()->json(['error' => 'This course does not require payment.'], 400);
+            }
+
             // Create Razorpay order
             $orderData = [
                 'receipt' => 'course_' . $course->id . '_student_' . $student->id,
-                'amount' => $course->fee * 100, // Amount in paisa
+                'amount' => (int) round((float) $course->fee * 100), // Amount in paisa
                 'currency' => 'INR',
                 'payment_capture' => 1, // Auto capture
             ];
 
-            $razorpayOrder = $this->razorpay->order->create($orderData);
+            $razorpayOrder = $this->razorpay()->order->create($orderData);
 
             // Create payment record
             $payment = Payment::create([
@@ -101,12 +198,7 @@ class PaymentController extends Controller
             'payment_id' => 'required|exists:payments,id',
         ]);
 
-        $user = Auth::user();
-        $student = Student::where('user_id', $user->id)->first();
-
-        if (!$student) {
-            return response()->json(['error' => 'Student not found'], 404);
-        }
+        $student = $this->currentStudent();
 
         $payment = Payment::findOrFail($request->payment_id);
 
@@ -123,7 +215,7 @@ class PaymentController extends Controller
                 'razorpay_signature' => $request->razorpay_signature,
             ];
 
-            $this->razorpay->utility->verifyPaymentSignature($attributes);
+            $this->razorpay()->utility->verifyPaymentSignature($attributes);
 
             // Update payment status
             $payment->update([
@@ -133,11 +225,15 @@ class PaymentController extends Controller
             ]);
 
             // Create enrollment
-            $student->enrollments()->create([
-                'course_id' => $payment->course_id,
-                'enrollment_date' => now(),
-                'status' => 'active',
-            ]);
+            $student->enrollments()->updateOrCreate(
+                ['course_id' => $payment->course_id],
+                [
+                    'enrollment_date' => now(),
+                    'status' => 'ongoing',
+                ]
+            );
+
+            session()->forget('checkout_intent');
 
             return response()->json([
                 'success' => true,
@@ -157,12 +253,7 @@ class PaymentController extends Controller
      */
     public function paymentHistory()
     {
-        $user = Auth::user();
-        $student = Student::where('user_id', $user->id)->first();
-
-        if (!$student) {
-            return response()->json(['error' => 'Student not found'], 404);
-        }
+        $student = $this->currentStudent();
 
         $payments = $student->payments()->with('course')->get();
 
@@ -174,17 +265,102 @@ class PaymentController extends Controller
      */
     public function availableCourses()
     {
-        $user = Auth::user();
-        $student = Student::where('user_id', $user->id)->first();
-
-        if (!$student) {
-            return response()->json(['error' => 'Student not found'], 404);
-        }
+        $student = $this->currentStudent();
 
         // Get courses not enrolled in
         $enrolledCourseIds = $student->enrollments()->pluck('course_id');
         $courses = Course::whereNotIn('id', $enrolledCourseIds)->get();
 
         return response()->json($courses);
+    }
+
+    public function completeFreeEnrollment(Request $request)
+    {
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+        ]);
+
+        $student = $this->currentStudent();
+        $course = Course::findOrFail($request->course_id);
+
+        if ((float) $course->fee > 0) {
+            return response()->json(['error' => 'This course requires payment.'], 400);
+        }
+
+        $payment = Payment::updateOrCreate(
+            [
+                'student_id' => $student->id,
+                'course_id' => $course->id,
+                'status' => 'completed',
+            ],
+            [
+                'amount' => 0,
+                'payment_date' => now(),
+            ]
+        );
+
+        $student->enrollments()->updateOrCreate(
+            ['course_id' => $course->id],
+            [
+                'enrollment_date' => now(),
+                'status' => 'ongoing',
+            ]
+        );
+
+        session()->forget('checkout_intent');
+
+        return response()->json([
+            'success' => true,
+            'payment_id' => $payment->id,
+            'message' => 'Enrollment completed.',
+        ]);
+    }
+
+    protected function currentStudent(): Student
+    {
+        $user = Auth::user();
+
+        abort_unless($user, 401);
+        abort_unless(optional($user->role)->name === 'student', 403, 'Only student accounts can enroll in courses.');
+
+        $student = $user->student()->first();
+
+        if ($student) {
+            return $student;
+        }
+
+        $intent = session('checkout_intent', []);
+        $collegeName = trim($intent['college'] ?? '') ?: 'Direct Enrollment';
+        $college = College::firstOrCreate(
+            ['college_name' => $collegeName],
+            [
+                'user_id' => null,
+                'address' => $intent['location'] ?? null,
+                'contact_number' => $intent['phone'] ?? null,
+            ]
+        );
+
+        return $user->student()->create([
+            'college_id' => $college->id,
+            'course_name' => null,
+        ]);
+    }
+
+    protected function razorpay(): Api
+    {
+        if ($this->razorpay) {
+            return $this->razorpay;
+        }
+
+        $key = config('services.razorpay.key');
+        $secret = config('services.razorpay.secret');
+
+        if (blank($key) || blank($secret)) {
+            throw ValidationException::withMessages([
+                'razorpay' => 'Razorpay credentials are not configured.',
+            ]);
+        }
+
+        return $this->razorpay = new Api($key, $secret);
     }
 }
