@@ -31,10 +31,31 @@
 
     $levels = array_keys($menuLevels);
     $defaultLevel = $levels[0] ?? 'Beginner';
+    $trendingGoals = [
+        ['label' => 'Core Python & Computational Logic', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Core Python & Computational Logic'))],
+        ['label' => 'Data Foundations & Visual Analytics', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Data Foundations & Visual Analytics (Excel/SQL)'))],
+        ['label' => 'Full Stack Web Development', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Full Stack Web Development (React/Node)'))],
+        ['label' => 'Applied Machine Learning', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Applied Machine Learning & Data Modeling'))],
+    ];
 @endphp
 
 @if ($mobile)
 <div x-data="{ level: '{{ $defaultLevel }}', levels: {{ json_encode($menuLevels) }} }">
+    <div class="mb-4 rounded-card border border-borderLight bg-white p-4">
+        <p class="flex items-center gap-2 text-sm font-bold text-textPrimary">
+            Trending goals
+            <i class="fi fi-rr-target text-xs text-brand"></i>
+        </p>
+        <div class="mt-3 flex flex-wrap gap-2">
+            @foreach ($trendingGoals as $goal)
+                <a href="{{ $goal['href'] }}"
+                    class="inline-flex min-h-9 items-center rounded-control border border-borderLight bg-bgWhite px-3 py-1.5 text-xs font-semibold text-textPrimary transition hover:border-brand hover:bg-brandSoft hover:text-brand">
+                    {{ $goal['label'] }}
+                </a>
+            @endforeach
+        </div>
+    </div>
+
     <div class="grid grid-cols-3 gap-2">
         <template x-for="lvl in Object.keys(levels)" :key="lvl">
             <button type="button"
@@ -127,18 +148,35 @@
             </aside>
 
             <div class="bg-white p-5">
-                <div class="flex items-center justify-between gap-6 border-b border-borderLight pb-4">
-                    <div>
-                        <p class="text-sm font-black text-textPrimary" x-text="level + ' Internship Topics'"></p>
-                        <p class="text-caption mt-1">Pick a focused track and open the full course page.</p>
+                <div class="border-b border-borderLight pb-4">
+                    <div class="mb-4">
+                        <p class="flex items-center gap-2 text-sm font-black text-textPrimary">
+                            Trending goals
+                            <i class="fi fi-rr-target text-xs text-brand"></i>
+                        </p>
+                        <div class="mt-3 flex flex-wrap gap-2.5">
+                            @foreach ($trendingGoals as $goal)
+                                <a href="{{ $goal['href'] }}"
+                                    class="inline-flex min-h-10 items-center rounded-control border border-borderLight bg-bgWhite px-3.5 py-2 text-xs font-bold text-textPrimary shadow-sm transition hover:border-brand hover:bg-brandSoft hover:text-brand">
+                                    {{ $goal['label'] }}
+                                </a>
+                            @endforeach
+                        </div>
                     </div>
 
-                    <a href="#courses" class="rounded-full bg-secondarySoft px-4 py-2 text-xs font-black text-textPrimary transition hover:bg-secondary">
-                        View modules
-                    </a>
+                    <div class="flex items-center justify-between gap-6">
+                        <div>
+                            <p class="text-sm font-black text-textPrimary" x-text="level + ' Internship Topics'"></p>
+                            <p class="text-caption mt-1">Pick a focused track and open the full course page.</p>
+                        </div>
+
+                        <a href="#courses" class="rounded-full bg-secondarySoft px-4 py-2 text-xs font-black text-textPrimary transition hover:bg-secondary">
+                            View modules
+                        </a>
+                    </div>
                 </div>
 
-                <div class="mt-4 grid max-h-[calc(100vh-15rem)] grid-cols-1 gap-3 overflow-y-auto pr-1 xl:grid-cols-2">
+                <div class="mt-4 grid max-h-[calc(100vh-19rem)] grid-cols-1 gap-3 overflow-y-auto pr-1 xl:grid-cols-2">
                     <template x-for="category in levels[level].categories" :key="category.label">
                         <section class="rounded-card border border-borderLight bg-bgSoft/45 p-4 transition hover:border-brand/30 hover:bg-white hover:shadow-card">
                             <div class="flex items-start gap-3">

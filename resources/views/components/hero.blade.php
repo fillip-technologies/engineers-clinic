@@ -24,9 +24,30 @@
                     Choose your level, work on real projects, complete tasks, build practical skills, and earn industry-focused certifications.
                 </p>
 
-                <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                {{-- <div class="mt-8 flex flex-col gap-3 sm:flex-row">
                     <a href="#courses" class="btn-primary">Start Internship</a>
                     <a href="#courses" class="btn-secondary">Explore Tracks</a>
+                </div> --}}
+
+                <div class="mt-8">
+                    <p class="flex items-center gap-2 text-base font-bold text-textPrimary">
+                        Or select your goal
+                        <i class="fi fi-rr-target text-sm text-brand"></i>
+                    </p>
+
+                    <div class="mt-4 flex flex-wrap gap-3">
+                        @foreach ([
+                            ['label' => 'Core Python & Computational Logic', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Core Python & Computational Logic'))],
+                            ['label' => 'Data Foundations & Visual Analytics', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Data Foundations & Visual Analytics (Excel/SQL)'))],
+                            ['label' => 'Full Stack Web Development', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Full Stack Web Development (React/Node)'))],
+                            ['label' => 'Applied Machine Learning', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Applied Machine Learning & Data Modeling'))],
+                        ] as $goal)
+                            <a href="{{ $goal['href'] }}"
+                                class="inline-flex min-h-11 items-center justify-center rounded-control border border-borderLight bg-bgWhite px-4 py-2 text-sm font-bold text-textPrimary shadow-sm transition hover:border-brand hover:bg-brandSoft hover:text-brand">
+                                {{ $goal['label'] }}
+                            </a>
+                        @endforeach
+                    </div>
                 </div>
 
                 <div class="mt-9 flex flex-wrap items-center gap-5">

@@ -25,14 +25,14 @@
                     </div>
 
                     <!-- Spline Robot -->
-                    <div class="relative z-10 h-[650px] w-full">
+                    <div class="relative z-10 h-[650px] w-full overflow-hidden">
 
                         <iframe
                             src="https://my.spline.design/r4xbot-iAs0s9UvHqSshESeDIZqCcMw/"
                             frameborder="0"
                             width="100%"
                             height="100%"
-                            class="border-0">
+                            class="h-[calc(100%+72px)] w-full border-0">
                         </iframe>
 
                     </div>
@@ -174,4 +174,3 @@
         @endif
     </script>
 @endsection
-

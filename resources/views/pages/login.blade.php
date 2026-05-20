@@ -70,7 +70,7 @@ $loginConfig = [
                         frameborder="0"
                         width="100%"
                         height="100%"
-                        class="relative z-10 w-full h-full border-0">
+                        class="relative z-10 h-[calc(100%+72px)] w-full border-0">
                     </iframe>
 
                 </div>
