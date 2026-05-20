@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\CollegePartnershipDiscussionReceivedMail;
+use App\Mail\CounsellingLeadReceivedMail;
 use Illuminate\Http\Request;
 use App\Models\CounsellingLead;
 use App\Models\CollegePartnershipDiscussion;
@@ -26,7 +27,19 @@ class CounsellingController extends Controller
             'email' => 'nullable|email|max:255',
         ]);
 
-        CounsellingLead::create($validated);
+        $lead = CounsellingLead::create($validated);
+
+        if (filled($lead->email)) {
+            try {
+                Mail::to($lead->email)->send(new CounsellingLeadReceivedMail($lead));
+            } catch (Throwable $exception) {
+                Log::warning('Unable to send counselling lead acknowledgement email.', [
+                    'lead_id' => $lead->id,
+                    'email' => $lead->email,
+                    'message' => $exception->getMessage(),
+                ]);
+            }
+        }
 
         return back()->with('success', 'Your request has been submitted successfully.');
     }
