@@ -119,7 +119,7 @@ Choose from practical learning tracks designed for different engineering domains
             @foreach ($internshipLevels as $levelName => $programs)
             @php $cfg = $levelConfig[$levelName]; @endphp
 
-            <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-4" x-data="{ expanded: false }">
 
                 {{-- ── Level Card ── --}}
                 <div class="lc-card relative overflow-hidden  border p-6
@@ -233,7 +233,12 @@ Choose from practical learning tracks designed for different engineering domains
                 <div class="flex flex-col gap-1.5">
                     @foreach ($programs as $program)
                     <a href="{{ route('course.detail', $program['slug']) }}"
-                        class="group flex items-center gap-2.5 border bg-white/82 px-3.5 py-2.5 text-sm font-normal text-textPrimary no-underline sm:text-[16px]
+                        @if ($loop->index >= 10)
+                            x-cloak
+                            x-show="expanded"
+                            x-transition
+                        @endif
+                        class="group flex min-h-[4.5rem] items-center gap-2.5 border bg-white/82 px-3.5 py-2.5 text-sm font-normal text-textPrimary no-underline sm:text-[16px]
                         transition-all duration-200 hover:-translate-y-px hover:translate-x-1
                         @if($cfg['mc_class'] === 'mb')
                             border-brand/13 shadow-[0_2px_8px_rgba(124,92,252,0.05)]
@@ -269,6 +274,19 @@ Choose from practical learning tracks designed for different engineering domains
                     </a>
                     @endforeach
                 </div>
+
+                @if (count($programs) > 10)
+                    <button
+                        type="button"
+                        class="inline-flex items-center justify-center gap-2 rounded-[10px] border border-borderLight bg-white px-4 py-2.5 text-sm font-bold text-textPrimary shadow-sm transition hover:border-brand hover:bg-brandSoft hover:text-brand"
+                        @click="expanded = !expanded"
+                    >
+                        <span x-text="expanded ? 'Show less' : 'View more'"></span>
+                        <svg class="h-4 w-4 transition-transform duration-200" :class="expanded ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </button>
+                @endif
 
             </div>
             @endforeach
