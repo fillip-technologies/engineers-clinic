@@ -4,33 +4,34 @@
             'badge' => 'Limited Offer',
             'title' => 'UI/UX Design Fundamentals',
             'image' => '/images/master1.png',
-            'outcome' => 'Design a polished app screen and submit a practical UI task.',
-            'meta' => ['Guided task brief', 'Certificate Included', 'Portfolio-ready output'],
-            'support' => 'Beginner friendly',
-            'accent' => 'from-[#7C5CFC] to-[#B8DEFF]',
+            'outcome' => '',
+            'meta' => [],
+            'support' => '',
         ],
         [
             'badge' => 'Career Starter',
             'title' => 'HR Recruitment Basics & ATS Navigation',
             'image' => '/images/master2.png',
-            'outcome' => 'Practice a hiring workflow with shortlisting and ATS basics.',
-            'meta' => ['Project submission', 'Certificate Included', 'Job workflow practice'],
-            'support' => 'ATS workflow practice',
-            'accent' => 'from-[#160840] to-[#7C5CFC]',
+            'outcome' => '',
+            'meta' => [],
+            'support' => '',
         ],
         [
             'badge' => 'New Launch',
             'title' => 'Foundational Legal Research & Writing',
             'image' => '/images/master3.png',
-            'outcome' => 'Complete a guided legal research and writing mini assignment.',
-            'meta' => ['Legal writing task', 'Certificate Included', 'Research based practice'],
-            'support' => 'Research based task',
-            'accent' => 'from-[#3D2090] to-[#F5C842]',
+            'outcome' => '',
+            'meta' => [],
+            'support' => '',
         ],
     ];
 @endphp
 
-<section class="section-surface section-padding-sm relative isolate overflow-hidden">
+<section
+    x-data="{ enrollmentOpen: false }"
+    @keydown.escape.window="enrollmentOpen = false"
+    class="section-surface section-padding-sm relative isolate overflow-hidden"
+>
     <div class="pointer-events-none absolute inset-0 -z-10">
         <div class="absolute left-0 top-10 h-64 w-64 rounded-full bg-glowPurple blur-3xl"></div>
         <div class="absolute bottom-10 right-0 h-72 w-72 rounded-full bg-glowBlue blur-3xl"></div>
@@ -81,9 +82,11 @@
                                 {{ $program['title'] }}
                             </h3>
 
-                            <p class="text-body mt-3">
-                                {{ $program['outcome'] }}
-                            </p>
+                            @if (!empty($program['outcome']))
+                                <p class="text-body mt-3">
+                                    {{ $program['outcome'] }}
+                                </p>
+                            @endif
 
                             <div class="mt-5 rounded-[20px] border border-borderLight bg-gradient-to-br from-white to-bgSoft p-4">
                                 <div class="flex items-end justify-between gap-4">
@@ -102,30 +105,32 @@
                                 <p class="text-caption mt-3">Includes task brief, submission flow, and certificate eligibility.</p>
                             </div>
 
-                            <div class="mt-5 h-1.5 overflow-hidden rounded-full bg-bgSoft">
-                                <div class="h-full w-2/3 rounded-full bg-gradient-to-r {{ $program['accent'] }}"></div>
-                            </div>
+                            @if (!empty($program['support']) || !empty($program['meta']))
+                                <div class="mt-5 space-y-3">
+                                    @if (!empty($program['support']))
+                                        <div class="flex items-center gap-3">
+                                            <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-brandSoft text-xs font-black text-brand">
+                                                &check;
+                                            </span>
+                                            <span class="text-body">{{ $program['support'] }}</span>
+                                        </div>
+                                    @endif
 
-                            <div class="mt-5 space-y-3">
-                                <div class="flex items-center gap-3">
-                                    <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-brandSoft text-xs font-black text-brand">
-                                        &check;
-                                    </span>
-                                    <span class="text-body">{{ $program['support'] }}</span>
+                                    @foreach ($program['meta'] as $meta)
+                                        <div class="flex items-center gap-3">
+                                            <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-brandSoft text-xs font-black text-brand">
+                                                &check;
+                                            </span>
+                                            <span class="text-body">{{ $meta }}</span>
+                                        </div>
+                                    @endforeach
                                 </div>
-
-                                @foreach ($program['meta'] as $meta)
-                                    <div class="flex items-center gap-3">
-                                        <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-brandSoft text-xs font-black text-brand">
-                                            &check;
-                                        </span>
-                                        <span class="text-body">{{ $meta }}</span>
-                                    </div>
-                                @endforeach
-                            </div>
+                            @endif
 
                             <div class="mt-auto pt-7">
-                                <a href="#courses" class="btn-primary w-full">Start this sprint for &#8377;9</a>
+                                <button type="button" class="btn-primary w-full" @click="enrollmentOpen = true">
+                                    Enroll Now
+                                </button>
                                 <a href="#courses" class="mt-3 inline-flex w-full justify-center text-sm font-bold text-brand transition hover:text-brandDark">
                                     View task details
                                 </a>
@@ -145,6 +150,49 @@
                     Get my &#8377;9 certificate sprint
                 </a>
             </div> -->
+        </div>
+    </div>
+
+    <div
+        x-cloak
+        x-show="enrollmentOpen"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-[140] overflow-y-auto bg-slate-950/70 px-4 py-6 backdrop-blur-sm sm:px-6 lg:px-8"
+        role="dialog"
+        aria-modal="true"
+        @click="enrollmentOpen = false"
+    >
+        <div class="flex min-h-full items-center justify-center">
+            <div
+                x-show="enrollmentOpen"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="translate-y-4 scale-[0.98] opacity-0"
+                x-transition:enter-end="translate-y-0 scale-100 opacity-100"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="translate-y-0 scale-100 opacity-100"
+                x-transition:leave-end="translate-y-4 scale-[0.98] opacity-0"
+                class="relative w-full max-w-3xl"
+                @click.stop
+            >
+                <button
+                    type="button"
+                    class="absolute right-4 top-4 z-20 inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-slate-500 shadow-lg shadow-slate-300/50 transition hover:text-slate-900"
+                    @click="enrollmentOpen = false"
+                    aria-label="Close enrollment form"
+                >
+                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 5l10 10" />
+                        <path d="M15 5 5 15" />
+                    </svg>
+                </button>
+
+                @include('form.enrollment-form', ['selectedLevel' => 'Beginner'])
+            </div>
         </div>
     </div>
 </section>
