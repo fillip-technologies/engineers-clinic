@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CollegePartnershipDiscussionReceivedMail;
 use Illuminate\Http\Request;
 use App\Models\CounsellingLead;
 use App\Models\CollegePartnershipDiscussion;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class CounsellingController extends Controller
 {
@@ -46,7 +50,17 @@ class CounsellingController extends Controller
             'department_stream.required' => 'Department / stream is required.',
         ]);
 
-        CollegePartnershipDiscussion::create($validated);
+        $discussion = CollegePartnershipDiscussion::create($validated);
+
+        try {
+            Mail::to($discussion->official_email)->send(new CollegePartnershipDiscussionReceivedMail($discussion));
+        } catch (Throwable $exception) {
+            Log::warning('Unable to send college partnership discussion acknowledgement email.', [
+                'discussion_id' => $discussion->id,
+                'email' => $discussion->official_email,
+                'message' => $exception->getMessage(),
+            ]);
+        }
 
         return back()->with('partnership_discussion_success', 'Your partnership discussion request has been submitted. Our team will contact you shortly.');
     }
