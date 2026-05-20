@@ -1,3 +1,8 @@
+@php
+    $courseModel = $courseModel ?? null;
+    $selectedLevel = old('level', $selectedLevel ?? 'Beginner');
+@endphp
+
 <!-- ANIMATED FORM WRAPPER -->
 <div class="relative overflow-hidden rounded-[2rem] p-[1px]">
 
@@ -72,7 +77,7 @@
             @if($courseModel)
                 <input type="hidden" name="course_id" value="{{ $courseModel->id }}">
             @endif
-            <input type="hidden" name="level" :value="level">
+            <input type="hidden" name="level" value="{{ $selectedLevel }}" x-model="level">
 
             @if ($errors->any())
                 <div class="mb-5 rounded-2xl border border-red-100 bg-red-50 px-5 py-4 text-sm font-semibold text-red-700">
