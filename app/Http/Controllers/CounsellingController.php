@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Mail\CollegePartnershipDiscussionReceivedMail;
+use App\Mail\CourseEnquiryReceivedMail;
 use App\Mail\CounsellingLeadReceivedMail;
 use Illuminate\Http\Request;
+use App\Models\CourseEnquiry;
 use App\Models\CounsellingLead;
 use App\Models\CollegePartnershipDiscussion;
 use Illuminate\Support\Facades\Log;
@@ -78,6 +80,38 @@ class CounsellingController extends Controller
         return back()->with('partnership_discussion_success', 'Your partnership discussion request has been submitted. Our team will contact you shortly.');
     }
 
+    public function storeCourseEnquiry(Request $request)
+    {
+        $validated = $request->validateWithBag('courseEnquiry', [
+            'name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'regex:/^[0-9+\-\s()]{7,20}$/'],
+            'email' => ['required', 'email', 'max:255'],
+            'course_slug' => ['nullable', 'string', 'max:255'],
+            'course_title' => ['nullable', 'string', 'max:255'],
+            'consent' => ['accepted'],
+        ], [
+            'phone.regex' => 'Enter a valid phone number.',
+            'consent.accepted' => 'Please allow us to contact you about this enquiry.',
+        ]);
+
+        $enquiry = CourseEnquiry::create([
+            ...$validated,
+            'consent' => true,
+        ]);
+
+        try {
+            Mail::to($enquiry->email)->send(new CourseEnquiryReceivedMail($enquiry));
+        } catch (Throwable $exception) {
+            Log::warning('Unable to send course enquiry acknowledgement email.', [
+                'enquiry_id' => $enquiry->id,
+                'email' => $enquiry->email,
+                'message' => $exception->getMessage(),
+            ]);
+        }
+
+        return back()->with('course_enquiry_success', 'Your enquiry has been submitted. Our team will contact you shortly.');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Admin Listing
@@ -96,5 +130,12 @@ class CounsellingController extends Controller
         $college_partner = CollegePartnershipDiscussion::latest()->paginate(20);
 
         return view('Admin.forms.collegepartner', compact('college_partner'));
+    }
+
+    public function courseEnquiries()
+    {
+        $enquiries = CourseEnquiry::latest()->paginate(20);
+
+        return view('Admin.forms.course-enquiries', compact('enquiries'));
     }
 }

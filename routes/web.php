@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/counselling-submit', [CounsellingController::class, 'store'])
     ->name('counselling.store');
 Route::post('/college-tieup/partnership-discussion', [CounsellingController::class, 'storeCollegePartnershipDiscussion'])->name('college.partnership-discussion.store');
+Route::post('/course-enquiry-submit', [CounsellingController::class, 'storeCourseEnquiry'])->name('course-enquiries.store');
 Route::post('/course/{course:slug}/reserve', [PaymentController::class, 'startCheckout'])->name('payments.checkout.start');
 
 

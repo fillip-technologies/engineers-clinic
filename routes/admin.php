@@ -43,3 +43,5 @@ Route::get('/counselling-leads', [CounsellingController::class, 'index'])
     ->name('counselling.index');
 Route::get('/college-partner', [CounsellingController::class, 'index_college'])
     ->name('counselling.partner');
+Route::get('/course-enquiries', [CounsellingController::class, 'courseEnquiries'])
+    ->name('course-enquiries.index');

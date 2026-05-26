@@ -12,7 +12,7 @@ $primaryCta = $hero['primary_cta'] ?? ['label' => 'Reserve Your Seat', 'href' =>
 $selectedLevel = $hero['level'] ?? 'Beginner';
 @endphp
 
-<div x-data="{ enquiryOpen: false }" @keydown.escape.window="enquiryOpen = false">
+<div x-data="{ enquiryOpen: {{ ($errors->courseEnquiry->any() || session()->has('course_enquiry_success')) ? 'true' : 'false' }} }" @keydown.escape.window="enquiryOpen = false">
 
     <section class="relative overflow-hidden bg-[#fcfcfd] py-20">
 
