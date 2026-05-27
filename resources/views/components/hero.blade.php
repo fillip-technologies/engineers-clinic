@@ -11,7 +11,7 @@
             <div>
                 <span class="badge-pill">
                     <span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>
-                    Industry-Led Internship Platform
+                    Industry-Led Internship Platfor
                 </span>
 
                 <h1 class="text-hero mt-6 max-w-4xl">
