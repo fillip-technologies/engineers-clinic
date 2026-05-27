@@ -56,7 +56,13 @@
             <h2 class="text-2xl font-bold tracking-tight text-slate-900">Connect With Our Team</h2>
             <p class="mt-2 text-sm text-slate-500">Fill your details and our team will contact you shortly.</p>
 
-            <form method="POST" action="#" class="mt-6 space-y-5">
+            @if(session('course_enquiry_success'))
+                <div class="mt-5 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800">
+                    {{ session('course_enquiry_success') }}
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('course-enquiries.store') }}" class="mt-6 space-y-5">
                 @csrf
                 <input type="hidden" name="course_slug" value="{{ $course['slug'] ?? '' }}">
                 <input type="hidden" name="course_title" value="{{ $course['title'] ?? '' }}">
@@ -65,8 +71,12 @@
                     <label class="block text-sm font-medium text-slate-700">Full Name *</label>
                     <input type="text"
                         name="name"
+                        value="{{ old('name') }}"
                         placeholder="Enter your full name"
-                        class="mt-1.5 block w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm text-slate-900 transition focus:border-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400">
+                        class="mt-1.5 block w-full rounded-lg border {{ $errors->courseEnquiry->has('name') ? 'border-red-300' : 'border-slate-200' }} px-4 py-2.5 text-sm text-slate-900 transition focus:border-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400">
+                    @error('name', 'courseEnquiry')
+                        <p class="mt-1 text-xs font-medium text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
@@ -75,25 +85,38 @@
                         <span class="inline-flex items-center rounded-l-lg border border-r-0 border-slate-200 bg-slate-50 px-3 text-sm text-slate-600">+91</span>
                         <input type="tel"
                             name="phone"
+                            value="{{ old('phone') }}"
                             placeholder="98765 43210"
-                            class="block w-full rounded-r-lg border border-slate-200 px-4 py-2.5 text-sm text-slate-900 transition focus:border-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400">
+                            class="block w-full rounded-r-lg border {{ $errors->courseEnquiry->has('phone') ? 'border-red-300' : 'border-slate-200' }} px-4 py-2.5 text-sm text-slate-900 transition focus:border-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400">
                     </div>
+                    @error('phone', 'courseEnquiry')
+                        <p class="mt-1 text-xs font-medium text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700">Email ID *</label>
                     <input type="email"
                         name="email"
+                        value="{{ old('email') }}"
                         placeholder="you@example.com"
-                        class="mt-1.5 block w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm text-slate-900 transition focus:border-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400">
+                        class="mt-1.5 block w-full rounded-lg border {{ $errors->courseEnquiry->has('email') ? 'border-red-300' : 'border-slate-200' }} px-4 py-2.5 text-sm text-slate-900 transition focus:border-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400">
+                    @error('email', 'courseEnquiry')
+                        <p class="mt-1 text-xs font-medium text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <label class="flex items-start gap-3 text-sm text-slate-500">
                     <input type="checkbox"
                         name="consent"
+                        value="1"
+                        @checked(old('consent'))
                         class="mt-0.5 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400">
                     <span>I agree to receive updates via Call, SMS, Email & WhatsApp from Engineers Clinic.</span>
                 </label>
+                @error('consent', 'courseEnquiry')
+                    <p class="-mt-3 text-xs font-medium text-red-600">{{ $message }}</p>
+                @enderror
 
                 <button type="submit"
                     class="w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-slate-800">

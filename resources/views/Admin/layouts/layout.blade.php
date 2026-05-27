@@ -95,9 +95,8 @@ $navigationGroups = [
 
 'Form Data' => [
 ['label' => 'Counselling Form', 'route' => 'admin.counselling.index', 'active' => 'admin.counselling.*', 'icon' => 'fi-rr-task'],
-['label' => 'College Partnership', 'route' => 'admin.quizzes.index', 'active' => 'admin.quizzes.*', 'icon' => 'fi-rr-form'],
-['label' => 'Quiz Results', 'route' => 'admin.quiz-results.index', 'active' => 'admin.quiz-results.*', 'icon' => 'fi-rr-chart'],
-['label' => 'Certificates', 'route' => 'admin.certificates.index', 'active' => 'admin.certificates.*', 'icon' => 'fi-rr-medal'],
+['label' => 'Course Enquiries', 'route' => 'admin.course-enquiries.index', 'active' => 'admin.course-enquiries.*', 'icon' => 'fi-rr-comment-alt'],
+['label' => 'College Partnership', 'route' => 'admin.counselling.partner', 'active' => 'admin.counselling.partner', 'icon' => 'fi-rr-form'],
 ],
 ];
 @endphp
