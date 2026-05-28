@@ -1,6 +1,16 @@
 @extends('layouts.frontend-admin')
 
 @section('content')
+    @php
+        $quizStats = $quizStats ?? [
+            'total' => 0,
+            'attempted' => 0,
+            'passed' => 0,
+            'upcoming' => 0,
+            'averageScore' => '0%',
+        ];
+    @endphp
+
     <div class="mx-auto max-w-6xl">
         <section class="rounded-[1.75rem] border border-slate-200/70 bg-white px-6 py-6 shadow-sm sm:px-8">
             <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -20,19 +30,53 @@
             </div>
         </section>
 
+        <section class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Assigned quizzes</p>
+                <p class="mt-2 text-2xl font-semibold text-slate-950">{{ $quizStats['total'] }}</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Attempts</p>
+                <p class="mt-2 text-2xl font-semibold text-slate-950">{{ $quizStats['attempted'] }}</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Passed</p>
+                <p class="mt-2 text-2xl font-semibold text-slate-950">{{ $quizStats['passed'] }}</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Upcoming</p>
+                <p class="mt-2 text-2xl font-semibold text-slate-950">{{ $quizStats['upcoming'] }}</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Average score</p>
+                <p class="mt-2 text-2xl font-semibold text-slate-950">{{ $quizStats['averageScore'] }}</p>
+            </div>
+        </section>
+
         <section class="mt-8 rounded-[1.75rem] border border-slate-200/70 bg-white p-3 shadow-sm sm:p-4">
             <div class="flex flex-col gap-3 border-b border-slate-200 px-3 pb-4 pt-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <p class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Quiz Activity</p>
                     <h2 class="mt-2 text-2xl font-semibold text-slate-900">Track every quiz from one place</h2>
                 </div>
-                <p class="text-sm leading-6 text-slate-500">Dummy interface for student quiz history and next attempts.</p>
+                <p class="text-sm leading-6 text-slate-500">Showing quizzes from your enrolled courses and recorded attempts.</p>
             </div>
 
             <div class="mt-4 space-y-3">
-                @foreach ($quizAttempts as $attempt)
+                @forelse ($quizAttempts as $attempt)
                     @include('dashboard.student-dashboard.components.quiz-attempt-item', ['attempt' => $attempt])
-                @endforeach
+                @empty
+                    <div class="flex min-h-[260px] flex-col items-center justify-center rounded-[1.5rem] bg-slate-50 px-6 text-center">
+                        <h3 class="text-xl font-semibold text-slate-950">No quizzes available yet</h3>
+                        <p class="mt-3 max-w-md text-sm leading-6 text-slate-500">
+                            Once quizzes are added to your enrolled courses, they will appear here with your scores and status.
+                        </p>
+                        <a href="{{ route('dashboard.enrolled-courses') }}"
+                            class="mt-5 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primaryLight">
+                            View Enrolled Courses
+                        </a>
+                    </div>
+                @endforelse
             </div>
         </section>
     </div>

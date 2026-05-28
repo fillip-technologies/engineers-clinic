@@ -18,7 +18,9 @@ use App\Services\OnboardingMailer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -221,24 +223,88 @@ class HomeController extends Controller
             $enrolledCourses = [];
         } else {
             // Fetch enrollments with course details
-            $enrollments = Enrollment::with('course')
+            $enrollments = Enrollment::with([
+                'course.workspaces' => fn ($query) => $query
+                    ->where('status', true)
+                    ->with([
+                        'steps' => fn ($query) => $query->orderBy('sort_order')->orderBy('step_no'),
+                        'steps.taskProgress' => fn ($query) => $query->where('student_id', $user->id),
+                    ])
+                    ->orderByDesc('updated_at'),
+            ])
                 ->where('student_id', $student->id)
                 ->orderBy('enrollment_date', 'desc')
                 ->get();
 
             $enrolledCourses = $enrollments->map(function ($enrollment) {
                 $course = $enrollment->course;
+                $workspaces = $course?->workspaces ?? collect();
+                $projects = $workspaces->values()->map(function (CourseWorkspace $workspace, int $index) use ($enrollment) {
+                    $steps = $this->studentWorkspaceSteps($workspace);
+                    $completedSteps = collect($steps)->where('state', 'completed')->count();
+                    $totalSteps = count($steps);
+
+                    return [
+                        'id' => (string) $workspace->id,
+                        'title' => $workspace->title,
+                        'description' => $workspace->summary ?: $workspace->headline ?: 'Complete the workspace checkpoints for this course.',
+                        'time' => $totalSteps > 0 ? $totalSteps . ' steps' : 'Ready to start',
+                        'points' => max($totalSteps, 1) * 150,
+                        'recommended' => $index === 0,
+                        'progress' => $totalSteps > 0 ? (int) round(($completedSteps / $totalSteps) * 100) : (int) ($enrollment->progress ?? 0),
+                    ];
+                })->all();
+
+                $tasks = $workspaces->mapWithKeys(function (CourseWorkspace $workspace) {
+                    $steps = collect($this->studentWorkspaceSteps($workspace))->map(function (array $step) {
+                        $state = $step['state'] ?? 'pending';
+                        $isCompleted = $state === 'completed';
+                        $isSubmitted = ($step['status'] ?? '') === 'Submitted';
+
+                        return [
+                            'title' => $step['title'],
+                            'meta' => $step['description'] ?: ($step['build'] ?: 'Project checkpoint'),
+                            'status' => $step['status'] ?: ($isCompleted ? 'Completed' : 'Pending'),
+                            'action' => $isCompleted ? 'Review Task' : ($isSubmitted ? 'View Submission' : 'Continue Task'),
+                            'tone' => $isCompleted
+                                ? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
+                                : (($step['active'] ?? false)
+                                    ? 'bg-blue-50 text-blue-700 ring-blue-200'
+                                    : 'bg-amber-50 text-amber-700 ring-amber-200'),
+                        ];
+                    })->values()->all();
+
+                    return [(string) $workspace->id => $steps];
+                })->all();
+
+                $activeWorkspace = $workspaces->first();
+                $activeSteps = $activeWorkspace ? $this->studentWorkspaceSteps($activeWorkspace) : [];
+                $totalSteps = count($activeSteps) ?: 100;
+                $completedSteps = count($activeSteps)
+                    ? collect($activeSteps)->where('state', 'completed')->count()
+                    : (int) ($enrollment->progress ?? 0);
+                $progress = count($activeSteps)
+                    ? (int) round(($completedSteps / $totalSteps) * 100)
+                    : (int) ($enrollment->progress ?? 0);
+                $status = match (strtolower((string) $enrollment->status)) {
+                    'completed' => 'Completed',
+                    'ongoing', 'active', 'in progress' => 'Active',
+                    default => Str::headline((string) ($enrollment->status ?: 'Active')),
+                };
+
                 return [
                     'id' => $enrollment->id,
                     'course_id' => $course?->id,
                     'title' => $course?->title ?? 'Unknown Course',
-                    'image' => '/images/courses/' . ($course?->slug ?? 'default') . '.svg',
+                    'image' => $course?->image ?: '/images/courses/default.svg',
                     'description' => $course?->description ?? '',
-                    'completed_lessons' => $enrollment->progress ?? 0,
-                    'total_lessons' => 100, // Default total
-                    'progress' => $enrollment->progress ?? 0,
-                    'status' => $enrollment->status ?? 'Active',
+                    'completed_lessons' => $completedSteps,
+                    'total_lessons' => $totalSteps,
+                    'progress' => $progress,
+                    'status' => $status,
                     'enrollment_date' => $enrollment->enrollment_date?->format('M d, Y'),
+                    'projects' => $projects,
+                    'tasks' => $tasks,
                 ];
             })->toArray();
         }
@@ -342,6 +408,7 @@ class HomeController extends Controller
             'goals',
         ])
             ->when($course, fn ($query) => $query->where('course_id', $course->id))
+            ->when(request('project'), fn ($query, $project) => $query->where('id', $project))
             ->where('status', true)
             ->orderByDesc('updated_at')
             ->first();
@@ -535,28 +602,8 @@ class HomeController extends Controller
             return redirect()->route('login');
         }
 
-        // Get the student record for this user
-        $student = Student::where('user_id', $user->id)->first();
-
-        // Build profile data from user and student records
-        $profile = [
-            'name' => $user->name,
-            'email' => $user->email,
-            'phone' => $user->phone ?? '',
-            'avatar' => $user->avatar ?? 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80',
-            'student_id' => $student?->id,
-            'college_id' => $student?->college_id,
-            'course_name' => $student?->course_name ?? '',
-            'created_at' => $user->created_at?->format('M d, Y'),
-        ];
-
-        // If no student record exists, create basic profile from user
-        if (!$student) {
-            $profile['course_name'] = 'Not enrolled';
-        }
-
         return view('dashboard.student-dashboard.profile.index', [
-            'profile' => $profile,
+            'profile' => $this->studentProfileData($user),
             ...$this->frontendAdminData('student-profile'),
         ]);
     }
@@ -570,10 +617,11 @@ class HomeController extends Controller
         }
 
         // Handle form submission for profile update
-        if ($request->isMethod('post')) {
+        if (! $request->isMethod('get')) {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'phone' => 'nullable|string|max:20',
+                'avatar' => 'nullable|image|max:2048',
             ]);
 
             // Update user profile
@@ -581,16 +629,46 @@ class HomeController extends Controller
             if (isset($validated['phone'])) {
                 $user->phone = $validated['phone'];
             }
+
+            if ($request->hasFile('avatar')) {
+                $path = $request->file('avatar')->store('avatars', 'public');
+                $user->avatar = Storage::url($path);
+            }
+
             $user->save();
 
             return redirect()->route('dashboard.student.profile')
                 ->with('success', 'Profile updated successfully!');
         }
 
-        // Get the student record for this user
-        $student = Student::where('user_id', $user->id)->first();
+        return view('dashboard.student-dashboard.profile.edit', [
+            'profile' => $this->studentProfileData($user),
+            ...$this->frontendAdminData('student-profile'),
+        ]);
+    }
 
-        // Build profile data for editing
+    protected function studentProfileData(User $user): array
+    {
+        $student = Student::with([
+            'college',
+            'enrollments.course',
+            'payments.course',
+        ])
+            ->where('user_id', $user->id)
+            ->first();
+
+        $enrollments = $student?->enrollments ?? collect();
+        $latestEnrollment = $enrollments->sortByDesc('enrollment_date')->first();
+        $completedCourses = $enrollments->where('status', 'completed')->count();
+        $activeCourses = $enrollments
+            ->filter(fn (Enrollment $enrollment) => in_array(strtolower((string) $enrollment->status), ['active', 'ongoing', 'in progress'], true))
+            ->count();
+        $averageProgress = $enrollments->count() ? (int) round($enrollments->avg('progress')) : 0;
+        $payments = $student?->payments ?? collect();
+        $paidAmount = $payments
+            ->whereIn('status', ['completed', 'paid', 'success'])
+            ->sum(fn (Payment $payment) => (float) $payment->amount);
+
         $profile = [
             'name' => $user->name,
             'email' => $user->email,
@@ -598,13 +676,23 @@ class HomeController extends Controller
             'avatar' => $user->avatar ?? 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80',
             'student_id' => $student?->id,
             'college_id' => $student?->college_id,
-            'course_name' => $student?->course_name ?? '',
+            'college_name' => $student?->college?->college_name ?? 'Not linked',
+            'course_name' => $latestEnrollment?->course?->title ?? $student?->course_name ?? 'Not enrolled',
+            'enrollment_status' => $latestEnrollment
+                ? Str::headline((string) $latestEnrollment->status)
+                : 'Not enrolled',
+            'enrollment_date' => $latestEnrollment?->enrollment_date?->format('M d, Y') ?? 'Not enrolled',
+            'progress' => $latestEnrollment?->progress ?? 0,
+            'total_enrolled' => $enrollments->count(),
+            'active_courses' => $activeCourses,
+            'completed_courses' => $completedCourses,
+            'average_progress' => $averageProgress,
+            'paid_amount' => 'Rs. ' . number_format($paidAmount, 0),
+            'latest_payment' => $payments->sortByDesc('payment_date')->first()?->payment_date?->format('M d, Y') ?? 'No payment yet',
+            'created_at' => $user->created_at?->format('M d, Y'),
         ];
 
-        return view('dashboard.student-dashboard.profile.edit', [
-            'profile' => $profile,
-            ...$this->frontendAdminData('student-profile'),
-        ]);
+        return $profile;
     }
 
     public function quizAttempts()
@@ -615,35 +703,101 @@ class HomeController extends Controller
             return redirect()->route('login');
         }
 
-        // Get the student record for this user
-        $student = Student::where('user_id', $user->id)->first();
+        $student = Student::with('enrollments.course')
+            ->where('user_id', $user->id)
+            ->first();
 
-        if (!$student) {
-            $quizAttempts = [];
-        } else {
-            // Fetch quiz results with quiz and course details
-            $quizResults = QuizResult::with(['quiz', 'quiz.course'])
-                ->where('student_id', $student->id)
-                ->orderBy('created_at', 'desc')
+        $quizAttempts = [];
+        $quizStats = [
+            'total' => 0,
+            'attempted' => 0,
+            'passed' => 0,
+            'upcoming' => 0,
+            'averageScore' => '0%',
+        ];
+
+        if ($student) {
+            $enrollments = $student->enrollments;
+            $enrollmentByCourse = $enrollments->keyBy('course_id');
+            $courseIds = $enrollments->pluck('course_id')->filter()->unique()->values();
+            $quizzes = Quiz::with('course')
+                ->withCount('questions')
+                ->whereIn('course_id', $courseIds)
+                ->orderBy('created_at')
                 ->get();
+            $quizResults = QuizResult::with(['quiz.course'])
+                ->where('student_id', $student->id)
+                ->orderBy('created_at')
+                ->get();
+            $attemptNumbers = [];
 
-            $quizAttempts = $quizResults->map(function ($result, $index) {
+            $completedAttempts = $quizResults->map(function (QuizResult $result) use (&$attemptNumbers, $enrollmentByCourse) {
                 $quiz = $result->quiz;
+                $course = $quiz?->course;
+                $attemptNumbers[$result->quiz_id] = ($attemptNumbers[$result->quiz_id] ?? 0) + 1;
+                $score = $result->score;
+                $totalMarks = $quiz?->total_marks;
+                $scoreLabel = $score !== null
+                    ? ($totalMarks && $score <= $totalMarks
+                        ? $score . '/' . $totalMarks . ' marks (' . (int) round(($score / max($totalMarks, 1)) * 100) . '%)'
+                        : $score . '%')
+                    : 'Pending';
+                $enrollment = $course ? $enrollmentByCourse->get($course->id) : null;
+
                 return [
-                    'id' => $result->id,
+                    'id' => 'result-' . $result->id,
                     'title' => $quiz?->title ?? 'Unknown Quiz',
-                    'course' => $quiz?->course?->title ?? 'Unknown Course',
-                    'attempt' => 'Attempt ' . ($index + 1),
-                    'score' => $result->score ? $result->score . '%' : 'Pending',
-                    'status' => $result->passed ? 'Passed' : ($result->score !== null ? 'Failed' : 'Upcoming'),
-                    'updated_at' => $result->created_at?->format('F j, Y'),
+                    'course' => $course?->title ?? 'Unknown Course',
+                    'attempt' => 'Attempt ' . $attemptNumbers[$result->quiz_id],
+                    'score' => $scoreLabel,
+                    'status' => $result->passed ? 'Passed' : 'Failed',
+                    'updated_at' => $result->created_at?->format('F j, Y') ?? 'Recently',
                     'action' => $result->passed ? 'View Summary' : 'Review Attempt',
+                    'href' => $enrollment ? route('student.course.workspace', ['id' => $enrollment->id]) : route('dashboard.enrolled-courses'),
+                    'sort_at' => $result->created_at,
                 ];
-            })->toArray();
+            });
+
+            $attemptedQuizIds = $quizResults->pluck('quiz_id')->unique();
+            $upcomingAttempts = $quizzes
+                ->whereNotIn('id', $attemptedQuizIds)
+                ->map(function (Quiz $quiz) use ($enrollmentByCourse) {
+                    $enrollment = $enrollmentByCourse->get($quiz->course_id);
+
+                    return [
+                        'id' => 'quiz-' . $quiz->id,
+                        'title' => $quiz->title,
+                        'course' => $quiz->course?->title ?? 'Unknown Course',
+                        'attempt' => ($quiz->questions_count ?? 0) . ' questions',
+                        'score' => 'Pending',
+                        'status' => 'Upcoming',
+                        'updated_at' => $quiz->created_at?->format('F j, Y') ?? 'Available now',
+                        'action' => 'Open Course',
+                        'href' => $enrollment ? route('student.course.workspace', ['id' => $enrollment->id]) : route('dashboard.enrolled-courses'),
+                        'sort_at' => $quiz->created_at,
+                    ];
+                });
+
+            $quizAttempts = $completedAttempts
+                ->concat($upcomingAttempts)
+                ->sortByDesc('sort_at')
+                ->map(fn (array $attempt) => collect($attempt)->except('sort_at')->all())
+                ->values()
+                ->toArray();
+
+            $scores = $quizResults->pluck('score')->filter(fn ($score) => $score !== null);
+            $quizStats = [
+                'total' => $quizzes->count(),
+                'attempted' => $quizResults->count(),
+                'passed' => $quizResults->where('passed', true)->count(),
+                'upcoming' => $upcomingAttempts->count(),
+                'averageScore' => $scores->count() ? (int) round($scores->avg()) . '%' : '0%',
+            ];
         }
 
         return view('dashboard.student-dashboard.quiz-attempts.index', [
             'quizAttempts' => $quizAttempts,
+            'quizStats' => $quizStats,
             ...$this->frontendAdminData('student-quiz-attempts'),
         ]);
     }
@@ -1013,6 +1167,12 @@ class HomeController extends Controller
                 'activities' => [],
                 'announcements' => [],
                 'statCards' => [],
+                'collegeChartData' => [
+                    'studentGrowth' => ['labels' => [], 'data' => []],
+                    'enrollmentDistribution' => ['labels' => [], 'data' => []],
+                    'placementStats' => ['labels' => ['Completed', 'In progress'], 'data' => [0, 0]],
+                    'engagement' => ['labels' => [], 'active' => [], 'inactive' => []],
+                ],
             ];
         }
 
@@ -1024,7 +1184,7 @@ class HomeController extends Controller
             ->where('status', 'completed')
             ->count();
         $activeStudents = Student::where('college_id', $college->id)
-            ->whereHas('enrollments', fn ($query) => $query->where('status', 'active'))
+            ->whereHas('enrollments', fn ($query) => $query->whereIn('status', ['active', 'ongoing', 'in progress']))
             ->count();
         $placementRate = $totalEnrollments ? round($completedEnrollments * 100 / $totalEnrollments) : 0;
 
@@ -1141,7 +1301,34 @@ class HomeController extends Controller
             ],
         ];
 
-        return compact('recentStudents', 'topCourses', 'activities', 'announcements', 'statCards');
+        $growthRows = Student::where('college_id', $college->id)
+            ->selectRaw("DATE_FORMAT(created_at, '%b') as month_label, DATE_FORMAT(created_at, '%Y-%m') as month_key, COUNT(*) as total")
+            ->groupBy('month_key', 'month_label')
+            ->orderBy('month_key')
+            ->limit(7)
+            ->get();
+
+        $collegeChartData = [
+            'studentGrowth' => [
+                'labels' => $growthRows->pluck('month_label')->values()->all(),
+                'data' => $growthRows->pluck('total')->map(fn ($value) => (int) $value)->values()->all(),
+            ],
+            'enrollmentDistribution' => [
+                'labels' => collect($topCourses)->pluck('name')->values()->all(),
+                'data' => collect($topCourses)->pluck('enrollments')->map(fn ($value) => (int) $value)->values()->all(),
+            ],
+            'placementStats' => [
+                'labels' => ['Completed', 'In progress'],
+                'data' => [$completedEnrollments, max($totalEnrollments - $completedEnrollments, 0)],
+            ],
+            'engagement' => [
+                'labels' => ['Active', 'Inactive'],
+                'active' => [$activeStudents],
+                'inactive' => [max($totalStudents - $activeStudents, 0)],
+            ],
+        ];
+
+        return compact('recentStudents', 'topCourses', 'activities', 'announcements', 'statCards', 'collegeChartData');
     }
 
     protected function dashboardStudentOverviewData(): array
@@ -1150,52 +1337,157 @@ class HomeController extends Controller
 
         if (! $user) {
             return [
-                'currentTrack' => 'Full Stack Development Internship',
+                'currentTrack' => 'Learning Track',
                 'totalEnrolled' => 0,
                 'activeCourses' => 0,
                 'completedCourses' => 0,
                 'tasks' => [],
+                'leaderboard' => [],
+                'currentProgress' => 0,
+                'completedSteps' => 0,
+                'totalSteps' => 0,
+                'nextLesson' => 'Enroll in a course to begin.',
+                'resumeUrl' => route('dashboard.enrolled-courses'),
+                'rank' => null,
+                'percentile' => 0,
+                'points' => 0,
+                'pendingTasks' => 0,
+                'completedTasks' => 0,
             ];
         }
 
-        $student = Student::with(['enrollments.course.tasks'])
+        $student = Student::with([
+            'enrollments.course.workspaces' => fn ($query) => $query
+                ->where('status', true)
+                ->with([
+                    'steps' => fn ($query) => $query->orderBy('sort_order')->orderBy('step_no'),
+                    'steps.taskProgress' => fn ($query) => $query->where('student_id', $user->id),
+                ])
+                ->orderByDesc('updated_at'),
+        ])
             ->where('user_id', $user->id)
             ->first();
 
         $enrollments = $student?->enrollments ?? collect();
         $totalEnrolled = $enrollments->count();
-        $activeCourses = $enrollments->where('status', 'active')->count();
+        $activeCourses = $enrollments
+            ->filter(fn (Enrollment $enrollment) => in_array(strtolower((string) $enrollment->status), ['active', 'ongoing', 'in progress'], true))
+            ->count();
         $completedCourses = $enrollments->where('status', 'completed')->count();
 
         $latestEnrollment = $enrollments->sortByDesc('enrollment_date')->first();
         $currentTrack = $latestEnrollment?->course?->title ?? $student?->course_name ?? 'Learning Track';
 
-        $courseTasks = $latestEnrollment?->course?->tasks ?? collect();
-        $statuses = ['Pending', 'Review', 'Done'];
-        $tones = [
-            'bg-amber-50 text-amber-700 ring-amber-200',
-            'bg-blue-50 text-blue-700 ring-blue-200',
-            'bg-emerald-50 text-emerald-700 ring-emerald-200',
-        ];
+        $workspace = $latestEnrollment?->course?->workspaces?->first();
+        $steps = $workspace ? collect($this->studentWorkspaceSteps($workspace)) : collect();
+        $totalSteps = $steps->count();
+        $completedSteps = $steps->where('state', 'completed')->count();
+        $currentProgress = $totalSteps > 0
+            ? (int) round(($completedSteps / $totalSteps) * 100)
+            : (int) ($latestEnrollment?->progress ?? 0);
 
-        $tasks = $courseTasks->take(3)->values()->map(function ($task, $index) use ($statuses, $tones) {
+        $activeStep = $steps->firstWhere('active', true)
+            ?? $steps->first(fn (array $step) => ($step['state'] ?? null) !== 'completed')
+            ?? $steps->first();
+
+        $nextLesson = $activeStep['title'] ?? ($workspace?->next_milestone ?: 'No active task yet.');
+        $resumeUrl = $latestEnrollment && $workspace
+            ? route('student.course.workspace', ['id' => $latestEnrollment->id]) . '?project=' . $workspace->id
+            : route('dashboard.enrolled-courses');
+
+        $tasks = $steps->take(4)->values()->map(function (array $step) {
+            $isCompleted = ($step['state'] ?? null) === 'completed';
+            $isActive = (bool) ($step['active'] ?? false);
+
             return [
-                'title' => $task->title,
-                'deadline' => ['Due today', 'Mentor review', 'Submitted'][$index] ?? 'Soon',
-                'status' => $statuses[$index] ?? 'Pending',
-                'tone' => $tones[$index] ?? 'bg-slate-100 text-slate-700 ring-slate-200',
+                'title' => $step['title'],
+                'deadline' => $isCompleted ? 'Completed' : ($isActive ? 'Current step' : 'Upcoming'),
+                'status' => $isCompleted ? 'Done' : ($isActive ? 'In Progress' : 'Pending'),
+                'tone' => $isCompleted
+                    ? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
+                    : ($isActive
+                        ? 'bg-blue-50 text-blue-700 ring-blue-200'
+                        : 'bg-amber-50 text-amber-700 ring-amber-200'),
             ];
         })->toArray();
 
-        if (empty($tasks)) {
-            $tasks = [
-                ['title' => 'Build portfolio API', 'deadline' => 'Due today', 'status' => 'Pending', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
-                ['title' => 'React dashboard checkpoint', 'deadline' => 'Mentor review', 'status' => 'Review', 'tone' => 'bg-blue-50 text-blue-700 ring-blue-200'],
-                ['title' => 'Git deployment lab', 'deadline' => 'Submitted', 'status' => 'Done', 'tone' => 'bg-emerald-50 text-emerald-700 ring-emerald-200'],
+        $pendingTasks = collect($tasks)->where('status', '!=', 'Done')->count();
+        $completedTasks = collect($tasks)->where('status', 'Done')->count();
+        $points = ($completedSteps * 150) + ($completedCourses * 500);
+        $rankings = Student::with('user')
+            ->withSum('enrollments as progress_points', 'progress')
+            ->withCount([
+                'enrollments as completed_enrollments_count' => fn ($query) => $query->where('status', 'completed'),
+            ])
+            ->get()
+            ->map(function (Student $rankedStudent) {
+                $completed = (int) ($rankedStudent->completed_enrollments_count ?? 0);
+                $progress = (int) ($rankedStudent->progress_points ?? 0);
+
+                return [
+                    'student_id' => $rankedStudent->id,
+                    'name' => $rankedStudent->user?->name ?? 'Student',
+                    'points' => ($completed * 500) + $progress,
+                ];
+            })
+            ->sortByDesc('points')
+            ->values();
+
+        $rankIndex = $student
+            ? $rankings->search(fn (array $row) => $row['student_id'] === $student->id)
+            : false;
+        $rank = $rankIndex === false ? null : $rankIndex + 1;
+        $percentile = $rank && $rankings->count() > 0
+            ? max(1, (int) round((1 - (($rank - 1) / $rankings->count())) * 100))
+            : 0;
+
+        $leaderboard = $rankings->take(3)->map(function (array $row, int $index) use ($student) {
+            $badges = ['Gold', 'Silver', 'Bronze'];
+            $tones = [
+                'bg-amber-100 text-amber-700 ring-amber-200',
+                'bg-slate-100 text-slate-700 ring-slate-200',
+                'bg-orange-100 text-orange-700 ring-orange-200',
+            ];
+
+            return [
+                'rank' => $index + 1,
+                'name' => $row['name'],
+                'points' => number_format($row['points']),
+                'badge' => $badges[$index] ?? 'Top',
+                'tone' => $tones[$index] ?? 'bg-blue-100 text-primary ring-blue-200',
+                'current' => $student && $row['student_id'] === $student->id,
+            ];
+        })->values()->toArray();
+
+        if ($student && $rank && ! collect($leaderboard)->contains(fn (array $row) => ! empty($row['current']))) {
+            $leaderboard[] = [
+                'rank' => $rank,
+                'name' => $user->name ?? 'Student',
+                'points' => number_format($points),
+                'badge' => 'You',
+                'tone' => 'bg-blue-100 text-primary ring-blue-200',
+                'current' => true,
             ];
         }
 
-        return compact('currentTrack', 'totalEnrolled', 'activeCourses', 'completedCourses', 'tasks');
+        return compact(
+            'currentTrack',
+            'totalEnrolled',
+            'activeCourses',
+            'completedCourses',
+            'tasks',
+            'leaderboard',
+            'currentProgress',
+            'completedSteps',
+            'totalSteps',
+            'nextLesson',
+            'resumeUrl',
+            'rank',
+            'percentile',
+            'points',
+            'pendingTasks',
+            'completedTasks',
+        );
     }
 
     protected function collegeStudentManagementData(): array

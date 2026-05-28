@@ -7,61 +7,22 @@
     $workspaceUrl = $activeCourse
         ? route('student.course.workspace', ['id' => $activeCourse['id']])
         : route('student.course.workspace.default');
-
-    $projects = [
-        [
-            'id' => 'portfolio-platform',
-            'title' => 'Developer Portfolio Platform',
-            'description' => 'Build a full-stack portfolio with projects, contact form, admin updates, and deployment.',
-            'time' => '10-12 hours',
-            'points' => 450,
-            'recommended' => true,
-        ],
-        [
-            'id' => 'task-manager',
-            'title' => 'Team Task Manager',
-            'description' => 'Create a collaborative task board with authentication, status flows, and filters.',
-            'time' => '8-10 hours',
-            'points' => 380,
-            'recommended' => false,
-        ],
-        [
-            'id' => 'analytics-dashboard',
-            'title' => 'Learning Analytics Dashboard',
-            'description' => 'Design and implement charts, KPI cards, and a clean reporting dashboard.',
-            'time' => '12-14 hours',
-            'points' => 520,
-            'recommended' => false,
-        ],
-    ];
-
-    $tasks = [
-        'portfolio-platform' => [
-            ['title' => 'Set up project structure', 'meta' => 'Repository, routes, layout', 'status' => 'Done', 'action' => 'Continue Task', 'tone' => 'bg-emerald-50 text-emerald-700 ring-emerald-200'],
-            ['title' => 'Build project showcase CRUD', 'meta' => 'Models, forms, validation', 'status' => 'Review', 'action' => 'Submit Task', 'tone' => 'bg-blue-50 text-blue-700 ring-blue-200'],
-            ['title' => 'Deploy and document the app', 'meta' => 'Hosting, README, screenshots', 'status' => 'Pending', 'action' => 'Start Task', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
-        ],
-        'task-manager' => [
-            ['title' => 'Create board and task schema', 'meta' => 'Database and relationships', 'status' => 'Pending', 'action' => 'Start Task', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
-            ['title' => 'Implement drag status workflow', 'meta' => 'To do, review, done', 'status' => 'Pending', 'action' => 'Start Task', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
-            ['title' => 'Add team filters', 'meta' => 'Priority, owner, due date', 'status' => 'Pending', 'action' => 'Start Task', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
-        ],
-        'analytics-dashboard' => [
-            ['title' => 'Define dashboard metrics', 'meta' => 'KPIs and data states', 'status' => 'Pending', 'action' => 'Start Task', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
-            ['title' => 'Build chart components', 'meta' => 'Progress and comparison views', 'status' => 'Pending', 'action' => 'Start Task', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
-            ['title' => 'Create final report view', 'meta' => 'Export-ready summary', 'status' => 'Pending', 'action' => 'Start Task', 'tone' => 'bg-amber-50 text-amber-700 ring-amber-200'],
-        ],
-    ];
+    $projects = $activeCourse['projects'] ?? [];
+    $tasks = $activeCourse['tasks'] ?? [];
+    $defaultProject = $projects[0]['id'] ?? null;
 @endphp
 
 @section('content')
     <div class="mx-auto max-w-6xl"
         x-data="{
-            selectedProject: 'portfolio-platform',
+            selectedProject: @js($defaultProject),
             projects: @js($projects),
             tasks: @js($tasks),
             get currentProject() {
-                return this.projects.find((project) => project.id === this.selectedProject) || this.projects[0];
+                return this.projects.find((project) => project.id === this.selectedProject) || this.projects[0] || {};
+            },
+            get currentTasks() {
+                return this.tasks[this.selectedProject] || [];
             }
         }">
         <div class="mb-6">
@@ -93,7 +54,7 @@
                         <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-500">{{ $activeCourse['description'] }}</p>
                         <div class="mt-4">
                             <div class="flex justify-between text-sm">
-                                <span class="font-medium text-slate-600">{{ $activeCourse['completed_lessons'] }}/{{ $activeCourse['total_lessons'] }} lessons completed</span>
+                                <span class="font-medium text-slate-600">{{ $activeCourse['completed_lessons'] }}/{{ $activeCourse['total_lessons'] }} steps completed</span>
                                 <span class="font-semibold text-slate-900">{{ $activeCourse['progress'] }}%</span>
                             </div>
                             <div class="mt-2 h-2 rounded-full bg-slate-100">
@@ -102,16 +63,35 @@
                         </div>
                     </div>
 
-                    <a href="{{ route('student.course.workspace', ['id' => $activeCourse['id']]) }}"
-                        class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
-                        Continue Learning
-                    </a>
+                    @if (!empty($projects))
+                        <a href="{{ route('student.course.workspace', ['id' => $activeCourse['id']]) }}?project={{ $defaultProject }}"
+                            class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
+                            Continue Learning
+                        </a>
+                    @else
+                        <span class="inline-flex items-center justify-center rounded-lg bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-500">
+                            Workspace Pending
+                        </span>
+                    @endif
                 </div>
+            </section>
+        @else
+            <section class="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+                <h2 class="text-2xl font-semibold text-slate-950">You are not enrolled in any courses yet</h2>
+                <p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-500">
+                    Explore the available programs and start your learning journey with a track that fits your goals.
+                </p>
+                <a href="{{ url('/') }}"
+                    class="mt-6 inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
+                    Browse Courses
+                </a>
             </section>
         @endif
 
+        @if ($activeCourse)
         <section class="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
             <div class="space-y-6">
+                @if (!empty($projects))
                 <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                         <div>
@@ -139,6 +119,9 @@
                                     <span class="text-slate-500">{{ $project['time'] }}</span>
                                     <span class="font-semibold text-slate-900">{{ $project['points'] }} pts</span>
                                 </div>
+                                <div class="mt-3 h-1.5 rounded-full bg-slate-100">
+                                    <div class="h-1.5 rounded-full bg-primary" style="width: {{ $project['progress'] }}%"></div>
+                                </div>
                                 <span
                                     class="mt-4 inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-semibold transition"
                                     :class="selectedProject === '{{ $project['id'] }}'
@@ -159,7 +142,7 @@
                             <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500" x-text="currentProject.description"></p>
                         </div>
                         <div class="flex gap-2">
-                            <a href="{{ $workspaceUrl }}?project=portfolio-platform"
+                            <a href="{{ $workspaceUrl }}?project={{ $defaultProject }}"
                                 :href="`{{ $workspaceUrl }}?project=${selectedProject}`"
                                 class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
                                 Continue Project
@@ -178,25 +161,33 @@
                             <p class="text-sm font-semibold text-primary">Project Tasks</p>
                             <h2 class="mt-2 text-xl font-semibold text-slate-950">Task workflow</h2>
                         </div>
-                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">3 tasks</span>
+                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600" x-text="`${currentTasks.length} tasks`"></span>
                     </div>
 
                     <div class="mt-5 divide-y divide-slate-100 rounded-lg border border-slate-200">
-                        <template x-for="task in tasks[selectedProject]" :key="task.title">
+                        <template x-for="task in currentTasks" :key="task.title">
                             <div class="flex flex-col gap-4 px-4 py-4 transition hover:bg-slate-50 sm:flex-row sm:items-center">
                                 <div class="min-w-0 flex-1">
                                     <p class="font-medium text-slate-950" x-text="task.title"></p>
                                     <p class="mt-1 text-sm text-slate-500" x-text="task.meta"></p>
                                 </div>
                                 <span class="w-fit rounded-full px-2.5 py-1 text-xs font-semibold ring-1" :class="task.tone" x-text="task.status"></span>
-                                <a href="{{ $workspaceUrl }}?project=portfolio-platform#tasks"
-                                    :href="`{{ $workspaceUrl }}?project=${selectedProject}#tasks`"
+                                <a href="{{ $workspaceUrl }}?project={{ $defaultProject }}#steps"
+                                    :href="`{{ $workspaceUrl }}?project=${selectedProject}#steps`"
                                     class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-primary hover:text-primary"
                                     x-text="task.action"></a>
                             </div>
                         </template>
                     </div>
                 </section>
+                @else
+                    <section class="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+                        <h2 class="text-xl font-semibold text-slate-950">No active project workspace yet</h2>
+                        <p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-500">
+                            Your enrolled course is ready, and project workspaces will appear here once they are published.
+                        </p>
+                    </section>
+                @endif
             </div>
 
             <aside class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -230,5 +221,6 @@
                 </div>
             </aside>
         </section>
+        @endif
     </div>
 @endsection

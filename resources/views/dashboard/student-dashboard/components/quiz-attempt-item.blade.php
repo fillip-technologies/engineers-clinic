@@ -5,6 +5,7 @@
 @php
     $statusClasses = match ($attempt['status']) {
         'Passed' => 'bg-emerald-100 text-emerald-700',
+        'Failed' => 'bg-red-100 text-red-700',
         'Completed' => 'bg-blue-100 text-blue-700',
         'Upcoming' => 'bg-amber-100 text-amber-700',
         default => 'bg-slate-100 text-slate-700',
@@ -35,7 +36,7 @@
         </div>
     </div>
 
-    <a href="#"
+    <a href="{{ $attempt['href'] ?? route('dashboard.enrolled-courses') }}"
         class="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primaryLight">
         {{ $attempt['action'] }}
     </a>

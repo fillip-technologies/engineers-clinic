@@ -11,6 +11,14 @@
                 <p class="text-sm font-semibold text-primary">Account</p>
                 <h1 class="mt-1 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">{{ $profile['name'] }}</h1>
                 <p class="mt-1 text-sm text-slate-500">{{ $profile['email'] }}</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                    <span class="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 ring-1 ring-blue-200">
+                        {{ $profile['course_name'] }}
+                    </span>
+                    <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200">
+                        Joined {{ $profile['created_at'] }}
+                    </span>
+                </div>
             </div>
         </div>
 

@@ -4,6 +4,12 @@
     $activities = $activities ?? [];
     $announcements = $announcements ?? [];
     $statCards = $statCards ?? [];
+    $collegeChartData = $collegeChartData ?? [
+        'studentGrowth' => ['labels' => [], 'data' => []],
+        'enrollmentDistribution' => ['labels' => [], 'data' => []],
+        'placementStats' => ['labels' => ['Completed', 'In progress'], 'data' => [0, 0]],
+        'engagement' => ['labels' => ['Active', 'Inactive'], 'active' => [0], 'inactive' => [0]],
+    ];
 @endphp
 
 <!-- <section class="relative overflow-hidden rounded-[2rem] border border-white/60 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 px-6 py-8 shadow-[0_24px_60px_rgba(15,23,42,0.18)] sm:px-8">
@@ -226,6 +232,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     (() => {
+        const chartData = @js($collegeChartData);
         const makeGradient = (context, colors) => {
             const gradient = context.createLinearGradient(0, 0, 0, 260);
             gradient.addColorStop(0, colors[0]);
@@ -239,10 +246,10 @@
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    labels: chartData.studentGrowth.labels,
                     datasets: [{
                         label: 'Registrations',
-                        data: [320, 410, 465, 590, 710, 845, 980],
+                        data: chartData.studentGrowth.data,
                         borderColor: '#4f46e5',
                         backgroundColor: makeGradient(ctx, ['rgba(79,70,229,0.28)', 'rgba(79,70,229,0.03)']),
                         fill: true,
@@ -276,9 +283,9 @@
             new Chart(enrollmentCanvas, {
                 type: 'bar',
                 data: {
-                    labels: ['Full Stack', 'Analytics', 'Frontend', 'UI/UX'],
+                    labels: chartData.enrollmentDistribution.labels,
                     datasets: [{
-                        data: [128, 104, 96, 88],
+                        data: chartData.enrollmentDistribution.data,
                         borderRadius: 10,
                         backgroundColor: ['#4f46e5', '#06b6d4', '#8b5cf6', '#22c55e']
                     }]
@@ -308,9 +315,9 @@
             new Chart(placementCanvas, {
                 type: 'pie',
                 data: {
-                    labels: ['Placed', 'Not Placed'],
+                    labels: chartData.placementStats.labels,
                     datasets: [{
-                        data: [78, 22],
+                        data: chartData.placementStats.data,
                         backgroundColor: ['#22c55e', '#e2e8f0'],
                         borderWidth: 0
                     }]
@@ -338,11 +345,11 @@
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    labels: chartData.engagement.labels,
                     datasets: [
                         {
                             label: 'Active Students',
-                            data: [840, 920, 970, 1010, 1080, 990, 940],
+                            data: chartData.engagement.active,
                             borderColor: '#06b6d4',
                             backgroundColor: makeGradient(ctx, ['rgba(6,182,212,0.18)', 'rgba(6,182,212,0.02)']),
                             fill: true,
@@ -352,7 +359,7 @@
                         },
                         {
                             label: 'Inactive Students',
-                            data: [260, 240, 220, 210, 198, 230, 250],
+                            data: chartData.engagement.inactive,
                             borderColor: '#a855f7',
                             backgroundColor: makeGradient(ctx, ['rgba(168,85,247,0.14)', 'rgba(168,85,247,0.02)']),
                             fill: true,
