@@ -97,7 +97,7 @@
                                     <div>
                                         <p class="text-caption font-bold uppercase tracking-[0.12em] text-brand">Launch price</p>
                                         <div class="mt-1 flex items-end gap-2">
-                                            <span class="text-4xl font-black leading-none text-textPrimary">&#8377;9</span>
+                                            <span class="text-4xl font-black leading-none text-textPrimary">&#8377;99</span>
                                             <span class="pb-1 text-sm font-bold text-textMuted line-through">&#8377;499</span>
                                         </div>
                                     </div>

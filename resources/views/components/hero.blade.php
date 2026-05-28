@@ -37,15 +37,15 @@
 
                     <div class="mt-4 flex flex-wrap gap-3">
                         @foreach ([
-                            ['label' => 'Core Python & Computational Logic', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Core Python & Computational Logic'))],
-                            ['label' => 'Data Foundations & Visual Analytics', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Data Foundations & Visual Analytics (Excel/SQL)'))],
-                            ['label' => 'Full Stack Web Development', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Full Stack Web Development (React/Node)'))],
-                            ['label' => 'Applied Machine Learning', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Applied Machine Learning & Data Modeling'))],
+                        ['label' => 'Core Python & Computational Logic', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Core Python & Computational Logic'))],
+                        ['label' => 'Data Foundations & Visual Analytics', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Data Foundations & Visual Analytics (Excel/SQL)'))],
+                        ['label' => 'Full Stack Web Development', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Full Stack Web Development (React/Node)'))],
+                        ['label' => 'Applied Machine Learning', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Applied Machine Learning & Data Modeling'))],
                         ] as $goal)
-                            <a href="{{ $goal['href'] }}"
-                                class="inline-flex min-h-11 items-center justify-center rounded-control border border-borderLight bg-bgWhite px-4 py-2 text-sm font-bold text-textPrimary shadow-sm transition hover:border-brand hover:bg-brandSoft hover:text-brand">
-                                {{ $goal['label'] }}
-                            </a>
+                        <a href="{{ $goal['href'] }}"
+                            class="inline-flex min-h-11 items-center justify-center rounded-control border border-borderLight bg-bgWhite px-4 py-2 text-sm font-bold text-textPrimary shadow-sm transition hover:border-brand hover:bg-brandSoft hover:text-brand">
+                            {{ $goal['label'] }}
+                        </a>
                         @endforeach
                     </div>
                 </div>
