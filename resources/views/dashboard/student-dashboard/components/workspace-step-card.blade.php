@@ -110,9 +110,9 @@
             </div>
 
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <button type="button" @click="markStepComplete({{ $step['number'] }})"
+                <button type="button" @click="markStepComplete({{ $step['number'] }}, @js($step['complete_url']))"
                     class="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-white transition"
-                    :class="isComplete({{ $step['number'] }}) ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-blue-600 hover:bg-blue-700'">
+                    :class="isComplete({{ $step['number'] }}) ? 'bg-emerald-600 hover:bg-emerald-700' : (isUnlocked({{ $step['number'] }}) ? 'bg-blue-600 hover:bg-blue-700' : 'bg-slate-300 cursor-not-allowed')">
                     <span x-text="isComplete({{ $step['number'] }}) ? 'Step completed' : 'Mark complete'">Mark complete</span>
                 </button>
                 <button type="button" @click="showHint = !showHint" class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
@@ -125,6 +125,9 @@
                     Need help?
                 </a>
             </div>
+
+            <p x-cloak x-show="stepErrors[{{ $step['number'] }}]" x-text="stepErrors[{{ $step['number'] }}]"
+                class="rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700"></p>
 
             <div x-show="showHint" x-collapse class="rounded-2xl border border-blue-100 bg-blue-50 p-4 text-sm leading-6 text-slate-700">
                 {{ $step['hint'] }}

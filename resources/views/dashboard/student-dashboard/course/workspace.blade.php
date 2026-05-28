@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $workspace['title'] }} Workspace - {{ config('app.name', 'Engineers Clinic') }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -38,6 +39,8 @@
             totalSteps: {{ count($steps) }},
             completedSteps: @js(collect($steps)->where('state', 'completed')->pluck('number')->values()),
             progressMessage: '',
+            stepErrors: {},
+            submissionUnlocked: @js($workspace['submission_unlocked']),
             submission: {
                 name: @js($workspace['student_name']),
                 email: @js($workspace['student_email']),
@@ -45,12 +48,15 @@
                 learningNote: '',
                 stream: '',
                 loading: false,
-                submitted: false,
+                submitted: @js($workspace['submission_submitted']),
                 error: '',
                 fieldErrors: {}
             },
             get progress() {
-                return Math.round((this.completedSteps.length / this.totalSteps) * 100);
+                return this.totalSteps ? Math.round((this.completedSteps.length / this.totalSteps) * 100) : 0;
+            },
+            get allStepsComplete() {
+                return this.totalSteps > 0 && this.completedSteps.length >= this.totalSteps;
             },
             isComplete(number) {
                 return this.completedSteps.includes(number);
@@ -63,13 +69,43 @@
                 if (this.isUnlocked(number)) return 'active';
                 return 'locked';
             },
-            markStepComplete(number) {
-                if (!this.completedSteps.includes(number)) {
-                    this.completedSteps.push(number);
+            async markStepComplete(number, url) {
+                if (!this.isUnlocked(number) || this.isComplete(number)) return;
+
+                this.stepErrors[number] = '';
+                this.progressMessage = 'Saving your progress...';
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+                        },
+                        body: JSON.stringify({})
+                    });
+
+                    const payload = await response.json().catch(() => ({}));
+
+                    if (!response.ok) {
+                        throw new Error(payload.message || 'Progress could not be saved.');
+                    }
+
+                    this.completedSteps = payload.completed_steps || [...this.completedSteps, number];
+                    this.submissionUnlocked = payload.all_complete || this.allStepsComplete;
+                    this.progressMessage = this.submissionUnlocked
+                        ? 'All tasks are complete. Final submission is now unlocked.'
+                        : `Nice work - Step ${number} completed. The next step is unlocked.`;
+                } catch (error) {
+                    this.stepErrors[number] = error.message || 'Progress could not be saved. Please try again.';
+                    this.progressMessage = '';
                 }
 
-                this.progressMessage = `Nice work - Step ${number} completed. The next step is unlocked.`;
-                setTimeout(() => this.progressMessage = '', 3800);
+                setTimeout(() => {
+                    this.progressMessage = '';
+                    this.stepErrors[number] = '';
+                }, 5000);
             },
             copyCode(code) {
                 navigator.clipboard?.writeText(code);
@@ -107,31 +143,37 @@
                 return Object.keys(this.submission.fieldErrors).length === 0;
             },
             async submitProject() {
+                if (!this.submissionUnlocked) {
+                    this.submission.error = 'Complete every task before final submission.';
+                    return;
+                }
+
                 if (!this.validateSubmission()) return;
 
                 this.submission.loading = true;
                 this.submission.error = '';
 
                 try {
-                    const response = await fetch('https://hook.eu1.make.com/548hncude0u8tbidojofh6d3w7t72fvz', {
+                    const response = await fetch(@js($workspace['submission_url']), {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Accept': 'application/json'
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
                         },
                         body: JSON.stringify({
                             name: this.submission.name.trim(),
                             email: this.submission.email.trim(),
                             github_url: this.submission.githubUrl.trim(),
-                            stream: this.submission.stream
+                            stream: this.submission.stream,
+                            learning_note: this.submission.learningNote.trim()
                         })
                     });
 
-                   if (!response.ok) {
-    const text = await response.text();
-    console.log(text);
-    throw new Error(text || 'Submission failed');
-}
+                    if (!response.ok) {
+                        const payload = await response.json().catch(() => ({}));
+                        throw new Error(payload.message || 'Submission failed');
+                    }
 
                     this.submission.submitted = true;
                 } catch (error) {
@@ -216,7 +258,22 @@
                     </section>
 
                     <section id="submission" class="rounded-3xl border border-blue-100 bg-blue-50 p-6">
-                        <template x-if="!submission.submitted">
+                        <template x-if="!submissionUnlocked && !submission.submitted">
+                            <div class="rounded-3xl border border-slate-200 bg-white p-6 text-center">
+                                <div class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-slate-100 text-slate-500">
+                                    <i class="fi fi-rr-lock text-2xl"></i>
+                                </div>
+                                <h2 class="mt-4 text-2xl font-bold tracking-tight text-slate-950">Final submission is locked</h2>
+                                <p class="mx-auto mt-2 max-w-md text-base leading-7 text-slate-600">
+                                    Complete every project task first. Your progress is saved to your student account after each completed step.
+                                </p>
+                                <a href="#steps" class="mt-6 inline-flex items-center justify-center rounded-2xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+                                    Continue tasks
+                                </a>
+                            </div>
+                        </template>
+
+                        <template x-if="submissionUnlocked && !submission.submitted">
                             <div>
                                 <p class="text-sm font-semibold text-blue-700">Submission</p>
                                 <h2 class="mt-2 text-2xl font-bold tracking-tight text-slate-950">Submit your project for review</h2>

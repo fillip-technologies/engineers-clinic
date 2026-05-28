@@ -12,8 +12,10 @@ use App\Models\QuizResult;
 use App\Models\Quiz;
 use App\Models\Payment;
 use App\Models\Role;
+use App\Models\TaskProgress;
 use App\Models\User;
 use App\Models\CourseWorkspace;
+use App\Models\WorkspaceStep;
 use App\Services\OnboardingMailer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -436,6 +438,168 @@ class HomeController extends Controller
         ));
     }
 
+    public function studentWorkspaceCompleteStep(Request $request, $id, WorkspaceStep $step)
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            return response()->json(['message' => 'Unauthenticated.'], 401);
+        }
+
+        [$student, $enrollment] = $this->studentEnrollmentForWorkspace($user, $id);
+        abort_if(! $student || ! $enrollment, 404, 'Course enrollment not found.');
+
+        $workspace = $step->workspace()->first();
+        abort_if(! $workspace || (int) $workspace->course_id !== (int) $enrollment->course_id, 403, 'This step does not belong to your enrolled course.');
+
+        $orderedStepIds = $workspace->steps()->pluck('id')->values();
+        $stepIndex = $orderedStepIds->search($step->id);
+        $previousStepIds = $stepIndex > 0 ? $orderedStepIds->slice(0, $stepIndex) : collect();
+        $completedPreviousSteps = $previousStepIds->isEmpty()
+            ? 0
+            : TaskProgress::where('student_id', $user->id)
+                ->where('course_id', $enrollment->course_id)
+                ->whereIn('step_id', $previousStepIds)
+                ->where('completed', true)
+                ->count();
+
+        if ($previousStepIds->count() !== $completedPreviousSteps) {
+            return response()->json([
+                'message' => 'Complete the previous task before this one.',
+            ], 422);
+        }
+
+        TaskProgress::updateOrCreate(
+            [
+                'student_id' => $user->id,
+                'course_id' => $enrollment->course_id,
+                'step_id' => $step->id,
+            ],
+            [
+                'completed' => true,
+                'completed_at' => now(),
+            ]
+        );
+
+        $progress = $this->syncEnrollmentProgress($enrollment, $workspace);
+
+        return response()->json([
+            'message' => 'Step completed.',
+            'completed_steps' => $this->completedStepNumbers($workspace, $user->id),
+            'progress' => $progress,
+            'all_complete' => $progress === 100,
+        ]);
+    }
+
+    public function studentWorkspaceSubmitProject(Request $request, $id)
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            return response()->json(['message' => 'Unauthenticated.'], 401);
+        }
+
+        [$student, $enrollment] = $this->studentEnrollmentForWorkspace($user, $id);
+        abort_if(! $student || ! $enrollment, 404, 'Course enrollment not found.');
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'github_url' => ['required', 'url', 'max:500'],
+            'stream' => ['required', 'string', 'max:50'],
+            'learning_note' => ['nullable', 'string', 'max:5000'],
+        ]);
+
+        $workspace = CourseWorkspace::with([
+            'steps' => fn ($query) => $query->orderBy('sort_order')->orderBy('step_no'),
+            'steps.taskProgress' => fn ($query) => $query->where('student_id', $user->id),
+        ])
+            ->where('course_id', $enrollment->course_id)
+            ->when($request->input('project'), fn ($query, $project) => $query->where('id', $project))
+            ->where('status', true)
+            ->orderByDesc('updated_at')
+            ->first();
+
+        abort_unless($workspace, 404, 'No active workspace found for this course.');
+
+        $progress = $this->syncEnrollmentProgress($enrollment, $workspace);
+        abort_if($progress < 100, 422, 'Complete every task before final submission.');
+
+        $lastStep = $workspace->steps->last();
+        abort_unless($lastStep, 422, 'This workspace does not have any steps yet.');
+
+        TaskProgress::updateOrCreate(
+            [
+                'student_id' => $user->id,
+                'course_id' => $enrollment->course_id,
+                'step_id' => $lastStep->id,
+            ],
+            [
+                'completed' => true,
+                'submitted' => true,
+                'github_link' => $validated['github_url'],
+                'notes' => trim(($validated['learning_note'] ?? '') . "\n\nStream: " . $validated['stream']),
+                'completed_at' => now(),
+            ]
+        );
+
+        return response()->json([
+            'message' => 'Project submitted successfully.',
+        ]);
+    }
+
+    protected function studentEnrollmentForWorkspace(User $user, $id): array
+    {
+        $student = Student::where('user_id', $user->id)->first();
+        $enrollment = null;
+
+        if ($student) {
+            $enrollment = Enrollment::where('student_id', $student->id)
+                ->where('id', $id)
+                ->first();
+
+            if (! $enrollment) {
+                $enrollment = Enrollment::where('student_id', $student->id)
+                    ->where('course_id', $id)
+                    ->first();
+            }
+        }
+
+        return [$student, $enrollment];
+    }
+
+    protected function syncEnrollmentProgress(Enrollment $enrollment, CourseWorkspace $workspace): int
+    {
+        $stepIds = $workspace->steps()->pluck('id');
+        $totalSteps = $stepIds->count();
+        $completedSteps = $totalSteps
+            ? TaskProgress::where('student_id', Auth::id())
+                ->where('course_id', $enrollment->course_id)
+                ->whereIn('step_id', $stepIds)
+                ->where('completed', true)
+                ->count()
+            : 0;
+        $progress = $totalSteps ? (int) round(($completedSteps / $totalSteps) * 100) : 0;
+
+        $enrollment->forceFill([
+            'progress' => $progress,
+            'status' => $progress === 100 ? 'completed' : 'ongoing',
+        ])->save();
+
+        return $progress;
+    }
+
+    protected function completedStepNumbers(CourseWorkspace $workspace, int $userId): array
+    {
+        return $workspace->steps()
+            ->with(['taskProgress' => fn ($query) => $query->where('student_id', $userId)->where('completed', true)])
+            ->get()
+            ->filter(fn (WorkspaceStep $step) => $step->taskProgress->isNotEmpty())
+            ->map(fn (WorkspaceStep $step, int $index) => $step->step_no ?: $index + 1)
+            ->values()
+            ->all();
+    }
+
     protected function studentWorkspaceData(CourseWorkspace $courseWorkspace, $course, $user, array $steps, $enrollment = null): array
     {
         $stepsCollection = collect($steps);
@@ -459,6 +623,15 @@ class HomeController extends Controller
             'current_step_label' => isset($currentStep['number']) ? 'Continue Step ' . $currentStep['number'] : 'Continue',
             'student_name' => $user->name ?? 'Student',
             'student_email' => $user->email ?? 'student@example.com',
+            'submission_url' => $enrollment
+                ? route('student.course.workspace.submit', ['id' => $enrollment->id, 'project' => $courseWorkspace->id])
+                : '#',
+            'submission_unlocked' => $stepsCollection->isNotEmpty() && $completedSteps === $stepsCollection->count(),
+            'submission_submitted' => TaskProgress::where('student_id', $user->id)
+                ->where('course_id', $course?->id)
+                ->where('submitted', true)
+                ->whereIn('step_id', $courseWorkspace->steps->pluck('id'))
+                ->exists(),
         ];
     }
 
@@ -470,14 +643,15 @@ class HomeController extends Controller
             $isCompleted = (bool) ($progress?->completed ?? false);
 
             return [
+                'id' => $step->id,
                 'number' => $number,
                 'slug' => $step->slug ?: 'step-' . $number,
                 'nav_label' => $step->nav_label ?: $step->title,
                 'title' => $step->title,
                 'description' => $step->description ?: '',
-                'status' => $isCompleted ? 'Completed' : $step->status,
-                'state' => $isCompleted ? 'completed' : $step->state,
-                'active' => $isCompleted ? false : $step->active,
+                'status' => $isCompleted ? 'Completed' : 'Locked',
+                'state' => $isCompleted ? 'completed' : 'locked',
+                'active' => false,
                 'build' => $step->build_goal ?: '',
                 'why' => $step->why_text ?: '',
                 'lesson' => $step->lesson ?: '',
@@ -491,17 +665,18 @@ class HomeController extends Controller
                 'tips' => $step->tips ?: [],
                 'hint' => $step->hint ?: '',
                 'mentor_tip' => $step->mentor_tip ?: '',
+                'complete_url' => request()->route('id')
+                    ? route('student.course.workspace.steps.complete', ['id' => request()->route('id'), 'step' => $step->id])
+                    : '#',
             ];
         })->values()->all();
 
-        if (! collect($steps)->contains(fn (array $step) => $step['active'])) {
-            $firstAvailableIndex = collect($steps)->search(fn (array $step) => $step['state'] !== 'completed');
+        $firstAvailableIndex = collect($steps)->search(fn (array $step) => $step['state'] !== 'completed');
 
-            if ($firstAvailableIndex !== false) {
-                $steps[$firstAvailableIndex]['state'] = 'active';
-                $steps[$firstAvailableIndex]['active'] = true;
-                $steps[$firstAvailableIndex]['status'] = 'In Progress';
-            }
+        if ($firstAvailableIndex !== false) {
+            $steps[$firstAvailableIndex]['state'] = 'active';
+            $steps[$firstAvailableIndex]['active'] = true;
+            $steps[$firstAvailableIndex]['status'] = 'In Progress';
         }
 
         return $steps;
@@ -518,10 +693,12 @@ class HomeController extends Controller
             ];
         }, $steps);
 
+        $allComplete = ! empty($steps) && collect($steps)->every(fn (array $step) => $step['state'] === 'completed');
+
         $sidebarItems[] = [
             'label' => 'Submission',
             'target' => 'submission',
-            'state' => 'locked',
+            'state' => $allComplete ? 'active' : 'locked',
             'number' => count($steps) + 1,
         ];
 

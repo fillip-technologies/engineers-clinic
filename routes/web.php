@@ -65,6 +65,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/student-dashboard/orders', [HomeController::class, 'orderHistory'])->name('dashboard.orders');
     Route::get('/student/course/workspace', [HomeController::class, 'studentDefaultCourseWorkspace'])->name('student.course.workspace.default');
     Route::get('/student/course/{id}/workspace', [HomeController::class, 'studentCourseWorkspace'])->name('student.course.workspace');
+    Route::post('/student/course/{id}/workspace/steps/{step}/complete', [HomeController::class, 'studentWorkspaceCompleteStep'])->name('student.course.workspace.steps.complete');
+    Route::post('/student/course/{id}/workspace/submit', [HomeController::class, 'studentWorkspaceSubmitProject'])->name('student.course.workspace.submit');
     Route::get('/student-dashboard/course/{id}/workspace', [HomeController::class, 'studentCourseWorkspace']);
     Route::get('/student-dashboard/course/{id}', [HomeController::class, 'studentCourse'])->name('student.course.detail');
     Route::get('/course/{course:slug}/checkout/{order?}', [CheckoutController::class, 'show'])->name('payments.checkout');
