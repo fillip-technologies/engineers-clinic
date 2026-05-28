@@ -17,6 +17,8 @@
                 Partner with Engineers Clinic to deliver structured internships, department-wise project tracks, faculty coordination, student analytics, and placement-readiness support through one accountable operating model.
             </p>
 
+
+
             <div class="mt-9 flex flex-col gap-3 sm:flex-row">
                 <button type="button"
                     onclick="window.dispatchEvent(new CustomEvent('open-partnership-discussion'))"

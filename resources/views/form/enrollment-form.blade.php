@@ -99,7 +99,7 @@
 
                     <input type="text"
                         name="name"
-                        value="{{ old('name', auth()->user()->name ?? '') }}"
+                        value="{{ old('name') }}"
                         placeholder=" "
                         class="peer w-full rounded-2xl border border-[#E2E8F0] bg-white px-5 pt-7 pb-3 text-[15px] text-[#111827] outline-none transition duration-300 focus:border-[#5B5BF6] focus:ring-4 focus:ring-[#5B5BF6]/10">
 
@@ -125,7 +125,7 @@
 
                     <input type="email"
                         name="email"
-                        value="{{ old('email', auth()->user()->email ?? '') }}"
+                        value="{{ old('email') }}"
                         placeholder=" "
                         class="peer w-full rounded-2xl border border-[#E2E8F0] bg-white px-5 pt-7 pb-3 text-[15px] text-[#111827] outline-none transition duration-300 focus:border-[#5B5BF6] focus:ring-4 focus:ring-[#5B5BF6]/10">
 

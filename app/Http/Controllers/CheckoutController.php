@@ -1,0 +1,87 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\Checkout\StartCheckoutRequest;
+use App\Models\Course;
+use App\Models\Order;
+use App\Models\Payment;
+use App\Services\CheckoutService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use Throwable;
+
+class CheckoutController extends Controller
+{
+    public function start(StartCheckoutRequest $request, Course $course, CheckoutService $checkout): RedirectResponse
+    {
+        try {
+            $result = $checkout->start($course, $request->validated());
+        } catch (ValidationException $exception) {
+            throw $exception;
+        } catch (Throwable $exception) {
+            Log::error('Unable to start course checkout.', [
+                'course_id' => $course->id,
+                'message' => $exception->getMessage(),
+            ]);
+
+            return back()
+                ->withInput()
+                ->with('error', 'Unable to start checkout right now. Please try again in a moment.');
+        }
+
+        Auth::login($result['user']);
+        $request->session()->regenerate();
+
+        $request->session()->put('checkout_intent', [
+            ...$request->validated(),
+            'course_slug' => $course->slug,
+            'new_user' => $result['new_user'],
+        ]);
+
+        if ($result['already_enrolled']) {
+            return redirect()
+                ->route('dashboard.enrolled-courses')
+                ->with('success', 'Your enrollment is ready.');
+        }
+
+        return redirect()->route('payments.checkout', [
+            'course' => $course->slug,
+            'order' => $result['order']->id,
+        ]);
+    }
+
+    public function show(Course $course, ?Order $order = null)
+    {
+        $student = Auth::user()?->student;
+
+        abort_unless($student, 403, 'A student account is required for checkout.');
+
+        if ($order) {
+            abort_unless($order->student_id === $student->id && $order->course_id === $course->id, 403);
+        }
+
+        $completedPayment = Payment::where('student_id', $student->id)
+            ->where('course_id', $course->id)
+            ->where('status', 'completed')
+            ->latest()
+            ->first();
+
+        $existingEnrollment = $student->enrollments()
+            ->where('course_id', $course->id)
+            ->first();
+
+        return view('payments.checkout', [
+            'course' => $course,
+            'student' => $student,
+            'order' => $order,
+            'checkoutIntent' => session('checkout_intent', []),
+            'existingEnrollment' => $existingEnrollment,
+            'hasCompletedEnrollment' => (bool) $existingEnrollment,
+            'completedPayment' => $completedPayment,
+            'razorpayKey' => config('services.razorpay.key'),
+        ]);
+    }
+}

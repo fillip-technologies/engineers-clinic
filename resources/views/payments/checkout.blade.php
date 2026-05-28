@@ -4,8 +4,9 @@
 @php
     $amount = (float) $course->fee;
     $isFree = $amount <= 0;
-    $intentName = $checkoutIntent['name'] ?? auth()->user()->name;
-    $intentEmail = $checkoutIntent['email'] ?? auth()->user()->email;
+    $intentName = $checkoutIntent['name'] ?? auth()->user()?->name ?? '';
+    $intentEmail = $checkoutIntent['email'] ?? auth()->user()?->email ?? '';
+    $canPay = $order && !$completedPayment && !$hasCompletedEnrollment && !$isFree;
 @endphp
 
 <section class="section-white py-20">
@@ -23,7 +24,7 @@
                         Complete your enrollment
                     </h1>
                     <p class="mt-5 max-w-2xl text-body-lg">
-                        Review your course details and confirm your seat. Your enrollment will be activated after payment confirmation.
+                        Razorpay checkout will open automatically. Your course access is activated as soon as payment is verified.
                     </p>
                 </div>
 
@@ -41,23 +42,18 @@
                     </div>
                 </div>
 
-                @if(session('checkout_intent') && auth()->check())
+                @if(($checkoutIntent['new_user'] ?? false) && auth()->check())
                     <div class="rounded-card border border-brand/20 bg-brandSoft p-5">
                         <p class="font-black text-textPrimary">Your student account is ready.</p>
                         <p class="mt-2 text-sm font-semibold text-textSecondary">
-                            We sent the login password to {{ auth()->user()->email }}. You can change it later from your dashboard.
+                            We queued your login credentials email. You are already signed in for this purchase.
                         </p>
                     </div>
                 @endif
 
-                @if($completedPayment)
+                @if($completedPayment || $hasCompletedEnrollment)
                     <div class="rounded-card border border-green-200 bg-green-50 p-5">
-                        <p class="font-black text-green-800">Payment is already completed.</p>
-                        <p class="mt-2 text-sm font-semibold text-green-700">Your enrollment is ready in your dashboard.</p>
-                    </div>
-                @elseif($hasCompletedEnrollment)
-                    <div class="rounded-card border border-green-200 bg-green-50 p-5">
-                        <p class="font-black text-green-800">You are already enrolled in this course.</p>
+                        <p class="font-black text-green-800">Your enrollment is active.</p>
                         <p class="mt-2 text-sm font-semibold text-green-700">You can continue from your enrolled courses dashboard.</p>
                     </div>
                 @endif
@@ -66,19 +62,23 @@
             <aside
                 class="card-primary h-fit p-6"
                 x-data="courseCheckout({
-                    courseId: {{ $course->id }},
+                    orderId: @js($order?->id),
+                    razorpayOrderId: @js($order?->razorpay_order_id),
                     courseTitle: @js($course->title),
-                    amount: {{ $amount }},
+                    amount: @js($amount),
+                    amountPaise: @js((int) round($amount * 100)),
                     isFree: @js($isFree),
+                    canPay: @js($canPay),
                     razorpayKey: @js($razorpayKey),
-                    createOrderUrl: @js(route('payments.create-order')),
                     verifyUrl: @js(route('payments.verify')),
-                    freeEnrollUrl: @js(route('payments.free-enroll')),
+                    failureUrl: @js($order ? route('payments.failure', ['order' => $order->id]) : route('course.detail', $course->slug)),
                     successUrl: @js(route('dashboard.enrolled-courses')),
                     csrfToken: @js(csrf_token()),
                     studentName: @js($intentName),
-                    studentEmail: @js($intentEmail)
+                    studentEmail: @js($intentEmail),
+                    studentPhone: @js($checkoutIntent['phone'] ?? '')
                 })"
+                x-init="openWhenReady()"
             >
                 <p class="text-sm font-black uppercase tracking-[0.14em] text-brand">Order summary</p>
 
@@ -105,26 +105,22 @@
                     <div class="mt-5 rounded-control border border-red-100 bg-red-50 px-4 py-3 text-sm font-bold text-red-700" x-text="error"></div>
                 </template>
 
-                <template x-if="success">
-                    <div class="mt-5 rounded-control border border-green-100 bg-green-50 px-4 py-3 text-sm font-bold text-green-700" x-text="success"></div>
-                </template>
-
-                @if(!$hasCompletedEnrollment && !$completedPayment)
-                    @if(!$isFree && blank($razorpayKey))
+                @if($canPay)
+                    @if(blank($razorpayKey))
                         <div class="mt-5 rounded-control border border-amber-100 bg-amber-50 px-4 py-3 text-sm font-bold text-amber-800">
                             Razorpay key is missing. Add RAZORPAY_KEY and RAZORPAY_SECRET to enable paid checkout.
                         </div>
+                    @else
+                        <button
+                            type="button"
+                            @click="pay()"
+                            :disabled="processing"
+                            class="mt-6 inline-flex w-full items-center justify-center rounded-control bg-brand px-5 py-4 text-sm font-black text-white shadow-card transition hover:bg-brandDark disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                            <span x-show="!processing">Open Razorpay Checkout</span>
+                            <span x-show="processing">Processing...</span>
+                        </button>
                     @endif
-
-                    <button
-                        type="button"
-                        @click="{{ $isFree ? 'completeFreeEnrollment()' : 'pay()' }}"
-                        :disabled="processing || (!isFree && !razorpayKey)"
-                        class="mt-6 inline-flex w-full items-center justify-center rounded-control bg-brand px-5 py-4 text-sm font-black text-white shadow-card transition hover:bg-brandDark disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                        <span x-show="!processing">{{ $isFree ? 'Confirm Enrollment' : 'Pay Securely' }}</span>
-                        <span x-show="processing">Processing...</span>
-                    </button>
                 @else
                     <a href="{{ route('dashboard.enrolled-courses') }}" class="mt-6 inline-flex w-full items-center justify-center rounded-control bg-brand px-5 py-4 text-sm font-black text-white shadow-card transition hover:bg-brandDark">
                         Go to Dashboard
@@ -139,7 +135,7 @@
     </div>
 </section>
 
-@if(!$isFree)
+@if($canPay)
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 @endif
 
@@ -148,67 +144,71 @@
         return {
             ...config,
             processing: false,
+            opened: false,
             error: '',
-            success: '',
+
+            openWhenReady() {
+                if (!this.canPay || !this.razorpayKey) {
+                    return;
+                }
+
+                this.$nextTick(() => this.pay());
+            },
 
             async pay() {
+                if (this.processing || this.opened) {
+                    return;
+                }
+
                 this.error = '';
-                this.success = '';
                 this.processing = true;
+                this.opened = true;
 
-                try {
-                    const order = await this.postJson(this.createOrderUrl, { course_id: this.courseId });
+                if (typeof Razorpay === 'undefined') {
+                    this.error = 'Razorpay checkout could not be loaded. Please refresh and try again.';
+                    this.processing = false;
+                    this.opened = false;
+                    return;
+                }
 
-                    const checkout = new Razorpay({
-                        key: order.key,
-                        amount: Math.round(Number(order.amount) * 100),
-                        currency: order.currency,
-                        name: 'Engineers Clinic',
-                        description: this.courseTitle,
-                        order_id: order.order_id,
-                        prefill: {
-                            name: this.studentName,
-                            email: this.studentEmail,
-                        },
-                        handler: async (response) => {
+                const checkout = new Razorpay({
+                    key: this.razorpayKey,
+                    amount: this.amountPaise,
+                    currency: 'INR',
+                    name: 'Engineers Clinic',
+                    description: this.courseTitle,
+                    order_id: this.razorpayOrderId,
+                    prefill: {
+                        name: this.studentName,
+                        email: this.studentEmail,
+                        contact: this.studentPhone,
+                    },
+                    handler: async (response) => {
+                        try {
                             const result = await this.postJson(this.verifyUrl, {
-                                payment_id: order.payment_id,
+                                order_id: this.orderId,
                                 razorpay_payment_id: response.razorpay_payment_id,
                                 razorpay_order_id: response.razorpay_order_id,
                                 razorpay_signature: response.razorpay_signature,
                             });
 
-                            this.success = result.message || 'Enrollment completed.';
-                            window.location.href = this.successUrl;
+                            window.location.href = result.redirect_url || this.successUrl;
+                        } catch (error) {
+                            this.error = error.message || 'Payment verification failed.';
+                            this.processing = false;
+                        }
+                    },
+                    modal: {
+                        ondismiss: () => {
+                            window.location.href = this.failureUrl;
                         },
-                        modal: {
-                            ondismiss: () => {
-                                this.processing = false;
-                            },
-                        },
-                    });
+                    },
+                    theme: {
+                        color: '#5B5BF6',
+                    },
+                });
 
-                    checkout.open();
-                } catch (error) {
-                    this.error = error.message || 'Unable to start payment.';
-                    this.processing = false;
-                }
-            },
-
-            async completeFreeEnrollment() {
-                this.error = '';
-                this.success = '';
-                this.processing = true;
-
-                try {
-                    const result = await this.postJson(this.freeEnrollUrl, { course_id: this.courseId });
-
-                    this.success = result.message || 'Enrollment completed.';
-                    window.location.href = this.successUrl;
-                } catch (error) {
-                    this.error = error.message || 'Unable to complete enrollment.';
-                    this.processing = false;
-                }
+                checkout.open();
             },
 
             async postJson(url, payload) {
@@ -225,7 +225,7 @@
                 const data = await response.json().catch(() => ({}));
 
                 if (!response.ok) {
-                    throw new Error(data.error || data.message || 'Request failed.');
+                    throw new Error(data.message || data.error || 'Request failed.');
                 }
 
                 return data;

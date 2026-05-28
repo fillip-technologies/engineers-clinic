@@ -23,6 +23,7 @@ class CounsellingController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
@@ -33,7 +34,7 @@ class CounsellingController extends Controller
 
         if (filled($lead->email)) {
             try {
-                Mail::to($lead->email)->send(new CounsellingLeadReceivedMail($lead));
+                Mail::to($lead->email)->queue(new CounsellingLeadReceivedMail($lead));
             } catch (Throwable $exception) {
                 Log::warning('Unable to send counselling lead acknowledgement email.', [
                     'lead_id' => $lead->id,
@@ -68,7 +69,7 @@ class CounsellingController extends Controller
         $discussion = CollegePartnershipDiscussion::create($validated);
 
         try {
-            Mail::to($discussion->official_email)->send(new CollegePartnershipDiscussionReceivedMail($discussion));
+            Mail::to($discussion->official_email)->queue(new CollegePartnershipDiscussionReceivedMail($discussion));
         } catch (Throwable $exception) {
             Log::warning('Unable to send college partnership discussion acknowledgement email.', [
                 'discussion_id' => $discussion->id,
@@ -100,7 +101,7 @@ class CounsellingController extends Controller
         ]);
 
         try {
-            Mail::to($enquiry->email)->send(new CourseEnquiryReceivedMail($enquiry));
+            Mail::to($enquiry->email)->queue(new CourseEnquiryReceivedMail($enquiry));
         } catch (Throwable $exception) {
             Log::warning('Unable to send course enquiry acknowledgement email.', [
                 'enquiry_id' => $enquiry->id,

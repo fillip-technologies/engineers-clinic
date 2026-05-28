@@ -77,12 +77,41 @@
                     <h2 class="text-card-title mt-5">Book a Free Call</h2>
                     <p class="text-body mt-2">Talk to our expert and plan your career path.</p>
 
+                    @if (session('success'))
+                        <div class="mt-5 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+                            Please check the form details and try again.
+                        </div>
+                    @endif
+
                     <form action="{{ route('counselling.store') }}" method="POST" class="mt-6 space-y-4">
                         @csrf
 
-                        <input type="text" name="name" placeholder="Full Name" required class="input-primary">
-                        <input type="tel" name="phone" placeholder="Phone Number" required class="input-primary">
-                        <input type="email" name="email" placeholder="Email Address (optional)" class="input-primary">
+                        <div>
+                            <input type="text" name="name" value="{{ old('name') }}" placeholder="Full Name" required class="input-primary">
+                            @error('name')
+                                <p class="mt-2 text-xs font-semibold text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="Phone Number" required class="input-primary">
+                            @error('phone')
+                                <p class="mt-2 text-xs font-semibold text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <input type="email" name="email" value="{{ old('email') }}" placeholder="Email Address (optional)" class="input-primary">
+                            @error('email')
+                                <p class="mt-2 text-xs font-semibold text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
 
                         <button type="submit" class="btn-primary w-full">
                             Get Free Counselling

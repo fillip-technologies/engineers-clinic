@@ -2,10 +2,9 @@
 
 namespace App\Services;
 
-use App\Mail\OnboardingWelcomeMail;
+use App\Jobs\SendWelcomeCredentialsEmail;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Throwable;
 
 class OnboardingMailer
@@ -17,13 +16,7 @@ class OnboardingMailer
         $accountType = $accountType ?: ($user->role?->name ?? 'student');
 
         try {
-            Mail::to($user->email)->send(new OnboardingWelcomeMail(
-                user: $user,
-                plainPassword: $plainPassword,
-                accountType: $accountType,
-                loginUrl: route('login'),
-                dashboardUrl: $this->dashboardUrl($accountType)
-            ));
+            SendWelcomeCredentialsEmail::dispatch($user->id, $plainPassword, $accountType)->afterCommit();
         } catch (Throwable $exception) {
             Log::warning('Unable to send onboarding email.', [
                 'user_id' => $user->id,
@@ -33,12 +26,4 @@ class OnboardingMailer
         }
     }
 
-    private function dashboardUrl(string $accountType): string
-    {
-        return match ($accountType) {
-            'admin' => route('admin.dashboard'),
-            'college' => route('college.dashboard'),
-            default => route('dashboard'),
-        };
-    }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\CheckRole;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CounsellingController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
@@ -37,7 +38,7 @@ Route::post('/counselling-submit', [CounsellingController::class, 'store'])
     ->name('counselling.store');
 Route::post('/college-tieup/partnership-discussion', [CounsellingController::class, 'storeCollegePartnershipDiscussion'])->name('college.partnership-discussion.store');
 Route::post('/course-enquiry-submit', [CounsellingController::class, 'storeCourseEnquiry'])->name('course-enquiries.store');
-Route::post('/course/{course:slug}/reserve', [PaymentController::class, 'startCheckout'])->name('payments.checkout.start');
+Route::post('/course/{course:slug}/reserve', [CheckoutController::class, 'start'])->name('payments.checkout.start');
 
 
 
@@ -66,15 +67,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/student/course/{id}/workspace', [HomeController::class, 'studentCourseWorkspace'])->name('student.course.workspace');
     Route::get('/student-dashboard/course/{id}/workspace', [HomeController::class, 'studentCourseWorkspace']);
     Route::get('/student-dashboard/course/{id}', [HomeController::class, 'studentCourse'])->name('student.course.detail');
-    Route::get('/course/{course:slug}/checkout', [PaymentController::class, 'checkout'])->name('payments.checkout');
+    Route::get('/course/{course:slug}/checkout/{order?}', [CheckoutController::class, 'show'])->name('payments.checkout');
 
     // Payment Routes
     Route::prefix('payments')->name('payments.')->group(function () {
-        Route::post('/create-order', [App\Http\Controllers\PaymentController::class, 'createOrder'])->name('create-order');
-        Route::post('/verify', [App\Http\Controllers\PaymentController::class, 'verifyPayment'])->name('verify');
-        Route::post('/free-enroll', [App\Http\Controllers\PaymentController::class, 'completeFreeEnrollment'])->name('free-enroll');
-        Route::get('/history', [App\Http\Controllers\PaymentController::class, 'paymentHistory'])->name('history');
-        Route::get('/available-courses', [App\Http\Controllers\PaymentController::class, 'availableCourses'])->name('available-courses');
+        Route::post('/create-order', [PaymentController::class, 'createOrder'])->name('create-order');
+        Route::post('/verify', [PaymentController::class, 'verify'])->name('verify');
+        Route::post('/free-enroll', [PaymentController::class, 'completeFreeEnrollment'])->name('free-enroll');
+        Route::get('/success/{order}', [PaymentController::class, 'success'])->name('success');
+        Route::get('/failure/{order}', [PaymentController::class, 'failure'])->name('failure');
+        Route::get('/history', [PaymentController::class, 'paymentHistory'])->name('history');
+        Route::get('/available-courses', [PaymentController::class, 'availableCourses'])->name('available-courses');
     });
 });
 
