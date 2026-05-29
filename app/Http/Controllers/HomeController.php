@@ -1858,4 +1858,36 @@ class HomeController extends Controller
 
         return view('pages.about', compact('about'));
     }
+
+    public function privacy()
+    {
+        return view('pages.privacy');
+    }
+
+    public function comingSoonEnterpriseServices()
+    {
+        return view('pages.coming-soon', [
+            'title' => 'Enterprise Services & Products — Coming Soon',
+            'description' => 'We\'re building a marketplace for verified services and products tailored for students, colleges, and young professionals. Stay tuned.',
+            'features' => ['Service Listings', 'Verified Sellers', 'Student Discounts'],
+        ]);
+    }
+
+    public function comingSoonAiTools()
+    {
+        return view('pages.coming-soon', [
+            'title' => 'AI Tools — Coming Soon',
+            'description' => 'Smart AI-powered tools to help you with resume building, interview prep, code reviews, and career planning. Launching soon.',
+            'features' => ['AI Resume Builder', 'Interview Coach', 'Code Reviewer'],
+        ]);
+    }
+
+    public function comingSoonBlog()
+    {
+        return view('pages.coming-soon', [
+            'title' => 'Blog — Coming Soon',
+            'description' => 'Insights, tutorials, career tips, and success stories from the Engineers Clinic community. We\'re preparing great content for you.',
+            'features' => ['Career Guides', 'Tech Tutorials', 'Student Stories'],
+        ]);
+    }
 }
