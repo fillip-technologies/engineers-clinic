@@ -43,7 +43,7 @@
                             Numbers that make the first step easier
                         </h2>
 
-                        <p class="mt-4 text-base leading-7 text-white/72">
+                        <p class="mt-4 text-base leading-7 text-white">
                             Engineers Clinic combines structured courses, guided tasks, and practical certification paths for students who want visible progress.
                         </p>
                     </div>

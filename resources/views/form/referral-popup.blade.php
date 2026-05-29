@@ -70,7 +70,7 @@
                             <h2 class="mt-6 text-4xl font-black leading-none tracking-tight text-white sm:text-5xl">
                                 Give 10% <span class="text-secondary">•</span> Get 10%
                             </h2>
-                            <p class="mt-4 max-w-md text-sm leading-7 text-white/68 sm:text-base">
+                            <p class="mt-4 max-w-md text-sm leading-7 text-white sm:text-base">
                                 Invite friends to Engineers Clinic and unlock rewards together.
                             </p>
                         </div>

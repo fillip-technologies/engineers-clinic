@@ -142,7 +142,7 @@ $partnershipErrors = $errors->partnershipDiscussion;
                             Trusted by Colleges Across India
                         </div>
 
-                        <h3 class="max-w-md text-4xl font-bold leading-tight">
+                        <h3 class="max-w-md text-4xl font-bold leading-tight text-white">
                             Build Industry-Ready Students With Engineers Clinic
                         </h3>
 
@@ -153,14 +153,14 @@ $partnershipErrors = $errors->partnershipDiscussion;
                         <div class="mt-10 flex gap-12">
 
                             <div>
-                                <p class="text-3xl font-bold">50+</p>
+                                <p class="text-3xl font-bold text-white">50+</p>
                                 <p class="mt-1 text-sm text-white/70">
                                     Institution Partners
                                 </p>
                             </div>
 
                             <div>
-                                <p class="text-3xl font-bold">10K+</p>
+                                <p class="text-3xl font-bold text-white">10K+</p>
                                 <p class="mt-1 text-sm text-white/70">
                                     Students Trained
                                 </p>
