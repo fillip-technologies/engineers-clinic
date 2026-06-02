@@ -5,8 +5,8 @@
             'items' => [
                 ['name' => 'React', 'slug' => 'react', 'color' => '61DAFB'],
                 ['name' => 'Python', 'slug' => 'python', 'color' => '3776AB'],
-                ['name' => 'AWS', 'slug' => 'amazonwebservices', 'color' => '232F3E'],
-                ['name' => 'AI', 'slug' => 'openai', 'color' => '111111'],
+                ['name' => 'AWS', 'initials' => 'AWS'],
+                ['name' => 'AI', 'initials' => 'AI'],
                 ['name' => 'DevOps', 'slug' => 'docker', 'color' => '2496ED'],
                 ['name' => 'Cyber Security', 'initials' => 'CS'],
             ],
@@ -16,7 +16,7 @@
             'items' => [
                 ['name' => 'Marketing', 'slug' => 'googleads', 'color' => '4285F4'],
                 ['name' => 'Finance', 'slug' => 'stripe', 'color' => '635BFF'],
-                ['name' => 'CRM', 'slug' => 'salesforce', 'color' => '00A1E0'],
+                ['name' => 'CRM', 'initials' => 'CRM'],
                 ['name' => 'Analytics', 'slug' => 'googleanalytics', 'color' => 'E37400'],
             ],
         ],
@@ -41,11 +41,22 @@
             'title' => 'Media & Communication',
             'items' => [
                 ['name' => 'UI/UX', 'slug' => 'figma', 'color' => 'F24E1E'],
-                ['name' => 'Motion Graphics', 'slug' => 'adobeaftereffects', 'color' => '9999FF'],
+                ['name' => 'Motion Graphics', 'initials' => 'MG'],
                 ['name' => 'SEO', 'slug' => 'google', 'color' => '4285F4'],
-                ['name' => 'Branding', 'slug' => 'adobeillustrator', 'color' => 'FF9A00'],
+                ['name' => 'Branding', 'initials' => 'BR'],
             ],
         ],
+        [
+    'title' => 'Artificial Intelligence',
+    'items' => [
+        ['name' => 'Machine Learning', 'initials' => 'ML'],
+        ['name' => 'Deep Learning', 'initials' => 'DL'],
+        ['name' => 'ChatGPT', 'initials' => 'GPT'],
+        ['name' => 'TensorFlow', 'slug' => 'tensorflow', 'color' => 'FF6F00'],
+        ['name' => 'Computer Vision', 'initials' => 'CV'],
+        ['name' => 'NLP', 'initials' => 'NLP'],
+          ],
+       ],
     ];
 @endphp
 

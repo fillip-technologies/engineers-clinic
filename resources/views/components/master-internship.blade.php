@@ -50,7 +50,7 @@
 
             <h2 class="text-section mt-5 max-w-3xl">
                 Start with one real task, earn one certificate, pay only
-                <span class="gradient-text">&#8377;9</span>
+                <span class="gradient-text">&#8377;99</span>
             </h2>
 
             <p class="text-body-lg mt-5 max-w-2xl">

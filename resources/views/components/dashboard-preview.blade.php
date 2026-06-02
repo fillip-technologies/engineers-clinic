@@ -1,5 +1,5 @@
 @props([
-    'image' => '/images/dashboard-preview.webp',
+    'image' => '/images/add-dashboard.png',
 ])
 
 <style>

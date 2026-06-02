@@ -42,7 +42,7 @@
                         </span>
                     </a>
 
-                    <a href="#" class="group mt-2 flex items-start gap-4 rounded-control p-4 transition hover:bg-bgSoft">
+                    <a href="{{ route('coming-soon.enterprise-services') }}" class="group mt-2 flex items-start gap-4 rounded-control p-4 transition hover:bg-bgSoft">
                         <span class="grid h-12 w-12 place-items-center rounded-control bg-brandSoft text-brand">
                             <i class="fi fi-rr-megaphone text-lg"></i>
                         </span>
@@ -63,9 +63,9 @@
                 </button>
 
                 <div x-show="moreOpen" x-transition x-cloak class="dropdown-panel absolute right-0 top-full mt-3 w-[260px] p-3">
-                    <a href="#" class="block rounded-control px-4 py-3 text-sm font-semibold text-textSecondary transition hover:bg-bgSoft hover:text-brand">AI Tools</a>
+                    <a href="{{ route('coming-soon.ai-tools') }}" class="block rounded-control px-4 py-3 text-sm font-semibold text-textSecondary transition hover:bg-bgSoft hover:text-brand">AI Tools</a>
                     <a href="#" @click.prevent="window.dispatchEvent(new CustomEvent('open-referral-popup'))" class="mt-1 block rounded-control px-4 py-3 text-sm font-semibold text-textSecondary transition hover:bg-bgSoft hover:text-brand">Refer & Earn</a>
-                    <a href="#" class="mt-1 block rounded-control px-4 py-3 text-sm font-semibold text-textSecondary transition hover:bg-bgSoft hover:text-brand">Blog</a>
+                    <a href="{{ route('coming-soon.blog') }}" class="mt-1 block rounded-control px-4 py-3 text-sm font-semibold text-textSecondary transition hover:bg-bgSoft hover:text-brand">Blog</a>
                     <a href="{{ route('about') }}" class="mt-1 block rounded-control px-4 py-3 text-sm font-semibold text-textSecondary transition hover:bg-bgSoft hover:text-brand">About Us</a>
                 </div>
             </div>
@@ -134,7 +134,7 @@
                 </button>
                 <div x-show="mobileEnterpriseOpen" x-transition class="space-y-2 border-t border-borderLight p-4">
                     <a href="{{ route('company.branding') }}" class="block rounded-control bg-bgSoft px-4 py-3 text-sm font-semibold text-textPrimary">Company For Branding</a>
-                    <a href="#" class="block rounded-control bg-bgSoft px-4 py-3 text-sm font-semibold text-textPrimary">For Selling Services & Products</a>
+                    <a href="{{ route('coming-soon.enterprise-services') }}" class="block rounded-control bg-bgSoft px-4 py-3 text-sm font-semibold text-textPrimary">For Selling Services & Products</a>
                 </div>
             </div>
 
@@ -146,9 +146,9 @@
                     </svg>
                 </button>
                 <div x-show="mobileMoreOpen" x-transition class="space-y-2 border-t border-borderLight p-4">
-                    <a href="#" class="block rounded-control bg-bgSoft px-4 py-3 text-sm font-semibold text-textPrimary">AI Tools</a>
+                    <a href="{{ route('coming-soon.ai-tools') }}" class="block rounded-control bg-bgSoft px-4 py-3 text-sm font-semibold text-textPrimary">AI Tools</a>
                     <a href="#" @click.prevent="mobileOpen = false; window.dispatchEvent(new CustomEvent('open-referral-popup'))" class="block rounded-control bg-bgSoft px-4 py-3 text-sm font-semibold text-textPrimary">Refer & Earn</a>
-                    <a href="#" class="block rounded-control bg-bgSoft px-4 py-3 text-sm font-semibold text-textPrimary">Blog</a>
+                    <a href="{{ route('coming-soon.blog') }}" class="block rounded-control bg-bgSoft px-4 py-3 text-sm font-semibold text-textPrimary">Blog</a>
                     <a href="{{ route('about') }}" class="block rounded-control bg-bgSoft px-4 py-3 text-sm font-semibold text-textPrimary">About Us</a>
                 </div>
             </div>

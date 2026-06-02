@@ -5,7 +5,7 @@
         ->mapWithKeys(function ($levelData, $levelName) {
             $programs = collect($levelData['categories'] ?? [])
                 ->flatMap(function ($topics) {
-                    return collect($topics)->map(fn ($topic) => [
+                    return collect($topics)->map(fn($topic) => [
                         'label' => $topic,
                         'slug' => \Illuminate\Support\Str::slug($topic),
                     ]);
@@ -38,7 +38,8 @@
                 </p>
 
                 <div class="mt-6 space-y-3 text-sm text-bgSoft/78">
-                    <a href="mailto:info@engineersclinic.com" class="flex items-start gap-3 transition hover:text-secondary">
+                    <a href="mailto:info@engineersclinic.com"
+                        class="flex items-start gap-3 transition hover:text-secondary">
                         <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary"></span>
                         <span class="break-all">info@engineersclinic.com</span>
                     </a>
@@ -62,7 +63,8 @@
                             <p class="text-sm font-bold text-white">{{ $level }}</p>
                             <div class="mt-3 space-y-2">
                                 @foreach ($programs as $program)
-                                    <a href="{{ route('course.detail', $program['slug']) }}" class="block text-sm leading-6 text-bgSoft/75 transition hover:text-secondary">
+                                    <a href="{{ route('course.detail', $program['slug']) }}"
+                                        class="block text-sm leading-6 text-bgSoft/75 transition hover:text-secondary">
                                         {{ $program['label'] }}
                                     </a>
                                 @endforeach
@@ -84,17 +86,19 @@
                     @endforeach
                 </ul>
 
-                <a href="mailto:info@engineersclinic.com" class="btn-secondary mt-7 bg-white/10 text-white hover:text-secondary">
+                <a href="mailto:info@engineersclinic.com"
+                    class="btn-secondary mt-7 bg-white/10 text-white hover:text-secondary">
                     Contact Us
                 </a>
             </div>
         </div>
 
-        <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-center text-sm text-bgSoft/65 md:flex-row md:text-left">
-            <p>&copy; {{ date('Y') }} Engineers Clinic. All rights reserved.</p>
+        <div
+            class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-center text-sm text-bgSoft/65 md:flex-row md:text-left">
+            <p class="text-white">&copy; {{ date('Y') }} Engineers Clinic. All rights reserved.</p>
             <div class="flex items-center gap-6">
-                <a href="#" class="transition hover:text-secondary">Privacy</a>
-                <a href="#" class="transition hover:text-secondary">Terms</a>
+                <a href="{{ route('privacy') }}" class="transition hover:text-secondary">Privacy</a>
+                <!-- <a href="#" class="transition hover:text-secondary">Terms</a> -->
             </div>
         </div>
     </div>

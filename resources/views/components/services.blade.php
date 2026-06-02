@@ -62,7 +62,7 @@
                     Modern services and solutions.
                 </h2>
 
-                <p class="mt-4 text-base leading-8 text-[#EEF5FF]/72">
+                <p class="mt-4 text-base leading-8 text-[#EEF5FF]">
                     Alongside internships and practical learning, Engineers Clinic is expanding into AI-powered services, automation, and modern digital solutions.
                 </p>
             </div>
@@ -72,7 +72,7 @@
                     <article class="rounded-xl border border-white/12 bg-white/[0.07] p-5 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[#A78BFA]/35 hover:bg-white/[0.1]">
                         <div class="mb-5 h-px w-10 bg-gradient-to-r from-[#F5C842] to-transparent"></div>
                         <h3 class="text-lg font-semibold text-white">{{ $service['title'] }}</h3>
-                        <p class="mt-3 text-sm leading-7 text-[#EEF5FF]/68">{{ $service['copy'] }}</p>
+                        <p class="mt-3 text-sm leading-7 text-[#EEF5FF]">{{ $service['copy'] }}</p>
                     </article>
                 @endforeach
             </div>
