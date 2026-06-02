@@ -2,6 +2,9 @@
 
 namespace App\Helpers;
 
+use App\Models\Course;
+use Illuminate\Support\Str;
+
 class CourseDataHelper
 {
     protected static array $courseFamilies = [
@@ -67,6 +70,12 @@ class CourseDataHelper
 
         $courses = [];
 
+        foreach (Course::query()->orderBy('title')->get() as $courseModel) {
+            $courses[] = self::attachCourseMeta(self::mapCourseModel($courseModel));
+        }
+
+        $existingSlugs = array_column($courses, 'slug');
+
         foreach ($courseFiles as $courseFile) {
             $course = json_decode(file_get_contents($courseFile), true);
 
@@ -74,10 +83,13 @@ class CourseDataHelper
                 continue;
             }
 
-            $courses[] = self::attachCourseMeta($course);
-        }
+            if (in_array($course['slug'], $existingSlugs, true)) {
+                continue;
+            }
 
-        $existingSlugs = array_column($courses, 'slug');
+            $courses[] = self::attachCourseMeta($course);
+            $existingSlugs[] = $course['slug'];
+        }
 
         foreach (self::topicCourses() as $course) {
             if (in_array($course['slug'], $existingSlugs, true)) {
@@ -94,6 +106,12 @@ class CourseDataHelper
 
     public static function loadCourseBySlug(string $slug): ?array
     {
+        $dbCourse = Course::where('slug', $slug)->first();
+
+        if ($dbCourse) {
+            return self::attachCourseMeta(self::mapCourseModel($dbCourse));
+        }
+
         $courseFile = resource_path("data/courses/{$slug}.json");
 
         if (! is_file($courseFile)) {
@@ -231,7 +249,7 @@ class CourseDataHelper
 
     protected static function buildTopicCourse(string $topic, string $level, string $category, array $levelData): array
     {
-        $slug = \Illuminate\Support\Str::slug($topic);
+        $slug = Str::slug($topic);
         $duration = $levelData['duration'] ?? match ($level) {
             'Intermediate' => '75 Days',
             'Advanced' => '90 Days',
@@ -271,19 +289,7 @@ class CourseDataHelper
                     ],
                 ],
             ],
-            'curriculum' => [
-                [
-                    'title' => "Task 1: {$topic} Portfolio Sprint",
-                    'tasks' => [
-                        [
-                            'title' => 'Applied internship assignment',
-                            'assignment' => "Complete a guided {$topic} task and turn it into a reviewable portfolio output.",
-                            'submission' => 'Project file, document, design link, repository, or report based on the track.',
-                            'ai_review' => 'The review checks clarity, structure, completeness, and practical alignment with the selected internship topic.',
-                        ],
-                    ],
-                ],
-            ],
+            'curriculum' => self::buildMappedCurriculum($topic, $category),
             'hero_badge' => strtoupper("{$level} {$domain} internship"),
             'career_path' => "{$domain} skill-building and portfolio project track",
             'program_overview' => [
@@ -359,6 +365,174 @@ class CourseDataHelper
                 ],
             ],
         ];
+    }
+
+    protected static function mapCourseModel(Course $course): array
+    {
+        $payload = [
+            'id' => $course->id,
+            'slug' => $course->slug,
+            'title' => $course->title,
+            'category' => $course->category ?? 'Internship',
+            'level' => $course->level ?? 'Beginner',
+            'duration' => self::formatDuration($course->duration_months),
+            'duration_months' => $course->duration_months,
+            'fee' => $course->fee,
+            'image' => $course->image,
+            'description' => $course->description,
+            'hero_badge' => $course->hero_badge,
+            'career_path' => $course->career_path,
+            'program_overview' => $course->program_overview ?? [],
+            'why_choose' => $course->why_choose ?? [],
+            'testimonials' => $course->testimonials ?? [],
+            'faq' => $course->faq ?? [],
+            'curriculum' => $course->curriculum ?? [],
+            'modules' => $course->modules ?? [],
+            'phases' => $course->phases ?? [],
+            'outcome' => $course->outcome ?? [],
+        ];
+
+        if (! self::hasMappedCurriculum($payload['curriculum'])) {
+            $payload['curriculum'] = self::buildMappedCurriculum(
+                $payload['title'],
+                $payload['category'],
+                $payload['modules']
+            );
+        }
+
+        return $payload;
+    }
+
+    protected static function hasMappedCurriculum(mixed $curriculum): bool
+    {
+        if (! is_array($curriculum) || count($curriculum) !== 50) {
+            return false;
+        }
+
+        $firstProject = $curriculum[0] ?? null;
+        $firstTask = is_array($firstProject) ? ($firstProject['tasks'][0] ?? null) : null;
+
+        return is_array($firstProject)
+            && is_array($firstTask)
+            && array_key_exists('project_no', $firstProject)
+            && array_key_exists('difficulty', $firstProject)
+            && array_key_exists('estimated_hours', $firstProject)
+            && array_key_exists('task_no', $firstTask);
+    }
+
+    protected static function buildMappedCurriculum(string $courseTitle, string $category, array $modules = []): array
+    {
+        $projectTitles = self::projectTitlesFor($courseTitle, $modules);
+        $projectCategory = self::curriculumCategory($courseTitle, $category);
+
+        return collect(range(1, 50))->map(function (int $projectNo) use ($courseTitle, $projectCategory, $projectTitles) {
+            $title = $projectTitles[$projectNo - 1] ?? "Portfolio Project {$projectNo}";
+            $difficulty = match (true) {
+                $projectNo <= 12 => 'Beginner',
+                $projectNo <= 28 => 'Intermediate',
+                $projectNo <= 42 => 'Advanced',
+                default => 'Advanced Capstone',
+            };
+            $estimatedHours = match (true) {
+                $projectNo <= 12 => 4 + ($projectNo % 2),
+                $projectNo <= 28 => 6 + ($projectNo % 3),
+                $projectNo <= 42 => 9 + ($projectNo % 4),
+                default => 12 + ($projectNo % 5),
+            };
+
+            return [
+                'project_no' => $projectNo,
+                'title' => "Project {$projectNo}: {$title}",
+                'category' => $projectCategory,
+                'difficulty' => $difficulty,
+                'estimated_hours' => $estimatedHours,
+                'description' => "Build a practical {$courseTitle} portfolio project focused on planning, execution, quality review, and presentation.",
+                'tasks' => self::projectTasks($projectNo, $title, $courseTitle),
+            ];
+        })->all();
+    }
+
+    protected static function projectTasks(int $projectNo, string $projectTitle, string $courseTitle): array
+    {
+        $templates = [
+            ['Define Project Brief', 'Write the objective, audience, scope, constraints, and success criteria.', 'Brief document with scope and acceptance criteria.', 'Checks clarity, scope, realism, and alignment with the course topic.'],
+            ['Plan Workflow', 'Break the project into milestones, tools, references, and expected deliverables.', 'Milestone checklist with tools and references.', 'Checks sequence, tool fit, and execution readiness.'],
+            ['Build Core Output', 'Create the main working artifact for the project with practical, reviewable detail.', 'Project file, repository, design link, notebook, model, or report.', 'Checks completeness, practical correctness, and structure.'],
+            ['Document Decisions', 'Explain key decisions, tradeoffs, rejected options, and supporting evidence.', 'README, decision log, screenshots, diagrams, or notes.', 'Checks reasoning quality and usefulness for portfolio review.'],
+            ['Review Quality', 'Test the output against acceptance criteria and list issues, risks, or gaps.', 'Quality checklist with fixes and remaining limitations.', 'Checks review depth, issue priority, and evidence.'],
+            ['Polish Final Version', 'Improve clarity, usability, accuracy, performance, or presentation based on review.', 'Updated final artifact with a short improvement note.', 'Checks whether revisions are meaningful and connected to feedback.'],
+            ['Prepare Case Study', 'Summarize problem, process, final output, learning, and next steps.', 'Portfolio case study page, PDF, slide deck, or README section.', 'Checks storytelling, professional tone, and interview readiness.'],
+            ['Present Outcome', 'Create a short demo or presentation explaining the final result and value.', 'Presentation notes, demo outline, recording plan, or final links.', 'Checks clarity, confidence, and outcome focus.'],
+        ];
+
+        $taskCount = 4 + ($projectNo % 5);
+
+        return collect(array_slice($templates, 0, $taskCount))->values()->map(fn (array $task, int $index) => [
+            'task_no' => $index + 1,
+            'title' => $task[0],
+            'assignment' => "{$task[1]} Apply this to {$projectTitle} for {$courseTitle}.",
+            'submission' => $task[2],
+            'ai_review' => $task[3],
+        ])->all();
+    }
+
+    protected static function projectTitlesFor(string $courseTitle, array $modules = []): array
+    {
+        $title = strtolower($courseTitle . ' ' . implode(' ', array_map('strval', $modules)));
+
+        return match (true) {
+            str_contains($title, 'frontend') || str_contains($title, 'web') || str_contains($title, 'react') => [
+                'Responsive Landing Page', 'Portfolio Homepage', 'Cafe Menu Interface', 'Pricing Table Experience', 'FAQ Accordion System', 'Image Gallery Layout', 'Agency Landing Page', 'Timeline Interface', 'Dashboard Shell', 'Newsletter Signup Flow',
+                'Product Detail Page', 'Blog Article Template', 'Login and Registration UI', 'Responsive Navbar System', 'Card Grid Marketplace', 'Profile Settings Page', 'Checkout Summary UI', 'Admin Table Interface', 'Search Results Page', 'Weather App UI',
+                'React State Panel', 'Reusable Button Library', 'Component Props Showcase', 'Tabbed Content UI', 'Form Validation Experience', 'API Data Listing Page', 'Filtered Product Catalog', 'Todo Workflow App', 'Kanban Board Interface', 'Analytics Dashboard',
+                'Theme Toggle System', 'Accessible Modal Flow', 'Multi-Step Form Wizard', 'Notification Center UI', 'Calendar Event Layout', 'Responsive Blog Platform', 'E-commerce Cart Experience', 'Portfolio Case Study Page', 'Design System Starter', 'Performance Optimized Landing',
+                'Progressive Web App Shell', 'Realtime Chat Interface', 'Role-Based Dashboard UI', 'Headless CMS Frontend', 'Frontend Testing Suite', 'Micro-Interaction Library', 'Data Visualization Screen', 'Full SaaS Marketing Site', 'Capstone Product Interface', 'Frontend Architecture Portfolio',
+            ],
+            str_contains($title, 'ui') || str_contains($title, 'ux') || str_contains($title, 'design') => [
+                'Persona and Problem Framing Board', 'Mobile App Wireframe Set', 'Landing Page Wireframe', 'Moodboard and Visual Direction', 'Design Tokens Starter', 'Button Component States', 'Navigation Pattern Study', 'Signup Flow Redesign', 'Dashboard Information Architecture', 'E-commerce Product Page',
+                'Checkout Flow UX', 'Accessibility Contrast Audit', 'Microcopy Improvement Sprint', 'Empty State Design Pack', 'Mobile Banking Screen', 'Food Delivery App Flow', 'Travel Booking Search Flow', 'SaaS Settings Experience', 'Onboarding Journey Map', 'User Interview Synthesis',
+                'Competitive UX Audit', 'Clickable Prototype Sprint', 'Usability Test Plan', 'Design System Foundations', 'Responsive Web Mockup', 'Developer Handoff Sheet', 'Figma Auto Layout Library', 'Interactive Component Prototype', 'Admin Dashboard Redesign', 'Healthcare Appointment Flow',
+                'EdTech Learning Dashboard', 'FinTech Wallet Flow', 'CRM Contact Management UI', 'B2B Product Trial Flow', 'Mobile App Design System', 'Research to Prototype Case Study', 'Service Blueprint Design', 'Conversion-Focused Landing Page', 'UX Metrics Review', 'Product Requirements to Screens',
+                'Advanced Prototype with States', 'Cross-Platform UI Kit', 'Design QA Checklist', 'Stakeholder Presentation Deck', 'Portfolio Case Study Rewrite', 'A/B Variant Design Set', 'Analytics-Informed Redesign', 'End-to-End Product Prototype', 'Capstone Product Design Case Study', 'Portfolio Design System Showcase',
+            ],
+            str_contains($title, 'data') || str_contains($title, 'machine learning') || str_contains($title, 'analytics') => [
+                'Dataset Cleaning Notebook', 'Sales Summary Dashboard', 'Customer Segmentation Report', 'Survey Insights Analysis', 'Exploratory Data Analysis Pack', 'CSV Quality Audit', 'Excel to Python Workflow', 'KPI Scorecard Dashboard', 'Marketing Funnel Analysis', 'Inventory Trend Report',
+                'HR Attrition Insights', 'Financial Expense Tracker', 'Web Traffic Analytics', 'A/B Test Interpretation', 'Correlation Study Notebook', 'Time Series Forecast Starter', 'Classification Baseline Model', 'Regression Prediction Model', 'Model Evaluation Report', 'Feature Engineering Notebook',
+                'Power BI Executive Dashboard', 'SQL Reporting Dataset', 'ETL Pipeline Prototype', 'Data Dictionary and Governance Sheet', 'Customer Churn Analysis', 'Sentiment Analysis Mini Project', 'Recommendation Logic Prototype', 'Anomaly Detection Report', 'Big Data Pipeline Blueprint', 'Spark Transformation Exercise',
+                'Cloud Data Warehouse Plan', 'Dashboard Storytelling Case Study', 'Model Bias Review', 'Experiment Tracking Sheet', 'API Data Collection Project', 'Automated Data Refresh Workflow', 'Forecasting Dashboard', 'Business Metrics Deep Dive', 'Interactive Analytics App', 'Data Quality Monitoring Plan',
+                'ML Deployment Readiness Checklist', 'Advanced Feature Pipeline', 'Stakeholder Insight Memo', 'End-to-End Analytics Case Study', 'Predictive Dashboard Prototype', 'Portfolio Data Story', 'Capstone Decision Intelligence Project', 'Production Analytics Blueprint', 'Advanced ML Portfolio Project', 'Data Science Portfolio Showcase',
+            ],
+            default => [
+                'Foundation Concept Map', 'Tool Setup and Workflow Board', 'Mini Case Study', 'Process Documentation Pack', 'Starter Portfolio Artifact', 'Industry Terminology Glossary', 'Practical Checklist Build', 'Simple Scenario Analysis', 'Reference Board and Notes', 'Client Brief Interpretation',
+                'Workflow Diagram', 'Quality Review Sheet', 'Problem Statement Report', 'Applied Calculation Exercise', 'Tool-Based Practice File', 'Resource Planning Sheet', 'Risk and Assumption Register', 'Draft Output Review', 'Submission-Ready Mini Project', 'Peer Review Improvement',
+                'Intermediate Case Study', 'Real-World Dataset or Site Review', 'Standards Alignment Checklist', 'Documentation Sprint', 'Comparative Analysis Report', 'Prototype or Model Build', 'Operational Workflow Plan', 'Stakeholder Summary Memo', 'Metrics and Evaluation Sheet', 'Automation Opportunity Map',
+                'Advanced Tool Practice', 'Integrated Project Draft', 'Quality Assurance Review', 'Performance Improvement Plan', 'Compliance and Safety Review', 'Portfolio Case Study', 'Presentation Deck Build', 'Client-Ready Report', 'Multi-Step Workflow Project', 'Decision Matrix Exercise',
+                'Advanced Scenario Simulation', 'End-to-End Implementation Plan', 'Review and Remediation Pack', 'Professional Documentation Set', 'Capstone Planning Sprint', 'Capstone Build Sprint', 'Capstone Validation Sprint', 'Capstone Presentation', 'Advanced Portfolio Case Study', 'Professional Portfolio Showcase',
+            ],
+        };
+    }
+
+    protected static function curriculumCategory(string $courseTitle, string $category): string
+    {
+        $title = strtolower($courseTitle);
+
+        return match (true) {
+            str_contains($title, 'frontend') || str_contains($title, 'web') => 'Frontend Development',
+            str_contains($title, 'ui') || str_contains($title, 'ux') || str_contains($title, 'design') => 'UI/UX and Product Design',
+            str_contains($title, 'data') || str_contains($title, 'machine learning') => 'Data Science and Analytics',
+            str_contains($title, 'cloud') || str_contains($title, 'aws') => 'Cloud and Backend Systems',
+            str_contains($title, 'security') || str_contains($title, 'hacking') => 'Cyber Security',
+            default => str_replace(' (BBA/MBA)', '', $category),
+        };
+    }
+
+    protected static function formatDuration(?int $months): ?string
+    {
+        if (! $months) {
+            return null;
+        }
+
+        return $months . ' ' . Str::plural('Month', $months);
     }
 
     protected static function topicConfig(): array
@@ -453,22 +627,33 @@ class CourseDataHelper
 
     protected static function countCourseProjects(array $course): ?int
     {
-        $count = 0;
+        $curriculum = $course['curriculum'] ?? [];
 
-        foreach (($course['phases'] ?? []) as $phase) {
-            foreach (($phase['modules'] ?? []) as $module) {
-                $count += count($module['tasks'] ?? []);
+        if (is_array($curriculum) && ! empty($curriculum)) {
+            $mappedProjectCount = collect($curriculum)
+                ->filter(fn ($section) => is_array($section) && array_key_exists('project_no', $section))
+                ->count();
+
+            if ($mappedProjectCount > 0) {
+                return $mappedProjectCount;
+            }
+
+            $taskCount = collect($curriculum)
+                ->sum(fn ($section) => is_array($section) ? count($section['tasks'] ?? []) : 0);
+
+            if ($taskCount > 0) {
+                return $taskCount;
             }
         }
 
-        if ($count > 0) {
-            return $count;
+        $phaseTaskCount = 0;
+
+        foreach (($course['phases'] ?? []) as $phase) {
+            foreach (($phase['modules'] ?? []) as $module) {
+                $phaseTaskCount += count($module['tasks'] ?? []);
+            }
         }
 
-        foreach (($course['curriculum'] ?? []) as $section) {
-            $count += count($section['tasks'] ?? []);
-        }
-
-        return $count > 0 ? $count : null;
+        return $phaseTaskCount > 0 ? $phaseTaskCount : null;
     }
 }

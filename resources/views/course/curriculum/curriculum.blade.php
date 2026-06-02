@@ -2,6 +2,7 @@
 
 @php
 $curriculum = $course['curriculum'] ?? [];
+// dd($curriculum);
 $totalModules = count($curriculum);
 @endphp
 
@@ -16,7 +17,7 @@ $totalModules = count($curriculum);
         <div class="mx-auto max-w-3xl text-center">
             <span
                 class="inline-flex items-center rounded-full border border-brand/10 bg-brandSoft px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-brand">
-                Curriculum
+                Curriculum1
             </span>
             <h2 class="mt-5 text-3xl font-semibold leading-tight text-textPrimary sm:text-4xl">
                 Build practical skills through structured module work
