@@ -19,7 +19,9 @@
                     <select id="student_name"
                         class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-blue-100">
                         @foreach ($students as $student)
-                            <option {{ $enrollment['student_name'] === $student ? 'selected' : '' }}>{{ $student }}</option>
+                            <option {{ $enrollment['student_name'] === $student['name'] ? 'selected' : '' }}>
+                                {{ $student['name'] }}{{ $student['email'] ? ' - ' . $student['email'] : '' }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
@@ -29,7 +31,7 @@
                     <select id="course_name"
                         class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-blue-100">
                         @foreach ($courses as $course)
-                            <option {{ $enrollment['course_name'] === $course ? 'selected' : '' }}>{{ $course }}</option>
+                            <option {{ $enrollment['course_name'] === $course['title'] ? 'selected' : '' }}>{{ $course['title'] }}</option>
                         @endforeach
                     </select>
                 </div>

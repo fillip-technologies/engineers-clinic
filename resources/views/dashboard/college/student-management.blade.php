@@ -19,6 +19,12 @@
     </section>
 
     <section class="mt-8 rounded-[1.75rem] border border-slate-200/70 bg-white p-5 shadow-sm sm:p-6">
+        @if (session('success'))
+            <div class="mb-6 rounded-2xl border border-emerald-100 bg-emerald-50 px-5 py-4 text-sm font-semibold text-emerald-700">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div class="flex w-full max-w-lg items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                 <i class="fi fi-rr-search text-sm text-slate-400"></i>

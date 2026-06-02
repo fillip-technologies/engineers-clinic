@@ -47,10 +47,12 @@ Route::middleware(['auth', CheckRole::class . ':college'])->group(function () {
     Route::get('/college/dashboard', [HomeController::class, 'dashboard'])->name('college.dashboard');
     Route::get('/college/students', [HomeController::class, 'studentManagement'])->name('college.students');
     Route::get('/college/students/create', [HomeController::class, 'studentCreate'])->name('college.students.create');
+    Route::post('/college/students', [HomeController::class, 'studentStore'])->name('college.students.store');
     Route::get('/college/students/edit', [HomeController::class, 'studentEdit'])->name('college.students.edit');
     Route::get('/college/students/view', [HomeController::class, 'studentShow'])->name('college.students.view');
     Route::get('/college/enrollments', [HomeController::class, 'enrollments'])->name('college.enrollments');
     Route::get('/college/enrollments/create', [HomeController::class, 'enrollmentCreate'])->name('college.enrollments.create');
+    Route::post('/college/enrollments', [HomeController::class, 'enrollmentStore'])->name('college.enrollments.store');
     Route::get('/college/enrollments/edit', [HomeController::class, 'enrollmentEdit'])->name('college.enrollments.edit');
     Route::get('/college/enrollments/view', [HomeController::class, 'enrollmentShow'])->name('college.enrollments.view');
 });

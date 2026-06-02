@@ -19,6 +19,12 @@
     </section>
 
     <section class="mt-8 rounded-[1.75rem] border border-slate-200/70 bg-white p-5 shadow-sm sm:p-6">
+        @if (session('success'))
+            <div class="mb-6 rounded-2xl border border-emerald-100 bg-emerald-50 px-5 py-4 text-sm font-semibold text-emerald-700">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
             <div class="flex w-full max-w-xl items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                 <i class="fi fi-rr-search text-sm text-slate-400"></i>
@@ -30,7 +36,7 @@
                 <select class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-primary focus:ring-4 focus:ring-blue-100">
                     <option>All Courses</option>
                     @foreach ($courses as $course)
-                        <option>{{ $course }}</option>
+                        <option>{{ $course['title'] }}</option>
                     @endforeach
                 </select>
 

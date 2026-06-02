@@ -18,11 +18,13 @@ use App\Models\CourseWorkspace;
 use App\Models\WorkspaceStep;
 use App\Services\OnboardingMailer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class HomeController extends Controller
 {
@@ -1035,6 +1037,39 @@ class HomeController extends Controller
         ]);
     }
 
+    public function studentStore(Request $request)
+    {
+        $college = $this->currentCollegeOrFail();
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'course_name' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $password = Str::random(12);
+
+        DB::transaction(function () use ($validated, $college, $password) {
+            $role = Role::firstOrCreate(['name' => 'student']);
+
+            $user = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => Hash::make($password),
+                'role_id' => $role->id,
+            ]);
+
+            $user->student()->create([
+                'college_id' => $college->id,
+                'course_name' => $validated['course_name'] ?? null,
+            ]);
+
+            app(OnboardingMailer::class)->send($user, $password, 'student');
+        });
+
+        return redirect()->route('college.students')->with('success', 'Student account created successfully.');
+    }
+
     public function studentEdit()
     {
         $students = $this->collegeStudentManagementData();
@@ -1072,6 +1107,66 @@ class HomeController extends Controller
             'courses' => $this->collegeEnrollmentCourseOptions(),
             ...$this->frontendAdminData('college-enrollments'),
         ]);
+    }
+
+    public function enrollmentStore(Request $request)
+    {
+        $college = $this->currentCollegeOrFail();
+        $studentIds = $college->students()->pluck('id')->all();
+
+        $validated = $request->validate([
+            'student_id' => [
+                'nullable',
+                Rule::requiredIf(fn () => blank($request->input('new_student_name')) && blank($request->input('new_student_email'))),
+                Rule::in($studentIds),
+                Rule::unique('enrollments')->where(fn ($query) => $query->where('course_id', $request->course_id)),
+            ],
+            'new_student_name' => ['nullable', 'required_without:student_id', 'string', 'max:255'],
+            'new_student_email' => ['nullable', 'required_without:student_id', 'email', 'max:255', 'unique:users,email'],
+            'course_id' => ['required', 'exists:courses,id'],
+            'enrollment_date' => ['required', 'date'],
+            'status' => ['required', 'in:ongoing,completed'],
+        ], [
+            'student_id.required' => 'Select an existing student or enter new student details.',
+            'student_id.in' => 'You can only enroll students from your college.',
+            'student_id.unique' => 'This student is already enrolled in the selected course.',
+        ]);
+
+        $password = Str::random(12);
+
+        DB::transaction(function () use ($validated, $college, $password) {
+            $student = null;
+
+            if (!empty($validated['student_id'])) {
+                $student = $college->students()->findOrFail($validated['student_id']);
+            } else {
+                $role = Role::firstOrCreate(['name' => 'student']);
+
+                $user = User::create([
+                    'name' => $validated['new_student_name'],
+                    'email' => $validated['new_student_email'],
+                    'password' => Hash::make($password),
+                    'role_id' => $role->id,
+                ]);
+
+                $student = $user->student()->create([
+                    'college_id' => $college->id,
+                    'course_name' => Course::find($validated['course_id'])?->title,
+                ]);
+
+                app(OnboardingMailer::class)->send($user, $password, 'student');
+            }
+
+            Enrollment::create([
+                'student_id' => $student->id,
+                'course_id' => $validated['course_id'],
+                'enrollment_date' => $validated['enrollment_date'],
+                'progress' => 0,
+                'status' => $validated['status'],
+            ]);
+        });
+
+        return redirect()->route('college.enrollments')->with('success', 'Enrollment created successfully.');
     }
 
     public function enrollmentEdit()
@@ -1136,6 +1231,15 @@ class HomeController extends Controller
         }
 
         return $data;
+    }
+
+    protected function currentCollegeOrFail(): College
+    {
+        $college = Auth::user()?->college;
+
+        abort_unless($college, 403, 'Your college account is not linked to a college profile.');
+
+        return $college;
     }
 
     protected function dashboardSidebarSections(string $role = 'student'): array
@@ -1703,9 +1807,17 @@ class HomeController extends Controller
 
     protected function collegeEnrollmentsData(): array
     {
-        return Enrollment::with(['student.user', 'course'])
-            ->orderBy('enrollment_date', 'desc')
-            ->get()
+        $query = Enrollment::with(['student.user', 'course'])
+            ->orderBy('enrollment_date', 'desc');
+
+        if (Auth::check() && Auth::user()->role?->name === 'college') {
+            $college = College::where('user_id', Auth::id())->first();
+            if ($college) {
+                $query->whereHas('student', fn ($query) => $query->where('college_id', $college->id));
+            }
+        }
+
+        return $query->get()
             ->map(function (Enrollment $enrollment) {
                 return [
                     'student_name' => $enrollment->student->user?->name ?? 'Unknown Student',
@@ -1720,15 +1832,33 @@ class HomeController extends Controller
 
     protected function collegeEnrollmentStudentOptions(): array
     {
-        return Student::with('user')
-            ->get()
-            ->map(fn (Student $student) => $student->user?->name ?? 'Unknown Student')
+        $query = Student::with('user')->orderBy('id');
+
+        if (Auth::check() && Auth::user()->role?->name === 'college') {
+            $college = College::where('user_id', Auth::id())->first();
+            if ($college) {
+                $query->where('college_id', $college->id);
+            }
+        }
+
+        return $query->get()
+            ->map(fn (Student $student) => [
+                'id' => $student->id,
+                'name' => $student->user?->name ?? 'Unknown Student',
+                'email' => $student->user?->email,
+            ])
             ->toArray();
     }
 
     protected function collegeEnrollmentCourseOptions(): array
     {
-        return Course::orderBy('title')->pluck('title')->toArray();
+        return Course::orderBy('title')
+            ->get(['id', 'title'])
+            ->map(fn (Course $course) => [
+                'id' => $course->id,
+                'title' => $course->title,
+            ])
+            ->toArray();
     }
 
     protected function studentCourseWorkspaceData(int $id): array
