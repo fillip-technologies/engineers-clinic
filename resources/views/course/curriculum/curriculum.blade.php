@@ -17,7 +17,7 @@ $totalModules = count($curriculum);
         <div class="mx-auto max-w-3xl text-center">
             <span
                 class="inline-flex items-center rounded-full border border-brand/10 bg-brandSoft px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-brand">
-                Curriculum1
+                Curriculum
             </span>
             <h2 class="mt-5 text-3xl font-semibold leading-tight text-textPrimary sm:text-4xl">
                 Build practical skills through structured module work
@@ -27,7 +27,7 @@ $totalModules = count($curriculum);
             </p>
         </div>
 
-        <div class="mt-8 rounded-[1.75rem] border border-borderLight bg-white/80 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.05)] backdrop-blur sm:p-6">
+        {{-- <div class="mt-8 rounded-[1.75rem] border border-borderLight bg-white/80 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.05)] backdrop-blur sm:p-6">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-textMuted">Learning path</p>
@@ -40,7 +40,7 @@ $totalModules = count($curriculum);
                     @endforeach
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="mt-10 space-y-4">
             @foreach ($curriculum as $index => $module)
