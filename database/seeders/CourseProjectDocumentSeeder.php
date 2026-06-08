@@ -51,7 +51,7 @@ class CourseProjectDocumentSeeder extends Seeder
         $candidates = array_filter([
             env('EC_PROJECTS_DOCX_PATH'),
             base_path('Projects For EC.docx'),
-            storage_path('app/Projects For EC.docx'),
+            storage_path('app/Projects For EC (1).docx'),
             PHP_OS_FAMILY === 'Windows' ? 'C:\\Users\\dell\\Downloads\\Projects For EC.docx' : null,
         ]);
 

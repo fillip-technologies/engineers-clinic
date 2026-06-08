@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\College\DashboardController as CollegeDashboardController;
 use App\Http\Middleware\CheckRole;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CounsellingController;
@@ -48,17 +49,19 @@ Route::post('/course/{course:slug}/reserve', [CheckoutController::class, 'start'
 
 
 Route::middleware(['auth', CheckRole::class . ':college'])->group(function () {
-    Route::get('/college/dashboard', [HomeController::class, 'dashboard'])->name('college.dashboard');
-    Route::get('/college/students', [HomeController::class, 'studentManagement'])->name('college.students');
-    Route::get('/college/students/create', [HomeController::class, 'studentCreate'])->name('college.students.create');
-    Route::post('/college/students', [HomeController::class, 'studentStore'])->name('college.students.store');
-    Route::get('/college/students/edit', [HomeController::class, 'studentEdit'])->name('college.students.edit');
-    Route::get('/college/students/view', [HomeController::class, 'studentShow'])->name('college.students.view');
-    Route::get('/college/enrollments', [HomeController::class, 'enrollments'])->name('college.enrollments');
-    Route::get('/college/enrollments/create', [HomeController::class, 'enrollmentCreate'])->name('college.enrollments.create');
-    Route::post('/college/enrollments', [HomeController::class, 'enrollmentStore'])->name('college.enrollments.store');
-    Route::get('/college/enrollments/edit', [HomeController::class, 'enrollmentEdit'])->name('college.enrollments.edit');
-    Route::get('/college/enrollments/view', [HomeController::class, 'enrollmentShow'])->name('college.enrollments.view');
+    Route::get('/college/dashboard', [CollegeDashboardController::class, 'dashboard'])->name('college.dashboard');
+    Route::get('/college/payment', [CollegeDashboardController::class, 'payment'])->name('college.payment');
+    Route::post('/college/payment', [CollegeDashboardController::class, 'paymentStore'])->name('college.payment.store');
+    Route::get('/college/students', [CollegeDashboardController::class, 'studentManagement'])->name('college.students');
+    Route::get('/college/students/create', [CollegeDashboardController::class, 'studentCreate'])->name('college.students.create');
+    Route::post('/college/students', [CollegeDashboardController::class, 'studentStore'])->name('college.students.store');
+    Route::get('/college/students/edit', [CollegeDashboardController::class, 'studentEdit'])->name('college.students.edit');
+    Route::get('/college/students/view', [CollegeDashboardController::class, 'studentShow'])->name('college.students.view');
+    Route::get('/college/enrollments', [CollegeDashboardController::class, 'enrollments'])->name('college.enrollments');
+    Route::get('/college/enrollments/create', [CollegeDashboardController::class, 'enrollmentCreate'])->name('college.enrollments.create');
+    Route::post('/college/enrollments', [CollegeDashboardController::class, 'enrollmentStore'])->name('college.enrollments.store');
+    Route::get('/college/enrollments/edit', [CollegeDashboardController::class, 'enrollmentEdit'])->name('college.enrollments.edit');
+    Route::get('/college/enrollments/view', [CollegeDashboardController::class, 'enrollmentShow'])->name('college.enrollments.view');
 });
 
 // Student Dashboard Routes (protected with auth middleware)

@@ -23,6 +23,8 @@ use App\Http\Controllers\CounsellingController;
 
 Route::resource('roles', RoleController::class);
 Route::resource('permissions', PermissionController::class);
+Route::patch('colleges/{college}/payment/approve', [CollegeController::class, 'approveOfflinePayment'])->name('colleges.payment.approve');
+Route::patch('colleges/{college}/payment/reject', [CollegeController::class, 'rejectOfflinePayment'])->name('colleges.payment.reject');
 Route::resource('colleges', CollegeController::class);
 Route::resource('students', StudentController::class);
 Route::resource('courses', CourseController::class);

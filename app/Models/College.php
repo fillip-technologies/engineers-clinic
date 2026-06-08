@@ -16,6 +16,18 @@ class College extends Model
         'college_name',
         'address',
         'contact_number',
+        'payment_mode',
+        'utr_number',
+        'payment_status',
+        'payment_submitted_at',
+        'payment_reviewed_by',
+        'payment_reviewed_at',
+        'payment_rejection_reason',
+    ];
+
+    protected $casts = [
+        'payment_submitted_at' => 'datetime',
+        'payment_reviewed_at' => 'datetime',
     ];
 
     public function user(): BelongsTo
@@ -26,5 +38,10 @@ class College extends Model
     public function students(): HasMany
     {
         return $this->hasMany(Student::class);
+    }
+
+    public function paymentReviewer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'payment_reviewed_by');
     }
 }
