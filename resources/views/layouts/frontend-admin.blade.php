@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{{ $title ?? config('app.name', 'Engineers Clinic') }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/Engineers-clinic-logo.png') }}">
 
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,800,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
