@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\RolePermissionController;
 use App\Http\Controllers\Admin\CourseWorkspaceController;
+use App\Http\Controllers\Admin\ChatLogController;
 use App\Http\Controllers\CounsellingController;
 
 // CRUD Routes
@@ -47,3 +48,5 @@ Route::get('/college-partner', [CounsellingController::class, 'index_college'])
     ->name('counselling.partner');
 Route::get('/course-enquiries', [CounsellingController::class, 'courseEnquiries'])
     ->name('course-enquiries.index');
+Route::get('/chat-logs', [ChatLogController::class, 'index'])->name('chat-logs.index');
+Route::get('/chat-logs/{chatLog}', [ChatLogController::class, 'show'])->name('chat-logs.show');

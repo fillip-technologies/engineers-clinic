@@ -6,6 +6,68 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Satoshi', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Brand palette (ported from the former Tailwind CDN inline config) */
+    --color-brand: #7C5CFC;
+    --color-brandLight: #A78BFA;
+    --color-brandDark: #160840;
+    --color-brandSoft: rgba(124, 92, 252, 0.15);
+
+    --color-primary: #7C5CFC;
+    --color-primaryLight: #A78BFA;
+    --color-primarySoft: rgba(124, 92, 252, 0.15);
+
+    --color-secondary: #F5C842;
+    --color-secondaryLight: #A78BFA;
+    --color-secondaryDark: #160840;
+    --color-secondarySoft: rgba(245, 200, 66, 0.18);
+
+    --color-accent: #ffffff;
+    --color-accentLight: #FAF7FF;
+    --color-accentSoft: rgba(184, 222, 255, 0.35);
+
+    --color-auroraLeft: #DDD0FF;
+    --color-auroraMid: #B8DEFF;
+    --color-auroraRight: #FFD0E8;
+
+    --color-bgMain: #F5F0FF;
+    --color-bgSoft: #EEF5FF;
+    --color-bgWhite: #ffffff;
+    --color-bgDark: #F5F0FF;
+    --color-bgDarkSoft: #ffffff;
+    --color-bgIndigo: #EEF5FF;
+
+    --color-surface: #FAF7FF;
+    --color-surfaceDark: #12052E;
+
+    --color-cardBg: rgba(255, 255, 255, 0.60);
+    --color-cardBorder: rgba(255, 255, 255, 0.85);
+
+    --color-glass: #ffffff;
+    --color-glassBorder: #E2D9FF;
+
+    --color-textPrimary: #160840;
+    --color-textSecondary: #3D2090;
+    --color-textMuted: #8B7FBF;
+
+    --color-borderLight: #E2D9FF;
+
+    --color-glowPurple: rgba(124, 92, 252, 0.20);
+    --color-glowBlue: rgba(184, 222, 255, 0.35);
+    --color-glowPink: rgba(255, 208, 232, 0.35);
+
+    --color-success: #22C55E;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
+
+    /* Radius + shadows */
+    --radius-card: 24px;
+    --radius-control: 14px;
+    --shadow-card: 0 18px 48px rgba(22, 8, 64, 0.08);
+    --shadow-glass: 0 24px 70px rgba(22, 8, 64, 0.10);
+
+    /* Layout */
+    --container-container: 1280px;
 }
