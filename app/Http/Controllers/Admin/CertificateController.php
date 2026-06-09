@@ -13,14 +13,14 @@ class CertificateController extends Controller
     public function index()
     {
         $certificates = Certificate::with('student.user', 'course')->get();
-        return view('admin.certificates.index', compact('certificates'));
+        return view('Admin.certificates.index', compact('certificates'));
     }
 
     public function create()
     {
         $students = Student::with('user')->get();
         $courses = Course::all();
-        return view('admin.certificates.create', compact('students', 'courses'));
+        return view('Admin.certificates.create', compact('students', 'courses'));
     }
 
     public function store(Request $request)
@@ -40,14 +40,14 @@ class CertificateController extends Controller
     public function show(Certificate $certificate)
     {
         $certificate->load('student.user', 'course');
-        return view('admin.certificates.show', compact('certificate'));
+        return view('Admin.certificates.show', compact('certificate'));
     }
 
     public function edit(Certificate $certificate)
     {
         $students = Student::with('user')->get();
         $courses = Course::all();
-        return view('admin.certificates.edit', compact('certificate', 'students', 'courses'));
+        return view('Admin.certificates.edit', compact('certificate', 'students', 'courses'));
     }
 
     public function update(Request $request, Certificate $certificate)

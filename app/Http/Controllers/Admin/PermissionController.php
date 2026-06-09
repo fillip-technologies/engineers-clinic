@@ -11,12 +11,12 @@ class PermissionController extends Controller
     public function index()
     {
         $permissions = Permission::all();
-        return view('admin.permissions.index', compact('permissions'));
+        return view('Admin.permissions.index', compact('permissions'));
     }
 
     public function create()
     {
-        return view('admin.permissions.create');
+        return view('Admin.permissions.create');
     }
 
     public function store(Request $request)
@@ -32,12 +32,12 @@ class PermissionController extends Controller
 
     public function show(Permission $permission)
     {
-        return view('admin.permissions.show', compact('permission'));
+        return view('Admin.permissions.show', compact('permission'));
     }
 
     public function edit(Permission $permission)
     {
-        return view('admin.permissions.edit', compact('permission'));
+        return view('Admin.permissions.edit', compact('permission'));
     }
 
     public function update(Request $request, Permission $permission)

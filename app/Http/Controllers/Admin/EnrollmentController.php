@@ -17,7 +17,7 @@ class EnrollmentController extends Controller
             ->latest('enrollment_date')
             ->paginate(15);
 
-        return view('admin.enrollments.index', compact('enrollments'));
+        return view('Admin.enrollments.index', compact('enrollments'));
     }
 
     public function create()
@@ -25,7 +25,7 @@ class EnrollmentController extends Controller
         $students = Student::with('user')->orderBy('id')->get();
         $courses = Course::orderBy('title')->get();
 
-        return view('admin.enrollments.create', compact('students', 'courses'));
+        return view('Admin.enrollments.create', compact('students', 'courses'));
     }
 
     public function store(Request $request)
@@ -46,13 +46,13 @@ class EnrollmentController extends Controller
 
         Enrollment::create($validated);
 
-        return redirect()->route('admin.enrollments.index')->with('success', 'Enrollment created successfully.');
+        return redirect()->route('Admin.enrollments.index')->with('success', 'Enrollment created successfully.');
     }
 
     public function show(Enrollment $enrollment)
     {
         $enrollment->load('student.user', 'course');
-        return view('admin.enrollments.show', compact('enrollment'));
+        return view('Admin.enrollments.show', compact('enrollment'));
     }
 
     public function edit(Enrollment $enrollment)
@@ -60,7 +60,7 @@ class EnrollmentController extends Controller
         $students = Student::with('user')->orderBy('id')->get();
         $courses = Course::orderBy('title')->get();
 
-        return view('admin.enrollments.edit', compact('enrollment', 'students', 'courses'));
+        return view('Admin.enrollments.edit', compact('enrollment', 'students', 'courses'));
     }
 
     public function update(Request $request, Enrollment $enrollment)
@@ -83,13 +83,13 @@ class EnrollmentController extends Controller
 
         $enrollment->update($validated);
 
-        return redirect()->route('admin.enrollments.index')->with('success', 'Enrollment updated successfully.');
+        return redirect()->route('Admin.enrollments.index')->with('success', 'Enrollment updated successfully.');
     }
 
     public function destroy(Enrollment $enrollment)
     {
         $enrollment->delete();
 
-        return redirect()->route('admin.enrollments.index')->with('success', 'Enrollment deleted successfully.');
+        return redirect()->route('Admin.enrollments.index')->with('success', 'Enrollment deleted successfully.');
     }
 }

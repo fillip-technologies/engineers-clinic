@@ -13,14 +13,14 @@ class PaymentController extends Controller
     public function index()
     {
         $payments = Payment::with('student.user', 'course')->get();
-        return view('admin.payments.index', compact('payments'));
+        return view('Admin.payments.index', compact('payments'));
     }
 
     public function create()
     {
         $students = Student::with('user')->get();
         $courses = Course::all();
-        return view('admin.payments.create', compact('students', 'courses'));
+        return view('Admin.payments.create', compact('students', 'courses'));
     }
 
     public function store(Request $request)
@@ -40,14 +40,14 @@ class PaymentController extends Controller
     public function show(Payment $payment)
     {
         $payment->load('student.user', 'course');
-        return view('admin.payments.show', compact('payment'));
+        return view('Admin.payments.show', compact('payment'));
     }
 
     public function edit(Payment $payment)
     {
         $students = Student::with('user')->get();
         $courses = Course::all();
-        return view('admin.payments.edit', compact('payment', 'students', 'courses'));
+        return view('Admin.payments.edit', compact('payment', 'students', 'courses'));
     }
 
     public function update(Request $request, Payment $payment)

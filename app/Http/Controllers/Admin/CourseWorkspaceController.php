@@ -34,7 +34,7 @@ class CourseWorkspaceController extends Controller
         $this->syncChildren($workspace, $validated);
 
         return redirect()
-            ->route('admin.course-workspaces.edit', $workspace)
+            ->route('Admin.course-workspaces.edit', $workspace)
             ->with('success', 'Workspace created successfully.');
     }
 
@@ -67,7 +67,7 @@ class CourseWorkspaceController extends Controller
         $this->syncChildren($courseWorkspace, $validated);
 
         return redirect()
-            ->route('admin.course-workspaces.edit', $courseWorkspace)
+            ->route('Admin.course-workspaces.edit', $courseWorkspace)
             ->with('success', 'Workspace updated successfully.');
     }
 
@@ -76,7 +76,7 @@ class CourseWorkspaceController extends Controller
         $courseWorkspace->delete();
 
         return redirect()
-            ->route('admin.course-workspaces.index')
+            ->route('Admin.course-workspaces.index')
             ->with('success', 'Workspace deleted successfully.');
     }
 

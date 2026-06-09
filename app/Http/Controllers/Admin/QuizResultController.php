@@ -13,14 +13,14 @@ class QuizResultController extends Controller
     public function index()
     {
         $quizResults = QuizResult::with('student.user', 'quiz')->get();
-        return view('admin.quiz_results.index', compact('quizResults'));
+        return view('Admin.quiz_results.index', compact('quizResults'));
     }
 
     public function create()
     {
         $students = Student::with('user')->get();
         $quizzes = Quiz::all();
-        return view('admin.quiz_results.create', compact('students', 'quizzes'));
+        return view('Admin.quiz_results.create', compact('students', 'quizzes'));
     }
 
     public function store(Request $request)
@@ -40,14 +40,14 @@ class QuizResultController extends Controller
     public function show(QuizResult $quizResult)
     {
         $quizResult->load('student.user', 'quiz');
-        return view('admin.quiz_results.show', compact('quizResult'));
+        return view('Admin.quiz_results.show', compact('quizResult'));
     }
 
     public function edit(QuizResult $quizResult)
     {
         $students = Student::with('user')->get();
         $quizzes = Quiz::all();
-        return view('admin.quiz_results.edit', compact('quizResult', 'students', 'quizzes'));
+        return view('Admin.quiz_results.edit', compact('quizResult', 'students', 'quizzes'));
     }
 
     public function update(Request $request, QuizResult $quizResult)

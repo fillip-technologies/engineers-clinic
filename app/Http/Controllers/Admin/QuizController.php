@@ -54,7 +54,7 @@ class QuizController extends Controller
             $quiz->questions()->createMany($questions);
         });
 
-        return redirect()->route('admin.quizzes.index')->with('success', 'Quiz created successfully.');
+        return redirect()->route('Admin.quizzes.index')->with('success', 'Quiz created successfully.');
     }
 
     public function show(Quiz $quiz)
@@ -102,14 +102,14 @@ class QuizController extends Controller
             $quiz->questions()->createMany($questions);
         });
 
-        return redirect()->route('admin.quizzes.index')->with('success', 'Quiz updated successfully.');
+        return redirect()->route('Admin.quizzes.index')->with('success', 'Quiz updated successfully.');
     }
 
     public function destroy(Quiz $quiz)
     {
         $quiz->delete();
 
-        return redirect()->route('admin.quizzes.index')->with('success', 'Quiz deleted successfully.');
+        return redirect()->route('Admin.quizzes.index')->with('success', 'Quiz deleted successfully.');
     }
 
     private function validatedQuestions(Request $request): array

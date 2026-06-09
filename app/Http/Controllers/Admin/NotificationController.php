@@ -12,13 +12,13 @@ class NotificationController extends Controller
     public function index()
     {
         $notifications = Notification::with('user')->get();
-        return view('admin.notifications.index', compact('notifications'));
+        return view('Admin.notifications.index', compact('notifications'));
     }
 
     public function create()
     {
         $users = User::all();
-        return view('admin.notifications.create', compact('users'));
+        return view('Admin.notifications.create', compact('users'));
     }
 
     public function store(Request $request)
@@ -37,13 +37,13 @@ class NotificationController extends Controller
     public function show(Notification $notification)
     {
         $notification->load('user');
-        return view('admin.notifications.show', compact('notification'));
+        return view('Admin.notifications.show', compact('notification'));
     }
 
     public function edit(Notification $notification)
     {
         $users = User::all();
-        return view('admin.notifications.edit', compact('notification', 'users'));
+        return view('Admin.notifications.edit', compact('notification', 'users'));
     }
 
     public function update(Request $request, Notification $notification)

@@ -14,13 +14,13 @@ class CollegeController extends Controller
     public function index()
     {
         $colleges = College::with('user')->latest()->get();
-        return view('admin.colleges.index', compact('colleges'));
+        return view('Admin.colleges.index', compact('colleges'));
     }
 
     public function create()
     {
         $users = User::all();
-        return view('admin.colleges.create', compact('users'));
+        return view('Admin.colleges.create', compact('users'));
     }
 
     public function store(Request $request)
@@ -34,13 +34,13 @@ class CollegeController extends Controller
 
         College::create($request->all());
 
-        return redirect()->route('admin.colleges.index')->with('success', 'College created successfully.');
+        return redirect()->route('Admin.colleges.index')->with('success', 'College created successfully.');
     }
 
     public function show(College $college)
     {
         $college->load('user', 'students', 'paymentReviewer');
-        return view('admin.colleges.show', compact('college'));
+        return view('Admin.colleges.show', compact('college'));
     }
 
     public function approveOfflinePayment(College $college)
@@ -79,7 +79,7 @@ class CollegeController extends Controller
     public function edit(College $college)
     {
         $users = User::all();
-        return view('admin.colleges.edit', compact('college', 'users'));
+        return view('Admin.colleges.edit', compact('college', 'users'));
     }
 
     public function update(Request $request, College $college)
@@ -93,13 +93,13 @@ class CollegeController extends Controller
 
         $college->update($request->all());
 
-        return redirect()->route('admin.colleges.index')->with('success', 'College updated successfully.');
+        return redirect()->route('Admin.colleges.index')->with('success', 'College updated successfully.');
     }
 
     public function destroy(College $college)
     {
         $college->delete();
 
-        return redirect()->route('admin.colleges.index')->with('success', 'College deleted successfully.');
+        return redirect()->route('Admin.colleges.index')->with('success', 'College deleted successfully.');
     }
 }

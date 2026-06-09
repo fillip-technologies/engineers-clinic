@@ -13,14 +13,14 @@ class StudentController extends Controller
     public function index()
     {
         $students = Student::with('user', 'college')->get();
-        return view('admin.students.index', compact('students'));
+        return view('Admin.students.index', compact('students'));
     }
 
     public function create()
     {
         $users = User::all();
         $colleges = College::all();
-        return view('admin.students.create', compact('users', 'colleges'));
+        return view('Admin.students.create', compact('users', 'colleges'));
     }
 
     public function store(Request $request)
@@ -39,14 +39,14 @@ class StudentController extends Controller
     public function show(Student $student)
     {
         $student->load('user', 'college', 'enrollments', 'quizResults', 'certificates');
-        return view('admin.students.show', compact('student'));
+        return view('Admin.students.show', compact('student'));
     }
 
     public function edit(Student $student)
     {
         $users = User::all();
         $colleges = College::all();
-        return view('admin.students.edit', compact('student', 'users', 'colleges'));
+        return view('Admin.students.edit', compact('student', 'users', 'colleges'));
     }
 
     public function update(Request $request, Student $student)

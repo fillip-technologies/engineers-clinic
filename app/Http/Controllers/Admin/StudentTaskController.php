@@ -13,14 +13,14 @@ class StudentTaskController extends Controller
     public function index()
     {
         $studentTasks = StudentTask::with('student.user', 'task')->get();
-        return view('admin.student_tasks.index', compact('studentTasks'));
+        return view('Admin.student_tasks.index', compact('studentTasks'));
     }
 
     public function create()
     {
         $students = Student::with('user')->get();
         $tasks = Task::all();
-        return view('admin.student_tasks.create', compact('students', 'tasks'));
+        return view('Admin.student_tasks.create', compact('students', 'tasks'));
     }
 
     public function store(Request $request)
@@ -39,14 +39,14 @@ class StudentTaskController extends Controller
     public function show(StudentTask $studentTask)
     {
         $studentTask->load('student.user', 'task');
-        return view('admin.student_tasks.show', compact('studentTask'));
+        return view('Admin.student_tasks.show', compact('studentTask'));
     }
 
     public function edit(StudentTask $studentTask)
     {
         $students = Student::with('user')->get();
         $tasks = Task::all();
-        return view('admin.student_tasks.edit', compact('studentTask', 'students', 'tasks'));
+        return view('Admin.student_tasks.edit', compact('studentTask', 'students', 'tasks'));
     }
 
     public function update(Request $request, StudentTask $studentTask)

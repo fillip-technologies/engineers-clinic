@@ -12,13 +12,13 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::with('course')->get();
-        return view('admin.tasks.index', compact('tasks'));
+        return view('Admin.tasks.index', compact('tasks'));
     }
 
     public function create()
     {
         $courses = Course::all();
-        return view('admin.tasks.create', compact('courses'));
+        return view('Admin.tasks.create', compact('courses'));
     }
 
     public function store(Request $request)
@@ -37,13 +37,13 @@ class TaskController extends Controller
     public function show(Task $task)
     {
         $task->load('course', 'studentTasks.student');
-        return view('admin.tasks.show', compact('task'));
+        return view('Admin.tasks.show', compact('task'));
     }
 
     public function edit(Task $task)
     {
         $courses = Course::all();
-        return view('admin.tasks.edit', compact('task', 'courses'));
+        return view('Admin.tasks.edit', compact('task', 'courses'));
     }
 
     public function update(Request $request, Task $task)
