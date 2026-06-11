@@ -558,7 +558,7 @@ class DashboardController extends Controller
             $query->where('college_id', $college->id);
         }
 
-        return $query->limit(5)->get()->map(function (Student $student) {
+        $students = $query->limit(5)->get()->map(function (Student $student) {
             $latestEnrollment = $student->enrollments->first();
             $progress = $latestEnrollment?->progress;
 
@@ -571,6 +571,15 @@ class DashboardController extends Controller
                 'joined' => $student->created_at?->diffForHumans() ?? 'Just now',
             ];
         })->toArray();
+
+        return $students ?: array_map(fn (array $student) => [
+            'name' => $student['name'],
+            'email' => $student['email'],
+            'course' => $student['course'],
+            'progress' => $student['progress'],
+            'status' => $student['status'],
+            'joined' => $student['joined'],
+        ], $this->collegeDemoStudents());
     }
 
     protected function dashboardCollegeOverviewData(): array
@@ -723,7 +732,7 @@ class DashboardController extends Controller
             ],
         ];
 
-        if ($totalStudents === 0 && $totalEnrollments === 0) {
+        if ($totalStudents === 1 && $totalEnrollments === 1) {
             return $this->collegeDashboardFallbackData($college);
         }
 
@@ -735,39 +744,52 @@ class DashboardController extends Controller
         $topCourses = $this->dashboardCourseCards($college, true);
 
         return [
-            'recentStudents' => [
-                ['name' => 'Aarav Sharma', 'course' => $topCourses[0]['name'] ?? 'Full Stack Development', 'status' => 'Active', 'joined' => '2 days ago'],
-                ['name' => 'Priya Nair', 'course' => $topCourses[1]['name'] ?? 'Data Analytics', 'status' => 'Active', 'joined' => '5 days ago'],
-                ['name' => 'Karan Mehta', 'course' => $topCourses[2]['name'] ?? 'UI/UX Design', 'status' => 'Completed', 'joined' => '1 week ago'],
-                ['name' => 'Simran Kaur', 'course' => $topCourses[3]['name'] ?? 'Frontend Development', 'status' => 'Active', 'joined' => '2 weeks ago'],
-            ],
+            'recentStudents' => array_map(fn (array $student) => [
+                'name' => $student['name'],
+                'course' => $student['course'],
+                'status' => $student['status'],
+                'joined' => $student['joined'],
+            ], array_slice($this->collegeDemoStudents(), 0, 5)),
             'topCourses' => $topCourses,
             'activities' => [
-                ['title' => 'Aarav Sharma enrolled in ' . ($topCourses[0]['name'] ?? 'Full Stack Development'), 'time' => 'Today, 10:30 AM', 'tone' => 'blue'],
-                ['title' => 'Priya Nair completed the analytics assessment', 'time' => 'Yesterday', 'tone' => 'green'],
-                ['title' => 'New course batch planning is ready for review', 'time' => '2 days ago', 'tone' => 'purple'],
-                ['title' => 'Placement readiness report was generated', 'time' => '3 days ago', 'tone' => 'orange'],
+                ['title' => 'Riya Verma submitted her capstone project review', 'time' => 'Today, 10:30 AM', 'tone' => 'green'],
+                ['title' => 'Aarav Sharma enrolled in ' . ($topCourses[0]['name'] ?? 'Full Stack Web Development'), 'time' => 'Today, 09:15 AM', 'tone' => 'blue'],
+                ['title' => 'Mentor feedback cycle completed for Data Analytics batch', 'time' => 'Yesterday', 'tone' => 'purple'],
+                ['title' => 'Placement readiness report generated for final-year cohort', 'time' => '2 days ago', 'tone' => 'orange'],
+                ['title' => 'New UI/UX portfolio sprint opened for second-year students', 'time' => '3 days ago', 'tone' => 'blue'],
             ],
             'announcements' => [
-                ['title' => 'June internship orientation starts this week', 'meta' => 'Academic coordination'],
-                ['title' => 'Student project review window is open', 'meta' => 'Program update'],
+                ['title' => 'June internship orientation starts Monday at 11:00 AM', 'meta' => 'Academic coordination'],
+                ['title' => 'Project review window is open for all active batches', 'meta' => 'Program update'],
                 ['title' => 'Placement readiness session scheduled for Friday', 'meta' => 'Career services'],
+                ['title' => 'Faculty coordinator report will be shared this week', 'meta' => 'Operations'],
             ],
             'statCards' => [
-                ['label' => 'Total Students', 'value' => '128', 'change' => '+12%', 'icon' => 'fi fi-rr-users', 'classes' => 'from-blue-500/15 to-cyan-400/10 text-blue-700'],
-                ['label' => 'Active Students', 'value' => '96', 'change' => '+8%', 'icon' => 'fi fi-rr-chart-line-up', 'classes' => 'from-violet-500/15 to-indigo-400/10 text-violet-700'],
-                ['label' => 'Total Enrollments', 'value' => '184', 'change' => '+18%', 'icon' => 'fi fi-rr-book-alt', 'classes' => 'from-emerald-500/15 to-lime-400/10 text-emerald-700'],
-                ['label' => 'Placement Rate', 'value' => '78%', 'change' => '+6%', 'icon' => 'fi fi-rr-briefcase', 'classes' => 'from-orange-500/15 to-amber-400/10 text-orange-700'],
+                ['label' => 'Total Students', 'value' => '246', 'change' => '+18%', 'icon' => 'fi fi-rr-users', 'classes' => 'from-blue-500/15 to-cyan-400/10 text-blue-700'],
+                ['label' => 'Active Students', 'value' => '193', 'change' => '+14%', 'icon' => 'fi fi-rr-chart-line-up', 'classes' => 'from-violet-500/15 to-indigo-400/10 text-violet-700'],
+                ['label' => 'Total Enrollments', 'value' => '318', 'change' => '+22%', 'icon' => 'fi fi-rr-book-alt', 'classes' => 'from-emerald-500/15 to-lime-400/10 text-emerald-700'],
+                ['label' => 'Placement Rate', 'value' => '84%', 'change' => '+9%', 'icon' => 'fi fi-rr-briefcase', 'classes' => 'from-orange-500/15 to-amber-400/10 text-orange-700'],
             ],
             'collegeChartData' => [
-                'studentGrowth' => ['labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], 'data' => [18, 24, 31, 42, 58, 72]],
+                'studentGrowth' => ['labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], 'data' => [42, 58, 74, 106, 151, 193]],
                 'enrollmentDistribution' => [
                     'labels' => collect($topCourses)->pluck('name')->take(4)->values()->all(),
-                    'data' => collect($topCourses)->pluck('enrollments')->take(4)->map(fn ($value) => max((int) $value, 12))->values()->all(),
+                    'data' => collect($topCourses)->pluck('enrollments')->take(4)->values()->all(),
                 ],
-                'placementStats' => ['labels' => ['Completed', 'In progress'], 'data' => [78, 22]],
-                'engagement' => ['labels' => ['Week 1', 'Week 2', 'Week 3', 'Week 4'], 'active' => [64, 72, 81, 96], 'inactive' => [22, 18, 14, 11]],
+                'placementStats' => ['labels' => ['Placed / Ready', 'In progress'], 'data' => [84, 16]],
+                'engagement' => ['labels' => ['Week 1', 'Week 2', 'Week 3', 'Week 4'], 'active' => [132, 156, 178, 193], 'inactive' => [39, 32, 24, 18]],
             ],
+        ];
+    }
+
+    protected function collegeDemoStudents(): array
+    {
+        return [
+            ['name' => 'Aarav Sharma', 'email' => 'aarav.sharma@example.edu', 'course' => 'Full Stack Web Development', 'progress' => '82%', 'status' => 'Active', 'joined' => '2 days ago', 'joined_date' => 'June 09, 2026'],
+            ['name' => 'Priya Nair', 'email' => 'priya.nair@example.edu', 'course' => 'Data Analytics with Power BI', 'progress' => '76%', 'status' => 'Active', 'joined' => '5 days ago', 'joined_date' => 'June 06, 2026'],
+            ['name' => 'Karan Mehta', 'email' => 'karan.mehta@example.edu', 'course' => 'UI/UX Product Design', 'progress' => '100%', 'status' => 'Completed', 'joined' => '1 week ago', 'joined_date' => 'June 03, 2026'],
+            ['name' => 'Simran Kaur', 'email' => 'simran.kaur@example.edu', 'course' => 'Python for AI Projects', 'progress' => '68%', 'status' => 'Active', 'joined' => '2 weeks ago', 'joined_date' => 'May 28, 2026'],
+            ['name' => 'Riya Verma', 'email' => 'riya.verma@example.edu', 'course' => 'Cloud DevOps Foundation', 'progress' => '91%', 'status' => 'Active', 'joined' => '3 weeks ago', 'joined_date' => 'May 21, 2026'],
         ];
     }
 
@@ -786,14 +808,15 @@ class DashboardController extends Controller
         }
 
         $demoMetrics = [
-            ['enrollments' => 48, 'completion' => '82%'],
-            ['enrollments' => 36, 'completion' => '76%'],
-            ['enrollments' => 28, 'completion' => '69%'],
-            ['enrollments' => 32, 'completion' => '74%'],
+            ['enrollments' => 92, 'completion' => '86%'],
+            ['enrollments' => 78, 'completion' => '81%'],
+            ['enrollments' => 64, 'completion' => '74%'],
+            ['enrollments' => 84, 'completion' => '79%'],
         ];
 
         $courses = $query->get()->values()->map(function (Course $course, int $index) use ($college, $useDemoMetrics, $demoMetrics) {
-            $enrollments = $useDemoMetrics ? $demoMetrics[$index]['enrollments'] : ($college ? (int) $course->college_enrollments_count : 0);
+            $metric = $demoMetrics[$index] ?? ['enrollments' => 24, 'completion' => '72%'];
+            $enrollments = $useDemoMetrics ? $metric['enrollments'] : ($college ? (int) $course->college_enrollments_count : 0);
             $completed = $college && ! $useDemoMetrics ? (int) $course->college_completed_count : 0;
 
             return [
@@ -802,15 +825,15 @@ class DashboardController extends Controller
                 'duration' => $course->duration_months ? $course->duration_months . ' months' : 'Self paced',
                 'fee' => $course->fee !== null ? 'Rs. ' . number_format((float) $course->fee, 2) : 'Free',
                 'enrollments' => $enrollments,
-                'completion' => $useDemoMetrics ? $demoMetrics[$index]['completion'] : ($enrollments ? round($completed * 100 / $enrollments) . '%' : '0%'),
+                'completion' => $useDemoMetrics ? $metric['completion'] : ($enrollments ? round($completed * 100 / $enrollments) . '%' : '0%'),
             ];
         })->toArray();
 
         return $courses ?: [
-            ['name' => 'Full Stack Development', 'category' => 'Technology', 'duration' => '6 months', 'fee' => 'Rs. 12,000.00', 'enrollments' => 48, 'completion' => '82%'],
-            ['name' => 'Data Analytics', 'category' => 'Technology', 'duration' => '4 months', 'fee' => 'Rs. 9,500.00', 'enrollments' => 36, 'completion' => '76%'],
-            ['name' => 'UI/UX Design', 'category' => 'Design', 'duration' => '3 months', 'fee' => 'Rs. 8,000.00', 'enrollments' => 28, 'completion' => '69%'],
-            ['name' => 'Frontend Development', 'category' => 'Technology', 'duration' => '4 months', 'fee' => 'Rs. 10,000.00', 'enrollments' => 32, 'completion' => '74%'],
+            ['name' => 'Full Stack Web Development', 'category' => 'Technology', 'duration' => '6 months', 'fee' => 'Rs. 12,000.00', 'enrollments' => 92, 'completion' => '86%'],
+            ['name' => 'Data Analytics with Power BI', 'category' => 'Technology', 'duration' => '4 months', 'fee' => 'Rs. 9,500.00', 'enrollments' => 78, 'completion' => '81%'],
+            ['name' => 'UI/UX Product Design', 'category' => 'Design', 'duration' => '3 months', 'fee' => 'Rs. 8,000.00', 'enrollments' => 64, 'completion' => '74%'],
+            ['name' => 'Python for AI Projects', 'category' => 'Technology', 'duration' => '4 months', 'fee' => 'Rs. 10,000.00', 'enrollments' => 84, 'completion' => '79%'],
         ];
     }
 
@@ -828,7 +851,7 @@ class DashboardController extends Controller
             $query->where('college_id', $college->id);
         }
 
-        return $query->get()->map(function (Student $student) {
+        $students = $query->get()->map(function (Student $student) {
             $latestEnrollment = $student->enrollments->first();
 
             return [
@@ -839,6 +862,14 @@ class DashboardController extends Controller
                 'joined_date' => $student->created_at?->format('F d, Y') ?? 'N/A',
             ];
         })->toArray();
+
+        return $students ?: array_map(fn (array $student) => [
+            'name' => $student['name'],
+            'email' => $student['email'],
+            'course' => $student['course'],
+            'status' => $student['status'],
+            'joined_date' => $student['joined_date'],
+        ], $this->collegeDemoStudents());
     }
 
     protected function collegeStudentCourseOptions(): array
