@@ -59,6 +59,10 @@ class HomeController extends Controller
         $roleName = $user?->role?->name ?? 'student';
 
         if ($roleName === 'college') {
+            if ($user->college?->payment_status !== 'approved') {
+                return redirect()->route('college.payment');
+            }
+
             return redirect()->route('college.dashboard');
         }
 
@@ -146,7 +150,7 @@ class HomeController extends Controller
 
             $validated = $request->validate($rules);
 
-            $roleRecord = Role::where('name', 'student')->firstOrFail();
+            $roleRecord = Role::firstOrCreate(['name' => 'student']);
 
             $user = User::create([
                 'name' => $validated['student_name'],
@@ -181,7 +185,7 @@ class HomeController extends Controller
                 'college_password' => 'required|string|min:8|confirmed',
             ]);
 
-            $roleRecord = Role::where('name', 'college')->firstOrFail();
+            $roleRecord = Role::firstOrCreate(['name' => 'college']);
 
             $user = User::create([
                 'name' => $validated['college_contact'],

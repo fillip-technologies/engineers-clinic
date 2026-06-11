@@ -61,6 +61,10 @@ class AuthController extends Controller
     {
         $roleName = $user->role->name;
 
+        if ($roleName === 'college' && $user->college?->payment_status !== 'approved') {
+            return redirect()->route('college.payment');
+        }
+
         return match ($roleName) {
             'admin' => redirect('/admin/dashboard'),
             'college' => redirect('/college/dashboard'),
@@ -96,6 +100,14 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
             'role_id' => $validated['role_id'],
         ]);
+
+        if ($user->role?->name === 'college') {
+            $user->college()->create([
+                'college_name' => $user->name,
+                'address' => null,
+                'contact_number' => null,
+            ]);
+        }
 
         app(OnboardingMailer::class)->send($user, $validated['password']);
 

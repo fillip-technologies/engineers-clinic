@@ -40,4 +40,8 @@ return [
         'secret' => env('RAZORPAY_SECRET'),
     ],
 
+    'college_payment' => [
+        'amount' => (float) env('COLLEGE_PAYMENT_AMOUNT', 1000),
+    ],
+
 ];

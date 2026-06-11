@@ -31,11 +31,15 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 });
+Route::get('/signup/student', [HomeController::class, 'signup'])->defaults('role', 'student')->name('signup.student');
+Route::post('/signup/student', [HomeController::class, 'signupSubmit'])->defaults('role', 'student')->name('signup.student.submit');
+Route::get('/signup/college', [HomeController::class, 'signup'])->defaults('role', 'college')->name('signup.college');
+Route::post('/signup/college', [HomeController::class, 'signupSubmit'])->defaults('role', 'college')->name('signup.college.submit');
 Route::get('/signup/{role}', [HomeController::class, 'signup'])->name('signup');
 Route::post('/signup/{role}', [HomeController::class, 'signupSubmit'])->name('signup.submit');
 
 // Unified dashboard - redirects based on user role
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', CheckRole::class . ':student'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 });
 
@@ -52,6 +56,10 @@ Route::middleware(['auth', CheckRole::class . ':college'])->group(function () {
     Route::get('/college/dashboard', [CollegeDashboardController::class, 'dashboard'])->name('college.dashboard');
     Route::get('/college/payment', [CollegeDashboardController::class, 'payment'])->name('college.payment');
     Route::post('/college/payment', [CollegeDashboardController::class, 'paymentStore'])->name('college.payment.store');
+    Route::post('/college/payment/verify', [CollegeDashboardController::class, 'paymentVerify'])->name('college.payment.verify');
+    Route::get('/college/courses', [CollegeDashboardController::class, 'courses'])->name('college.courses');
+    Route::get('/college/settings', [CollegeDashboardController::class, 'settings'])->name('college.settings');
+    Route::patch('/college/settings', [CollegeDashboardController::class, 'settingsUpdate'])->name('college.settings.update');
     Route::get('/college/students', [CollegeDashboardController::class, 'studentManagement'])->name('college.students');
     Route::get('/college/students/create', [CollegeDashboardController::class, 'studentCreate'])->name('college.students.create');
     Route::post('/college/students', [CollegeDashboardController::class, 'studentStore'])->name('college.students.store');

@@ -5,6 +5,22 @@
 @php
     $user = Auth::user();
     $displayName = $user?->name ?? $userName;
+    $roleName = $user?->role?->name;
+    $accountUrl = match ($roleName) {
+        'college' => route('college.settings'),
+        'admin' => route('admin.dashboard'),
+        default => route('dashboard.student.profile'),
+    };
+    $coursesUrl = match ($roleName) {
+        'college' => route('college.courses'),
+        default => route('dashboard.enrolled-courses'),
+    };
+    $settingsUrl = match ($roleName) {
+        'college' => route('college.settings'),
+        'admin' => route('admin.dashboard'),
+        default => route('dashboard.student.profile'),
+    };
+    $coursesLabel = $roleName === 'college' ? 'Courses' : 'My Courses';
     $initials = collect(explode(' ', trim($displayName)))
         ->filter()
         ->take(2)
@@ -51,19 +67,19 @@
                         x-transition:leave-end="opacity-0 translate-y-1"
                         class="absolute right-0 z-30 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white py-2 shadow-lg"
                         role="menu">
-                        <a href="{{ route('dashboard.student.profile') }}"
+                        <a href="{{ $accountUrl }}"
                             class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                             role="menuitem">
                             <i class="fi fi-rr-user text-slate-400"></i>
                             <span>Account</span>
                         </a>
-                        <a href="{{ route('dashboard.enrolled-courses') }}"
+                        <a href="{{ $coursesUrl }}"
                             class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                             role="menuitem">
                             <i class="fi fi-rr-book-alt text-slate-400"></i>
-                            <span>My Courses</span>
+                            <span>{{ $coursesLabel }}</span>
                         </a>
-                        <a href="#"
+                        <a href="{{ $settingsUrl }}"
                             class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                             role="menuitem">
                             <i class="fi fi-rr-settings text-slate-400"></i>

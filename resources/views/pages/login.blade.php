@@ -105,6 +105,28 @@ $loginConfig = [
 
                         </div>
 
+                        @if($errors->any())
+                            <div class="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                                <ul class="space-y-1">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        @if(session('error'))
+                            <div class="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
+                        @if(session('success'))
+                            <div class="mt-6 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
                         <!-- Form -->
                         <form method="POST" action="{{ route('loginpost') }}"
                             class="mt-8">
@@ -127,7 +149,9 @@ $loginConfig = [
                                     <input
                                         type="email"
                                         name="email"
+                                        value="{{ old('email') }}"
                                         placeholder="Enter your email address"
+                                        required
                                         class="mt-2 w-full rounded-2xl border border-gray-200 bg-[#F8F7FF] px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#7C5CFC] focus:bg-white focus:ring-4 focus:ring-[#7C5CFC]/15" />
 
                                 </div>
@@ -144,6 +168,7 @@ $loginConfig = [
                                         type="password"
                                         name="password"
                                         placeholder="Enter your password"
+                                        required
                                         class="mt-2 w-full rounded-2xl border border-gray-200 bg-[#F8F7FF] px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#7C5CFC] focus:bg-white focus:ring-4 focus:ring-[#7C5CFC]/15" />
 
                                 </div>

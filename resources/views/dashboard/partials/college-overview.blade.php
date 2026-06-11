@@ -154,23 +154,30 @@
     <article class="rounded-[1.75rem] border border-slate-200/70 bg-white p-6 shadow-sm sm:p-7">
         <div class="flex items-center justify-between gap-4">
             <div>
-                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Top Performing Courses</p>
-                <h2 class="mt-2 text-2xl font-semibold text-slate-900">Programs with the strongest outcomes</h2>
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">My Courses</p>
+                <h2 class="mt-2 text-2xl font-semibold text-slate-900">Courses available for your students</h2>
             </div>
-            <span class="text-sm font-semibold text-slate-500">Completion leaders</span>
+            <a href="{{ route('college.courses') }}" class="text-sm font-semibold text-blue-700 transition hover:text-blue-800">View all</a>
         </div>
 
         <div class="mt-6 space-y-4">
             @foreach ($topCourses as $course)
                 <div class="rounded-2xl border border-slate-200/70 bg-slate-50/70 px-4 py-4 transition hover:border-violet-200 hover:bg-violet-50/40">
-                    <div class="flex items-center justify-between gap-4">
+                    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                             <p class="text-sm font-semibold text-slate-900">{{ $course['name'] }}</p>
-                            <p class="mt-1 text-sm text-slate-500">{{ $course['enrollments'] }} enrollments</p>
+                            <div class="mt-3 flex flex-wrap gap-2">
+                                <span class="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600">{{ $course['category'] ?? 'Internship' }}</span>
+                                <span class="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600">{{ $course['duration'] ?? 'Self paced' }}</span>
+                                <span class="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600">{{ $course['fee'] ?? 'Free' }}</span>
+                            </div>
                         </div>
-                        <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
-                            {{ $course['completion'] }} completion
-                        </span>
+                        <div class="shrink-0 text-left sm:text-right">
+                            <p class="text-sm font-semibold text-slate-900">{{ $course['enrollments'] }} enrollments</p>
+                            <span class="mt-2 inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+                                {{ $course['completion'] }} completion
+                            </span>
+                        </div>
                     </div>
                     <div class="mt-4 h-2 rounded-full bg-slate-200">
                         <div class="h-2 rounded-full bg-gradient-to-r from-violet-500 to-blue-500" style="width: {{ $course['completion'] }}"></div>

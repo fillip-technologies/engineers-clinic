@@ -19,13 +19,18 @@ class College extends Model
         'payment_mode',
         'utr_number',
         'payment_status',
+        'payment_amount',
         'payment_submitted_at',
+        'razorpay_order_id',
+        'razorpay_payment_id',
+        'razorpay_signature',
         'payment_reviewed_by',
         'payment_reviewed_at',
         'payment_rejection_reason',
     ];
 
     protected $casts = [
+        'payment_amount' => 'decimal:2',
         'payment_submitted_at' => 'datetime',
         'payment_reviewed_at' => 'datetime',
     ];

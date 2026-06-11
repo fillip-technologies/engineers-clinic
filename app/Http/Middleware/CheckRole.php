@@ -23,6 +23,15 @@ class CheckRole
             return redirect('/dashboard')->with('error', 'You do not have permission to access this page.');
         }
 
+        if (
+            $role === 'college'
+            && $request->user()->college?->payment_status !== 'approved'
+            && ! $request->routeIs('college.payment', 'college.payment.store', 'college.payment.verify', 'college.settings', 'college.settings.update')
+        ) {
+            return redirect()->route('college.payment')
+                ->with('error', 'Please complete college payment before accessing the dashboard.');
+        }
+
         return $next($request);
     }
 }

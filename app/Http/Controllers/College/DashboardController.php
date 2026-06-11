@@ -11,6 +11,8 @@ use App\Models\Notification;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\OnboardingMailer;
+use App\Services\RazorpayService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +24,7 @@ class DashboardController extends Controller
 {
     public function dashboard(Request $request)
     {
+        // dd($user = Auth::user());
         return view('dashboard.home', $this->frontendAdminData('college-dashboard', 'college'));
     }
 
@@ -31,11 +34,13 @@ class DashboardController extends Controller
 
         return view('dashboard.college.payment', [
             'college' => $college,
+            'paymentAmount' => $this->collegePaymentAmount(),
+            'razorpayKey' => config('services.razorpay.key'),
             ...$this->frontendAdminData('college-payment'),
         ]);
     }
 
-    public function paymentStore(Request $request)
+    public function paymentStore(Request $request, RazorpayService $razorpay)
     {
         $validated = $request->validate([
             'payment_mode' => ['required', Rule::in(['online', 'offline'])],
@@ -51,35 +56,174 @@ class DashboardController extends Controller
 
         $college = $this->currentCollegeOrFail();
 
+        if ($validated['payment_mode'] === 'online') {
+            $amount = $this->collegePaymentAmount();
+
+            abort_if($amount <= 0, 422, 'College payment amount is not configured.');
+
+            $receipt = 'college_' . $college->id . '_' . Str::lower(Str::random(8));
+            $razorpayOrder = $razorpay->createOrder($amount, $receipt, [
+                'college_id' => (string) $college->id,
+                'user_id' => (string) Auth::id(),
+            ]);
+
+            $college->update([
+                'payment_mode' => 'online',
+                'utr_number' => null,
+                'payment_status' => 'pending',
+                'payment_amount' => $amount,
+                'payment_submitted_at' => now(),
+                'razorpay_order_id' => $razorpayOrder->id,
+                'razorpay_payment_id' => null,
+                'razorpay_signature' => null,
+                'payment_reviewed_by' => null,
+                'payment_reviewed_at' => null,
+                'payment_rejection_reason' => null,
+            ]);
+
+            return redirect()->route('college.payment')->with('open_razorpay', true);
+        }
+
         $college->update([
             'payment_mode' => $validated['payment_mode'],
-            'utr_number' => $validated['payment_mode'] === 'offline' ? $validated['utr_number'] : null,
+            'utr_number' => $validated['utr_number'],
             'payment_status' => 'pending',
+            'payment_amount' => $this->collegePaymentAmount(),
             'payment_submitted_at' => now(),
+            'razorpay_order_id' => null,
+            'razorpay_payment_id' => null,
+            'razorpay_signature' => null,
             'payment_reviewed_by' => null,
             'payment_reviewed_at' => null,
             'payment_rejection_reason' => null,
         ]);
 
-        $message = $validated['payment_mode'] === 'offline'
-            ? 'Offline payment details submitted successfully. Your UTR number is pending admin approval.'
-            : 'Online payment mode selected. Please complete the payment when the gateway opens.';
+        return redirect()->route('college.payment')
+            ->with('success', 'Offline payment details submitted successfully. Your UTR number is pending admin approval.');
+    }
 
-        return redirect()->route('college.payment')->with('success', $message);
+    public function paymentVerify(Request $request, RazorpayService $razorpay): JsonResponse
+    {
+        $validated = $request->validate([
+            'razorpay_payment_id' => ['required', 'string', 'max:255'],
+            'razorpay_order_id' => ['required', 'string', 'max:255'],
+            'razorpay_signature' => ['required', 'string', 'max:255'],
+        ]);
+
+        $college = $this->currentCollegeOrFail();
+
+        abort_unless($college->payment_mode === 'online', 422, 'Online payment has not been started for this college.');
+        abort_unless($college->razorpay_order_id === $validated['razorpay_order_id'], 422, 'The payment order does not match this college.');
+
+        $razorpay->verifyPaymentSignature($validated);
+
+        $college->update([
+            'payment_status' => 'approved',
+            'payment_submitted_at' => $college->payment_submitted_at ?? now(),
+            'razorpay_payment_id' => $validated['razorpay_payment_id'],
+            'razorpay_signature' => $validated['razorpay_signature'],
+            'payment_reviewed_by' => null,
+            'payment_reviewed_at' => now(),
+            'payment_rejection_reason' => null,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment verified. Dashboard access is now active.',
+            'redirect_url' => route('college.dashboard'),
+        ]);
+    }
+
+    public function courses()
+    {
+        $college = $this->currentCollegeOrFail();
+
+        $courses = Course::query()
+            ->withCount([
+                'enrollments as college_enrollments_count' => fn ($query) => $query
+                    ->whereHas('student', fn ($query) => $query->where('college_id', $college->id)),
+                'enrollments as college_completed_count' => fn ($query) => $query
+                    ->where('status', 'completed')
+                    ->whereHas('student', fn ($query) => $query->where('college_id', $college->id)),
+            ])
+            ->orderBy('title')
+            ->get()
+            ->map(fn (Course $course) => [
+                'id' => $course->id,
+                'title' => $course->title,
+                'description' => $course->description,
+                'level' => $course->level ?? 'Beginner',
+                'category' => $course->category ?? 'Internship',
+                'duration' => $course->duration_months ? $course->duration_months . ' months' : 'Self paced',
+                'fee' => $course->fee !== null ? 'Rs. ' . number_format((float) $course->fee, 2) : 'Free',
+                'enrollments' => (int) $course->college_enrollments_count,
+                'completed' => (int) $course->college_completed_count,
+                'completion' => $course->college_enrollments_count
+                    ? round($course->college_completed_count * 100 / $course->college_enrollments_count) . '%'
+                    : '0%',
+            ]);
+
+        return view('dashboard.college.courses', [
+            'courses' => $courses,
+            ...$this->frontendAdminData('college-courses'),
+        ]);
+    }
+
+    public function settings()
+    {
+        return view('dashboard.college.settings', [
+            'college' => $this->currentCollegeOrFail(),
+            'user' => Auth::user(),
+            ...$this->frontendAdminData('common-settings'),
+        ]);
+    }
+
+    public function settingsUpdate(Request $request)
+    {
+        $user = Auth::user();
+        $college = $this->currentCollegeOrFail();
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'college_name' => ['required', 'string', 'max:255'],
+            'contact_number' => ['nullable', 'string', 'max:30'],
+            'address' => ['nullable', 'string', 'max:1000'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user->fill([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ]);
+
+        if (filled($validated['password'] ?? null)) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        $college->update([
+            'college_name' => $validated['college_name'],
+            'contact_number' => $validated['contact_number'] ?? null,
+            'address' => $validated['address'] ?? null,
+        ]);
+
+        return redirect()->route('college.settings')->with('success', 'Settings updated successfully.');
     }
 
     public function index()
     {
         $user = Auth::user();
-        
+
         // Get college profile
         $college = College::where('user_id', $user->id)->first();
-        
+
         // Get students for this college (or empty collection if no college)
-        $students = $college 
+        $students = $college
             ? Student::where('college_id', $college->id)->with('user')->get()
             : collect();
-        
+
         // Calculate stats with defaults
         $totalStudents = $students->count();
         $activeInternships = $students->filter(function($student) {
@@ -88,7 +232,7 @@ class DashboardController extends Controller
         $completed = $students->filter(function($student) {
             return $student->enrollments()->where('status', 'completed')->exists();
         })->count();
-        
+
         // Get monthly enrollment data for chart
         $monthlyData = Enrollment::select(
             DB::raw('MONTH(created_at) as month'),
@@ -98,18 +242,18 @@ class DashboardController extends Controller
         ->groupBy('month')
         ->orderBy('month')
         ->pluck('count', 'month');
-        
+
         // Fill missing months with 0
         $chartData = [];
         for ($i = 1; $i <= 12; $i++) {
             $chartData[] = $monthlyData->get($i, 0);
         }
-        
+
         // Provide default college object if none exists
         if (!$college) {
             $college = (object) ['college_name' => $user->name];
         }
-        
+
         return view('pages.college.dashboard', compact(
             'college',
             'students',
@@ -307,11 +451,36 @@ class DashboardController extends Controller
 
     protected function currentCollegeOrFail(): College
     {
-        $college = Auth::user()?->college;
+        $user = Auth::user();
+
+        abort_unless($user, 403, 'Please login to access your college account.');
+
+        $college = $user->college;
+
+        if (! $college && $user->role?->name === 'college') {
+            $college = College::whereNull('user_id')
+                ->where('college_name', $user->name)
+                ->first();
+
+            if ($college) {
+                $college->update(['user_id' => $user->id]);
+            } else {
+                $college = $user->college()->create([
+                    'college_name' => $user->name,
+                    'address' => null,
+                    'contact_number' => null,
+                ]);
+            }
+        }
 
         abort_unless($college, 403, 'Your college account is not linked to a college profile.');
 
         return $college;
+    }
+
+    protected function collegePaymentAmount(): float
+    {
+        return (float) config('services.college_payment.amount', 1000);
     }
 
     protected function dashboardSidebarSections(): array
@@ -321,7 +490,7 @@ class DashboardController extends Controller
                 'key' => 'common-settings',
                 'label' => 'Settings',
                 'icon' => 'fi fi-rr-settings',
-                'href' => '#',
+                'href' => route('college.settings'),
             ],
             [
                 'key' => 'common-logout',
@@ -364,7 +533,7 @@ class DashboardController extends Controller
                         'key' => 'college-courses',
                         'label' => 'Courses',
                         'icon' => 'fi fi-rr-book-alt',
-                        'href' => '#',
+                        'href' => route('college.courses'),
                     ],
                 ],
             ],
@@ -409,19 +578,7 @@ class DashboardController extends Controller
         $college = College::where('user_id', Auth::id())->first();
 
         if (! $college) {
-            return [
-                'recentStudents' => [],
-                'topCourses' => [],
-                'activities' => [],
-                'announcements' => [],
-                'statCards' => [],
-                'collegeChartData' => [
-                    'studentGrowth' => ['labels' => [], 'data' => []],
-                    'enrollmentDistribution' => ['labels' => [], 'data' => []],
-                    'placementStats' => ['labels' => ['Completed', 'In progress'], 'data' => [0, 0]],
-                    'engagement' => ['labels' => [], 'active' => [], 'inactive' => []],
-                ],
-            ];
+            return $this->collegeDashboardFallbackData();
         }
 
         $studentIds = Student::where('college_id', $college->id)->pluck('id');
@@ -474,14 +631,7 @@ class DashboardController extends Controller
             ->toArray();
 
         if (empty($topCourses)) {
-            $topCourses = Course::orderBy('title')
-                ->limit(4)
-                ->get()
-                ->map(fn (Course $course) => [
-                    'name' => $course->title,
-                    'enrollments' => 0,
-                    'completion' => '0%',
-                ])->toArray();
+            $topCourses = $this->dashboardCourseCards($college);
         }
 
         $activities = $enrollments->take(4)->map(function (Enrollment $enrollment) {
@@ -573,7 +723,95 @@ class DashboardController extends Controller
             ],
         ];
 
+        if ($totalStudents === 0 && $totalEnrollments === 0) {
+            return $this->collegeDashboardFallbackData($college);
+        }
+
         return compact('recentStudents', 'topCourses', 'activities', 'announcements', 'statCards', 'collegeChartData');
+    }
+
+    protected function collegeDashboardFallbackData(?College $college = null): array
+    {
+        $topCourses = $this->dashboardCourseCards($college, true);
+
+        return [
+            'recentStudents' => [
+                ['name' => 'Aarav Sharma', 'course' => $topCourses[0]['name'] ?? 'Full Stack Development', 'status' => 'Active', 'joined' => '2 days ago'],
+                ['name' => 'Priya Nair', 'course' => $topCourses[1]['name'] ?? 'Data Analytics', 'status' => 'Active', 'joined' => '5 days ago'],
+                ['name' => 'Karan Mehta', 'course' => $topCourses[2]['name'] ?? 'UI/UX Design', 'status' => 'Completed', 'joined' => '1 week ago'],
+                ['name' => 'Simran Kaur', 'course' => $topCourses[3]['name'] ?? 'Frontend Development', 'status' => 'Active', 'joined' => '2 weeks ago'],
+            ],
+            'topCourses' => $topCourses,
+            'activities' => [
+                ['title' => 'Aarav Sharma enrolled in ' . ($topCourses[0]['name'] ?? 'Full Stack Development'), 'time' => 'Today, 10:30 AM', 'tone' => 'blue'],
+                ['title' => 'Priya Nair completed the analytics assessment', 'time' => 'Yesterday', 'tone' => 'green'],
+                ['title' => 'New course batch planning is ready for review', 'time' => '2 days ago', 'tone' => 'purple'],
+                ['title' => 'Placement readiness report was generated', 'time' => '3 days ago', 'tone' => 'orange'],
+            ],
+            'announcements' => [
+                ['title' => 'June internship orientation starts this week', 'meta' => 'Academic coordination'],
+                ['title' => 'Student project review window is open', 'meta' => 'Program update'],
+                ['title' => 'Placement readiness session scheduled for Friday', 'meta' => 'Career services'],
+            ],
+            'statCards' => [
+                ['label' => 'Total Students', 'value' => '128', 'change' => '+12%', 'icon' => 'fi fi-rr-users', 'classes' => 'from-blue-500/15 to-cyan-400/10 text-blue-700'],
+                ['label' => 'Active Students', 'value' => '96', 'change' => '+8%', 'icon' => 'fi fi-rr-chart-line-up', 'classes' => 'from-violet-500/15 to-indigo-400/10 text-violet-700'],
+                ['label' => 'Total Enrollments', 'value' => '184', 'change' => '+18%', 'icon' => 'fi fi-rr-book-alt', 'classes' => 'from-emerald-500/15 to-lime-400/10 text-emerald-700'],
+                ['label' => 'Placement Rate', 'value' => '78%', 'change' => '+6%', 'icon' => 'fi fi-rr-briefcase', 'classes' => 'from-orange-500/15 to-amber-400/10 text-orange-700'],
+            ],
+            'collegeChartData' => [
+                'studentGrowth' => ['labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], 'data' => [18, 24, 31, 42, 58, 72]],
+                'enrollmentDistribution' => [
+                    'labels' => collect($topCourses)->pluck('name')->take(4)->values()->all(),
+                    'data' => collect($topCourses)->pluck('enrollments')->take(4)->map(fn ($value) => max((int) $value, 12))->values()->all(),
+                ],
+                'placementStats' => ['labels' => ['Completed', 'In progress'], 'data' => [78, 22]],
+                'engagement' => ['labels' => ['Week 1', 'Week 2', 'Week 3', 'Week 4'], 'active' => [64, 72, 81, 96], 'inactive' => [22, 18, 14, 11]],
+            ],
+        ];
+    }
+
+    protected function dashboardCourseCards(?College $college = null, bool $useDemoMetrics = false): array
+    {
+        $query = Course::query()->orderBy('title')->limit(4);
+
+        if ($college) {
+            $query->withCount([
+                'enrollments as college_enrollments_count' => fn ($query) => $query
+                    ->whereHas('student', fn ($query) => $query->where('college_id', $college->id)),
+                'enrollments as college_completed_count' => fn ($query) => $query
+                    ->where('status', 'completed')
+                    ->whereHas('student', fn ($query) => $query->where('college_id', $college->id)),
+            ]);
+        }
+
+        $demoMetrics = [
+            ['enrollments' => 48, 'completion' => '82%'],
+            ['enrollments' => 36, 'completion' => '76%'],
+            ['enrollments' => 28, 'completion' => '69%'],
+            ['enrollments' => 32, 'completion' => '74%'],
+        ];
+
+        $courses = $query->get()->values()->map(function (Course $course, int $index) use ($college, $useDemoMetrics, $demoMetrics) {
+            $enrollments = $useDemoMetrics ? $demoMetrics[$index]['enrollments'] : ($college ? (int) $course->college_enrollments_count : 0);
+            $completed = $college && ! $useDemoMetrics ? (int) $course->college_completed_count : 0;
+
+            return [
+                'name' => $course->title,
+                'category' => $course->category ?? 'Internship',
+                'duration' => $course->duration_months ? $course->duration_months . ' months' : 'Self paced',
+                'fee' => $course->fee !== null ? 'Rs. ' . number_format((float) $course->fee, 2) : 'Free',
+                'enrollments' => $enrollments,
+                'completion' => $useDemoMetrics ? $demoMetrics[$index]['completion'] : ($enrollments ? round($completed * 100 / $enrollments) . '%' : '0%'),
+            ];
+        })->toArray();
+
+        return $courses ?: [
+            ['name' => 'Full Stack Development', 'category' => 'Technology', 'duration' => '6 months', 'fee' => 'Rs. 12,000.00', 'enrollments' => 48, 'completion' => '82%'],
+            ['name' => 'Data Analytics', 'category' => 'Technology', 'duration' => '4 months', 'fee' => 'Rs. 9,500.00', 'enrollments' => 36, 'completion' => '76%'],
+            ['name' => 'UI/UX Design', 'category' => 'Design', 'duration' => '3 months', 'fee' => 'Rs. 8,000.00', 'enrollments' => 28, 'completion' => '69%'],
+            ['name' => 'Frontend Development', 'category' => 'Technology', 'duration' => '4 months', 'fee' => 'Rs. 10,000.00', 'enrollments' => 32, 'completion' => '74%'],
+        ];
     }
 
     protected function collegeStudentManagementData(): array
