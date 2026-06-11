@@ -4,66 +4,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Engineers Clinic') }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/Engineers-clinic-logo.png') }}">
 
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,800,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Satoshi', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: '#7C5CFC',
-                        brandLight: '#A78BFA',
-                        brandDark: '#160840',
-                        brandSoft: 'rgba(124,92,252,0.15)',
-                        secondary: '#F5C842',
-                        secondarySoft: 'rgba(245,200,66,0.18)',
-                        auroraLeft: '#DDD0FF',
-                        auroraMid: '#B8DEFF',
-                        auroraRight: '#FFD0E8',
-                        bgMain: '#F5F0FF',
-                        bgSoft: '#EEF5FF',
-                        bgWhite: '#ffffff',
-                        surface: '#FAF7FF',
-                        surfaceDark: '#12052E',
-                        cardBg: 'rgba(255,255,255,0.60)',
-                        cardBorder: 'rgba(255,255,255,0.85)',
-                        textPrimary: '#160840',
-                        textSecondary: '#3D2090',
-                        textMuted: '#8B7FBF',
-                        borderLight: '#E2D9FF',
-                        glowPurple: 'rgba(124,92,252,0.20)',
-                        glowBlue: 'rgba(184,222,255,0.35)',
-                        glowPink: 'rgba(255,208,232,0.35)',
-                        success: '#22C55E',
-                        warning: '#F59E0B',
-                        danger: '#EF4444',
-                    },
-                    maxWidth: {
-                        container: '1280px',
-                    },
-                    borderRadius: {
-                        card: '24px',
-                        control: '14px',
-                    },
-                    boxShadow: {
-                        card: '0 18px 48px rgba(22,8,64,0.08)',
-                        glass: '0 24px 70px rgba(22,8,64,0.10)',
-                    },
-                },
-            },
-        };
-    </script>
 
     <style>
         :root {
@@ -389,6 +340,7 @@
     @include('form.college-partnership-discussion')
     @include('form.referral-popup')
     @include('partials.footer')
+    @include('partials.chatbot')
 </body>
 
 </html>

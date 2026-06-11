@@ -158,7 +158,12 @@
             return;
         }
 
-        const colors = tailwind.config.theme.extend.colors;
+        const colors = {
+            brand: '#7C5CFC',
+            brandLight: '#A78BFA',
+            auroraMid: '#B8DEFF',
+            auroraRight: '#FFD0E8',
+        };
 
         const getParticleSettings = () => {
             const isMobile = window.matchMedia("(max-width: 640px)").matches;

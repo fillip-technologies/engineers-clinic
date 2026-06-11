@@ -7,6 +7,7 @@ use App\Http\Middleware\CheckRole;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CounsellingController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ChatbotController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -102,3 +103,9 @@ Route::middleware(['auth'])->group(function () {
 
 // Public course detail route
 Route::get('/course/{slug}', [HomeController::class, 'courseDetail'])->name('course.detail');
+
+// Chatbot (support assistant)
+Route::prefix('chatbot')->name('chatbot.')->middleware('throttle:30,1')->group(function () {
+    Route::post('/message', [ChatbotController::class, 'message'])->name('message');
+    Route::post('/handoff', [ChatbotController::class, 'handoff'])->name('handoff');
+});

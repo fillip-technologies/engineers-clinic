@@ -52,6 +52,27 @@
                         <span>+91-79790-30298</span>
                     </a>
                 </div>
+
+                <div class="mt-8">
+                    <h3 class="text-label text-brandLight">Our Clients</h3>
+                    <div class="mt-4 space-y-2 text-sm text-bgSoft/78">
+                        <a href="https://fillipskillacademy.com/" target="_blank" rel="noopener noreferrer"
+                            class="flex items-start gap-3 transition hover:text-secondary">
+                            <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary"></span>
+                            <span>Fillip Skill Academy</span>
+                        </a>
+                        <a href="https://filliptechnologies.com/" target="_blank" rel="noopener noreferrer"
+                            class="flex items-start gap-3 transition hover:text-secondary">
+                            <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary"></span>
+                            <span>Fillip Technologies</span>
+                        </a>
+                        <a href="https://technosysmanagement.com/" target="_blank" rel="noopener noreferrer"
+                            class="flex items-start gap-3 transition hover:text-secondary">
+                            <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary"></span>
+                            <span>Technosys Management</span>
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <div>
