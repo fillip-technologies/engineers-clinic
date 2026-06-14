@@ -11,10 +11,18 @@
                 </p>
             </div>
 
-            <a href="{{ route('college.enrollments.create') }}"
-                class="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
-                Add Enrollment
-            </a>
+            <div class="flex flex-wrap gap-3">
+                <a href="{{ route('college.enrollments.bulk-upload') }}"
+                    class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-900 hover:bg-slate-900 hover:text-white">
+                    <i class="fi fi-rr-cloud-upload text-sm leading-none"></i>
+                    Bulk Upload
+                </a>
+                <a href="{{ route('college.enrollments.create') }}"
+                    class="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
+                    <i class="fi fi-rr-plus text-sm leading-none"></i>
+                    Add Enrollment
+                </a>
+            </div>
         </div>
     </section>
 

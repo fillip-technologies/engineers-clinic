@@ -29,7 +29,7 @@ class SendWelcomeCredentialsEmail implements ShouldQueue
             return;
         }
 
-        Mail::to($user->email)->queue(new OnboardingWelcomeMail(
+        Mail::to($user->email)->send(new OnboardingWelcomeMail(
             user: $user,
             plainPassword: $this->plainPassword,
             accountType: $this->accountType,

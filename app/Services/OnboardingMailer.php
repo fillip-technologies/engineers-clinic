@@ -16,7 +16,7 @@ class OnboardingMailer
         $accountType = $accountType ?: ($user->role?->name ?? 'student');
 
         try {
-            SendWelcomeCredentialsEmail::dispatch($user->id, $plainPassword, $accountType)->afterCommit();
+            SendWelcomeCredentialsEmail::dispatchSync($user->id, $plainPassword, $accountType);
         } catch (Throwable $exception) {
             Log::warning('Unable to send onboarding email.', [
                 'user_id' => $user->id,

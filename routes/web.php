@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\College\DashboardController as CollegeDashboardController;
+use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use App\Http\Middleware\CheckRole;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CounsellingController;
@@ -41,7 +42,7 @@ Route::post('/signup/{role}', [HomeController::class, 'signupSubmit'])->name('si
 
 // Unified dashboard - redirects based on user role
 Route::middleware(['auth', CheckRole::class . ':student'])->group(function () {
-    Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [StudentDashboardController::class, 'dashboard'])->name('dashboard');
 });
 
 Route::post('/counselling-submit', [CounsellingController::class, 'store'])
@@ -69,24 +70,29 @@ Route::middleware(['auth', CheckRole::class . ':college'])->group(function () {
     Route::get('/college/enrollments', [CollegeDashboardController::class, 'enrollments'])->name('college.enrollments');
     Route::get('/college/enrollments/create', [CollegeDashboardController::class, 'enrollmentCreate'])->name('college.enrollments.create');
     Route::post('/college/enrollments', [CollegeDashboardController::class, 'enrollmentStore'])->name('college.enrollments.store');
+    Route::get('/college/enrollments/bulk-upload', [CollegeDashboardController::class, 'enrollmentBulkUpload'])->name('college.enrollments.bulk-upload');
+    Route::post('/college/enrollments/bulk-upload', [CollegeDashboardController::class, 'enrollmentBulkUploadStore'])->name('college.enrollments.bulk-upload.store');
+    Route::get('/college/enrollments/bulk-template', [CollegeDashboardController::class, 'enrollmentBulkTemplate'])->name('college.enrollments.bulk-template');
     Route::get('/college/enrollments/edit', [CollegeDashboardController::class, 'enrollmentEdit'])->name('college.enrollments.edit');
     Route::get('/college/enrollments/view', [CollegeDashboardController::class, 'enrollmentShow'])->name('college.enrollments.view');
 });
 
 // Student Dashboard Routes (protected with auth middleware)
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard/enrolled-courses', [HomeController::class, 'enrolledCourses'])->name('dashboard.enrolled-courses');
-    Route::get('/dashboard/student/profile', [HomeController::class, 'studentProfile'])->name('dashboard.student.profile');
-    Route::put('/dashboard/student/profile/edit', [HomeController::class, 'studentProfileEdit'])->name('dashboard.student.profile.edit');
-    Route::patch('/dashboard/student/profile/edit', [HomeController::class, 'studentProfileEdit'])->name('dashboard.student.profile.update');
-    Route::get('/student-dashboard/quiz-attempts', [HomeController::class, 'quizAttempts'])->name('dashboard.quiz-attempts');
-    Route::get('/student-dashboard/orders', [HomeController::class, 'orderHistory'])->name('dashboard.orders');
-    Route::get('/student/course/workspace', [HomeController::class, 'studentDefaultCourseWorkspace'])->name('student.course.workspace.default');
-    Route::get('/student/course/{id}/workspace', [HomeController::class, 'studentCourseWorkspace'])->name('student.course.workspace');
-    Route::post('/student/course/{id}/workspace/steps/{step}/complete', [HomeController::class, 'studentWorkspaceCompleteStep'])->name('student.course.workspace.steps.complete');
-    Route::post('/student/course/{id}/workspace/submit', [HomeController::class, 'studentWorkspaceSubmitProject'])->name('student.course.workspace.submit');
-    Route::get('/student-dashboard/course/{id}/workspace', [HomeController::class, 'studentCourseWorkspace']);
-    Route::get('/student-dashboard/course/{id}', [HomeController::class, 'studentCourse'])->name('student.course.detail');
+    Route::get('/dashboard/enrolled-courses', [StudentDashboardController::class, 'enrolledCourses'])->name('dashboard.enrolled-courses');
+    Route::get('/dashboard/student/profile', [StudentDashboardController::class, 'studentProfile'])->name('dashboard.student.profile');
+    Route::put('/dashboard/student/profile/edit', [StudentDashboardController::class, 'studentProfileEdit'])->name('dashboard.student.profile.edit');
+    Route::patch('/dashboard/student/profile/edit', [StudentDashboardController::class, 'studentProfileEdit'])->name('dashboard.student.profile.update');
+    Route::get('/student-dashboard/quiz-attempts', [StudentDashboardController::class, 'quizAttempts'])->name('dashboard.quiz-attempts');
+    Route::get('/student-dashboard/orders', [StudentDashboardController::class, 'orderHistory'])->name('dashboard.orders');
+    Route::get('/student/course/workspace', [StudentDashboardController::class, 'studentDefaultCourseWorkspace'])->name('student.course.workspace.default');
+    Route::get('/student/course/{id}/workspace', [StudentDashboardController::class, 'studentCourseWorkspace'])->name('student.course.workspace');
+    Route::post('/student/course/{id}/workspace/steps/{step}/complete', [StudentDashboardController::class, 'studentWorkspaceCompleteStep'])->name('student.course.workspace.steps.complete');
+    Route::post('/student/course/{id}/workspace/submit', [StudentDashboardController::class, 'studentWorkspaceSubmitProject'])->name('student.course.workspace.submit');
+    Route::get('/student-dashboard/course/{id}/workspace', [StudentDashboardController::class, 'studentCourseWorkspace']);
+    Route::get('/student-dashboard/course/{id}', [StudentDashboardController::class, 'studentCourse'])->name('student.course.detail');
+    Route::get('/student/projects', [StudentDashboardController::class, 'studentProjects'])->name('student.projects');
+    Route::post('/student/projects/{course}/select', [StudentDashboardController::class, 'studentSelectProject'])->name('student.projects.select');
     Route::get('/course/{course:slug}/checkout/{order?}', [CheckoutController::class, 'show'])->name('payments.checkout');
 
     // Payment Routes

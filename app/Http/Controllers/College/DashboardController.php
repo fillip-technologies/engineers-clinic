@@ -10,6 +10,7 @@ use App\Models\Enrollment;
 use App\Models\Notification;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\EnrollmentBulkImportService;
 use App\Services\OnboardingMailer;
 use App\Services\RazorpayService;
 use Illuminate\Http\JsonResponse;
@@ -357,6 +358,8 @@ class DashboardController extends Controller
         $college = $this->currentCollegeOrFail();
         $studentIds = $college->students()->pluck('id')->all();
 
+        $isNewStudent = blank($request->input('student_id'));
+
         $validated = $request->validate([
             'student_id' => [
                 'nullable',
@@ -364,8 +367,9 @@ class DashboardController extends Controller
                 Rule::in($studentIds),
                 Rule::unique('enrollments')->where(fn ($query) => $query->where('course_id', $request->course_id)),
             ],
-            'new_student_name' => ['nullable', 'required_without:student_id', 'string', 'max:255'],
-            'new_student_email' => ['nullable', 'required_without:student_id', 'email', 'max:255', 'unique:users,email'],
+            'new_student_name' => ['nullable', Rule::requiredIf($isNewStudent), 'string', 'max:255'],
+            'new_student_email' => ['nullable', Rule::requiredIf($isNewStudent), 'email', 'max:255', 'unique:users,email'],
+            'new_student_password' => ['nullable', Rule::requiredIf($isNewStudent), 'string', 'min:8', 'confirmed'],
             'course_id' => ['required', 'exists:courses,id'],
             'enrollment_date' => ['required', 'date'],
             'status' => ['required', 'in:ongoing,completed'],
@@ -373,9 +377,12 @@ class DashboardController extends Controller
             'student_id.required' => 'Select an existing student or enter new student details.',
             'student_id.in' => 'You can only enroll students from your college.',
             'student_id.unique' => 'This student is already enrolled in the selected course.',
+            'new_student_password.required' => 'A password is required when creating a new student account.',
+            'new_student_password.confirmed' => 'The passwords do not match.',
+            'new_student_password.min' => 'Password must be at least 8 characters.',
         ]);
 
-        $password = Str::random(12);
+        $password = $validated['new_student_password'] ?? Str::random(12);
 
         DB::transaction(function () use ($validated, $college, $password) {
             $student = null;
@@ -410,6 +417,63 @@ class DashboardController extends Controller
         });
 
         return redirect()->route('college.enrollments')->with('success', 'Enrollment created successfully.');
+    }
+
+    public function enrollmentBulkUpload()
+    {
+        $college = $this->currentCollegeOrFail();
+
+        return view('dashboard.college.enrollments.bulk-upload', [
+            'courses' => $this->collegeEnrollmentCourseOptions(),
+            ...$this->frontendAdminData('college-enrollments'),
+        ]);
+    }
+
+    public function enrollmentBulkUploadStore(Request $request, EnrollmentBulkImportService $importService)
+    {
+        $college = $this->currentCollegeOrFail();
+
+        // Laravel-level file presence check
+        $request->validate([
+            'enrollment_file' => ['required', 'file'],
+        ], [
+            'enrollment_file.required' => 'Please select a file to upload.',
+            'enrollment_file.file'     => 'The upload must be a file.',
+        ]);
+
+        $file = $request->file('enrollment_file');
+
+        // Deep security validation (MIME, magic bytes, macros, size, name)
+        $fileErrors = $importService->validate($file);
+
+        if (! empty($fileErrors)) {
+            return back()
+                ->withInput()
+                ->with('bulk_errors', array_map(fn ($msg) => ['row' => 'File', 'message' => $msg], $fileErrors));
+        }
+
+        $outcome = $importService->import($file, $college->id);
+
+        $created  = collect($outcome['results'])->where('status', 'created')->count();
+        $enrolled = collect($outcome['results'])->where('status', 'enrolled')->count();
+        $skipped  = collect($outcome['results'])->where('status', 'skipped')->count();
+        $failed   = count($outcome['errors']);
+
+        return back()->with([
+            'bulk_results'  => $outcome['results'],
+            'bulk_errors'   => $outcome['errors'],
+            'bulk_summary'  => compact('created', 'enrolled', 'skipped', 'failed'),
+        ]);
+    }
+
+    public function enrollmentBulkTemplate(EnrollmentBulkImportService $importService)
+    {
+        $csv = $importService->templateCsv();
+
+        return response($csv, 200, [
+            'Content-Type'        => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="enrollment-template.csv"',
+        ]);
     }
 
     public function enrollmentEdit()

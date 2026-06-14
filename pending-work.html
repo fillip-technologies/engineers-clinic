@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta charset="UTF-8">
+  <title>Engineers Clinic — Pending Work</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 2.5cm 2cm 2.5cm 2.5cm;
+    }
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      font-size: 11pt;
+      color: #1e293b;
+      line-height: 1.6;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    h1 {
+      font-size: 22pt;
+      font-weight: 700;
+      color: #0f172a;
+      border-bottom: 3px solid #2563eb;
+      padding-bottom: 8px;
+      margin-bottom: 6px;
+    }
+    .meta {
+      font-size: 9pt;
+      color: #64748b;
+      margin-bottom: 30px;
+    }
+    h2 {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-top: 30px;
+      margin-bottom: 6px;
+      border-left: 4px solid #2563eb;
+      padding-left: 10px;
+    }
+    h3 {
+      font-size: 11pt;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 18px;
+      margin-bottom: 4px;
+    }
+    p { margin: 4px 0 10px 0; }
+    ul { margin: 4px 0 10px 20px; padding: 0; }
+    li { margin-bottom: 4px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 10pt;
+    }
+    th {
+      background-color: #1e40af;
+      color: #ffffff;
+      font-weight: 600;
+      text-align: left;
+      padding: 8px 10px;
+      border: 1px solid #1e40af;
+    }
+    td {
+      padding: 7px 10px;
+      border: 1px solid #cbd5e1;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background-color: #f8fafc; }
+    .badge-critical {
+      background-color: #fee2e2;
+      color: #991b1b;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 9pt;
+      font-weight: 600;
+    }
+    .badge-medium {
+      background-color: #fef3c7;
+      color: #92400e;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 9pt;
+      font-weight: 600;
+    }
+    .badge-low {
+      background-color: #d1fae5;
+      color: #065f46;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 9pt;
+      font-weight: 600;
+    }
+    .badge-deferred {
+      background-color: #ede9fe;
+      color: #4c1d95;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 9pt;
+      font-weight: 600;
+    }
+    code {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 9.5pt;
+      background-color: #f1f5f9;
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: #be185d;
+    }
+    .section-intro {
+      background-color: #eff6ff;
+      border-left: 3px solid #3b82f6;
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 14px;
+      font-size: 10pt;
+      color: #1e40af;
+    }
+    .page-break { page-break-before: always; }
+    hr { border: none; border-top: 1px solid #e2e8f0; margin: 20px 0; }
+  </style>
+</head>
+<body>
+
+<h1>Engineers Clinic — Pending Work</h1>
+<p class="meta">Project: <strong>c:\xampp\htdocs\Ongoing Projects\engineers-clinic</strong>&nbsp;&nbsp;|&nbsp;&nbsp;Prepared: <strong>June 14, 2026</strong>&nbsp;&nbsp;|&nbsp;&nbsp;Branch: <strong>main</strong></p>
+
+<div class="section-intro">
+  This document lists all known pending work, bugs, and incomplete features discovered during the refactoring and audit session. Items are grouped by priority and area. Completed items from this session are <em>not</em> listed.
+</div>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SUMMARY TABLE
+════════════════════════════════════════════════════════════ -->
+<h2>Summary</h2>
+
+<table>
+  <tr>
+    <th>#</th>
+    <th>Item</th>
+    <th>Area</th>
+    <th>Priority</th>
+  </tr>
+  <tr><td>1</td><td>Seed 9 project courses (3 per level) with workspaces and steps</td><td>Database / Seeder</td><td><span class="badge-critical">Critical</span></td></tr>
+  <tr><td>2</td><td>College: missing <code>studentUpdate()</code> method and route</td><td>College Dashboard</td><td><span class="badge-critical">Critical</span></td></tr>
+  <tr><td>3</td><td>College: missing <code>enrollmentUpdate()</code> method and route</td><td>College Dashboard</td><td><span class="badge-critical">Critical</span></td></tr>
+  <tr><td>4</td><td><code>student-edit.blade.php</code> — broken form (no action, wrong button type)</td><td>College Views</td><td><span class="badge-critical">Critical</span></td></tr>
+  <tr><td>5</td><td><code>enrollments/edit.blade.php</code> — broken form (no action, no HTTP method)</td><td>College Views</td><td><span class="badge-critical">Critical</span></td></tr>
+  <tr><td>6</td><td>Wire Admin controller routes (students, courses, enrollments, colleges)</td><td>Admin Panel</td><td><span class="badge-medium">Medium</span></td></tr>
+  <tr><td>7</td><td>Student sidebar: Settings link points to <code>#</code></td><td>Student Dashboard</td><td><span class="badge-medium">Medium</span></td></tr>
+  <tr><td>8</td><td>Certificate generation logic missing</td><td>Certificates</td><td><span class="badge-medium">Medium</span></td></tr>
+  <tr><td>9</td><td>Student quiz-taking interface (models exist, no UI to attempt a quiz)</td><td>Quizzes</td><td><span class="badge-medium">Medium</span></td></tr>
+  <tr><td>10</td><td>Dashboard home: prompt unenrolled students to browse projects</td><td>Student Dashboard</td><td><span class="badge-low">Low</span></td></tr>
+  <tr><td>11</td><td>Re-enable commented-out database seeders in <code>DatabaseSeeder.php</code></td><td>Database / Seeder</td><td><span class="badge-low">Low</span></td></tr>
+  <tr><td>12</td><td>Admin sidebar links in student controller all point to <code>#</code></td><td>Admin Dashboard</td><td><span class="badge-low">Low</span></td></tr>
+</table>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 1 — CRITICAL
+════════════════════════════════════════════════════════════ -->
+<h2>1. Critical — Must Fix</h2>
+
+<!-- 1.1 -->
+<h3>1.1 — Seed 9 Project Courses</h3>
+<p><span class="badge-critical">Critical</span> &nbsp; Deferred by decision during this session.</p>
+<p>
+  The student project selection flow (<code>GET /student/projects</code>) and the project workspace flow are fully built and ready.
+  However, there are <strong>no courses in the database</strong>, so the page will show empty tabs.
+</p>
+<p><strong>What needs to be done:</strong></p>
+<ul>
+  <li>Create a <code>ProjectCoursesSeeder</code> (or seed via the admin panel once it is wired).</li>
+  <li>Seed exactly <strong>9 courses</strong> with <code>level</code> set to one of: <code>Beginner</code>, <code>Intermediate</code>, <code>Advanced</code> — 3 courses per level.</li>
+  <li>Set <code>category = 'Project'</code> on each so they appear in the Browse Projects view.</li>
+  <li>For each course, create at least one <strong>CourseWorkspace</strong> record (<code>status = true</code>) and at least 3–5 <strong>WorkspaceStep</strong> records (ordered by <code>sort_order</code>).</li>
+</ul>
+<p><strong>Files involved:</strong></p>
+<ul>
+  <li><code>database/seeders/ProjectCoursesSeeder.php</code> — to be created</li>
+  <li><code>database/seeders/DatabaseSeeder.php</code> — register the new seeder in the <code>$this->call([...])</code> array</li>
+</ul>
+<p><strong>Relevant models:</strong> <code>Course</code>, <code>CourseWorkspace</code>, <code>WorkspaceStep</code></p>
+
+<hr>
+
+<!-- 1.2 -->
+<h3>1.2 — College: Missing <code>studentUpdate()</code> Method</h3>
+<p><span class="badge-critical">Critical</span></p>
+<p>
+  The <code>studentEdit()</code> route at <code>GET /college/students/edit</code> renders a form, but there is no controller method or route to handle the form submission.
+  Clicking Save in the edit view does nothing — the form has no <code>action</code> attribute and the submit button is <code>type="button"</code>.
+</p>
+<p><strong>What needs to be done:</strong></p>
+<ul>
+  <li>Add a <code>studentUpdate(Request $request, Student $student)</code> method to <code>College\DashboardController</code>.</li>
+  <li>Validate <code>name</code>, <code>email</code> (unique ignoring current user), and optional <code>course_name</code>.</li>
+  <li>Update both the <code>User</code> and <code>Student</code> records inside a DB transaction.</li>
+  <li>Add a <code>PUT /college/students/{student}</code> route to <code>routes/web.php</code>.</li>
+  <li>Fix <code>student-edit.blade.php</code>: add form action, change <code>@method('PUT')</code>, fix the button to <code>type="submit"</code>, and add <code>name</code> attributes to all select fields.</li>
+</ul>
+<p><strong>Files involved:</strong></p>
+<ul>
+  <li><code>app/Http/Controllers/College/DashboardController.php</code></li>
+  <li><code>routes/web.php</code></li>
+  <li><code>resources/views/dashboard/college/student-edit.blade.php</code></li>
+</ul>
+
+<hr>
+
+<!-- 1.3 -->
+<h3>1.3 — College: Missing <code>enrollmentUpdate()</code> Method</h3>
+<p><span class="badge-critical">Critical</span></p>
+<p>Same problem as 1.2 but for enrollments. The enrollment edit view has no form action or HTTP method.</p>
+<p><strong>What needs to be done:</strong></p>
+<ul>
+  <li>Add an <code>enrollmentUpdate(Request $request, Enrollment $enrollment)</code> method to <code>College\DashboardController</code>.</li>
+  <li>Validate <code>status</code> (in: ongoing, completed) and <code>progress</code> (integer 0–100).</li>
+  <li>Ensure the enrollment belongs to the college's students before updating.</li>
+  <li>Add a <code>PUT /college/enrollments/{enrollment}</code> route to <code>routes/web.php</code>.</li>
+  <li>Fix <code>enrollments/edit.blade.php</code>: add form action, <code>@method('PUT')</code>, <code>type="submit"</code>, and field <code>name</code> attributes.</li>
+</ul>
+<p><strong>Files involved:</strong></p>
+<ul>
+  <li><code>app/Http/Controllers/College/DashboardController.php</code></li>
+  <li><code>routes/web.php</code></li>
+  <li><code>resources/views/dashboard/college/enrollments/edit.blade.php</code></li>
+</ul>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 2 — MEDIUM
+════════════════════════════════════════════════════════════ -->
+<h2 class="page-break">2. Medium Priority</h2>
+
+<!-- 2.1 -->
+<h3>2.1 — Wire Admin Panel Routes</h3>
+<p><span class="badge-medium">Medium</span></p>
+<p>
+  The <code>app/Http/Controllers/Admin/</code> directory contains fully-implemented controllers for
+  Students, Courses, Enrollments, Certificates, Colleges (including payment approval), Roles, Permissions, Quizzes, and more.
+  <strong>None of these are registered in <code>routes/web.php</code></strong> — only the admin dashboard index is wired.
+</p>
+<p><strong>What needs to be done:</strong></p>
+<ul>
+  <li>Add a route group under <code>prefix('admin')->middleware(['auth', CheckRole::class . ':admin'])</code>.</li>
+  <li>Register resource routes for: <code>students</code>, <code>courses</code>, <code>enrollments</code>, <code>certificates</code>, <code>colleges</code>, <code>roles</code>, <code>quizzes</code>.</li>
+  <li>Add specific routes for <code>CollegeController@approveOfflinePayment</code> and <code>CollegeController@rejectOfflinePayment</code>.</li>
+  <li>Create admin Blade views (or confirm existing views in <code>resources/views/dashboard/</code> cover admin needs).</li>
+</ul>
+<p><strong>Files involved:</strong></p>
+<ul>
+  <li><code>routes/web.php</code> — admin route group</li>
+  <li>All files in <code>app/Http/Controllers/Admin/</code></li>
+</ul>
+
+<hr>
+
+<!-- 2.2 -->
+<h3>2.2 — Student Settings Page</h3>
+<p><span class="badge-medium">Medium</span></p>
+<p>
+  The student sidebar shows a <strong>Settings</strong> link but its <code>href</code> is <code>'#'</code> (a placeholder) in
+  <code>Student\DashboardController::dashboardSidebarSections()</code> at line ~992.
+</p>
+<p><strong>What needs to be done:</strong></p>
+<ul>
+  <li>Create a student settings page (change email, change password, notification preferences).</li>
+  <li>Add a route: <code>GET /student/settings</code> → <code>studentSettings()</code> and <code>PATCH /student/settings</code> → <code>studentSettingsUpdate()</code>.</li>
+  <li>Update the sidebar href to <code>route('student.settings')</code>.</li>
+</ul>
+<p><strong>Files involved:</strong></p>
+<ul>
+  <li><code>app/Http/Controllers/Student/DashboardController.php</code></li>
+  <li><code>routes/web.php</code></li>
+  <li><code>resources/views/dashboard/student-dashboard/settings/index.blade.php</code> (to create)</li>
+</ul>
+
+<hr>
+
+<!-- 2.3 -->
+<h3>2.3 — Certificate Generation</h3>
+<p><span class="badge-medium">Medium</span></p>
+<p>
+  The <code>Certificate</code> model and its database table exist, but there is no logic to generate, issue, or download certificates.
+  The admin has a <code>CertificateController</code> but it is not routed.
+</p>
+<p><strong>What needs to be done:</strong></p>
+<ul>
+  <li>Trigger certificate creation when an enrollment's status becomes <code>completed</code> (could be done in an Eloquent observer or a service).</li>
+  <li>Generate a PDF certificate using <code>barryvdh/laravel-dompdf</code> (already likely in the project) or similar.</li>
+  <li>Add a "Download Certificate" button to the student workspace view when progress is 100%.</li>
+  <li>Wire the admin <code>CertificateController</code> to admin routes so admins can manually issue/revoke certificates.</li>
+</ul>
+<p><strong>Files involved:</strong></p>
+<ul>
+  <li><code>app/Models/Certificate.php</code></li>
+  <li><code>app/Http/Controllers/Admin/CertificateController.php</code></li>
+  <li><code>app/Observers/EnrollmentObserver.php</code> (to create, or add to service layer)</li>
+  <li><code>resources/views/certificates/template.blade.php</code> (to create)</li>
+</ul>
+
+<hr>
+
+<!-- 2.4 -->
+<h3>2.4 — Student Quiz-Taking Interface</h3>
+<p><span class="badge-medium">Medium</span></p>
+<p>
+  The <code>Quiz</code>, <code>Question</code>, and <code>QuizResult</code> models are fully defined with relationships.
+  The student quiz-attempts dashboard <em>lists</em> quiz results, but there is no interface for a student to actually <em>take</em> a quiz.
+</p>
+<p><strong>What needs to be done:</strong></p>
+<ul>
+  <li>Create a quiz-attempt route: <code>GET /student/quiz/{quiz}</code> to display the quiz questions.</li>
+  <li>Create a submit route: <code>POST /student/quiz/{quiz}/submit</code> to calculate the score, set <code>passed</code>, and create a <code>QuizResult</code> record.</li>
+  <li>Build a quiz-taking Blade view with radio button answers.</li>
+  <li>After submission, redirect to the quiz-attempts page with the score shown.</li>
+</ul>
+<p><strong>Files involved:</strong></p>
+<ul>
+  <li><code>routes/web.php</code></li>
+  <li><code>app/Http/Controllers/Student/DashboardController.php</code> (or a new <code>QuizController</code>)</li>
+  <li><code>resources/views/dashboard/student-dashboard/quiz/take.blade.php</code> (to create)</li>
+</ul>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 3 — LOW / POLISH
+════════════════════════════════════════════════════════════ -->
+<h2>3. Low Priority / Polish</h2>
+
+<!-- 3.1 -->
+<h3>3.1 — Dashboard Home: Unenrolled Student Prompt</h3>
+<p><span class="badge-low">Low</span></p>
+<p>
+  When a student has no enrollments, the dashboard home still renders the overview stats as zeros without any clear call-to-action.
+  A new student arriving from the college email should be immediately guided to select a project.
+</p>
+<p><strong>What needs to be done:</strong></p>
+<ul>
+  <li>In <code>dashboardStudentOverviewData()</code> detect when <code>$totalEnrolled === 0</code>.</li>
+  <li>In <code>resources/views/dashboard/partials/student-overview.blade.php</code>, add a banner/card prompting the student to browse projects when <code>$totalEnrolled === 0</code>.</li>
+  <li>Link the banner to <code>route('student.projects')</code>.</li>
+</ul>
+<p><strong>Files involved:</strong></p>
+<ul>
+  <li><code>resources/views/dashboard/partials/student-overview.blade.php</code></li>
+</ul>
+
+<hr>
+
+<!-- 3.2 -->
+<h3>3.2 — Re-enable Commented-Out Seeders</h3>
+<p><span class="badge-low">Low</span></p>
+<p>
+  Five seeders are commented out in <code>DatabaseSeeder.php</code>. Review each to determine whether it is safe to enable for a fresh install.
+</p>
+<table>
+  <tr>
+    <th>Seeder</th>
+    <th>Purpose</th>
+    <th>Action Needed</th>
+  </tr>
+  <tr>
+    <td><code>RoleSeeder</code></td>
+    <td>Seeds student, college, admin roles</td>
+    <td>Enable — required for auth to work on fresh install</td>
+  </tr>
+  <tr>
+    <td><code>UserSeeder</code></td>
+    <td>Seeds demo users</td>
+    <td>Enable for dev/staging only; guard with <code>app()->isLocal()</code></td>
+  </tr>
+  <tr>
+    <td><code>InternshipTopicCourseSeeder</code></td>
+    <td>Seeds internship-style courses</td>
+    <td>Review whether these conflict with new Project courses before enabling</td>
+  </tr>
+  <tr>
+    <td><code>CourseProjectDocumentSeeder</code></td>
+    <td>Seeds project documents</td>
+    <td>Review contents before enabling</td>
+  </tr>
+  <tr>
+    <td><code>CourseWorkspaceSeeder</code></td>
+    <td>Seeds workspaces for existing courses</td>
+    <td>Enable after project courses are seeded</td>
+  </tr>
+</table>
+
+<hr>
+
+<!-- 3.3 -->
+<h3>3.3 — Admin Sidebar Placeholder Links</h3>
+<p><span class="badge-low">Low</span></p>
+<p>
+  In <code>Student\DashboardController::dashboardSidebarSections()</code>, the admin role branch
+  has three sidebar items (Manage Users, Colleges, Courses) with <code>'href' => '#'</code>.
+  These will be resolved once admin routes are registered (see item 2.1).
+</p>
+<p><strong>Files involved:</strong></p>
+<ul>
+  <li><code>app/Http/Controllers/Student/DashboardController.php</code> — lines ~1068–1080</li>
+</ul>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 4 — COMPLETED THIS SESSION
+════════════════════════════════════════════════════════════ -->
+<h2>4. Completed in This Session (Reference)</h2>
+
+<table>
+  <tr>
+    <th>Item</th>
+    <th>Status</th>
+  </tr>
+  <tr><td>Moved all student dashboard methods from <code>HomeController</code> to <code>Student\DashboardController</code></td><td>✅ Done</td></tr>
+  <tr><td>Updated <code>routes/web.php</code> — all student routes now use <code>StudentDashboardController</code></td><td>✅ Done</td></tr>
+  <tr><td>Fixed missing <code>tasks</code> key bug in <code>studentCourse()</code> (view crash fix)</td><td>✅ Done</td></tr>
+  <tr><td>Audited full course and project workspace flow end-to-end</td><td>✅ Done</td></tr>
+  <tr><td>Added <code>studentProjects()</code> — project browse page grouped by level</td><td>✅ Done</td></tr>
+  <tr><td>Added <code>studentSelectProject()</code> — creates enrollment on project select</td><td>✅ Done</td></tr>
+  <tr><td>Added <code>GET /student/projects</code> and <code>POST /student/projects/{course}/select</code> routes</td><td>✅ Done</td></tr>
+  <tr><td>Added "Browse Projects" and renamed "Enrolled Courses" → "My Projects" in student sidebar</td><td>✅ Done</td></tr>
+  <tr><td>Created <code>resources/views/dashboard/student-dashboard/projects/index.blade.php</code></td><td>✅ Done</td></tr>
+</table>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 5 — TECH DEBT NOTES
+════════════════════════════════════════════════════════════ -->
+<h2>5. Architecture Notes</h2>
+
+<h3>Project Selection vs. Course Enrollment</h3>
+<p>
+  In the current implementation, <em>selecting a project</em> and <em>enrolling in a course</em> are the same action — both create an <code>Enrollment</code> record.
+  The <code>Enrollment</code> table is reused for project tracking without a separate <code>project_selections</code> table.
+  This is intentional and clean as long as projects are stored as <code>Course</code> records with <code>category = 'Project'</code>.
+</p>
+
+<h3>Email Delivery</h3>
+<p>
+  <code>SendWelcomeCredentialsEmail</code> is a queued job that dispatches after a student is created by the college.
+  <strong>The queue worker must be running</strong> (<code>php artisan queue:work</code>) for emails to actually send.
+  In production, configure a supervisor process or use <code>QUEUE_CONNECTION=sync</code> in <code>.env</code> for immediate delivery.
+</p>
+
+<h3>Workspace Steps Must Be Seeded</h3>
+<p>
+  The project workspace page (<code>GET /student/course/{id}/workspace</code>) aborts with 404 if the course has no active <code>CourseWorkspace</code> with at least one <code>WorkspaceStep</code>.
+  This is enforced at lines ~260–265 of <code>Student\DashboardController</code>.
+  Every project course seeded must also have workspace + steps or the workspace link will result in a 404.
+</p>
+
+</body>
+</html>
