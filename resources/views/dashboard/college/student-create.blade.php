@@ -56,6 +56,20 @@
                 </div>
             </div>
 
+            <div class="grid gap-6 md:grid-cols-2">
+                <div>
+                    <label class="text-sm font-medium text-slate-700" for="student_level">Internship Level <span class="text-red-500">*</span></label>
+                    <select id="student_level" name="level" required
+                        class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        <option value="">Select level</option>
+                        @foreach (['Beginner', 'Intermediate', 'Advanced'] as $level)
+                            <option value="{{ $level }}" @selected(old('level') === $level)>{{ $level }}</option>
+                        @endforeach
+                    </select>
+                    <p class="mt-1.5 text-xs text-slate-400">Sets which level of projects this student can browse and select.</p>
+                </div>
+            </div>
+
             <div class="flex flex-wrap items-center gap-3 pt-2">
                 <button type="submit"
                     class="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primaryLight">

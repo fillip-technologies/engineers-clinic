@@ -577,47 +577,72 @@ class DashboardController extends Controller
 
         $student = Student::where('user_id', $user->id)->first();
 
-        $enrolledCourseIds = $student
-            ? Enrollment::where('student_id', $student->id)->pluck('course_id')->toArray()
-            : [];
-
-        $enrollmentByCourse = $student
-            ? Enrollment::where('student_id', $student->id)->get()->keyBy('course_id')
+        $enrollments = $student
+            ? Enrollment::where('student_id', $student->id)->get()
             : collect();
+
+        $enrolledCourseIds = $enrollments->pluck('course_id')->toArray();
+        $enrollmentByCourse = $enrollments->keyBy('course_id');
+        $totalSelected = $enrollments->count();
+        $studentLevel = $student?->level;
 
         $courses = Course::orderBy('title')->get();
 
         $levels = ['Beginner', 'Intermediate', 'Advanced'];
-
         $projectsByLevel = [];
 
         foreach ($levels as $level) {
-            $levelCourses = $courses->where('level', $level)->values();
+            $levelProjects = [];
 
-            $projectsByLevel[$level] = $levelCourses->map(function (Course $course) use ($enrolledCourseIds, $enrollmentByCourse) {
+            foreach ($courses->where('level', $level) as $course) {
                 $isEnrolled = in_array($course->id, $enrolledCourseIds, true);
                 $enrollment = $isEnrolled ? $enrollmentByCourse->get($course->id) : null;
+                $items = $course->curriculum ?? [];
 
-                return [
-                    'id'           => $course->id,
-                    'title'        => $course->title,
-                    'description'  => $course->description ?? 'Complete this project to advance your skills.',
-                    'level'        => $course->level ?? 'Beginner',
-                    'category'     => $course->category ?? 'Project',
-                    'duration'     => $course->duration_months ? $course->duration_months . ' month' . ($course->duration_months > 1 ? 's' : '') : 'Self-paced',
-                    'is_enrolled'  => $isEnrolled,
-                    'enrollment_id' => $enrollment?->id,
-                    'progress'     => (int) ($enrollment?->progress ?? 0),
-                    'status'       => $enrollment?->status,
-                    'workspace_url' => $enrollment ? route('student.course.workspace', ['id' => $enrollment->id]) : null,
-                    'select_url'   => route('student.projects.select', ['course' => $course->id]),
-                ];
-            })->values()->all();
+                if (empty($items)) {
+                    continue;
+                }
+
+                foreach ($items as $idx => $item) {
+                    $firstTask     = $item['tasks'][0] ?? [];
+                    $description   = $firstTask['assignment'] ?? $course->description ?? 'Complete this project to advance your skills.';
+                    $submission    = $firstTask['submission'] ?? '';
+                    $aiReview      = $firstTask['ai_review'] ?? '';
+                    $taskTitles    = collect($item['tasks'] ?? [])->pluck('title')->filter()->values()->toArray();
+
+                    $levelProjects[] = [
+                        'id'             => $course->id,
+                        'item_index'     => $idx,
+                        'title'          => $item['title'] ?? $course->title,
+                        'description'    => $description,
+                        'submission'     => $submission,
+                        'ai_review'      => $aiReview,
+                        'tasks'          => $taskTitles,
+                        'level'          => $course->level ?? 'Beginner',
+                        'category'       => $course->category ?? 'Project',
+                        'duration'       => $course->duration_months
+                            ? $course->duration_months . ' month' . ($course->duration_months > 1 ? 's' : '')
+                            : 'Self-paced',
+                        'is_enrolled'    => $isEnrolled,
+                        'enrollment_id'  => $enrollment?->id,
+                        'progress'       => (int) ($enrollment?->progress ?? 0),
+                        'status'         => $enrollment?->status,
+                        'workspace_url'  => $enrollment ? route('student.course.workspace', ['id' => $enrollment->id]) : null,
+                        'select_url'     => route('student.projects.select', ['course' => $course->id]),
+                        'can_select'     => ! $isEnrolled && $totalSelected < 3 && $studentLevel === $level,
+                        'level_locked'   => $studentLevel !== null && $studentLevel !== $level,
+                    ];
+                }
+            }
+
+            $projectsByLevel[$level] = $levelProjects;
         }
 
         return view('dashboard.student-dashboard.projects.index', [
             'projectsByLevel' => $projectsByLevel,
-            'levels' => $levels,
+            'levels'          => $levels,
+            'totalSelected'   => $totalSelected,
+            'studentLevel'    => $studentLevel,
             ...$this->frontendAdminData('student-projects'),
         ]);
     }
@@ -645,6 +670,23 @@ class DashboardController extends Controller
                 ->with('info', 'You are already enrolled in this project.');
         }
 
+        if (blank($student->level)) {
+            return redirect()->route('student.projects')
+                ->with('error', 'Your college hasn\'t assigned your internship level yet. Contact your college administrator to get started.');
+        }
+
+        if ($course->level !== $student->level) {
+            return redirect()->route('student.projects')
+                ->with('error', "This project is part of the {$course->level} track. You are assigned to the {$student->level} track.");
+        }
+
+        $totalSelected = Enrollment::where('student_id', $student->id)->count();
+
+        if ($totalSelected >= 3) {
+            return redirect()->route('student.projects')
+                ->with('error', 'You can select a maximum of 3 projects. Go to your dashboard to review your current selections.');
+        }
+
         $enrollment = Enrollment::create([
             'student_id'      => $student->id,
             'course_id'       => $course->id,
@@ -653,8 +695,8 @@ class DashboardController extends Controller
             'status'          => 'ongoing',
         ]);
 
-        return redirect()->route('student.course.workspace', ['id' => $enrollment->id])
-            ->with('success', 'Project selected! Work through the steps in your workspace.');
+        return redirect()->route('dashboard')
+            ->with('success', 'Project selected! You can continue from your dashboard.');
     }
 
     public function orderHistory()
@@ -1113,22 +1155,23 @@ class DashboardController extends Controller
 
         if (! $user) {
             return [
-                'currentTrack' => 'Learning Track',
-                'totalEnrolled' => 0,
-                'activeCourses' => 0,
+                'currentTrack'    => 'Learning Track',
+                'totalEnrolled'   => 0,
+                'activeCourses'   => 0,
                 'completedCourses' => 0,
-                'tasks' => [],
-                'leaderboard' => [],
+                'tasks'           => [],
+                'leaderboard'     => [],
                 'currentProgress' => 0,
-                'completedSteps' => 0,
-                'totalSteps' => 0,
-                'nextLesson' => 'Enroll in a course to begin.',
-                'resumeUrl' => route('dashboard.enrolled-courses'),
-                'rank' => null,
-                'percentile' => 0,
-                'points' => 0,
-                'pendingTasks' => 0,
-                'completedTasks' => 0,
+                'completedSteps'  => 0,
+                'totalSteps'      => 0,
+                'nextLesson'      => 'Select a project to begin.',
+                'resumeUrl'       => route('student.projects'),
+                'rank'            => null,
+                'percentile'      => 0,
+                'points'          => 0,
+                'pendingTasks'    => 0,
+                'completedTasks'  => 0,
+                'enrolledProjects' => [],
             ];
         }
 
@@ -1152,7 +1195,10 @@ class DashboardController extends Controller
         $completedCourses = $enrollments->where('status', 'completed')->count();
 
         $latestEnrollment = $enrollments->sortByDesc('enrollment_date')->first();
-        $currentTrack = $latestEnrollment?->course?->title ?? $student?->course_name ?? 'Learning Track';
+        $latestCurriculum = $latestEnrollment?->course?->curriculum ?? [];
+        $currentTrack = filled($latestCurriculum[0]['title'] ?? '')
+            ? $latestCurriculum[0]['title']
+            : ($latestEnrollment?->course?->title ?? $student?->course_name ?? 'Learning Track');
 
         $workspace = $latestEnrollment?->course?->workspaces?->first();
         $steps = $workspace ? collect($this->studentWorkspaceSteps($workspace)) : collect();
@@ -1246,6 +1292,50 @@ class DashboardController extends Controller
             ];
         }
 
+        $levelColors = [
+            'Beginner'     => ['color' => 'emerald', 'icon' => 'fi fi-rr-seedling'],
+            'Intermediate' => ['color' => 'blue',    'icon' => 'fi fi-rr-chart-line-up'],
+            'Advanced'     => ['color' => 'violet',  'icon' => 'fi fi-rr-rocket'],
+        ];
+
+        $enrolledProjects = $enrollments->map(function (Enrollment $enrollment) use ($user, $levelColors) {
+            $course = $enrollment->course;
+            $workspace = $course?->workspaces?->first();
+            $steps = $workspace ? collect($this->studentWorkspaceSteps($workspace)) : collect();
+            $totalStepsForProject = $steps->count();
+            $completedStepsForProject = $steps->where('state', 'completed')->count();
+            $projectProgress = $totalStepsForProject > 0
+                ? (int) round(($completedStepsForProject / $totalStepsForProject) * 100)
+                : (int) ($enrollment->progress ?? 0);
+
+            $level = $course?->level ?? 'Beginner';
+            $meta = $levelColors[$level] ?? $levelColors['Beginner'];
+
+            // Use curriculum item title as the project title, not the course title
+            $curriculum  = $course?->curriculum ?? [];
+            $firstItem   = $curriculum[0] ?? [];
+            $projectTitle = filled($firstItem['title'] ?? '')
+                ? $firstItem['title']
+                : ($course?->title ?? 'Unknown Project');
+
+            $firstTask   = ($firstItem['tasks'][0] ?? []);
+            $description = $firstTask['assignment'] ?? $course?->description ?? '';
+
+            return [
+                'id'              => $enrollment->id,
+                'title'           => $projectTitle,
+                'level'           => $level,
+                'category'        => $course?->category ?? 'Project',
+                'description'     => $description,
+                'progress'        => $projectProgress,
+                'status'          => Str::headline((string) ($enrollment->status ?: 'Active')),
+                'color'           => $meta['color'],
+                'icon'            => $meta['icon'],
+                'workspace_url'   => route('student.course.workspace', ['id' => $enrollment->id]),
+                'enrollment_date' => $enrollment->enrollment_date?->format('M d, Y'),
+            ];
+        })->values()->toArray();
+
         return compact(
             'currentTrack',
             'totalEnrolled',
@@ -1263,6 +1353,7 @@ class DashboardController extends Controller
             'points',
             'pendingTasks',
             'completedTasks',
+            'enrolledProjects',
         );
     }
 }

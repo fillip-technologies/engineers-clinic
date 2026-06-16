@@ -289,6 +289,7 @@ class DashboardController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'course_name' => ['nullable', 'string', 'max:255'],
+            'level' => ['required', 'in:Beginner,Intermediate,Advanced'],
         ]);
 
         $password = Str::random(12);
@@ -306,6 +307,7 @@ class DashboardController extends Controller
             $user->student()->create([
                 'college_id' => $college->id,
                 'course_name' => $validated['course_name'] ?? null,
+                'level' => $validated['level'],
             ]);
 
             app(OnboardingMailer::class)->send($user, $password, 'student');
@@ -386,9 +388,14 @@ class DashboardController extends Controller
 
         DB::transaction(function () use ($validated, $college, $password) {
             $student = null;
+            $courseLevel = Course::find($validated['course_id'])?->level ?? 'Beginner';
 
             if (!empty($validated['student_id'])) {
                 $student = $college->students()->findOrFail($validated['student_id']);
+
+                if (blank($student->level)) {
+                    $student->update(['level' => $courseLevel]);
+                }
             } else {
                 $role = Role::firstOrCreate(['name' => 'student']);
 
@@ -402,6 +409,7 @@ class DashboardController extends Controller
                 $student = $user->student()->create([
                     'college_id' => $college->id,
                     'course_name' => Course::find($validated['course_id'])?->title,
+                    'level' => $courseLevel,
                 ]);
 
                 app(OnboardingMailer::class)->send($user, $password, 'student');
@@ -922,6 +930,7 @@ class DashboardController extends Controller
                 'name' => $student->user?->name ?? 'Unknown Student',
                 'email' => $student->user?->email ?? '',
                 'course' => $student->course_name ?? $latestEnrollment?->course?->title ?? 'Not enrolled',
+                'level' => $student->level ?? 'Not set',
                 'status' => $latestEnrollment?->status === 'completed' ? 'Completed' : 'Active',
                 'joined_date' => $student->created_at?->format('F d, Y') ?? 'N/A',
             ];
@@ -931,6 +940,7 @@ class DashboardController extends Controller
             'name' => $student['name'],
             'email' => $student['email'],
             'course' => $student['course'],
+            'level' => $student['level'] ?? 'Not set',
             'status' => $student['status'],
             'joined_date' => $student['joined_date'],
         ], $this->collegeDemoStudents());

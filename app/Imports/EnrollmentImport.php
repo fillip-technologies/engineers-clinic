@@ -179,6 +179,8 @@ class EnrollmentImport implements ToCollection, WithHeadingRow, WithLimit
                 $student = $user->student()->firstOrCreate([
                     'college_id'  => $this->collegeId,
                     'course_name' => $course->title,
+                ], [
+                    'level' => $course->level ?? 'Beginner',
                 ]);
             } else {
                 $user    = $existingUser;
@@ -188,6 +190,7 @@ class EnrollmentImport implements ToCollection, WithHeadingRow, WithLimit
                     $student = $user->student()->create([
                         'college_id'  => $this->collegeId,
                         'course_name' => $course->title,
+                        'level'       => $course->level ?? 'Beginner',
                     ]);
                 } elseif ((int) $student->college_id !== (int) $this->collegeId) {
                     $this->errors[] = [
@@ -195,6 +198,8 @@ class EnrollmentImport implements ToCollection, WithHeadingRow, WithLimit
                         'message' => "Row {$rowNumber}: Email \"{$email}\" is registered to a different college.",
                     ];
                     return;
+                } elseif (blank($student->level)) {
+                    $student->update(['level' => $course->level ?? 'Beginner']);
                 }
             }
 

@@ -50,6 +50,7 @@
                         <th class="rounded-l-2xl px-5 py-4 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Name</th>
                         <th class="px-5 py-4 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Email</th>
                         <th class="px-5 py-4 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Course</th>
+                        <th class="px-5 py-4 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Level</th>
                         <th class="px-5 py-4 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Status</th>
                         <th class="rounded-r-2xl px-5 py-4 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Actions</th>
                     </tr>
@@ -60,6 +61,11 @@
                             <td class="px-5 py-4 font-semibold text-slate-900">{{ $student['name'] }}</td>
                             <td class="px-5 py-4 text-slate-600">{{ $student['email'] }}</td>
                             <td class="px-5 py-4 text-slate-600">{{ $student['course'] }}</td>
+                            <td class="px-5 py-4">
+                                <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold {{ ($student['level'] ?? 'Not set') === 'Not set' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-700' }}">
+                                    {{ $student['level'] ?? 'Not set' }}
+                                </span>
+                            </td>
                             <td class="px-5 py-4">
                                 <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold {{ $student['status'] === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-700' }}">
                                     {{ $student['status'] }}
