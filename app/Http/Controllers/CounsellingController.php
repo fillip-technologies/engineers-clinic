@@ -123,20 +123,20 @@ class CounsellingController extends Controller
     {
         $leads = CounsellingLead::latest()->paginate(20);
 
-        return view('Admin.forms.counselling', compact('leads'));
+        return view('Admin.Forms.counselling', compact('leads'));
     }
 
      public function index_college()
     {
         $college_partner = CollegePartnershipDiscussion::latest()->paginate(20);
 
-        return view('Admin.forms.collegepartner', compact('college_partner'));
+        return view('Admin.Forms.collegepartner', compact('college_partner'));
     }
 
     public function courseEnquiries()
     {
         $enquiries = CourseEnquiry::latest()->paginate(20);
 
-        return view('Admin.forms.course-enquiries', compact('enquiries'));
+        return view('Admin.Forms.course-enquiries', compact('enquiries'));
     }
 }
