@@ -46,6 +46,10 @@ Route::get('/counselling-leads', [CounsellingController::class, 'index'])
     ->name('counselling.index');
 Route::get('/college-partner', [CounsellingController::class, 'index_college'])
     ->name('counselling.partner');
+Route::get('/partnerships/{partnership}', [CounsellingController::class, 'showPartnership'])
+    ->name('partnerships.show');
+Route::delete('/partnerships/{partnership}', [CounsellingController::class, 'destroyPartnership'])
+    ->name('partnerships.destroy');
 Route::get('/course-enquiries', [CounsellingController::class, 'courseEnquiries'])
     ->name('course-enquiries.index');
 Route::get('/chat-logs', [ChatLogController::class, 'index'])->name('chat-logs.index');

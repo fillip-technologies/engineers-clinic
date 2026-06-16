@@ -105,7 +105,7 @@ class ChatbotController extends Controller
 
         if (filled($lead->email)) {
             try {
-                Mail::to($lead->email)->queue(new CounsellingLeadReceivedMail($lead));
+                Mail::to($lead->email)->send(new CounsellingLeadReceivedMail($lead));
             } catch (Throwable $exception) {
                 Log::warning('Unable to send chatbot handoff acknowledgement email.', [
                     'lead_id' => $lead->id,

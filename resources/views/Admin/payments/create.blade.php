@@ -1,49 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Payment</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-4">
-        <h1>Create New Payment</h1>
+@extends('Admin.layouts.layout')
+
+@section('content')
+<div class="px-4 py-6 mx-auto max-w-5xl sm:px-6 lg:px-8">
+    <div class="overflow-hidden bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900">Create Payment</h3>
+                    <p class="mt-1 text-sm text-gray-500">Record a payment against a student's course.</p>
+                </div>
+                <a href="{{ route('admin.payments.index') }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50">
+                    Back to Payments
+                </a>
+            </div>
+        </div>
+
         <form action="{{ route('admin.payments.store') }}" method="POST">
             @csrf
-            <div class="mb-3">
-                <label for="student_id" class="form-label">Student</label>
-                <select name="student_id" id="student_id" class="form-control" required>
-                    <option value="">Select Student</option>
-                    @foreach($students as $student)
-                        <option value="{{ $student->id }}">{{ $student->user->name ?? 'N/A' }}</option>
-                    @endforeach
-                </select>
+            <div class="px-6 py-4">
+                @include('Admin.payments._form')
             </div>
-            <div class="mb-3">
-                <label for="course_id" class="form-label">Course</label>
-                <select name="course_id" id="course_id" class="form-control" required>
-                    <option value="">Select Course</option>
-                    @foreach($courses as $course)
-                        <option value="{{ $course->id }}">{{ $course->title }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="amount" class="form-label">Amount</label>
-                <input type="number" name="amount" id="amount" class="form-control" step="0.01" required>
-            </div>
-            <div class="mb-3">
-                <label for="status" class="form-label">Status</label>
-                <select name="status" id="status" class="form-control" required>
-                    <option value="pending">Pending</option>
-                    <option value="completed">Completed</option>
-                    <option value="failed">Failed</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Create</button>
-            <a href="{{ route('admin.payments.index') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
-</body>
-</html>
+</div>
+@endsection

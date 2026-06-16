@@ -12,8 +12,10 @@ use App\Models\Student;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class CheckoutService
 {
@@ -217,7 +219,15 @@ class CheckoutService
             ]);
 
             if ($newUser && $plainPassword) {
-                SendWelcomeCredentialsEmail::dispatch($user->id, $plainPassword, 'student')->afterCommit();
+                try {
+                    SendWelcomeCredentialsEmail::dispatchSync($user->id, $plainPassword, 'student');
+                } catch (Throwable $exception) {
+                    Log::warning('Unable to send checkout welcome credentials email.', [
+                        'user_id' => $user->id,
+                        'email' => $user->email,
+                        'message' => $exception->getMessage(),
+                    ]);
+                }
             }
 
             return [

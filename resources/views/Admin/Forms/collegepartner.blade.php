@@ -55,7 +55,7 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($partnerships as $partnership)
+                    @forelse($college_partner as $partnership)
                     <tr>
                         <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">{{ $partnership->id }}</td>
                         <td class="px-6 py-4">
@@ -108,11 +108,11 @@
                     </tr>
                     @endforelse
                 </tbody>
-             осигурање
+            </table>
         </div>
 
         <div class="px-6 py-4 border-t border-gray-200">
-            {{ $partnerships->links() }}
+            {{ $college_partner->links() }}
         </div>
     </div>
 </div>

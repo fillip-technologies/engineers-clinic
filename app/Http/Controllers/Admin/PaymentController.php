@@ -34,7 +34,7 @@ class PaymentController extends Controller
 
         Payment::create($request->all());
 
-        return redirect()->route('payments.index')->with('success', 'Payment created successfully.');
+        return redirect()->route('admin.payments.index')->with('success', 'Payment created successfully.');
     }
 
     public function show(Payment $payment)
@@ -61,13 +61,13 @@ class PaymentController extends Controller
 
         $payment->update($request->all());
 
-        return redirect()->route('payments.index')->with('success', 'Payment updated successfully.');
+        return redirect()->route('admin.payments.index')->with('success', 'Payment updated successfully.');
     }
 
     public function destroy(Payment $payment)
     {
         $payment->delete();
 
-        return redirect()->route('payments.index')->with('success', 'Payment deleted successfully.');
+        return redirect()->route('admin.payments.index')->with('success', 'Payment deleted successfully.');
     }
 }
