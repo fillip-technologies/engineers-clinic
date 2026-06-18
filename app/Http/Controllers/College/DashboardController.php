@@ -13,9 +13,11 @@ use App\Models\Notification;
 use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
+use App\Mail\EnrollmentNotificationMail;
 use App\Services\EnrollmentBulkImportService;
 use App\Services\OnboardingMailer;
 use App\Services\RazorpayService;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -821,7 +823,11 @@ class DashboardController extends Controller
             $student = Student::with('user')->find($validated['student_id']);
             if ($student?->user) {
                 try {
-                    app(OnboardingMailer::class)->send($student->user, null, 'student');
+                    Mail::to($student->user->email)->send(new EnrollmentNotificationMail(
+                        user: $student->user,
+                        courseTitle: $freshPurchase->course?->title ?? 'Internship Program',
+                        dashboardUrl: route('dashboard'),
+                    ));
                 } catch (\Throwable) {
                     // mail failure is non-fatal
                 }
