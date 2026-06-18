@@ -39,7 +39,7 @@ class EnrollmentController extends Controller
             'course_id' => ['required', 'exists:courses,id'],
             'enrollment_date' => ['required', 'date'],
             'progress' => ['required', 'integer', 'min:0', 'max:100'],
-            'status' => ['required', 'in:ongoing,completed'],
+            'status' => ['required', 'in:pending,active,completed,cancelled'],
         ], [
             'student_id.unique' => 'This student is already enrolled in the selected course.',
         ]);
@@ -76,7 +76,7 @@ class EnrollmentController extends Controller
             'course_id' => ['required', 'exists:courses,id'],
             'enrollment_date' => ['required', 'date'],
             'progress' => ['required', 'integer', 'min:0', 'max:100'],
-            'status' => ['required', 'in:ongoing,completed'],
+            'status' => ['required', 'in:pending,active,completed,cancelled'],
         ], [
             'student_id.unique' => 'This student is already enrolled in the selected course.',
         ]);

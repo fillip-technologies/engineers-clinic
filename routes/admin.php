@@ -19,6 +19,8 @@ use App\Http\Controllers\Admin\RolePermissionController;
 use App\Http\Controllers\Admin\CourseWorkspaceController;
 use App\Http\Controllers\Admin\ChatLogController;
 use App\Http\Controllers\CounsellingController;
+use App\Http\Controllers\Admin\CollegeTransactionController;
+use App\Http\Controllers\Admin\ReportController;
 
 // CRUD Routes
 
@@ -54,3 +56,13 @@ Route::get('/course-enquiries', [CounsellingController::class, 'courseEnquiries'
     ->name('course-enquiries.index');
 Route::get('/chat-logs', [ChatLogController::class, 'index'])->name('chat-logs.index');
 Route::get('/chat-logs/{chatLog}', [ChatLogController::class, 'show'])->name('chat-logs.show');
+
+// College payment transactions (seat purchases review)
+Route::get('/college-transactions', [CollegeTransactionController::class, 'index'])->name('college-transactions.index');
+Route::patch('/college-transactions/{transaction}/approve', [CollegeTransactionController::class, 'approve'])->name('college-transactions.approve');
+Route::patch('/college-transactions/{transaction}/reject', [CollegeTransactionController::class, 'reject'])->name('college-transactions.reject');
+
+// Reports
+Route::get('/reports/revenue', [ReportController::class, 'revenue'])->name('reports.revenue');
+Route::get('/reports/seat-utilization', [ReportController::class, 'seatUtilization'])->name('reports.seat-utilization');
+Route::get('/reports/enrollments', [ReportController::class, 'enrollments'])->name('reports.enrollments');

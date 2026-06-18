@@ -4,11 +4,14 @@ namespace App\Http\Controllers\College;
 
 use App\Http\Controllers\Controller;
 use App\Models\College;
+use App\Models\CollegeInternshipPurchase;
+use App\Models\CollegeInternshipSeatAllocation;
+use App\Models\CollegePaymentTransaction;
 use App\Models\Course;
-use App\Models\Student;
 use App\Models\Enrollment;
 use App\Models\Notification;
 use App\Models\Role;
+use App\Models\Student;
 use App\Models\User;
 use App\Services\EnrollmentBulkImportService;
 use App\Services\OnboardingMailer;
@@ -51,8 +54,16 @@ class DashboardController extends Controller
                 'string',
                 'max:100',
             ],
+            'payment_proof' => [
+                'nullable',
+                'file',
+                'mimes:jpg,jpeg,png,pdf',
+                'max:2048',
+            ],
         ], [
             'utr_number.required' => 'Please enter the UTR number for offline payment.',
+            'payment_proof.mimes' => 'Payment proof must be a JPG, PNG, or PDF file.',
+            'payment_proof.max' => 'Payment proof may not be larger than 2 MB.',
         ]);
 
         $college = $this->currentCollegeOrFail();
@@ -71,6 +82,7 @@ class DashboardController extends Controller
             $college->update([
                 'payment_mode' => 'online',
                 'utr_number' => null,
+                'payment_proof_path' => null,
                 'payment_status' => 'pending',
                 'payment_amount' => $amount,
                 'payment_submitted_at' => now(),
@@ -85,9 +97,16 @@ class DashboardController extends Controller
             return redirect()->route('college.payment')->with('open_razorpay', true);
         }
 
+        $proofPath = null;
+        if ($request->hasFile('payment_proof')) {
+            $proofPath = $request->file('payment_proof')
+                ->store('college-payment-proofs', 'local');
+        }
+
         $college->update([
             'payment_mode' => $validated['payment_mode'],
             'utr_number' => $validated['utr_number'],
+            'payment_proof_path' => $proofPath,
             'payment_status' => 'pending',
             'payment_amount' => $this->collegePaymentAmount(),
             'payment_submitted_at' => now(),
@@ -228,7 +247,7 @@ class DashboardController extends Controller
         // Calculate stats with defaults
         $totalStudents = $students->count();
         $activeInternships = $students->filter(function($student) {
-            return $student->enrollments()->where('status', 'active')->exists();
+            return $student->enrollments()->whereIn('status', ['active', 'pending'])->exists();
         })->count();
         $completed = $students->filter(function($student) {
             return $student->enrollments()->where('status', 'completed')->exists();
@@ -349,7 +368,7 @@ class DashboardController extends Controller
     public function enrollmentCreate()
     {
         return view('dashboard.college.enrollments.create', [
-            'students' => $this->collegeEnrollmentStudentOptions(),
+            'students' => $this->collegeEnrollmentStudentOptions()->values()->toArray(),
             'courses' => $this->collegeEnrollmentCourseOptions(),
             ...$this->frontendAdminData('college-enrollments'),
         ]);
@@ -374,7 +393,7 @@ class DashboardController extends Controller
             'new_student_password' => ['nullable', Rule::requiredIf($isNewStudent), 'string', 'min:8', 'confirmed'],
             'course_id' => ['required', 'exists:courses,id'],
             'enrollment_date' => ['required', 'date'],
-            'status' => ['required', 'in:ongoing,completed'],
+            'status' => ['required', 'in:pending,active,completed,cancelled'],
         ], [
             'student_id.required' => 'Select an existing student or enter new student details.',
             'student_id.in' => 'You can only enroll students from your college.',
@@ -416,11 +435,12 @@ class DashboardController extends Controller
             }
 
             Enrollment::create([
-                'student_id' => $student->id,
-                'course_id' => $validated['course_id'],
+                'student_id'      => $student->id,
+                'course_id'       => $validated['course_id'],
                 'enrollment_date' => $validated['enrollment_date'],
-                'progress' => 0,
-                'status' => $validated['status'],
+                'progress'        => 0,
+                'status'          => $validated['status'],
+                'sponsor_type'    => 'college',
             ]);
         });
 
@@ -490,7 +510,7 @@ class DashboardController extends Controller
 
         return view('dashboard.college.enrollments.edit', [
             'enrollment' => $enrollments[1] ?? $enrollments[0] ?? null,
-            'students' => $this->collegeEnrollmentStudentOptions(),
+            'students' => $this->collegeEnrollmentStudentOptions()->values()->toArray(),
             'courses' => $this->collegeEnrollmentCourseOptions(),
             ...$this->frontendAdminData('college-enrollments'),
         ]);
@@ -504,6 +524,331 @@ class DashboardController extends Controller
             'enrollment' => $enrollments[0] ?? null,
             ...$this->frontendAdminData('college-enrollments'),
         ]);
+    }
+
+    // ── Phase 3: Seat purchase & allocation ───────────────────────────────
+
+    public function internships()
+    {
+        $college = $this->currentCollegeOrFail();
+
+        $internships = Course::where('type', 'internship')
+            ->where('is_sponsorable', true)
+            ->orderBy('title')
+            ->get()
+            ->map(function (Course $course) use ($college) {
+                $purchased = CollegeInternshipPurchase::where('college_id', $college->id)
+                    ->where('course_id', $course->id)
+                    ->whereHas('transaction', fn ($q) => $q->where('status', 'approved'))
+                    ->sum('seats_purchased');
+                $used = CollegeInternshipPurchase::where('college_id', $college->id)
+                    ->where('course_id', $course->id)
+                    ->whereHas('transaction', fn ($q) => $q->where('status', 'approved'))
+                    ->sum('seats_used');
+
+                return [
+                    'id' => $course->id,
+                    'title' => $course->title,
+                    'description' => $course->description,
+                    'level' => $course->level ?? 'Beginner',
+                    'category' => $course->category ?? 'Internship',
+                    'duration' => $course->duration_months ? $course->duration_months . ' months' : 'Self paced',
+                    'fee' => $course->fee !== null ? 'Rs. ' . number_format((float) $course->fee, 2) : 'Contact us',
+                    'seats_purchased' => (int) $purchased,
+                    'seats_used' => (int) $used,
+                    'seats_available' => max(0, (int) $purchased - (int) $used),
+                    'purchase_url' => route('college.internships.purchase.create', $course->id),
+                ];
+            });
+
+        return view('dashboard.college.internships.index', [
+            'internships' => $internships,
+            ...$this->frontendAdminData('college-internships'),
+        ]);
+    }
+
+    public function internshipPurchaseCreate(Course $course)
+    {
+        abort_unless($course->type === 'internship' && $course->is_sponsorable, 404, 'This course is not available for seat sponsorship.');
+
+        $college = $this->currentCollegeOrFail();
+
+        return view('dashboard.college.internships.purchase', [
+            'course' => $course,
+            'college' => $college,
+            'pricePerSeat' => $course->fee,
+            'razorpayKey' => config('services.razorpay.key'),
+            ...$this->frontendAdminData('college-internships'),
+        ]);
+    }
+
+    public function internshipPurchaseStore(Course $course, Request $request, RazorpayService $razorpay)
+    {
+        abort_unless($course->type === 'internship' && $course->is_sponsorable, 404);
+
+        $college = $this->currentCollegeOrFail();
+
+        $validated = $request->validate([
+            'seats' => ['required', 'integer', 'min:1', 'max:500'],
+            'payment_mode' => ['required', Rule::in(['online', 'offline'])],
+            'utr_number' => [
+                'nullable',
+                Rule::requiredIf(fn () => $request->input('payment_mode') === 'offline'),
+                'string',
+                'max:100',
+            ],
+            'payment_proof' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+        ]);
+
+        $seats = (int) $validated['seats'];
+        $pricePerSeat = (float) ($course->fee ?? 0);
+        $totalAmount = $seats * $pricePerSeat;
+
+        if ($validated['payment_mode'] === 'online') {
+            abort_if($totalAmount <= 0, 422, 'Course fee is not configured for online payment.');
+
+            $receipt = 'seat_' . $college->id . '_' . $course->id . '_' . Str::lower(Str::random(8));
+            $razorpayOrder = $razorpay->createOrder($totalAmount, $receipt, [
+                'college_id' => (string) $college->id,
+                'course_id' => (string) $course->id,
+                'seats' => (string) $seats,
+            ]);
+
+            DB::transaction(function () use ($college, $course, $seats, $pricePerSeat, $totalAmount, $razorpayOrder) {
+                $transaction = CollegePaymentTransaction::create([
+                    'college_id' => $college->id,
+                    'purpose' => 'seat_purchase',
+                    'amount' => $totalAmount,
+                    'payment_mode' => 'online',
+                    'status' => 'pending',
+                    'razorpay_order_id' => $razorpayOrder->id,
+                    'submitted_at' => now(),
+                ]);
+
+                CollegeInternshipPurchase::create([
+                    'college_id' => $college->id,
+                    'course_id' => $course->id,
+                    'transaction_id' => $transaction->id,
+                    'seats_purchased' => $seats,
+                    'seats_used' => 0,
+                    'price_per_seat' => $pricePerSeat,
+                ]);
+            });
+
+            return redirect()->route('college.internships.purchase.create', $course->id)
+                ->with('open_razorpay', true)
+                ->with('razorpay_order_id', $razorpayOrder->id)
+                ->with('razorpay_amount', $totalAmount)
+                ->with('pending_seats', $seats)
+                ->with('pending_course_id', $course->id);
+        }
+
+        $proofPath = null;
+        if ($request->hasFile('payment_proof')) {
+            $proofPath = $request->file('payment_proof')->store('college-payment-proofs', 'local');
+        }
+
+        DB::transaction(function () use ($college, $course, $seats, $pricePerSeat, $totalAmount, $validated, $proofPath) {
+            $transaction = CollegePaymentTransaction::create([
+                'college_id' => $college->id,
+                'purpose' => 'seat_purchase',
+                'amount' => $totalAmount,
+                'payment_mode' => 'offline',
+                'status' => filled($validated['utr_number']) ? 'verification_pending' : 'pending',
+                'utr_number' => $validated['utr_number'] ?? null,
+                'payment_proof_path' => $proofPath,
+                'submitted_at' => now(),
+            ]);
+
+            CollegeInternshipPurchase::create([
+                'college_id' => $college->id,
+                'course_id' => $course->id,
+                'transaction_id' => $transaction->id,
+                'seats_purchased' => $seats,
+                'seats_used' => 0,
+                'price_per_seat' => $pricePerSeat,
+            ]);
+        });
+
+        return redirect()->route('college.purchases')
+            ->with('success', 'Seat purchase submitted. Admin will verify the payment shortly.');
+    }
+
+    public function internshipPurchaseVerify(Course $course, Request $request, RazorpayService $razorpay): JsonResponse
+    {
+        $validated = $request->validate([
+            'razorpay_payment_id' => ['required', 'string', 'max:255'],
+            'razorpay_order_id' => ['required', 'string', 'max:255'],
+            'razorpay_signature' => ['required', 'string', 'max:255'],
+        ]);
+
+        $college = $this->currentCollegeOrFail();
+
+        $transaction = CollegePaymentTransaction::where('college_id', $college->id)
+            ->where('purpose', 'seat_purchase')
+            ->where('razorpay_order_id', $validated['razorpay_order_id'])
+            ->where('status', 'pending')
+            ->firstOrFail();
+
+        $razorpay->verifyPaymentSignature($validated);
+
+        $transaction->update([
+            'status' => 'approved',
+            'razorpay_payment_id' => $validated['razorpay_payment_id'],
+            'razorpay_signature' => $validated['razorpay_signature'],
+            'reviewed_at' => now(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment verified. Seats are now active.',
+            'redirect_url' => route('college.purchases'),
+        ]);
+    }
+
+    public function purchaseIndex()
+    {
+        $college = $this->currentCollegeOrFail();
+
+        $purchases = CollegeInternshipPurchase::with(['course', 'transaction'])
+            ->where('college_id', $college->id)
+            ->latest()
+            ->get()
+            ->map(fn (CollegeInternshipPurchase $p) => [
+                'id' => $p->id,
+                'course_title' => $p->course?->title ?? 'Unknown',
+                'seats_purchased' => $p->seats_purchased,
+                'seats_used' => $p->seats_used,
+                'seats_remaining' => $p->seatsRemaining(),
+                'price_per_seat' => 'Rs. ' . number_format((float) $p->price_per_seat, 2),
+                'total_amount' => 'Rs. ' . number_format($p->seats_purchased * (float) $p->price_per_seat, 2),
+                'payment_status' => $p->transaction?->status ?? 'pending',
+                'payment_mode' => $p->transaction?->payment_mode ?? 'offline',
+                'submitted_at' => $p->transaction?->submitted_at?->format('M d, Y') ?? 'N/A',
+                'allocate_url' => route('college.purchases.allocations', $p->id),
+                'is_active' => $p->transaction?->status === 'approved',
+            ]);
+
+        return view('dashboard.college.internships.purchases', [
+            'purchases' => $purchases,
+            ...$this->frontendAdminData('college-internships'),
+        ]);
+    }
+
+    public function seatAllocations(CollegeInternshipPurchase $purchase)
+    {
+        $college = $this->currentCollegeOrFail();
+        abort_unless($purchase->college_id === $college->id, 403);
+        abort_unless($purchase->transaction?->status === 'approved', 422, 'Payment not yet approved. Cannot allocate seats.');
+
+        $allocations = CollegeInternshipSeatAllocation::with(['student.user', 'enrollment.course'])
+            ->where('purchase_id', $purchase->id)
+            ->get()
+            ->map(fn (CollegeInternshipSeatAllocation $a) => [
+                'id' => $a->id,
+                'student_name' => $a->student?->user?->name ?? 'Unknown',
+                'student_email' => $a->student?->user?->email ?? '',
+                'enrollment_status' => $a->enrollment?->status ?? 'Pending enrollment',
+                'allocated_at' => $a->allocated_at?->format('M d, Y') ?? 'N/A',
+                'destroy_url' => route('college.purchases.allocations.destroy', [$purchase->id, $a->id]),
+            ]);
+
+        $availableStudents = $this->collegeEnrollmentStudentOptions()
+            ->filter(fn ($s) => ! $allocations->pluck('student_name')
+                ->contains($s['name']));
+
+        return view('dashboard.college.internships.allocations', [
+            'purchase' => $purchase,
+            'course' => $purchase->course,
+            'allocations' => $allocations,
+            'availableStudents' => $availableStudents,
+            ...$this->frontendAdminData('college-internships'),
+        ]);
+    }
+
+    public function seatAllocationStore(CollegeInternshipPurchase $purchase, Request $request)
+    {
+        $college = $this->currentCollegeOrFail();
+        abort_unless($purchase->college_id === $college->id, 403);
+
+        $studentIds = $college->students()->pluck('id')->all();
+
+        $validated = $request->validate([
+            'student_id' => ['required', 'integer', Rule::in($studentIds)],
+        ], [
+            'student_id.required' => 'Please select a student.',
+            'student_id.in' => 'You can only allocate seats to students in your college.',
+        ]);
+
+        DB::transaction(function () use ($purchase, $validated, $college) {
+            $freshPurchase = CollegeInternshipPurchase::where('id', $purchase->id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            abort_if($freshPurchase->transaction?->status !== 'approved', 422, 'Payment not approved.');
+            abort_if($freshPurchase->seats_used >= $freshPurchase->seats_purchased, 422, 'No seats remaining for this purchase.');
+
+            $alreadyAllocated = CollegeInternshipSeatAllocation::where('purchase_id', $purchase->id)
+                ->where('student_id', $validated['student_id'])
+                ->exists();
+
+            if ($alreadyAllocated) {
+                abort(422, 'This student already has a seat allocated for this purchase.');
+            }
+
+            $enrollment = Enrollment::firstOrCreate(
+                ['student_id' => $validated['student_id'], 'course_id' => $freshPurchase->course_id],
+                [
+                    'enrollment_date' => now(),
+                    'progress' => 0,
+                    'status' => 'active',
+                    'sponsor_type' => 'college',
+                ]
+            );
+
+            $allocation = CollegeInternshipSeatAllocation::create([
+                'purchase_id' => $freshPurchase->id,
+                'student_id' => $validated['student_id'],
+                'enrollment_id' => $enrollment->id,
+                'allocated_by' => Auth::id(),
+                'allocated_at' => now(),
+            ]);
+
+            $enrollment->update(['seat_allocation_id' => $allocation->id]);
+
+            $freshPurchase->increment('seats_used');
+
+            $student = Student::with('user')->find($validated['student_id']);
+            if ($student?->user) {
+                try {
+                    app(OnboardingMailer::class)->send($student->user, null, 'student');
+                } catch (\Throwable) {
+                    // mail failure is non-fatal
+                }
+            }
+        });
+
+        return redirect()->route('college.purchases.allocations', $purchase->id)
+            ->with('success', 'Seat allocated and student enrolled successfully.');
+    }
+
+    public function seatAllocationDestroy(CollegeInternshipPurchase $purchase, CollegeInternshipSeatAllocation $allocation)
+    {
+        $college = $this->currentCollegeOrFail();
+        abort_unless($purchase->college_id === $college->id, 403);
+        abort_unless($allocation->purchase_id === $purchase->id, 403);
+
+        DB::transaction(function () use ($purchase, $allocation) {
+            if ($allocation->enrollment_id) {
+                Enrollment::where('id', $allocation->enrollment_id)
+                    ->update(['status' => 'cancelled', 'seat_allocation_id' => null]);
+            }
+            $allocation->delete();
+            $purchase->decrement('seats_used');
+        });
+
+        return redirect()->route('college.purchases.allocations', $purchase->id)
+            ->with('success', 'Seat allocation removed and enrollment cancelled.');
     }
 
     protected function frontendAdminData(string $activePage): array
@@ -596,6 +941,18 @@ class DashboardController extends Controller
                         'href' => route('college.enrollments'),
                     ],
                     [
+                        'key' => 'college-internships',
+                        'label' => 'Internship Seats',
+                        'icon' => 'fi fi-rr-rocket',
+                        'href' => route('college.internships'),
+                    ],
+                    [
+                        'key' => 'college-purchases',
+                        'label' => 'My Purchases',
+                        'icon' => 'fi fi-rr-shopping-cart',
+                        'href' => route('college.purchases'),
+                    ],
+                    [
                         'key' => 'college-payment',
                         'label' => 'Payment',
                         'icon' => 'fi fi-rr-credit-card',
@@ -669,7 +1026,7 @@ class DashboardController extends Controller
             ->where('status', 'completed')
             ->count();
         $activeStudents = Student::where('college_id', $college->id)
-            ->whereHas('enrollments', fn ($query) => $query->whereIn('status', ['active', 'ongoing', 'in progress']))
+            ->whereHas('enrollments', fn ($query) => $query->whereIn('status', ['active', 'pending']))
             ->count();
         $placementRate = $totalEnrollments ? round($completedEnrollments * 100 / $totalEnrollments) : 0;
 
@@ -967,12 +1324,17 @@ class DashboardController extends Controller
                 'course_name' => $enrollment->course?->title ?? 'Unknown Course',
                 'enrollment_date' => $enrollment->enrollment_date?->format('F d, Y') ?? 'N/A',
                 'progress' => $enrollment->progress,
-                'status' => $enrollment->status === 'completed' ? 'Completed' : 'Active',
+                'status' => match ($enrollment->status) {
+                    'completed'  => 'Completed',
+                    'cancelled'  => 'Cancelled',
+                    'pending'    => 'Pending',
+                    default      => 'Active',
+                },
                 'last_activity' => $enrollment->updated_at?->diffForHumans() ?? 'No activity yet',
             ])->toArray();
     }
 
-    protected function collegeEnrollmentStudentOptions(): array
+    protected function collegeEnrollmentStudentOptions(): \Illuminate\Support\Collection
     {
         $query = Student::with('user')->orderBy('id');
 
@@ -986,8 +1348,7 @@ class DashboardController extends Controller
                 'id' => $student->id,
                 'name' => $student->user?->name ?? 'Unknown Student',
                 'email' => $student->user?->email,
-            ])
-            ->toArray();
+            ]);
     }
 
     protected function collegeEnrollmentCourseOptions(): array

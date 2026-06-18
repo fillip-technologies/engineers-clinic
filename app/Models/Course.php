@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
@@ -14,6 +15,8 @@ class Course extends Model
     protected $fillable = [
         'title',
         'slug',
+        'type',
+        'is_sponsorable',
         'description',
         'level',
         'category',
@@ -33,7 +36,8 @@ class Course extends Model
     ];
 
     protected $casts = [
-        'fee' => 'decimal:2',
+        'fee'            => 'decimal:2',
+        'is_sponsorable' => 'boolean',
         'program_overview' => 'json',
         'why_choose' => 'json',
         'testimonials' => 'json',
@@ -68,9 +72,19 @@ class Course extends Model
         return $candidate;
     }
 
+    public function scopeInternships(Builder $query): Builder
+    {
+        return $query->where('type', 'internship');
+    }
+
     public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);
+    }
+
+    public function collegeInternshipPurchases(): HasMany
+    {
+        return $this->hasMany(CollegeInternshipPurchase::class);
     }
 
     public function tasks(): HasMany

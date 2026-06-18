@@ -35,7 +35,7 @@ class PaymentController extends Controller
         $completedPayment = Payment::query()
             ->where('student_id', $student->id)
             ->where('course_id', $course->id)
-            ->where('status', 'completed')
+            ->where('status', 'success')
             ->exists();
 
         if ($completedPayment) {
@@ -140,12 +140,29 @@ class PaymentController extends Controller
         return response()->json($payments);
     }
 
-    public function availableCourses(): JsonResponse
+    public function availableCourses(Request $request)
     {
         $student = $this->currentStudent();
         $enrolledCourseIds = $student->enrollments()->pluck('course_id');
+        $courses = Course::whereNotIn('id', $enrolledCourseIds)->orderBy('title')->get();
 
-        return response()->json(Course::whereNotIn('id', $enrolledCourseIds)->get());
+        if ($request->expectsJson()) {
+            return response()->json($courses);
+        }
+
+        return view('dashboard.student-dashboard.available-courses', [
+            'courses' => $courses->map(fn (Course $c) => [
+                'id' => $c->id,
+                'title' => $c->title,
+                'description' => $c->description,
+                'level' => $c->level,
+                'category' => $c->category,
+                'fee' => $c->fee ? 'Rs. ' . number_format((float) $c->fee, 2) : 'Free',
+                'slug' => $c->slug,
+                'checkout_url' => route('payments.checkout', ['course' => $c->slug]),
+                'is_free' => (float) ($c->fee ?? 0) <= 0,
+            ])->toArray(),
+        ]);
     }
 
     public function completeFreeEnrollment(Request $request): JsonResponse
@@ -183,7 +200,7 @@ class PaymentController extends Controller
 
         DB::transaction(function () use ($payment, $request, $student) {
             $payment->update([
-                'status' => 'completed',
+                'status' => 'success',
                 'payment_date' => now(),
                 'razorpay_payment_id' => $request->string('razorpay_payment_id')->toString(),
                 'razorpay_signature' => $request->string('razorpay_signature')->toString(),
@@ -191,7 +208,7 @@ class PaymentController extends Controller
 
             $student->enrollments()->updateOrCreate(
                 ['course_id' => $payment->course_id],
-                ['enrollment_date' => now(), 'status' => 'ongoing']
+                ['enrollment_date' => now(), 'status' => 'active', 'sponsor_type' => 'self']
             );
         });
 

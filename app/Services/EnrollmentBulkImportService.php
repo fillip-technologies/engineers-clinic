@@ -126,8 +126,8 @@ class EnrollmentBulkImportService
         $headers = ['student_name', 'student_email', 'password', 'course_title', 'status'];
 
         $example = [
-            ['Priya Sharma', 'priya.sharma@example.com', 'SecurePass1', 'Full Stack Web Development', 'ongoing'],
-            ['Amit Verma', 'amit.verma@example.com', 'SecurePass2', 'Data Analytics with Power BI', 'ongoing'],
+            ['Priya Sharma', 'priya.sharma@example.com', 'SecurePass1', 'Full Stack Web Development', 'active'],
+            ['Amit Verma', 'amit.verma@example.com', 'SecurePass2', 'Data Analytics with Power BI', 'active'],
         ];
 
         $csv = implode(',', $headers) . "\n";

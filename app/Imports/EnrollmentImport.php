@@ -101,7 +101,7 @@ class EnrollmentImport implements ToCollection, WithHeadingRow, WithLimit
             'student_email' => ['required', 'email:rfc', 'max:255'],
             'password'      => ['required', 'string', 'min:8', 'max:128'],
             'course_title'  => ['required', 'string', 'max:255'],
-            'status'        => ['nullable', 'string', 'in:ongoing,completed,active'],
+            'status'        => ['nullable', 'string', 'in:pending,active,completed,cancelled'],
         ];
 
         $validator = Validator::make($data, $rules, [
@@ -113,7 +113,7 @@ class EnrollmentImport implements ToCollection, WithHeadingRow, WithLimit
             'password.min'           => "Row {$rowNumber}: Password must be at least 8 characters.",
             'password.max'           => "Row {$rowNumber}: Password is too long.",
             'course_title.required'  => "Row {$rowNumber}: Course title is required.",
-            'status.in'              => "Row {$rowNumber}: Status must be \"ongoing\" or \"completed\".",
+            'status.in'              => "Row {$rowNumber}: Status must be one of: pending, active, completed, cancelled.",
         ]);
 
         if ($validator->fails()) {
@@ -160,7 +160,8 @@ class EnrollmentImport implements ToCollection, WithHeadingRow, WithLimit
     private function processRow(array $data, Course $course, int $rowNumber): void
     {
         $email  = strtolower(trim($data['student_email']));
-        $status = in_array(strtolower((string) ($data['status'] ?? '')), ['completed'], true) ? 'completed' : 'ongoing';
+        $rawStatus = strtolower((string) ($data['status'] ?? ''));
+        $status = in_array($rawStatus, ['pending', 'active', 'completed', 'cancelled'], true) ? $rawStatus : 'active';
 
         DB::transaction(function () use ($data, $email, $course, $status, $rowNumber) {
             $existingUser = User::where('email', $email)->first();
@@ -226,6 +227,7 @@ class EnrollmentImport implements ToCollection, WithHeadingRow, WithLimit
                 'enrollment_date' => now(),
                 'progress'        => 0,
                 'status'          => $status,
+                'sponsor_type'    => 'college',
             ]);
 
             if ($isNew) {

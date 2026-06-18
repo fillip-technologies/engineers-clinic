@@ -163,14 +163,21 @@
 
     <script>
         @if($role === 'student')
-        document.getElementById('student_college').addEventListener('change', function() {
+        (function () {
+            const select = document.getElementById('student_college');
             const otherField = document.querySelector('.college-other');
-            if (this.value === 'other') {
-                otherField.classList.remove('hidden');
-            } else {
-                otherField.classList.add('hidden');
+
+            function toggleOther() {
+                if (select.value === 'other') {
+                    otherField.classList.remove('hidden');
+                } else {
+                    otherField.classList.add('hidden');
+                }
             }
-        });
+
+            select.addEventListener('change', toggleOther);
+            toggleOther(); // restore state after validation failure
+        })();
         @endif
     </script>
 @endsection

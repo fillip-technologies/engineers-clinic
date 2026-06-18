@@ -16,6 +16,12 @@ class Student extends Model
         'college_id',
         'course_name',
         'level',
+        'internship_stream',
+        'internship_paid',
+    ];
+
+    protected $casts = [
+        'internship_paid' => 'boolean',
     ];
 
     public function user(): BelongsTo

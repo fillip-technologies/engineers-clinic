@@ -4,6 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\College\DashboardController as CollegeDashboardController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
+use App\Http\Controllers\Student\InternshipPaymentController;
 use App\Http\Middleware\CheckRole;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CounsellingController;
@@ -75,6 +76,16 @@ Route::middleware(['auth', CheckRole::class . ':college'])->group(function () {
     Route::get('/college/enrollments/bulk-template', [CollegeDashboardController::class, 'enrollmentBulkTemplate'])->name('college.enrollments.bulk-template');
     Route::get('/college/enrollments/edit', [CollegeDashboardController::class, 'enrollmentEdit'])->name('college.enrollments.edit');
     Route::get('/college/enrollments/view', [CollegeDashboardController::class, 'enrollmentShow'])->name('college.enrollments.view');
+
+    // Internship seat purchase routes (Phase 3 - Scenario A)
+    Route::get('/college/internships', [CollegeDashboardController::class, 'internships'])->name('college.internships');
+    Route::get('/college/internships/{course}/purchase', [CollegeDashboardController::class, 'internshipPurchaseCreate'])->name('college.internships.purchase.create');
+    Route::post('/college/internships/{course}/purchase', [CollegeDashboardController::class, 'internshipPurchaseStore'])->name('college.internships.purchase.store');
+    Route::post('/college/internships/{course}/purchase-verify', [CollegeDashboardController::class, 'internshipPurchaseVerify'])->name('college.internships.purchase.verify');
+    Route::get('/college/purchases', [CollegeDashboardController::class, 'purchaseIndex'])->name('college.purchases');
+    Route::get('/college/purchases/{purchase}/allocations', [CollegeDashboardController::class, 'seatAllocations'])->name('college.purchases.allocations');
+    Route::post('/college/purchases/{purchase}/allocations', [CollegeDashboardController::class, 'seatAllocationStore'])->name('college.purchases.allocations.store');
+    Route::delete('/college/purchases/{purchase}/allocations/{allocation}', [CollegeDashboardController::class, 'seatAllocationDestroy'])->name('college.purchases.allocations.destroy');
 });
 
 // Student Dashboard Routes (protected with auth middleware)
@@ -93,6 +104,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/student-dashboard/course/{id}', [StudentDashboardController::class, 'studentCourse'])->name('student.course.detail');
     Route::get('/student/projects', [StudentDashboardController::class, 'studentProjects'])->name('student.projects');
     Route::post('/student/projects/{course}/select', [StudentDashboardController::class, 'studentSelectProject'])->name('student.projects.select');
+    Route::delete('/student/projects/{enrollment}/remove', [StudentDashboardController::class, 'studentRemoveProject'])->name('student.projects.remove');
+    Route::post('/student/level', [StudentDashboardController::class, 'studentSetLevel'])->name('student.level.set');
+    Route::get('/student/internship/pay', [InternshipPaymentController::class, 'show'])->name('student.internship.pay');
+    Route::post('/student/internship/pay/order', [InternshipPaymentController::class, 'createOrder'])->name('student.internship.pay.order');
+    Route::post('/student/internship/pay/verify', [InternshipPaymentController::class, 'verify'])->name('student.internship.pay.verify');
+    Route::get('/student/internship/pay/success', [InternshipPaymentController::class, 'success'])->name('student.internship.pay.success');
     Route::get('/course/{course:slug}/checkout/{order?}', [CheckoutController::class, 'show'])->name('payments.checkout');
 
     // Payment Routes

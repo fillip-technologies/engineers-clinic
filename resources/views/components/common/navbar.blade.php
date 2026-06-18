@@ -48,9 +48,14 @@
                     <button type="button" @click="open = ! open"
                         class="flex items-center gap-3 rounded-lg border border-slate-200 bg-white py-1.5 pl-2 pr-3 shadow-sm transition hover:bg-slate-50"
                         :aria-expanded="open.toString()" aria-haspopup="menu">
+                        @if($user?->avatar)
+                        <img src="{{ $user->avatar }}" alt="{{ $displayName }}"
+                            class="h-9 w-9 rounded-lg object-cover">
+                        @else
                         <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-white">
                             {{ $initials }}
                         </span>
+                        @endif
                         <span class="hidden text-left sm:block">
                             <span class="block text-xs text-slate-500">Hello,</span>
                             <span class="block max-w-32 truncate text-sm font-semibold text-slate-900">{{ $displayName }}</span>

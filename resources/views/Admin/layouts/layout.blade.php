@@ -63,6 +63,12 @@ $navigationGroups = [
 ['label' => 'College Partnership', 'route' => 'admin.counselling.partner', 'active' => 'admin.counselling.partner', 'icon' => 'fi-rr-form'],
 ['label' => 'Chat Logs', 'route' => 'admin.chat-logs.index', 'active' => 'admin.chat-logs.*', 'icon' => 'fi-rr-comment-dots'],
 ],
+'Internship' => [
+['label' => 'College Transactions', 'route' => 'admin.college-transactions.index', 'active' => 'admin.college-transactions.*', 'icon' => 'fi-rr-receipt'],
+['label' => 'Revenue Report', 'route' => 'admin.reports.revenue', 'active' => 'admin.reports.revenue', 'icon' => 'fi-rr-chart-pie'],
+['label' => 'Seat Utilization', 'route' => 'admin.reports.seat-utilization', 'active' => 'admin.reports.seat-utilization', 'icon' => 'fi-rr-chair'],
+['label' => 'Enrollment Funnel', 'route' => 'admin.reports.enrollments', 'active' => 'admin.reports.enrollments', 'icon' => 'fi-rr-funnel'],
+],
 ];
 @endphp
 

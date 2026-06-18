@@ -29,7 +29,7 @@ class PaymentController extends Controller
             'student_id' => 'required|exists:students,id',
             'course_id' => 'required|exists:courses,id',
             'amount' => 'required|numeric|min:0',
-            'status' => 'required|in:pending,completed,failed',
+            'status' => 'required|in:pending,success,failed,refunded',
         ]);
 
         Payment::create($request->all());
@@ -56,7 +56,7 @@ class PaymentController extends Controller
             'student_id' => 'required|exists:students,id',
             'course_id' => 'required|exists:courses,id',
             'amount' => 'required|numeric|min:0',
-            'status' => 'required|in:pending,completed,failed',
+            'status' => 'required|in:pending,success,failed,refunded',
         ]);
 
         $payment->update($request->all());

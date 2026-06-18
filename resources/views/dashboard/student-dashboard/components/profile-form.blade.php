@@ -56,6 +56,54 @@
                 <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Latest payment</dt>
                 <dd class="mt-1 text-sm font-medium text-slate-950">{{ $profile['latest_payment'] }}</dd>
             </div>
+            <div class="rounded-lg border border-slate-200 px-4 py-3">
+                <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Internship level</dt>
+                <dd class="mt-1 flex items-center gap-2 text-sm font-medium text-slate-950">
+                    @if($profile['level'] ?? null)
+                        {{ $profile['level'] }}
+                    @else
+                        <span class="text-slate-400">Not assigned</span>
+                        @if($profile['can_self_assign_level'] ?? false)
+                            <a href="#level-section" @click="editMode = true"
+                                class="text-xs font-semibold text-primary hover:underline">Set level</a>
+                        @endif
+                    @endif
+                </dd>
+            </div>
+            <div class="rounded-lg border border-slate-200 px-4 py-3">
+                <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Internship topic</dt>
+                <dd class="mt-1 flex items-center gap-2 text-sm font-medium text-slate-950">
+                    @if($profile['internship_stream'] ?? null)
+                        {{ $profile['internship_stream'] }}
+                        @if($profile['can_self_assign_level'] ?? false)
+                            <a href="#stream-section" @click="editMode = true"
+                                class="text-xs font-semibold text-primary hover:underline">Change</a>
+                        @endif
+                    @else
+                        <span class="text-slate-400">Not chosen</span>
+                        @if($profile['can_self_assign_level'] ?? false)
+                            <a href="#stream-section" @click="editMode = true"
+                                class="text-xs font-semibold text-primary hover:underline">Choose topic</a>
+                        @endif
+                    @endif
+                </dd>
+            </div>
+            <div class="rounded-lg border border-slate-200 px-4 py-3">
+                <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Internship access</dt>
+                <dd class="mt-1 text-sm font-medium text-slate-950">
+                    @if($profile['internship_paid'] ?? false)
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200">
+                            <i class="fi fi-rr-check text-[10px] leading-none"></i> Paid &amp; Unlocked
+                        </span>
+                    @else
+                        <span class="text-slate-400 text-sm">Not paid</span>
+                        @if($profile['level'] ?? null)
+                            <a href="{{ route('student.internship.pay') }}"
+                                class="ml-2 text-xs font-semibold text-primary hover:underline">Pay now</a>
+                        @endif
+                    @endif
+                </dd>
+            </div>
         </dl>
 
         <div class="mt-5 grid gap-4 sm:grid-cols-4">
@@ -86,6 +134,30 @@
                 <div class="h-full rounded-full bg-primary" style="width: {{ $profile['average_progress'] }}%"></div>
             </div>
         </div>
+
+        @if(!empty($profile['payment_history']))
+        <div class="mt-5">
+            <h3 class="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">Payment History</h3>
+            <div class="divide-y divide-slate-100 overflow-hidden rounded-lg border border-slate-200">
+                @foreach($profile['payment_history'] as $payment)
+                <div class="flex items-center justify-between px-4 py-3">
+                    <div>
+                        <p class="text-sm font-medium text-slate-950">{{ $payment['course_title'] }}</p>
+                        <p class="text-xs text-slate-400">{{ $payment['date'] }}{{ $payment['razorpay_id'] ? ' &bull; ' . $payment['razorpay_id'] : '' }}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-semibold text-slate-950">{{ $payment['amount'] }}</p>
+                        <span class="rounded-full px-2 py-0.5 text-xs font-semibold {{ $payment['status'] === 'Success' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700' }}">
+                            {{ $payment['status'] }}
+                        </span>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @else
+        <p class="mt-4 text-sm text-slate-400">No payments yet. <a href="{{ route('payments.available-courses') }}" class="font-semibold text-primary hover:underline">Browse courses</a></p>
+        @endif
     </div>
 
     @if (session('success'))
@@ -131,6 +203,56 @@
                 @enderror
             </div>
         </div>
+
+        @if($profile['can_self_assign_level'] ?? false)
+        <div id="level-section">
+            <label class="text-sm font-medium text-slate-700">Internship Level</label>
+            <p class="mt-0.5 text-xs text-slate-400">Choose the level that matches your current skills. This determines which projects you can select.</p>
+            <div class="mt-2 flex flex-wrap gap-2">
+                @foreach(['Beginner', 'Intermediate', 'Advanced'] as $lvl)
+                <label class="flex cursor-pointer items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold transition
+                    {{ ($profile['level'] ?? '') === $lvl ? 'border-primary bg-primary text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-primary hover:text-primary' }}
+                    has-[:checked]:border-primary has-[:checked]:bg-primary has-[:checked]:text-white">
+                    <input type="radio" name="level" value="{{ $lvl }}"
+                        {{ ($profile['level'] ?? '') === $lvl ? 'checked' : '' }}
+                        class="sr-only" />
+                    {{ $lvl }}
+                </label>
+                @endforeach
+            </div>
+            @error('level')
+                <p class="mt-2 text-sm font-medium text-red-600">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div id="stream-section">
+            <label class="text-sm font-medium text-slate-700">Internship Topic</label>
+            <p class="mt-0.5 text-xs text-slate-400">Choose the domain for your internship. Your project choices will be filtered to this topic. You can change it any time before selecting projects.</p>
+            @if(empty($profile['available_streams'] ?? []))
+                <p class="mt-2 text-sm text-slate-400">No topics available yet.</p>
+            @else
+                <div class="mt-3 grid gap-2 sm:grid-cols-2">
+                    @foreach(($profile['available_streams'] ?? []) as $stream)
+                    @php
+                        $isSelected = ($profile['internship_stream'] ?? '') === $stream;
+                    @endphp
+                    <label class="flex cursor-pointer items-start gap-3 rounded-lg border p-3 text-sm font-medium transition
+                        {{ $isSelected ? 'border-primary bg-primary/5 text-primary' : 'border-slate-200 bg-white text-slate-700 hover:border-primary hover:text-primary' }}
+                        has-[:checked]:border-primary has-[:checked]:bg-primary/5 has-[:checked]:text-primary">
+                        <input type="radio" name="internship_stream" value="{{ $stream }}"
+                            {{ $isSelected ? 'checked' : '' }}
+                            class="sr-only" />
+                        <i class="fi fi-rr-bookmark mt-0.5 shrink-0 text-sm leading-none"></i>
+                        <span class="leading-snug">{{ $stream }}</span>
+                    </label>
+                    @endforeach
+                </div>
+            @endif
+            @error('internship_stream')
+                <p class="mt-2 text-sm font-medium text-red-600">{{ $message }}</p>
+            @enderror
+        </div>
+        @endif
 
         <div class="flex flex-wrap items-center gap-3 border-t border-slate-100 pt-5">
             <button type="submit"

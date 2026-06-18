@@ -18,6 +18,7 @@ class College extends Model
         'contact_number',
         'payment_mode',
         'utr_number',
+        'payment_proof_path',
         'payment_status',
         'payment_amount',
         'payment_submitted_at',
@@ -48,5 +49,15 @@ class College extends Model
     public function paymentReviewer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'payment_reviewed_by');
+    }
+
+    public function paymentTransactions(): HasMany
+    {
+        return $this->hasMany(CollegePaymentTransaction::class);
+    }
+
+    public function internshipPurchases(): HasMany
+    {
+        return $this->hasMany(CollegeInternshipPurchase::class);
     }
 }

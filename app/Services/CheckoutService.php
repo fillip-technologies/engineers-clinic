@@ -34,7 +34,7 @@ class CheckoutService
         $completedPayment = Payment::query()
             ->where('student_id', $student->id)
             ->where('course_id', $course->id)
-            ->where('status', 'completed')
+            ->where('status', 'success')
             ->latest()
             ->first();
 
@@ -55,13 +55,13 @@ class CheckoutService
                     'student_id' => $student->id,
                     'course_id' => $course->id,
                     'amount' => 0,
-                    'status' => 'completed',
+                    'status' => 'success',
                     'payment_date' => now(),
                 ]);
 
                 $student->enrollments()->updateOrCreate(
                     ['course_id' => $course->id],
-                    ['enrollment_date' => now(), 'status' => 'ongoing']
+                    ['enrollment_date' => now(), 'status' => 'active', 'sponsor_type' => 'self']
                 );
 
                 return [
@@ -144,7 +144,7 @@ class CheckoutService
 
             $payment = $order->payment()->firstOrFail();
             $payment->update([
-                'status' => 'completed',
+                'status' => 'success',
                 'payment_date' => now(),
                 'razorpay_payment_id' => $attributes['razorpay_payment_id'],
                 'razorpay_signature' => $attributes['razorpay_signature'],
@@ -152,7 +152,7 @@ class CheckoutService
 
             $order->student->enrollments()->updateOrCreate(
                 ['course_id' => $order->course_id],
-                ['enrollment_date' => now(), 'status' => 'ongoing']
+                ['enrollment_date' => now(), 'status' => 'active', 'sponsor_type' => 'self']
             );
 
             return $payment;

@@ -65,7 +65,7 @@ class CheckoutController extends Controller
 
         $completedPayment = Payment::where('student_id', $student->id)
             ->where('course_id', $course->id)
-            ->where('status', 'completed')
+            ->where('status', 'success')
             ->latest()
             ->first();
 

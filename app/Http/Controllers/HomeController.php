@@ -84,7 +84,15 @@ class HomeController extends Controller
         if ($role === 'student') {
             $colleges = College::all()->pluck('college_name', 'id')->toArray();
             $data['colleges'] = $colleges;
-            $data['signup']['fields'][2]['options'] = array_merge(['other' => 'Other'], $colleges);
+            $data['signup']['fields'][2]['type'] = 'select';
+            $data['signup']['fields'][2]['options'] = ['other' => 'Other'] + $colleges;
+            array_splice($data['signup']['fields'], 3, 0, [[
+                'label' => 'Enter Your College Name',
+                'type' => 'text',
+                'name' => 'student_college_other',
+                'placeholder' => 'e.g. ABC Institute of Technology',
+                'conditional' => true,
+            ]]);
         }
 
         return view('pages.signup', $data);
@@ -102,6 +110,10 @@ class HomeController extends Controller
                 'student_college' => 'required|string',
                 'student_password' => 'required|string|min:8|confirmed',
             ];
+
+            if ($request->student_college !== 'other') {
+                $rules['student_college'] = 'required|exists:colleges,id';
+            }
 
             if ($request->student_college === 'other') {
                 $rules['student_college_other'] = 'required|string|max:255';

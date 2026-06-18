@@ -56,11 +56,18 @@
                 <i class="fi fi-rr-rocket text-3xl text-slate-300"></i>
                 <p class="mt-3 text-sm font-semibold text-slate-700">No projects selected yet</p>
                 <p class="mt-1 text-sm text-slate-500">Choose up to 3 projects to start your internship journey.</p>
-                <a href="{{ route('student.projects') }}"
-                    class="mt-4 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
-                    <i class="fi fi-rr-search text-sm leading-none"></i>
-                    Browse Projects
-                </a>
+                <div class="mt-4 flex flex-wrap justify-center gap-3">
+                    <a href="{{ route('student.projects') }}"
+                        class="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
+                        <i class="fi fi-rr-search text-sm leading-none"></i>
+                        Browse Projects
+                    </a>
+                    <a href="{{ route('payments.available-courses') }}"
+                        class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-primary hover:text-primary">
+                        <i class="fi fi-rr-credit-card text-sm leading-none"></i>
+                        Enroll with Payment
+                    </a>
+                </div>
             </div>
         @else
             <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
