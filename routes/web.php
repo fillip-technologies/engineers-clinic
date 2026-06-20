@@ -105,11 +105,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/student/projects', [StudentDashboardController::class, 'studentProjects'])->name('student.projects');
     Route::post('/student/projects/{course}/select', [StudentDashboardController::class, 'studentSelectProject'])->name('student.projects.select');
     Route::delete('/student/projects/{enrollment}/remove', [StudentDashboardController::class, 'studentRemoveProject'])->name('student.projects.remove');
+    Route::post('/student/projects/{enrollment}/swap', [StudentDashboardController::class, 'studentSwapProject'])->name('student.projects.swap');
     Route::post('/student/level', [StudentDashboardController::class, 'studentSetLevel'])->name('student.level.set');
     Route::get('/student/internship/pay', [InternshipPaymentController::class, 'show'])->name('student.internship.pay');
     Route::post('/student/internship/pay/order', [InternshipPaymentController::class, 'createOrder'])->name('student.internship.pay.order');
     Route::post('/student/internship/pay/verify', [InternshipPaymentController::class, 'verify'])->name('student.internship.pay.verify');
     Route::get('/student/internship/pay/success', [InternshipPaymentController::class, 'success'])->name('student.internship.pay.success');
+    Route::get('/student/internship/checkout', [StudentDashboardController::class, 'internshipCheckout'])->name('student.internship.checkout');
+    Route::post('/student/internship/checkout/start', [InternshipPaymentController::class, 'checkoutStart'])->name('student.internship.checkout.start');
+    Route::post('/student/internship/checkout/verify', [InternshipPaymentController::class, 'checkoutVerify'])->name('student.internship.checkout.verify');
     Route::get('/course/{course:slug}/checkout/{order?}', [CheckoutController::class, 'show'])->name('payments.checkout');
 
     // Payment Routes

@@ -5,7 +5,7 @@
     $activeCourse = $activeCourses[0] ?? ($enrolledCourses[0] ?? null);
     $otherCourses = array_values(array_filter($enrolledCourses, fn ($course) => ! $activeCourse || $course['id'] !== $activeCourse['id']));
     $workspaceUrl = $activeCourse
-        ? route('student.course.workspace', ['id' => $activeCourse['id']])
+        ? route('student.course.workspace', ['id' => $activeCourse['id']]) . (!empty($defaultProject) ? '?project=' . $defaultProject : '')
         : route('student.course.workspace.default');
     $projects = $activeCourse['projects'] ?? [];
     $tasks = $activeCourse['tasks'] ?? [];
@@ -198,7 +198,7 @@
 
                 <div class="mt-5 space-y-3">
                     @forelse ($otherCourses as $course)
-                        <a href="{{ route('student.course.workspace', ['id' => $course['id']]) }}"
+                        <a href="{{ route('student.course.workspace', ['id' => $course['id']]) }}{{ !empty($course['projects'][0]['id']) ? '?project=' . $course['projects'][0]['id'] : '' }}"
                             class="block rounded-lg border border-slate-200 p-4 transition hover:border-primary hover:bg-slate-50">
                             <div class="flex items-start justify-between gap-3">
                                 <h3 class="text-sm font-semibold leading-6 text-slate-950">{{ $course['title'] }}</h3>

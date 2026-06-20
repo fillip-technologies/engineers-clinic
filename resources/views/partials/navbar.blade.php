@@ -82,7 +82,54 @@
                 <span class="relative">Refer & Earn</span>
             </a>
 
-            <a href="{{ url('/login') }}" class="btn-primary hidden lg:inline-flex">Login</a>
+            @auth
+                @php
+                    $authUser = Auth::user();
+                    $authDisplayName = $authUser?->name ?? 'User';
+                    $authFirstName = explode(' ', trim($authDisplayName))[0];
+                    $authInitials = collect(explode(' ', trim($authDisplayName)))->filter()->take(2)->map(fn($p) => strtoupper(substr($p, 0, 1)))->implode('') ?: 'U';
+                @endphp
+                <div class="relative hidden lg:block" x-data="{ userOpen: false }" @keydown.escape.window="userOpen = false">
+                    <button type="button" @click="userOpen = !userOpen"
+                        class="flex items-center gap-2 rounded-full border border-borderLight bg-bgWhite py-1.5 pl-2 pr-3 shadow-sm transition hover:bg-bgSoft">
+                        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand text-xs font-semibold text-white">
+                            {{ $authInitials }}
+                        </span>
+                        <span class="text-sm font-semibold text-textPrimary">{{ $authFirstName }}</span>
+                        <svg class="h-4 w-4 text-textSecondary transition" :class="userOpen ? 'rotate-180' : ''" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.51a.75.75 0 01-1.08 0l-4.25-4.51a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <div x-cloak x-show="userOpen" @click.outside="userOpen = false"
+                        x-transition:enter="transition ease-out duration-150"
+                        x-transition:enter-start="opacity-0 translate-y-1"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-100"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 translate-y-1"
+                        class="absolute right-0 z-50 mt-2 w-52 overflow-hidden rounded-xl border border-borderLight bg-white py-2 shadow-lg">
+                        <div class="border-b border-[#F1F5F9] px-4 py-3">
+                            <p class="text-xs text-textSecondary">Signed in as</p>
+                            <p class="truncate text-sm font-semibold text-textPrimary">{{ $authDisplayName }}</p>
+                        </div>
+                        <a href="{{ route('dashboard.student.profile') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-textSecondary transition hover:bg-bgSoft hover:text-brand">
+                            <i class="fi fi-rr-user"></i> My Dashboard
+                        </a>
+                        <a href="{{ route('dashboard.enrolled-courses') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-textSecondary transition hover:bg-bgSoft hover:text-brand">
+                            <i class="fi fi-rr-book-alt"></i> My Courses
+                        </a>
+                        <div class="my-1 border-t border-[#F1F5F9]"></div>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm font-medium text-red-600 transition hover:bg-red-50">
+                                <i class="fi fi-rr-sign-out-alt"></i> Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @else
+                <a href="{{ url('/login') }}" class="btn-primary hidden lg:inline-flex">Login</a>
+            @endauth
 
             <button
                 type="button"
@@ -152,6 +199,22 @@
                     <a href="{{ route('about') }}" class="block rounded-control bg-bgSoft px-4 py-3 text-sm font-semibold text-textPrimary">About Us</a>
                 </div>
             </div>
+
+            @auth
+                <div class="rounded-control border border-borderLight bg-bgWhite px-5 py-4">
+                    <p class="text-xs text-textSecondary">Signed in as</p>
+                    <p class="truncate text-sm font-semibold text-textPrimary">{{ Auth::user()->name }}</p>
+                    <div class="mt-3 flex gap-2">
+                        <a href="{{ route('dashboard.student.profile') }}" class="flex-1 rounded-control bg-bgSoft px-3 py-2 text-center text-sm font-semibold text-textPrimary transition hover:text-brand">Dashboard</a>
+                        <form method="POST" action="{{ route('logout') }}" class="flex-1">
+                            @csrf
+                            <button type="submit" class="w-full rounded-control bg-red-50 px-3 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-100">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            @else
+                <a href="{{ url('/login') }}" class="block rounded-control bg-brand px-5 py-4 text-center text-sm font-bold text-white">Login</a>
+            @endauth
         </nav>
     </div>
 </header>

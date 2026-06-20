@@ -98,7 +98,7 @@
                     @else
                         <span class="text-slate-400 text-sm">Not paid</span>
                         @if($profile['level'] ?? null)
-                            <a href="{{ route('student.internship.pay') }}"
+                            <a href="{{ route('student.internship.checkout') }}"
                                 class="ml-2 text-xs font-semibold text-primary hover:underline">Pay now</a>
                         @endif
                     @endif

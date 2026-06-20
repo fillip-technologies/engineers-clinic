@@ -42,13 +42,20 @@
                 <p class="text-sm font-semibold text-primary">My Projects</p>
                 <h2 class="mt-1 text-xl font-semibold text-slate-950">Selected Projects ({{ count($enrolledProjects) }}/3)</h2>
             </div>
-            @if (count($enrolledProjects) < 3)
-                <a href="{{ route('student.projects') }}"
-                    class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-primary hover:text-primary">
-                    <i class="fi fi-rr-plus text-sm leading-none"></i>
-                    Browse Projects
+            <div class="flex items-center gap-2">
+                @if (count($enrolledProjects) < 3)
+                    <a href="{{ route('student.projects') }}"
+                        class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-primary hover:text-primary">
+                        <i class="fi fi-rr-plus text-sm leading-none"></i>
+                        Browse Projects
+                    </a>
+                @endif
+                <a href="{{ route('student.internship.checkout') }}"
+                    class="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
+                    <i class="fi fi-rr-shopping-bag text-sm leading-none"></i>
+                    Add More Projects
                 </a>
-            @endif
+            </div>
         </div>
 
         @if (empty($enrolledProjects))
@@ -57,16 +64,16 @@
                 <p class="mt-3 text-sm font-semibold text-slate-700">No projects selected yet</p>
                 <p class="mt-1 text-sm text-slate-500">Choose up to 3 projects to start your internship journey.</p>
                 <div class="mt-4 flex flex-wrap justify-center gap-3">
-                    <a href="{{ route('student.projects') }}"
+                    <a href="{{ route('student.internship.checkout') }}"
                         class="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
-                        <i class="fi fi-rr-search text-sm leading-none"></i>
-                        Browse Projects
+                        <i class="fi fi-rr-shopping-bag text-sm leading-none"></i>
+                        Add  Projects
                     </a>
-                    <a href="{{ route('payments.available-courses') }}"
+                    {{-- <a href="{{ route('payments.available-courses') }}"
                         class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-primary hover:text-primary">
                         <i class="fi fi-rr-credit-card text-sm leading-none"></i>
                         Enroll with Payment
-                    </a>
+                    </a> --}}
                 </div>
             </div>
         @else

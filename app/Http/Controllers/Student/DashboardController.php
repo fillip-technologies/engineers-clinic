@@ -624,95 +624,102 @@ class DashboardController extends Controller
             ? Enrollment::where('student_id', $student->id)->get()
             : collect();
 
-        $enrolledCourseIds = $enrollments->pluck('course_id')->toArray();
-        $enrollmentByCourse = $enrollments->keyBy('course_id');
-        $totalSelected = $enrollments->count();
-        $studentLevel = $student?->level;
-        $studentStream = $student?->internship_stream;
-        $canSelfAssignLevel = $student && $student->college && $student->college->user_id === null;
-        $streamRequired = $studentLevel && ! $studentStream;
+        $enrolledCourseIds    = $enrollments->pluck('course_id')->toArray();
+        $enrollmentByCourse   = $enrollments->keyBy('course_id');
+        $totalSelected        = $enrollments->count();
+        $studentLevel         = $student?->level;
+        $studentStream        = $student?->internship_stream;
+        $canSelfAssignLevel   = $student && $student->college && $student->college->user_id === null;
+        $internshipPaid       = (bool) ($student?->internship_paid);
 
-        $internshipPaid = (bool) ($student?->internship_paid);
+        $workspaceIdByCourse = $enrolledCourseIds
+            ? CourseWorkspace::where('status', true)
+                ->whereIn('course_id', $enrolledCourseIds)
+                ->orderByDesc('updated_at')
+                ->get()
+                ->groupBy('course_id')
+                ->map(fn ($g) => $g->first()->id)
+            : collect();
 
-        $availableStreams = Course::select('category')
-            ->distinct()
-            ->orderBy('category')
-            ->pluck('category')
-            ->filter()
-            ->values()
-            ->toArray();
+        // Load ALL courses — cascade filter handles visibility
+        $courses = Course::orderBy('level')->orderBy('category')->orderBy('title')->get();
 
-        // Only load courses from the student's chosen stream (or all if no stream set yet)
-        $coursesQuery = Course::orderBy('title');
-        if ($studentStream) {
-            $coursesQuery->where('category', $studentStream);
-        }
-        $courses = $coursesQuery->get();
+        $levels               = ['Beginner', 'Intermediate', 'Advanced'];
+        $categoriesByLevel    = array_fill_keys($levels, []);
+        $titlesByLevelCategory = [];
+        $projectsByLevelCategoryTitle = [];
 
-        $levels = ['Beginner', 'Intermediate', 'Advanced'];
-        $projectsByLevel = [];
+        foreach ($courses as $course) {
+            $level    = $course->level    ?? 'Beginner';
+            $category = $course->category ?? 'General';
+            $track    = $course->title;
+            $items    = $course->curriculum ?? [];
 
-        foreach ($levels as $level) {
-            $levelProjects = [];
-
-            foreach ($courses->where('level', $level) as $course) {
-                $isEnrolled = in_array($course->id, $enrolledCourseIds, true);
-                $enrollment = $isEnrolled ? $enrollmentByCourse->get($course->id) : null;
-                $items = $course->curriculum ?? [];
-
-                if (empty($items)) {
-                    continue;
-                }
-
-                foreach ($items as $idx => $item) {
-                    $firstTask   = $item['tasks'][0] ?? [];
-                    $description = $firstTask['assignment'] ?? $course->description ?? 'Complete this project to advance your skills.';
-                    $submission  = $firstTask['submission'] ?? '';
-                    $taskTitles  = collect($item['tasks'] ?? [])->pluck('title')->filter()->values()->toArray();
-
-                    // Workspace is accessible only when internship is paid (or college-sponsored)
-                    $sponsorType    = $enrollment?->sponsor_type ?? 'self';
-                    $workspaceLocked = $isEnrolled && $sponsorType === 'self' && ! $internshipPaid;
-
-                    $levelProjects[] = [
-                        'id'              => $course->id,
-                        'item_index'      => $idx,
-                        'title'           => $item['title'] ?? $course->title,
-                        'description'     => $description,
-                        'submission'      => $submission,
-                        'tasks'           => $taskTitles,
-                        'level'           => $course->level ?? 'Beginner',
-                        'category'        => $course->category ?? 'Project',
-                        'duration'        => $course->duration_months
-                            ? $course->duration_months . ' month' . ($course->duration_months > 1 ? 's' : '')
-                            : 'Self-paced',
-                        'is_enrolled'     => $isEnrolled,
-                        'enrollment_id'   => $enrollment?->id,
-                        'progress'        => strtolower((string) $enrollment?->status) === 'completed' ? 100 : (int) ($enrollment?->progress ?? 0),
-                        'status'          => $enrollment?->status,
-                        'sponsor_type'    => $sponsorType,
-                        'workspace_locked' => $workspaceLocked,
-                        'workspace_url'   => $enrollment ? route('student.course.workspace', ['id' => $enrollment->id]) : null,
-                        'select_url'      => route('student.projects.select', ['course' => $course->id]),
-                        'can_select'      => ! $isEnrolled && $totalSelected < 3 && $studentLevel === $level && ! $streamRequired && $internshipPaid,
-                        'level_locked'    => $studentLevel !== null && $studentLevel !== $level,
-                    ];
-                }
+            if (empty($items)) {
+                continue;
             }
 
-            $projectsByLevel[$level] = $levelProjects;
+            // Build cascade selector data
+            if (! in_array($category, $categoriesByLevel[$level] ?? [])) {
+                $categoriesByLevel[$level][] = $category;
+            }
+            $key = $level . '|' . $category;
+            $existingTracks = array_column($titlesByLevelCategory[$key] ?? [], 'title');
+            if (! in_array($track, $existingTracks)) {
+                $titlesByLevelCategory[$key][] = ['title' => $track, 'count' => count($items)];
+            }
+
+            // Build project items
+            $isEnrolled      = in_array($course->id, $enrolledCourseIds, true);
+            $enrollment      = $isEnrolled ? $enrollmentByCourse->get($course->id) : null;
+            $sponsorType     = $enrollment?->sponsor_type ?? 'self';
+            $workspaceLocked = $isEnrolled && $sponsorType === 'self' && ! $internshipPaid;
+
+            foreach ($items as $idx => $item) {
+                $firstTask   = $item['tasks'][0] ?? [];
+                $description = $firstTask['assignment'] ?? $course->description ?? 'Complete this project to advance your skills.';
+                $taskTitles  = collect($item['tasks'] ?? [])->pluck('title')->filter()->values()->toArray();
+
+                $projectsByLevelCategoryTitle[$level][$category][$track][] = [
+                    'id'               => $course->id,
+                    'item_index'       => $idx,
+                    'title'            => $item['title'] ?? $course->title,
+                    'description'      => $description,
+                    'submission'       => $firstTask['submission'] ?? '',
+                    'tasks'            => $taskTitles,
+                    'level'            => $level,
+                    'category'         => $category,
+                    'duration'         => $course->duration_months
+                        ? $course->duration_months . ' month' . ($course->duration_months > 1 ? 's' : '')
+                        : 'Self-paced',
+                    'is_enrolled'      => $isEnrolled,
+                    'enrollment_id'    => $enrollment?->id,
+                    'progress'         => strtolower((string) $enrollment?->status) === 'completed' ? 100 : (int) ($enrollment?->progress ?? 0),
+                    'status'           => $enrollment?->status,
+                    'sponsor_type'     => $sponsorType,
+                    'workspace_locked' => $workspaceLocked,
+                    'workspace_url'    => $enrollment
+                        ? route('student.course.workspace', ['id' => $enrollment->id])
+                            . ($workspaceIdByCourse->has($course->id) ? '?project=' . $workspaceIdByCourse[$course->id] : '')
+                        : null,
+                    'select_url'       => route('student.projects.select', ['course' => $course->id]),
+                    'can_select'       => ! $isEnrolled && $totalSelected < 3 && $studentLevel === $level
+                        && (! $studentStream || $studentStream === $category) && $internshipPaid,
+                    'level_locked'     => $studentLevel !== null && $studentLevel !== $level,
+                ];
+            }
         }
 
         return view('dashboard.student-dashboard.projects.index', [
-            'projectsByLevel'    => $projectsByLevel,
-            'levels'             => $levels,
-            'totalSelected'      => $totalSelected,
-            'studentLevel'       => $studentLevel,
-            'studentStream'      => $studentStream,
-            'streamRequired'     => $streamRequired,
-            'availableStreams'    => $availableStreams,
-            'canSelfAssignLevel' => $canSelfAssignLevel,
-            'internshipPaid'     => $internshipPaid,
+            'projectsByLevelCategoryTitle' => $projectsByLevelCategoryTitle,
+            'categoriesByLevel'            => $categoriesByLevel,
+            'titlesByLevelCategory'        => $titlesByLevelCategory,
+            'levels'                       => $levels,
+            'totalSelected'                => $totalSelected,
+            'studentLevel'                 => $studentLevel,
+            'studentStream'                => $studentStream,
+            'canSelfAssignLevel'           => $canSelfAssignLevel,
+            'internshipPaid'               => $internshipPaid,
             ...$this->frontendAdminData('student-projects'),
         ]);
     }
@@ -800,6 +807,58 @@ class DashboardController extends Controller
             ->with('success', 'Project removed. You can now select a different project.');
     }
 
+    public function studentSwapProject(Request $request, Enrollment $enrollment)
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            return redirect()->route('login');
+        }
+
+        $student = Student::where('user_id', $user->id)->firstOrFail();
+
+        abort_unless($enrollment->student_id === $student->id, 403, 'You can only change your own projects.');
+        abort_if((int) $enrollment->progress > 0, 422, 'Cannot change a project you have already started.');
+        abort_if(strtolower((string) $enrollment->status) === 'completed', 422, 'Completed projects cannot be changed.');
+        abort_if($enrollment->sponsor_type === 'college', 422, 'College-sponsored projects cannot be changed. Contact your college administrator.');
+
+        $newCourse = Course::findOrFail($request->input('course_id'));
+        $oldCourse = $enrollment->course;
+
+        if ($newCourse->level !== $oldCourse->level) {
+            return redirect()->route('student.projects')
+                ->with('error', 'You can only swap to a project within the same level.');
+        }
+
+        if ($newCourse->category !== $oldCourse->category) {
+            return redirect()->route('student.projects')
+                ->with('error', 'You can only swap to a project within the same topic.');
+        }
+
+        $alreadyEnrolled = Enrollment::where('student_id', $student->id)
+            ->where('course_id', $newCourse->id)
+            ->exists();
+
+        if ($alreadyEnrolled) {
+            return redirect()->route('student.projects')
+                ->with('error', 'You are already enrolled in that project.');
+        }
+
+        $enrollment->delete();
+
+        Enrollment::create([
+            'student_id'      => $student->id,
+            'course_id'       => $newCourse->id,
+            'enrollment_date' => now(),
+            'progress'        => 0,
+            'status'          => 'active',
+            'sponsor_type'    => 'self',
+        ]);
+
+        return redirect()->route('student.projects')
+            ->with('success', "Project changed to \"{$newCourse->title}\" successfully.");
+    }
+
     public function studentSetLevel(Request $request)
     {
         $validated = $request->validate([
@@ -825,6 +884,104 @@ class DashboardController extends Controller
             ->with('success', 'Internship level set to ' . $validated['level'] . '. You can now select projects.');
     }
 
+    public function internshipCheckout(): mixed
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $student = Student::with('college')->where('user_id', $user->id)->first();
+
+        if (!$student) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Student account not found.');
+        }
+
+        // if ($student->internship_paid) {
+        //     return redirect()->route('student.projects')
+        //         ->with('success', 'Your internship is already unlocked. Browse and select your projects.');
+        // }
+
+        $canSelfAssignLevel = $student->college && $student->college->user_id === null;
+
+        // if (!$canSelfAssignLevel && !$student->level) {
+        //     return redirect()->route('dashboard')
+        //         ->with('error', 'Your internship level hasn\'t been assigned yet. Contact your college administrator.');
+        // }
+
+        // Pre-selections passed from the public enrollment form
+        $enrollmentData = session()->pull('enrollment_internship_checkout', []);
+        $preSelectedCourseIds = $enrollmentData['selected_courses'] ?? [];
+        $preSelectedLevel  = $enrollmentData['level']  ?? null;
+        $preSelectedStream = $enrollmentData['stream']  ?? null;
+
+        $enrolledCourseIds = Enrollment::where('student_id', $student->id)
+            ->pluck('course_id')
+            ->toArray();
+
+        $allCourses = Course::orderBy('level')->orderBy('category')->orderBy('title')->get()
+            ->map(function ($c) {
+                $rawCurriculum = $c->curriculum ?? [];
+                $projects = collect($rawCurriculum)->values()->map(function ($item, $index) {
+                    return [
+                        'id'          => $item['project_no'] ?? ($index + 1),
+                        'title'       => $item['title'] ?? '',
+                        'description' => $item['description'] ?? '',
+                        'category'    => $item['category'] ?? '',
+                        'duration'    => isset($item['estimated_hours'])
+                            ? $item['estimated_hours'] . ' hrs'
+                            : 'Self-paced',
+                    ];
+                })->all();
+
+                return [
+                    'id'          => $c->id,
+                    'title'       => $c->title,
+                    'level'       => $c->level ?? 'Beginner',
+                    'category'    => $c->category ?? 'General',
+                    'description' => $c->description ?? '',
+                    'projects'    => $projects,
+                ];
+            })
+            ->values();
+
+        $levelFees = [
+            'Beginner'     => 4999,
+            'Intermediate' => 7999,
+            'Advanced'     => 12999,
+        ];
+
+        $initialStep = 1;
+        if (!$canSelfAssignLevel && $student->level) {
+            $initialStep = $student->internship_stream ? 3 : 2;
+        }
+
+        // If coming from the public enrollment form, override level/stream and jump to payment
+        $currentLevel  = $student->level;
+        $currentStream = $student->internship_stream;
+        if (!empty($preSelectedCourseIds)) {
+            $initialStep   = 5;
+            $currentLevel  = $preSelectedLevel  ?? $student->level;
+            $currentStream = $preSelectedStream ?? $student->internship_stream;
+        }
+
+        return view('dashboard.student-dashboard.internship.checkout', [
+            'student'               => $student,
+            'currentLevel'          => $currentLevel,
+            'currentStream'         => $currentStream,
+            'canSelfAssignLevel'    => $canSelfAssignLevel,
+            'enrolledCourseIds'     => $enrolledCourseIds,
+            'allCourses'            => $allCourses,
+            'levelFees'             => $levelFees,
+            'initialStep'           => $initialStep,
+            'preSelectedCourseIds'  => $preSelectedCourseIds,
+            'razorpayKey'           => config('services.razorpay.key'),
+            ...$this->frontendAdminData('internship-checkout'),
+        ]);
+    }
+
     public function orderHistory()
     {
         $user = Auth::user();
@@ -838,13 +995,24 @@ class DashboardController extends Controller
         if (!$student) {
             $orders = [];
         } else {
-            $payments = Payment::with('course')
+            $payments = Payment::with(['course.workspaces' => fn ($q) => $q->where('status', true)->orderByDesc('updated_at')])
                 ->where('student_id', $student->id)
                 ->orderBy('payment_date', 'desc')
                 ->get();
 
-            $orders = $payments->map(function ($payment) {
-                $course = $payment->course;
+            $enrollmentByCourse = Enrollment::where('student_id', $student->id)
+                ->get()
+                ->keyBy('course_id');
+
+            $orders = $payments->map(function ($payment) use ($enrollmentByCourse) {
+                $course     = $payment->course;
+                $enrollment = $course ? $enrollmentByCourse->get($course->id) : null;
+                $workspace  = $course?->workspaces?->first();
+                $workspaceUrl = $enrollment
+                    ? route('student.course.workspace', ['id' => $enrollment->id])
+                        . ($workspace?->id ? '?project=' . $workspace->id : '')
+                    : route('student.course.workspace.default');
+
                 return [
                     'id' => $payment->id,
                     'title' => $course?->title ?? 'Unknown Course',
@@ -858,6 +1026,7 @@ class DashboardController extends Controller
                         default    => 'Pending',
                     },
                     'access_status' => $payment->status === 'success' ? 'Active' : 'Pending',
+                    'workspace_url' => $workspaceUrl,
                 ];
             })->toArray();
         }
@@ -1229,12 +1398,18 @@ class DashboardController extends Controller
                             'icon' => 'fi fi-rr-rocket',
                             'href' => route('student.projects'),
                         ],
-                        [
-                            'key' => 'student-enrolled-courses',
-                            'label' => 'My Projects',
-                            'icon' => 'fi fi-rr-book-alt',
-                            'href' => route('dashboard.enrolled-courses'),
-                        ],
+                        // [
+                        //     'key' => 'internship-checkout',
+                        //     'label' => 'Internship Checkout',
+                        //     'icon' => 'fi fi-rr-shopping-bag',
+                        //     'href' => route('student.internship.checkout'),
+                        // ],
+                        // [
+                        //     'key' => 'student-enrolled-courses',
+                        //     'label' => 'My Projects',
+                        //     'icon' => 'fi fi-rr-book-alt',
+                        //     'href' => route('dashboard.enrolled-courses'),
+                        // ],
                         [
                             'key' => 'student-quiz-attempts',
                             'label' => 'My Quiz Attempts',
@@ -1495,7 +1670,8 @@ class DashboardController extends Controller
                 'status'          => Str::headline((string) ($enrollment->status ?: 'Active')),
                 'color'           => $meta['color'],
                 'icon'            => $meta['icon'],
-                'workspace_url'   => route('student.course.workspace', ['id' => $enrollment->id]),
+                'workspace_url'   => route('student.course.workspace', ['id' => $enrollment->id])
+                    . ($workspace?->id ? '?project=' . $workspace->id : ''),
                 'enrollment_date' => $enrollment->enrollment_date?->format('M d, Y'),
             ];
         })->values()->toArray();

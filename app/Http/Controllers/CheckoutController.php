@@ -17,6 +17,34 @@ class CheckoutController extends Controller
 {
     public function start(StartCheckoutRequest $request, Course $course, CheckoutService $checkout): RedirectResponse
     {
+        $selectedCourses = array_filter((array) $request->input('selected_courses', []));
+
+        // If projects were selected in the enrollment form, create/resolve the account
+        // without creating a course-specific Razorpay order, then hand off to internship checkout.
+        if (!empty($selectedCourses)) {
+            try {
+                $account = $checkout->createUserAccount($course, $request->validated());
+            } catch (ValidationException $exception) {
+                throw $exception;
+            } catch (Throwable $exception) {
+                Log::error('Unable to create user account for internship checkout.', [
+                    'message' => $exception->getMessage(),
+                ]);
+                return back()->withInput()->with('error', 'Unable to start checkout right now. Please try again in a moment.');
+            }
+
+            Auth::login($account['user']);
+            $request->session()->regenerate();
+            $request->session()->put('enrollment_internship_checkout', [
+                'level'                => $request->input('level'),
+                'stream'               => $request->input('stream'),
+                'selected_courses'     => $selectedCourses,
+                'selected_project_nos' => array_filter((array) $request->input('selected_project_nos', [])),
+            ]);
+
+            return redirect()->route('student.internship.checkout');
+        }
+
         try {
             $result = $checkout->start($course, $request->validated());
         } catch (ValidationException $exception) {

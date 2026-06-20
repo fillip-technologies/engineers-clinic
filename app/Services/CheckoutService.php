@@ -167,6 +167,11 @@ class CheckoutService
         });
     }
 
+    public function createUserAccount(Course $course, array $data): array
+    {
+        return $this->resolveStudentAccount($course, $data);
+    }
+
     private function resolveStudentAccount(Course $course, array $data): array
     {
         return DB::transaction(function () use ($course, $data) {

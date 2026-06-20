@@ -45,7 +45,12 @@
         </div>
 
         <div class="flex items-center lg:justify-end">
-            <a href="{{ !empty($course['id']) ? route('student.course.workspace', ['id' => $course['id']]) : route('student.course.workspace.default') }}"
+            @php
+                $rowWsUrl = !empty($course['id'])
+                    ? route('student.course.workspace', ['id' => $course['id']]) . (!empty($course['projects'][0]['id']) ? '?project=' . $course['projects'][0]['id'] : '')
+                    : route('student.course.workspace.default');
+            @endphp
+            <a href="{{ $rowWsUrl }}"
                 class="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">
                 Continue Learning
             </a>

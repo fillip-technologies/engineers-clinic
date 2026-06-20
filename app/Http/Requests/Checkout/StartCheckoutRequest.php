@@ -21,6 +21,11 @@ class StartCheckoutRequest extends FormRequest
             'location' => ['required', 'string', 'max:255'],
             'college' => ['required', 'string', 'max:255'],
             'level' => ['required', 'string', 'max:50'],
+            'stream' => ['nullable', 'string', 'max:255'],
+            'selected_courses' => ['nullable', 'array', 'max:3'],
+            'selected_courses.*' => ['integer', 'exists:courses,id'],
+            'selected_project_nos' => ['nullable', 'array', 'max:3'],
+            'selected_project_nos.*' => ['integer'],
         ];
     }
 }
