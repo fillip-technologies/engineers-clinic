@@ -35,14 +35,15 @@ class CheckoutController extends Controller
 
             Auth::login($account['user']);
             $request->session()->regenerate();
-            $request->session()->put('enrollment_internship_checkout', [
+            $request->session()->put('enrollment_pending_payment', [
                 'level'                => $request->input('level'),
                 'stream'               => $request->input('stream'),
                 'selected_courses'     => $selectedCourses,
                 'selected_project_nos' => array_filter((array) $request->input('selected_project_nos', [])),
+                'course_title'         => $course->title,
             ]);
 
-            return redirect()->route('student.internship.checkout');
+            return redirect()->route('enrollment.payment');
         }
 
         try {
@@ -78,6 +79,28 @@ class CheckoutController extends Controller
         return redirect()->route('payments.checkout', [
             'course' => $course->slug,
             'order' => $result['order']->id,
+        ]);
+    }
+
+    public function enrollmentPayment(\Illuminate\Http\Request $request): mixed
+    {
+        $pending = $request->session()->get('enrollment_pending_payment');
+
+        if (empty($pending) || empty($pending['selected_courses'])) {
+            return redirect('/')->with('error', 'No pending enrollment found. Please fill the form again.');
+        }
+
+        $level = $pending['level'] ?? 'Beginner';
+        $fees  = ['Beginner' => 4999, 'Intermediate' => 7999, 'Advanced' => 12999];
+
+        return view('payments.enrollment-payment', [
+            'pending'      => $pending,
+            'level'        => $level,
+            'amount'       => $fees[$level] ?? 4999,
+            'razorpayKey'  => config('services.razorpay.key'),
+            'startUrl'     => route('student.internship.checkout.start'),
+            'verifyUrl'    => route('student.internship.checkout.verify'),
+            'dashboardUrl' => route('dashboard'),
         ]);
     }
 

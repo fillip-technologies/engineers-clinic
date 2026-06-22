@@ -1511,6 +1511,9 @@ class DashboardController extends Controller
                 'pendingTasks'    => 0,
                 'completedTasks'  => 0,
                 'enrolledProjects' => [],
+                'internshipPaid'  => false,
+                'studentLevel'    => null,
+                'studentStream'   => null,
             ];
         }
 
@@ -1676,6 +1679,10 @@ class DashboardController extends Controller
             ];
         })->values()->toArray();
 
+        $internshipPaid = (bool) ($student?->internship_paid ?? false);
+        $studentLevel   = $student?->level;
+        $studentStream  = $student?->internship_stream;
+
         return compact(
             'currentTrack',
             'totalEnrolled',
@@ -1694,6 +1701,9 @@ class DashboardController extends Controller
             'pendingTasks',
             'completedTasks',
             'enrolledProjects',
+            'internshipPaid',
+            'studentLevel',
+            'studentStream',
         );
     }
 }

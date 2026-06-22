@@ -1,6 +1,6 @@
 @php
     $courseModel     = $courseModel ?? null;
-    $selectedLevel   = old('level', $selectedLevel ?? 'Beginner');
+    $selectedLevel   = $courseModel?->level ?? old('level', $selectedLevel ?? 'Beginner');
     $courseStream    = $courseModel?->category ?? null;
 
     $authUser        = auth()->user();
@@ -57,7 +57,7 @@
             <!-- STEPPER -->
             <div class="flex items-center gap-4">
 
-                <template x-for="item in [1,2,3,4,5,6]" :key="item">
+                <template x-for="item in [1,2,3]" :key="item">
 
                     <div class="flex items-center flex-1">
 
@@ -71,7 +71,7 @@
 
                         </div>
 
-                        <div x-show="item != 6"
+                        <div x-show="item != 3"
                             class="mx-3 h-[1px] flex-1 bg-[#E2E8F0]">
                         </div>
 
@@ -122,210 +122,88 @@
                 </div>
             @endif
 
-            <!-- STEP 1 -->
+            <!-- STEP 1 — Personal Info (merged) -->
             <div x-show="step === 1" class="space-y-5">
 
                 <!-- FULL NAME -->
                 <div class="relative">
-
                     <input type="text"
                         name="name"
                         value="{{ old('name', auth()->user()?->name) }}"
                         placeholder=" "
                         class="peer w-full rounded-2xl border border-[#E2E8F0] bg-white px-5 pt-7 pb-3 text-[15px] text-[#111827] outline-none transition duration-300 focus:border-[#5B5BF6] focus:ring-4 focus:ring-[#5B5BF6]/10">
-
-                    <label
-                        class="absolute left-5 top-5 bg-white px-1 text-[15px] text-[#94A3B8] transition-all duration-200
-                        peer-focus:-top-2
-                        peer-focus:text-xs
-                        peer-focus:font-medium
-                        peer-focus:text-[#5B5BF6]
-                        peer-[:not(:placeholder-shown)]:-top-2
-                        peer-[:not(:placeholder-shown)]:text-xs
-                        peer-[:not(:placeholder-shown)]:font-medium
-                        peer-[:not(:placeholder-shown)]:text-[#5B5BF6]">
-
+                    <label class="absolute left-5 top-5 bg-white px-1 text-[15px] text-[#94A3B8] transition-all duration-200
+                        peer-focus:-top-2 peer-focus:text-xs peer-focus:font-medium peer-focus:text-[#5B5BF6]
+                        peer-[:not(:placeholder-shown)]:-top-2 peer-[:not(:placeholder-shown)]:text-xs
+                        peer-[:not(:placeholder-shown)]:font-medium peer-[:not(:placeholder-shown)]:text-[#5B5BF6]">
                         Full Name *
-
                     </label>
-
                 </div>
 
                 <!-- EMAIL -->
                 <div class="relative">
-
                     <input type="email"
                         name="email"
                         value="{{ old('email', auth()->user()?->email) }}"
                         placeholder=" "
                         class="peer w-full rounded-2xl border border-[#E2E8F0] bg-white px-5 pt-7 pb-3 text-[15px] text-[#111827] outline-none transition duration-300 focus:border-[#5B5BF6] focus:ring-4 focus:ring-[#5B5BF6]/10">
-
-                    <label
-                        class="absolute left-5 top-5 bg-white px-1 text-[15px] text-[#94A3B8] transition-all duration-200
-                        peer-focus:-top-2
-                        peer-focus:text-xs
-                        peer-focus:font-medium
-                        peer-focus:text-[#5B5BF6]
-                        peer-[:not(:placeholder-shown)]:-top-2
-                        peer-[:not(:placeholder-shown)]:text-xs
-                        peer-[:not(:placeholder-shown)]:font-medium
-                        peer-[:not(:placeholder-shown)]:text-[#5B5BF6]">
-
+                    <label class="absolute left-5 top-5 bg-white px-1 text-[15px] text-[#94A3B8] transition-all duration-200
+                        peer-focus:-top-2 peer-focus:text-xs peer-focus:font-medium peer-focus:text-[#5B5BF6]
+                        peer-[:not(:placeholder-shown)]:-top-2 peer-[:not(:placeholder-shown)]:text-xs
+                        peer-[:not(:placeholder-shown)]:font-medium peer-[:not(:placeholder-shown)]:text-[#5B5BF6]">
                         Email Address *
-
                     </label>
-
                 </div>
-
-            </div>
-
-            <!-- STEP 2 -->
-            <div x-show="step === 2" class="space-y-5">
 
                 <!-- PHONE -->
                 <div class="relative">
-
                     <input type="tel"
                         name="phone"
                         value="{{ old('phone', $authUser?->phone) }}"
                         placeholder=" "
                         class="peer w-full rounded-2xl border border-[#E2E8F0] bg-white px-5 pt-7 pb-3 text-[15px] text-[#111827] outline-none transition duration-300 focus:border-[#5B5BF6] focus:ring-4 focus:ring-[#5B5BF6]/10">
-
-                    <label
-                        class="absolute left-5 top-5 bg-white px-1 text-[15px] text-[#94A3B8] transition-all duration-200
-                        peer-focus:-top-2
-                        peer-focus:text-xs
-                        peer-focus:font-medium
-                        peer-focus:text-[#5B5BF6]
-                        peer-[:not(:placeholder-shown)]:-top-2
-                        peer-[:not(:placeholder-shown)]:text-xs
-                        peer-[:not(:placeholder-shown)]:font-medium
-                        peer-[:not(:placeholder-shown)]:text-[#5B5BF6]">
-
+                    <label class="absolute left-5 top-5 bg-white px-1 text-[15px] text-[#94A3B8] transition-all duration-200
+                        peer-focus:-top-2 peer-focus:text-xs peer-focus:font-medium peer-focus:text-[#5B5BF6]
+                        peer-[:not(:placeholder-shown)]:-top-2 peer-[:not(:placeholder-shown)]:text-xs
+                        peer-[:not(:placeholder-shown)]:font-medium peer-[:not(:placeholder-shown)]:text-[#5B5BF6]">
                         Phone Number *
-
                     </label>
-
                 </div>
 
                 <!-- LOCATION -->
                 <div class="relative">
-
                     <input type="text"
                         name="location"
                         value="{{ old('location', $authCollege?->address) }}"
                         placeholder=" "
                         class="peer w-full rounded-2xl border border-[#E2E8F0] bg-white px-5 pt-7 pb-3 text-[15px] text-[#111827] outline-none transition duration-300 focus:border-[#5B5BF6] focus:ring-4 focus:ring-[#5B5BF6]/10">
-
-                    <label
-                        class="absolute left-5 top-5 bg-white px-1 text-[15px] text-[#94A3B8] transition-all duration-200
-                        peer-focus:-top-2
-                        peer-focus:text-xs
-                        peer-focus:font-medium
-                        peer-focus:text-[#5B5BF6]
-                        peer-[:not(:placeholder-shown)]:-top-2
-                        peer-[:not(:placeholder-shown)]:text-xs
-                        peer-[:not(:placeholder-shown)]:font-medium
-                        peer-[:not(:placeholder-shown)]:text-[#5B5BF6]">
-
+                    <label class="absolute left-5 top-5 bg-white px-1 text-[15px] text-[#94A3B8] transition-all duration-200
+                        peer-focus:-top-2 peer-focus:text-xs peer-focus:font-medium peer-focus:text-[#5B5BF6]
+                        peer-[:not(:placeholder-shown)]:-top-2 peer-[:not(:placeholder-shown)]:text-xs
+                        peer-[:not(:placeholder-shown)]:font-medium peer-[:not(:placeholder-shown)]:text-[#5B5BF6]">
                         Location *
-
                     </label>
-
                 </div>
-
-            </div>
-
-            <!-- STEP 3 -->
-            <div x-show="step === 3" class="space-y-5">
 
                 <!-- COLLEGE -->
                 <div class="relative">
-
                     <input type="text"
                         name="college"
                         value="{{ old('college', $authCollege?->college_name) }}"
                         placeholder=" "
                         class="peer w-full rounded-2xl border border-[#E2E8F0] bg-white px-5 pt-7 pb-3 text-[15px] text-[#111827] outline-none transition duration-300 focus:border-[#5B5BF6] focus:ring-4 focus:ring-[#5B5BF6]/10">
-
-                    <label
-                        class="absolute left-5 top-5 bg-white px-1 text-[15px] text-[#94A3B8] transition-all duration-200
-                        peer-focus:-top-2
-                        peer-focus:text-xs
-                        peer-focus:font-medium
-                        peer-focus:text-[#5B5BF6]
-                        peer-[:not(:placeholder-shown)]:-top-2
-                        peer-[:not(:placeholder-shown)]:text-xs
-                        peer-[:not(:placeholder-shown)]:font-medium
-                        peer-[:not(:placeholder-shown)]:text-[#5B5BF6]">
-
+                    <label class="absolute left-5 top-5 bg-white px-1 text-[15px] text-[#94A3B8] transition-all duration-200
+                        peer-focus:-top-2 peer-focus:text-xs peer-focus:font-medium peer-focus:text-[#5B5BF6]
+                        peer-[:not(:placeholder-shown)]:-top-2 peer-[:not(:placeholder-shown)]:text-xs
+                        peer-[:not(:placeholder-shown)]:font-medium peer-[:not(:placeholder-shown)]:text-[#5B5BF6]">
                         College Name *
-
                     </label>
-
                 </div>
 
             </div>
 
-            <!-- STEP 4 -->
-            <div x-show="step === 4" class="space-y-5">
-
-                <div>
-
-                    <label class="text-sm font-medium text-[#111827]">
-                        Internship Level
-                    </label>
-
-                    <div class="mt-4 space-y-3">
-
-                        <template x-for="item in ['Beginner','Intermediate','Advanced']">
-
-                            <label
-                                class="flex cursor-pointer items-center justify-between rounded-2xl border px-5 py-4 transition duration-300"
-                                :class="level === item
-                                    ? 'border-[#5B5BF6] bg-[#F8F8FF]'
-                                    : 'border-[#E2E8F0] bg-white hover:border-[#CBD5E1]'">
-
-                                <div>
-
-                                    <p class="text-sm font-semibold text-[#111827]"
-                                        x-text="item"></p>
-
-                                    <p class="mt-1 text-xs text-[#64748B]">
-                                        Choose any 3 projects
-                                    </p>
-
-                                </div>
-
-                                <div
-                                    class="flex h-5 w-5 items-center justify-center rounded-full border-2"
-                                    :class="level === item
-                                        ? 'border-[#5B5BF6]'
-                                        : 'border-[#CBD5E1]'">
-
-                                    <div x-show="level === item"
-                                        class="h-2.5 w-2.5 rounded-full bg-[#5B5BF6]">
-                                    </div>
-
-                                </div>
-
-                                <input type="radio"
-                                    x-model="level"
-                                    :value="item"
-                                    class="hidden">
-
-                            </label>
-
-                        </template>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- STEP 5 — Auto-selected Course -->
-            <div x-show="step === 5" class="space-y-5">
+            <!-- STEP 2 — Auto-selected Course -->
+            <div x-show="step === 2" class="space-y-5">
 
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5B5BF6]">Your Selected Track</p>
@@ -333,6 +211,19 @@
                 </div>
 
                 @if($courseModel)
+                @php
+                    $lvl = $selectedLevel;
+                    $lvlBadge = match($lvl) {
+                        'Intermediate' => 'bg-blue-100 text-blue-700',
+                        'Advanced'     => 'bg-violet-100 text-violet-700',
+                        default        => 'bg-emerald-100 text-emerald-700',
+                    };
+                    $lvlIcon = match($lvl) {
+                        'Intermediate' => 'fi fi-rr-chart-line-up',
+                        'Advanced'     => 'fi fi-rr-rocket',
+                        default        => 'fi fi-rr-seedling',
+                    };
+                @endphp
                 <div class="rounded-2xl border border-[#5B5BF6]/30 bg-[#F8F8FF] px-6 py-5">
                     <div class="flex items-start gap-4">
                         <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#5B5BF6]/10">
@@ -343,15 +234,20 @@
                             @if($courseStream)
                             <p class="mt-0.5 text-xs text-[#64748B]">Topic: <span class="font-semibold">{{ $courseStream }}</span></p>
                             @endif
-                            <p class="mt-1 text-xs text-[#64748B]">Level: <span class="font-semibold" x-text="level"></span></p>
-                            <div class="mt-3 inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
-                                <i class="fi fi-rr-check text-[10px] leading-none"></i>
-                                Auto-selected
+                            <div class="mt-3 flex flex-wrap items-center gap-2">
+                                <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold {{ $lvlBadge }}">
+                                    <i class="{{ $lvlIcon }} text-[10px] leading-none"></i>
+                                    {{ $lvl }}
+                                </span>
+                                <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+                                    <i class="fi fi-rr-check text-[10px] leading-none"></i>
+                                    Auto-selected
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <p class="text-center text-xs text-[#64748B]">Click Continue to choose your projects from this course's curriculum.</p>
+                <p class="text-center text-xs text-[#64748B]">Your level is set automatically based on this course. Click Continue to choose your projects.</p>
                 @else
                 <div class="rounded-2xl border border-dashed border-[#E2E8F0] bg-[#F8FAFC] py-8 text-center">
                     <p class="text-sm font-semibold text-[#64748B]">No course selected.</p>
@@ -366,8 +262,8 @@
 
             </div>
 
-            <!-- STEP 6 — Select Projects from Curriculum -->
-            <div x-show="step === 6" class="space-y-4">
+            <!-- STEP 3 — Select Projects from Curriculum -->
+            <div x-show="step === 3" class="space-y-4">
 
                 <div>
                     <p class="text-sm font-semibold text-[#111827]">Choose Your Projects</p>
@@ -491,7 +387,7 @@
 
                 <!-- NEXT -->
                 <button type="button"
-                    x-show="step < 6"
+                    x-show="step < 3"
                     @click="step++"
                     class="ml-auto rounded-xl bg-[#5B5BF6] px-7 py-3 text-sm font-semibold text-white transition duration-300 hover:bg-[#4F46E5]">
 
@@ -501,7 +397,7 @@
 
                 <!-- SUBMIT -->
                 <button type="submit"
-                    x-show="step === 6"
+                    x-show="step === 3"
                     :disabled="(curriculumProjects.length > 0 && selectedProjectIds.length === 0) || @js(!$courseModel)"
                     class="ml-auto rounded-xl bg-[#5B5BF6] px-7 py-3 text-sm font-semibold text-white transition duration-300 hover:bg-[#4F46E5] disabled:opacity-50 disabled:cursor-not-allowed">
 
