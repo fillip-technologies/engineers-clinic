@@ -15,6 +15,7 @@ class Certificate extends Model
         'course_id',
         'issued_date',
         'certificate_url',
+        'certificate_number',
     ];
 
     protected $casts = [

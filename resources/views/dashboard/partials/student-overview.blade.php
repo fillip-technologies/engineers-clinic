@@ -1,6 +1,6 @@
 @php
     $studentName      = Auth::user()->name ?? 'Student';
-    $currentTrack     = $currentTrack     ?? 'Learning Track';
+    $currentTrack     = $currentTrack     ?? null;
     $totalEnrolled    = $totalEnrolled    ?? 0;
     $activeCourses    = $activeCourses    ?? 0;
     $completedCourses = $completedCourses ?? 0;
@@ -9,7 +9,7 @@
     $currentProgress  = $currentProgress  ?? 0;
     $completedSteps   = $completedSteps   ?? 0;
     $totalSteps       = $totalSteps       ?? 0;
-    $nextLesson       = $nextLesson       ?? 'Select a project to begin.';
+    $nextLesson       = $nextLesson       ?? null;
     $resumeUrl        = $resumeUrl        ?? route('student.projects');
     $rank             = $rank             ?? null;
     $percentile       = $percentile       ?? 0;
@@ -17,9 +17,10 @@
     $pendingTasks     = $pendingTasks     ?? 0;
     $completedTasks   = $completedTasks   ?? 0;
     $enrolledProjects = $enrolledProjects ?? [];
-    $internshipPaid   = $internshipPaid   ?? false;
-    $studentLevel     = $studentLevel     ?? null;
-    $studentStream    = $studentStream    ?? null;
+    $internshipPaid         = $internshipPaid         ?? false;
+    $studentLevel           = $studentLevel           ?? null;
+    $studentStream          = $studentStream          ?? null;
+    $internshipCertificate  = $internshipCertificate  ?? null;
 
     $levelMeta = [
         'Beginner'     => ['color' => 'emerald', 'icon' => 'fi fi-rr-seedling',       'badge' => 'bg-emerald-50 text-emerald-700 ring-emerald-200'],
@@ -46,6 +47,27 @@
         <div class="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800">
             <i class="fi fi-rr-exclamation mt-0.5 shrink-0"></i>
             <span>{{ session('error') }}</span>
+        </div>
+    @endif
+
+    {{-- ── Internship completion certificate banner ── --}}
+    @if ($internshipCertificate)
+        <div class="flex items-center justify-between gap-4 rounded-xl border border-emerald-300 bg-gradient-to-r from-emerald-50 to-teal-50 px-5 py-4 shadow-sm">
+            <div class="flex items-center gap-3">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                    <i class="fi fi-rr-diploma text-lg"></i>
+                </div>
+                <div>
+                    <p class="text-sm font-semibold text-emerald-900">Internship Certificate Ready!</p>
+                    <p class="text-xs text-emerald-700">You've completed all 3 projects. Your certificate is ready to download.</p>
+                </div>
+            </div>
+            <a href="{{ route('student.certificate.download', $internshipCertificate->id) }}"
+               target="_blank"
+               class="shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700">
+                <i class="fi fi-rr-download text-xs leading-none"></i>
+                Download Certificate
+            </a>
         </div>
     @endif
 
@@ -95,19 +117,28 @@
                 @endif
             </div>
             <div class="flex items-center gap-2">
-                @if (count($enrolledProjects) < 3)
-                    <a href="{{ route('student.projects') }}"
-                       class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-primary hover:text-primary">
-                        <i class="fi fi-rr-search text-sm leading-none"></i>
-                        Browse Projects
+                @if ($internshipCertificate)
+                    <a href="{{ route('student.certificate.download', $internshipCertificate->id) }}"
+                       target="_blank"
+                       class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700">
+                        <i class="fi fi-rr-diploma text-sm leading-none"></i>
+                        Get Certificate
                     </a>
-                @endif
-                @if ($internshipPaid && count($enrolledProjects) < 3)
-                    <a href="{{ route('student.projects') }}"
-                       class="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
-                        <i class="fi fi-rr-plus text-sm leading-none"></i>
-                        Add Project
-                    </a>
+                @else
+                    @if (count($enrolledProjects) < 3)
+                        <a href="{{ route('student.projects') }}"
+                           class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-primary hover:text-primary">
+                            <i class="fi fi-rr-search text-sm leading-none"></i>
+                            Browse Projects
+                        </a>
+                    @endif
+                    @if ($internshipPaid && count($enrolledProjects) < 3)
+                        <a href="{{ route('student.projects') }}"
+                           class="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
+                            <i class="fi fi-rr-plus text-sm leading-none"></i>
+                            Add Project
+                        </a>
+                    @endif
                 @endif
             </div>
         </div>
@@ -172,11 +203,19 @@
                             <span>Since {{ $ep['enrollment_date'] }}</span>
                         </div>
 
-                        <a href="{{ $ep['workspace_url'] }}"
-                           class="mt-4 flex w-full items-center justify-center gap-2 rounded-xl {{ $epColors['btn'] }} px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition">
-                            <i class="fi fi-rr-play text-xs leading-none"></i>
-                            {{ $ep['progress'] === 100 ? 'Review' : ($ep['progress'] > 0 ? 'Continue' : 'Start Project') }}
-                        </a>
+                        @if (!empty($ep['workspace_locked']) && $ep['workspace_locked'])
+                            <a href="{{ route('student.internship.pay') }}"
+                               class="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600">
+                                <i class="fi fi-rr-lock text-xs leading-none"></i>
+                                Pay to Unlock
+                            </a>
+                        @else
+                            <a href="{{ $ep['workspace_url'] }}"
+                               class="mt-4 flex w-full items-center justify-center gap-2 rounded-xl {{ $epColors['btn'] }} px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition">
+                                <i class="fi fi-rr-play text-xs leading-none"></i>
+                                {{ $ep['progress'] === 100 ? 'Review' : ($ep['progress'] > 0 ? 'Continue' : 'Start Project') }}
+                            </a>
+                        @endif
                     </div>
                 @endforeach
 
@@ -199,7 +238,7 @@
             <div class="min-w-0">
                 <p class="text-sm font-medium text-slate-500">Welcome back, {{ $studentName }}</p>
                 <h1 class="mt-1 truncate text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
-                    {{ $currentTrack }}
+                    {{ $currentTrack ?? 'Please select a project to begin' }}
                 </h1>
                 <div class="mt-2 flex flex-wrap gap-4 text-xs text-slate-500">
                     <span><strong class="text-slate-800">{{ $totalEnrolled }}</strong> enrolled</span>
@@ -391,7 +430,7 @@
                     <span>Week 1</span><span>Week 2</span><span>Week 3</span><span>Now</span>
                 </div>
                 <p class="mt-4 rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700">
-                    Next goal: {{ $nextLesson }}
+                    Next goal: {{ $nextLesson ?? 'Please select a project to begin' }}
                 </p>
             </section>
 

@@ -19,10 +19,12 @@ class Enrollment extends Model
         'status',
         'sponsor_type',
         'seat_allocation_id',
+        'enrolled_projects',
     ];
 
     protected $casts = [
-        'enrollment_date' => 'date',
+        'enrollment_date'   => 'date',
+        'enrolled_projects' => 'array',
     ];
 
     public function student(): BelongsTo

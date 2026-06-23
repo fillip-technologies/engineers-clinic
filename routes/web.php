@@ -56,11 +56,16 @@ Route::get('/enrollment/payment', [CheckoutController::class, 'enrollmentPayment
 
 
 
+// College payment routes — accessible before payment is approved
 Route::middleware(['auth', CheckRole::class . ':college'])->group(function () {
-    Route::get('/college/dashboard', [CollegeDashboardController::class, 'dashboard'])->name('college.dashboard');
     Route::get('/college/payment', [CollegeDashboardController::class, 'payment'])->name('college.payment');
     Route::post('/college/payment', [CollegeDashboardController::class, 'paymentStore'])->name('college.payment.store');
     Route::post('/college/payment/verify', [CollegeDashboardController::class, 'paymentVerify'])->name('college.payment.verify');
+});
+
+// College dashboard routes — require approved payment
+Route::middleware(['auth', CheckRole::class . ':college', 'college.payment.guard'])->group(function () {
+    Route::get('/college/dashboard', [CollegeDashboardController::class, 'dashboard'])->name('college.dashboard');
     Route::get('/college/courses', [CollegeDashboardController::class, 'courses'])->name('college.courses');
     Route::get('/college/settings', [CollegeDashboardController::class, 'settings'])->name('college.settings');
     Route::patch('/college/settings', [CollegeDashboardController::class, 'settingsUpdate'])->name('college.settings.update');
@@ -108,6 +113,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/student/projects/{enrollment}/remove', [StudentDashboardController::class, 'studentRemoveProject'])->name('student.projects.remove');
     Route::post('/student/projects/{enrollment}/swap', [StudentDashboardController::class, 'studentSwapProject'])->name('student.projects.swap');
     Route::post('/student/level', [StudentDashboardController::class, 'studentSetLevel'])->name('student.level.set');
+    Route::get('/student/certificate/{certificate}', [StudentDashboardController::class, 'downloadCertificate'])->name('student.certificate.download');
+    Route::get('/student/settings', [StudentDashboardController::class, 'studentSettings'])->name('student.settings');
+    Route::patch('/student/settings', [StudentDashboardController::class, 'studentSettingsUpdate'])->name('student.settings.update');
     Route::get('/student/internship/pay', [InternshipPaymentController::class, 'show'])->name('student.internship.pay');
     Route::post('/student/internship/pay/order', [InternshipPaymentController::class, 'createOrder'])->name('student.internship.pay.order');
     Route::post('/student/internship/pay/verify', [InternshipPaymentController::class, 'verify'])->name('student.internship.pay.verify');

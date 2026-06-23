@@ -653,12 +653,24 @@ function internshipCheckout(cfg) {
                     ? this.preSelectedCourseIds
                     : [this.selectedTrack.id];
                 orderData = await this.postJson(this.startUrl, {
-                    level:            this.selectedLevel,
-                    stream:           this.selectedStream || (this.selectedTrack ? this.selectedTrack.category : ''),
-                    selected_courses: courseIds,
+                    level:                this.selectedLevel,
+                    stream:               this.selectedStream || (this.selectedTrack ? this.selectedTrack.category : ''),
+                    selected_courses:     courseIds,
+                    selected_project_nos: this.selectedProjects.map(p => p.id),
                 });
             } catch (e) {
                 this.error = e.message || 'Could not create payment order. Please try again.';
+                this.processing = false;
+                return;
+            }
+
+            if (orderData.already_paid) {
+                window.location.href = orderData.redirect_url || this.dashboardUrl;
+                return;
+            }
+
+            if (!orderData.order_id) {
+                this.error = orderData.message || 'Could not create payment order.';
                 this.processing = false;
                 return;
             }

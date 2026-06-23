@@ -68,6 +68,16 @@ class HomeController extends Controller
                     ['label' => 'College Name', 'type' => 'text', 'name' => 'college_name', 'placeholder' => 'Enter your college name'],
                     ['label' => 'Official Email', 'type' => 'email', 'name' => 'college_email', 'placeholder' => 'Enter your official email'],
                     ['label' => 'Contact Person', 'type' => 'text', 'name' => 'college_contact', 'placeholder' => 'Enter contact person name'],
+                    [
+                        'label'  => 'Number of Students (Level-wise)',
+                        'hint'   => 'How many students do you plan to enrol at each level?',
+                        'type'   => 'level_group',
+                        'levels' => [
+                            ['label' => 'Beginner',     'name' => 'students_beginner',     'dot' => 'bg-emerald-500'],
+                            ['label' => 'Intermediate', 'name' => 'students_intermediate', 'dot' => 'bg-blue-500'],
+                            ['label' => 'Advanced',     'name' => 'students_advanced',     'dot' => 'bg-violet-500'],
+                        ],
+                    ],
                     ['label' => 'Password', 'type' => 'password', 'name' => 'college_password', 'placeholder' => 'Create a password'],
                     ['label' => 'Confirm Password', 'type' => 'password', 'name' => 'college_password_confirmation', 'placeholder' => 'Confirm your password'],
                 ],
@@ -149,25 +159,31 @@ class HomeController extends Controller
             app(OnboardingMailer::class)->send($user, $validated['student_password'], 'student');
         } else {
             $validated = $request->validate([
-                'college_name' => 'required|string|max:255',
-                'college_email' => 'required|string|email|max:255|unique:users,email',
-                'college_contact' => 'required|string|max:255',
-                'college_password' => 'required|string|min:8|confirmed',
+                'college_name'          => 'required|string|max:255',
+                'college_email'         => 'required|string|email|max:255|unique:users,email',
+                'college_contact'       => 'required|string|max:255',
+                'college_password'      => 'required|string|min:8|confirmed',
+                'students_beginner'     => 'nullable|integer|min:0|max:9999',
+                'students_intermediate' => 'nullable|integer|min:0|max:9999',
+                'students_advanced'     => 'nullable|integer|min:0|max:9999',
             ]);
 
             $roleRecord = Role::firstOrCreate(['name' => 'college']);
 
             $user = User::create([
-                'name' => $validated['college_contact'],
-                'email' => $validated['college_email'],
+                'name'     => $validated['college_contact'],
+                'email'    => $validated['college_email'],
                 'password' => Hash::make($validated['college_password']),
-                'role_id' => $roleRecord->id,
+                'role_id'  => $roleRecord->id,
             ]);
 
             $user->college()->create([
-                'college_name' => $validated['college_name'],
-                'address' => null,
-                'contact_number' => null,
+                'college_name'          => $validated['college_name'],
+                'address'               => null,
+                'contact_number'        => null,
+                'students_beginner'     => $validated['students_beginner'] ?? null,
+                'students_intermediate' => $validated['students_intermediate'] ?? null,
+                'students_advanced'     => $validated['students_advanced'] ?? null,
             ]);
 
             app(OnboardingMailer::class)->send($user, $validated['college_password'], 'college');

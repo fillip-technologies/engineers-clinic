@@ -155,17 +155,17 @@ class InternshipPaymentController extends Controller
     public function checkoutStart(Request $request, RazorpayService $razorpay): JsonResponse
     {
         $validated = $request->validate([
-            'level'              => ['required', 'in:Beginner,Intermediate,Advanced'],
-            'stream'             => ['required', 'string', 'max:255'],
-            'selected_courses'   => ['required', 'array', 'min:1', 'max:3'],
-            'selected_courses.*' => ['integer', 'exists:courses,id'],
+            'level'                  => ['required', 'in:Beginner,Intermediate,Advanced'],
+            'stream'                 => ['required', 'string', 'max:255'],
+            'selected_courses'       => ['required', 'array', 'min:1', 'max:3'],
+            'selected_courses.*'     => ['integer', 'exists:courses,id'],
+            'selected_project_nos'   => ['sometimes', 'nullable', 'array'],
+            'selected_project_nos.*' => ['integer'],
         ]);
 
         $student = $this->currentStudent();
 
-        if ($student->internship_paid) {
-            return response()->json(['message' => 'Internship already paid.'], 422);
-        }
+        $sponsorType = ($student->college && $student->college->user_id !== null) ? 'college' : 'self';
 
         // Level can only be changed if self-assigned (no registered college)
         $canSelfAssignLevel = $student->college && $student->college->user_id === null;
@@ -175,6 +175,37 @@ class InternshipPaymentController extends Controller
         }
         $student->update($updates);
         $student->refresh();
+
+        $selectedCourseIds = array_slice(array_unique($validated['selected_courses']), 0, 3);
+        $selectedProjectNos = array_values(array_filter((array) ($validated['selected_project_nos'] ?? [])));
+
+        // Internship already paid — enroll courses directly and redirect
+        if ($student->internship_paid) {
+            foreach ($selectedCourseIds as $courseId) {
+                $course = Course::find($courseId);
+                if (! $course) continue;
+                if ($student->level && $course->level !== $student->level) continue;
+
+                if (Enrollment::where('student_id', $student->id)->where('course_id', $courseId)->exists()) continue;
+
+                Enrollment::create([
+                    'student_id'        => $student->id,
+                    'course_id'         => $courseId,
+                    'enrollment_date'   => now(),
+                    'progress'          => 0,
+                    'status'            => 'active',
+                    'sponsor_type'      => $sponsorType,
+                    'enrolled_projects' => $selectedProjectNos ?: null,
+                ]);
+            }
+
+            $request->session()->forget('enrollment_pending_payment');
+
+            return response()->json([
+                'already_paid' => true,
+                'redirect_url' => route('dashboard'),
+            ]);
+        }
 
         $level  = $student->level ?? $validated['level'];
         $amount = (float) (self::LEVEL_FEES[$level] ?? 4999);
@@ -197,9 +228,13 @@ class InternshipPaymentController extends Controller
             'status'            => 'pending',
             'razorpay_order_id' => $razorpayOrder->id,
             'receipt'           => $receipt,
+            'enrolled_projects' => $selectedCourseIds,
         ]);
 
-        $request->session()->put('internship_checkout_courses', $validated['selected_courses']);
+        $request->session()->put('internship_checkout_courses', [
+            'course_ids'   => $selectedCourseIds,
+            'project_nos'  => $selectedProjectNos,
+        ]);
 
         return response()->json([
             'order_id'              => $razorpayOrder->id,
@@ -238,7 +273,9 @@ class InternshipPaymentController extends Controller
             return response()->json(['message' => 'Payment verification failed. Contact support if money was debited.'], 422);
         }
 
-        DB::transaction(function () use ($internshipPayment, $validated, $student, $request) {
+        $sponsorType = ($student->college && $student->college->user_id !== null) ? 'college' : 'self';
+
+        DB::transaction(function () use ($internshipPayment, $validated, $student, $request, $sponsorType) {
             $internshipPayment->update([
                 'status'              => 'success',
                 'razorpay_payment_id' => $validated['razorpay_payment_id'],
@@ -248,25 +285,42 @@ class InternshipPaymentController extends Controller
 
             $student->update(['internship_paid' => true]);
 
-            $courseIds = $request->session()->pull('internship_checkout_courses', []);
+            $checkoutData = $request->session()->pull('internship_checkout_courses', []);
+            // Support both old format (plain array) and new format (associative with course_ids/project_nos)
+            if (isset($checkoutData['course_ids'])) {
+                $courseIds  = $checkoutData['course_ids'];
+                $projectNos = $checkoutData['project_nos'] ?? [];
+            } else {
+                $courseIds  = (array) $checkoutData;
+                $projectNos = [];
+            }
             $courseIds = array_slice(array_unique($courseIds), 0, 3);
+            $isSingleCourse = count($courseIds) === 1;
 
-            foreach ($courseIds as $courseId) {
+            foreach ($courseIds as $index => $courseId) {
                 $course = Course::find($courseId);
                 if (!$course) continue;
                 if ($course->level !== $student->level) continue;
                 if ($course->category && $student->internship_stream && $course->category !== $student->internship_stream) continue;
 
-                $exists = Enrollment::where('student_id', $student->id)->where('course_id', $courseId)->exists();
-                if ($exists) continue;
+                if (Enrollment::where('student_id', $student->id)->where('course_id', $courseId)->exists()) continue;
+
+                // Single-course checkout: all selected projects belong to this enrollment.
+                // Multi-course checkout: slot number at matching index belongs to this enrollment.
+                if ($isSingleCourse) {
+                    $enrolledProjects = $projectNos ?: null;
+                } else {
+                    $enrolledProjects = isset($projectNos[$index]) ? [$projectNos[$index]] : null;
+                }
 
                 Enrollment::create([
-                    'student_id'      => $student->id,
-                    'course_id'       => $courseId,
-                    'enrollment_date' => now(),
-                    'progress'        => 0,
-                    'status'          => 'active',
-                    'sponsor_type'    => 'self',
+                    'student_id'        => $student->id,
+                    'course_id'         => $courseId,
+                    'enrollment_date'   => now(),
+                    'progress'          => 0,
+                    'status'            => 'active',
+                    'sponsor_type'      => $sponsorType,
+                    'enrolled_projects' => $enrolledProjects,
                 ]);
             }
         });

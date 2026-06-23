@@ -206,16 +206,19 @@ class DashboardController extends Controller
         $college = $this->currentCollegeOrFail();
 
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
-            'college_name' => ['required', 'string', 'max:255'],
-            'contact_number' => ['nullable', 'string', 'max:30'],
-            'address' => ['nullable', 'string', 'max:1000'],
-            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'name'                  => ['required', 'string', 'max:255'],
+            'email'                 => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'college_name'          => ['required', 'string', 'max:255'],
+            'contact_number'        => ['nullable', 'string', 'max:30'],
+            'address'               => ['nullable', 'string', 'max:1000'],
+            'students_beginner'     => ['nullable', 'integer', 'min:0', 'max:9999'],
+            'students_intermediate' => ['nullable', 'integer', 'min:0', 'max:9999'],
+            'students_advanced'     => ['nullable', 'integer', 'min:0', 'max:9999'],
+            'password'              => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
         $user->fill([
-            'name' => $validated['name'],
+            'name'  => $validated['name'],
             'email' => $validated['email'],
         ]);
 
@@ -226,9 +229,12 @@ class DashboardController extends Controller
         $user->save();
 
         $college->update([
-            'college_name' => $validated['college_name'],
-            'contact_number' => $validated['contact_number'] ?? null,
-            'address' => $validated['address'] ?? null,
+            'college_name'          => $validated['college_name'],
+            'contact_number'        => $validated['contact_number'] ?? null,
+            'address'               => $validated['address'] ?? null,
+            'students_beginner'     => $validated['students_beginner'] ?? null,
+            'students_intermediate' => $validated['students_intermediate'] ?? null,
+            'students_advanced'     => $validated['students_advanced'] ?? null,
         ]);
 
         return redirect()->route('college.settings')->with('success', 'Settings updated successfully.');
@@ -908,13 +914,11 @@ class DashboardController extends Controller
 
     protected function dashboardSidebarSections(): array
     {
+        $user = Auth::user();
+        $college = $user?->college;
+        $paymentApproved = $college && $college->payment_status === 'approved';
+
         $commonItems = [
-            [
-                'key' => 'common-settings',
-                'label' => 'Settings',
-                'icon' => 'fi fi-rr-settings',
-                'href' => route('college.settings'),
-            ],
             [
                 'key' => 'common-logout',
                 'label' => 'Logout',
@@ -924,53 +928,73 @@ class DashboardController extends Controller
             ],
         ];
 
+        if ($paymentApproved) {
+            array_unshift($commonItems, [
+                'key' => 'common-settings',
+                'label' => 'Settings',
+                'icon' => 'fi fi-rr-settings',
+                'href' => route('college.settings'),
+            ]);
+        }
+
+        $collegeItems = $paymentApproved
+            ? [
+                [
+                    'key' => 'college-dashboard',
+                    'label' => 'Dashboard',
+                    'icon' => 'fi fi-rr-apps',
+                    'href' => route('college.dashboard'),
+                ],
+                [
+                    'key' => 'college-students',
+                    'label' => 'Manage Students',
+                    'icon' => 'fi fi-rr-users',
+                    'href' => route('college.students'),
+                ],
+                [
+                    'key' => 'college-enrollments',
+                    'label' => 'Enrollments',
+                    'icon' => 'fi fi-rr-user-plus',
+                    'href' => route('college.enrollments'),
+                ],
+                [
+                    'key' => 'college-internships',
+                    'label' => 'Internship Seats',
+                    'icon' => 'fi fi-rr-rocket',
+                    'href' => route('college.internships'),
+                ],
+                [
+                    'key' => 'college-purchases',
+                    'label' => 'My Purchases',
+                    'icon' => 'fi fi-rr-shopping-cart',
+                    'href' => route('college.purchases'),
+                ],
+                [
+                    'key' => 'college-payment',
+                    'label' => 'Payment',
+                    'icon' => 'fi fi-rr-credit-card',
+                    'href' => route('college.payment'),
+                ],
+                [
+                    'key' => 'college-courses',
+                    'label' => 'Courses',
+                    'icon' => 'fi fi-rr-book-alt',
+                    'href' => route('college.courses'),
+                ],
+            ]
+            : [
+                [
+                    'key' => 'college-payment',
+                    'label' => 'Payment',
+                    'icon' => 'fi fi-rr-credit-card',
+                    'href' => route('college.payment'),
+                ],
+            ];
+
         return [
             [
                 'label' => 'For College',
-                'items' => [
-                    [
-                        'key' => 'college-dashboard',
-                        'label' => 'Dashboard',
-                        'icon' => 'fi fi-rr-apps',
-                        'href' => route('college.dashboard'),
-                    ],
-                    [
-                        'key' => 'college-students',
-                        'label' => 'Manage Students',
-                        'icon' => 'fi fi-rr-users',
-                        'href' => route('college.students'),
-                    ],
-                    [
-                        'key' => 'college-enrollments',
-                        'label' => 'Enrollments',
-                        'icon' => 'fi fi-rr-user-plus',
-                        'href' => route('college.enrollments'),
-                    ],
-                    [
-                        'key' => 'college-internships',
-                        'label' => 'Internship Seats',
-                        'icon' => 'fi fi-rr-rocket',
-                        'href' => route('college.internships'),
-                    ],
-                    [
-                        'key' => 'college-purchases',
-                        'label' => 'My Purchases',
-                        'icon' => 'fi fi-rr-shopping-cart',
-                        'href' => route('college.purchases'),
-                    ],
-                    [
-                        'key' => 'college-payment',
-                        'label' => 'Payment',
-                        'icon' => 'fi fi-rr-credit-card',
-                        'href' => route('college.payment'),
-                    ],
-                    [
-                        'key' => 'college-courses',
-                        'label' => 'Courses',
-                        'icon' => 'fi fi-rr-book-alt',
-                        'href' => route('college.courses'),
-                    ],
-                ],
+                'items' => $collegeItems,
             ],
             [
                 'label' => 'Account',

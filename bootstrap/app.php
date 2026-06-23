@@ -20,8 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'auth' => \App\Http\Middleware\RedirectBasedOnRole::class,
-            'role' => \App\Http\Middleware\CheckRole::class,
+            'auth'                   => \App\Http\Middleware\RedirectBasedOnRole::class,
+            'role'                   => \App\Http\Middleware\CheckRole::class,
+            'college.payment.guard'  => \App\Http\Middleware\RequireCollegePayment::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [

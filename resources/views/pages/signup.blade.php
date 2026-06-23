@@ -77,62 +77,97 @@
 
                                         @foreach ($signup['fields'] as $field)
 
-                                            <div
-                                                class="{{ isset($field['conditional']) && $field['conditional'] ? 'college-other hidden' : '' }}">
+                                            @if ($field['type'] === 'level_group')
 
-                                                <label
-                                                    class="text-sm font-medium text-textSecondary"
-                                                    for="{{ $field['name'] }}">
+                                                {{-- Level-wise student count — 3 inputs in one row --}}
+                                                <div>
+                                                    <p class="text-sm font-medium text-textSecondary">{{ $field['label'] }}</p>
+                                                    @if (!empty($field['hint']))
+                                                        <p class="mt-0.5 text-xs text-textMuted">{{ $field['hint'] }}</p>
+                                                    @endif
+                                                    <div class="mt-2 grid grid-cols-3 gap-3">
+                                                        @foreach ($field['levels'] as $level)
+                                                            <div>
+                                                                <label class="mb-1.5 flex items-center gap-1.5 text-xs font-semibold text-textSecondary">
+                                                                    <span class="inline-block h-2 w-2 rounded-full {{ $level['dot'] }}"></span>
+                                                                    {{ $level['label'] }}
+                                                                </label>
+                                                                <input
+                                                                    type="number"
+                                                                    name="{{ $level['name'] }}"
+                                                                    id="{{ $level['name'] }}"
+                                                                    value="{{ old($level['name'], 0) }}"
+                                                                    min="0"
+                                                                    max="9999"
+                                                                    class="w-full rounded-2xl border border-borderLight bg-bgSoft px-4 py-3 text-sm text-textPrimary outline-none transition focus:border-brand focus:bg-bgWhite focus:ring-4 focus:ring-brandSoft" />
+                                                                @error($level['name'])
+                                                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                                                @enderror
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
 
-                                                    {{ $field['label'] }}
+                                            @else
 
-                                                </label>
+                                                <div
+                                                    class="{{ isset($field['conditional']) && $field['conditional'] ? 'college-other hidden' : '' }}">
 
-                                                @if($field['type'] === 'select')
+                                                    <label
+                                                        class="text-sm font-medium text-textSecondary"
+                                                        for="{{ $field['name'] }}">
 
-                                                    <select
-                                                        id="{{ $field['name'] }}"
-                                                        name="{{ $field['name'] }}"
-                                                        class="mt-2 w-full rounded-2xl border border-borderLight bg-bgSoft px-4 py-3 text-sm text-textPrimary outline-none transition placeholder:text-textMuted focus:border-brand focus:bg-bgWhite focus:ring-4 focus:ring-brandSoft">
+                                                        {{ $field['label'] }}
 
-                                                        <option value="">
-                                                            Select an option
-                                                        </option>
+                                                    </label>
 
-                                                        @foreach($field['options'] as $value => $label)
+                                                    @if($field['type'] === 'select')
 
-                                                            <option value="{{ $value }}"
-                                                                {{ old($field['name']) == $value ? 'selected' : '' }}>
+                                                        <select
+                                                            id="{{ $field['name'] }}"
+                                                            name="{{ $field['name'] }}"
+                                                            class="mt-2 w-full rounded-2xl border border-borderLight bg-bgSoft px-4 py-3 text-sm text-textPrimary outline-none transition placeholder:text-textMuted focus:border-brand focus:bg-bgWhite focus:ring-4 focus:ring-brandSoft">
 
-                                                                {{ $label }}
-
+                                                            <option value="">
+                                                                Select an option
                                                             </option>
 
-                                                        @endforeach
+                                                            @foreach($field['options'] as $value => $label)
 
-                                                    </select>
+                                                                <option value="{{ $value }}"
+                                                                    {{ old($field['name']) == $value ? 'selected' : '' }}>
 
-                                                @else
+                                                                    {{ $label }}
 
-                                                    <input
-                                                        id="{{ $field['name'] }}"
-                                                        type="{{ $field['type'] }}"
-                                                        name="{{ $field['name'] }}"
-                                                        value="{{ old($field['name']) }}"
-                                                        placeholder="{{ $field['placeholder'] }}"
-                                                        class="mt-2 w-full rounded-2xl border border-borderLight bg-bgSoft px-4 py-3 text-sm text-textPrimary outline-none transition placeholder:text-textMuted focus:border-brand focus:bg-bgWhite focus:ring-4 focus:ring-brandSoft" />
+                                                                </option>
 
-                                                @endif
+                                                            @endforeach
 
-                                                @error($field['name'])
+                                                        </select>
 
-                                                    <p class="mt-2 text-xs text-red-600">
-                                                        {{ $message }}
-                                                    </p>
+                                                    @else
 
-                                                @enderror
+                                                        <input
+                                                            id="{{ $field['name'] }}"
+                                                            type="{{ $field['type'] }}"
+                                                            name="{{ $field['name'] }}"
+                                                            value="{{ old($field['name']) }}"
+                                                            placeholder="{{ $field['placeholder'] ?? '' }}"
+                                                            class="mt-2 w-full rounded-2xl border border-borderLight bg-bgSoft px-4 py-3 text-sm text-textPrimary outline-none transition placeholder:text-textMuted focus:border-brand focus:bg-bgWhite focus:ring-4 focus:ring-brandSoft" />
 
-                                            </div>
+                                                    @endif
+
+                                                    @error($field['name'])
+
+                                                        <p class="mt-2 text-xs text-red-600">
+                                                            {{ $message }}
+                                                        </p>
+
+                                                    @enderror
+
+                                                </div>
+
+                                            @endif
 
                                         @endforeach
 

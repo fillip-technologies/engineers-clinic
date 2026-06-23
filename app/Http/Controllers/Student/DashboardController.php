@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Helpers\CourseDataHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Certificate;
 use App\Models\Course;
 use App\Models\CourseWorkspace;
 use App\Models\Enrollment;
@@ -170,6 +171,7 @@ class DashboardController extends Controller
             ->where('student_id', $student->id)
             ->where('id', $id)
             ->first();
+        // dd( $enrollment);
 
         if (!$enrollment) {
             $enrollment = Enrollment::with('course')
@@ -501,6 +503,49 @@ class DashboardController extends Controller
             'profile' => $this->studentProfileData($user),
             ...$this->frontendAdminData('student-profile'),
         ]);
+    }
+
+    public function studentSettings()
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            return redirect()->route('login');
+        }
+
+        return view('dashboard.student-dashboard.settings.index', [
+            'user' => $user,
+            ...$this->frontendAdminData('common-settings'),
+        ]);
+    }
+
+    public function studentSettingsUpdate(Request $request)
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            return redirect()->route('login');
+        }
+
+        $validated = $request->validate([
+            'name'                  => ['required', 'string', 'max:255'],
+            'email'                 => ['required', 'email', 'max:255', \Illuminate\Validation\Rule::unique('users', 'email')->ignore($user->id)],
+            'phone'                 => ['nullable', 'string', 'max:20'],
+            'password'              => ['nullable', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user->name  = $validated['name'];
+        $user->email = $validated['email'];
+        $user->phone = $validated['phone'] ?? $user->phone;
+
+        if (filled($validated['password'] ?? null)) {
+            $user->password = \Illuminate\Support\Facades\Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        return redirect()->route('student.settings')
+            ->with('success', 'Settings saved successfully.');
     }
 
     public function quizAttempts()
@@ -1057,6 +1102,24 @@ class DashboardController extends Controller
         return [$student, $enrollment];
     }
 
+    public function downloadCertificate(Certificate $certificate)
+    {
+        $student = Student::where('user_id', Auth::id())->firstOrFail();
+        abort_if($certificate->student_id !== $student->id, 403);
+
+        $completedEnrollments = Enrollment::with('course')
+            ->where('student_id', $student->id)
+            ->where('status', 'completed')
+            ->get();
+
+        return view('student.certificate', [
+            'certificate'          => $certificate,
+            'student'              => $student,
+            'user'                 => Auth::user(),
+            'completedEnrollments' => $completedEnrollments,
+        ]);
+    }
+
     protected function enrollmentNeedsPayment(Enrollment $enrollment): bool
     {
         if ($enrollment->sponsor_type !== 'self') {
@@ -1364,7 +1427,7 @@ class DashboardController extends Controller
                 'key' => 'common-settings',
                 'label' => 'Settings',
                 'icon' => 'fi fi-rr-settings',
-                'href' => '#',
+                'href' => $role === 'student' ? route('student.settings') : '#',
             ],
             [
                 'key' => 'common-logout',
@@ -1494,7 +1557,7 @@ class DashboardController extends Controller
 
         if (! $user) {
             return [
-                'currentTrack'    => 'Learning Track',
+                'currentTrack'    => null,
                 'totalEnrolled'   => 0,
                 'activeCourses'   => 0,
                 'completedCourses' => 0,
@@ -1503,7 +1566,7 @@ class DashboardController extends Controller
                 'currentProgress' => 0,
                 'completedSteps'  => 0,
                 'totalSteps'      => 0,
-                'nextLesson'      => 'Select a project to begin.',
+                'nextLesson'      => null,
                 'resumeUrl'       => route('student.projects'),
                 'rank'            => null,
                 'percentile'      => 0,
@@ -1511,9 +1574,10 @@ class DashboardController extends Controller
                 'pendingTasks'    => 0,
                 'completedTasks'  => 0,
                 'enrolledProjects' => [],
-                'internshipPaid'  => false,
-                'studentLevel'    => null,
-                'studentStream'   => null,
+                'internshipPaid'           => false,
+                'studentLevel'             => null,
+                'studentStream'            => null,
+                'internshipCertificate'    => null,
             ];
         }
 
@@ -1529,9 +1593,18 @@ class DashboardController extends Controller
             ->where('user_id', $user->id)
             ->first();
 
-        $enrollments = $student?->enrollments ?? collect();
-        $totalEnrolled = $enrollments->count();
-        $activeCourses = $enrollments
+          
+
+        $allEnrollments = $student?->enrollments ?? collect();
+
+        $internshipPaid = (bool) ($student?->internship_paid ?? false);
+
+        // Only show student-initiated enrollments (no seat_allocation_id) AND only after payment is confirmed
+        $enrollments = $internshipPaid
+            ? $allEnrollments->filter(fn (Enrollment $e) => $e->seat_allocation_id === null)
+            : collect();
+        $totalEnrolled    = $enrollments->count();
+        $activeCourses    = $enrollments
             ->filter(fn (Enrollment $enrollment) => in_array(strtolower((string) $enrollment->status), ['active', 'pending'], true))
             ->count();
         $completedCourses = $enrollments->where('status', 'completed')->count();
@@ -1540,7 +1613,7 @@ class DashboardController extends Controller
         $latestCurriculum = $latestEnrollment?->course?->curriculum ?? [];
         $currentTrack = filled($latestCurriculum[0]['title'] ?? '')
             ? $latestCurriculum[0]['title']
-            : ($latestEnrollment?->course?->title ?? $student?->course_name ?? 'Learning Track');
+            : ($latestEnrollment?->course?->title ?? $student?->course_name ?? null);
 
         $workspace = $latestEnrollment?->course?->workspaces?->first();
         $steps = $workspace ? collect($this->studentWorkspaceSteps($workspace)) : collect();
@@ -1554,10 +1627,10 @@ class DashboardController extends Controller
             ?? $steps->first(fn (array $step) => ($step['state'] ?? null) !== 'completed')
             ?? $steps->first();
 
-        $nextLesson = $activeStep['title'] ?? ($workspace?->next_milestone ?: 'No active task yet.');
+        $nextLesson = $activeStep['title'] ?? ($workspace?->next_milestone ?: null);
         $resumeUrl = $latestEnrollment && $workspace
             ? route('student.course.workspace', ['id' => $latestEnrollment->id]) . '?project=' . $workspace->id
-            : route('dashboard.enrolled-courses');
+            : route('student.projects');
 
         $tasks = $steps->take(4)->values()->map(function (array $step) {
             $isCompleted = ($step['state'] ?? null) === 'completed';
@@ -1640,7 +1713,7 @@ class DashboardController extends Controller
             'Advanced'     => ['color' => 'violet',  'icon' => 'fi fi-rr-rocket'],
         ];
 
-        $enrolledProjects = $enrollments->map(function (Enrollment $enrollment) use ($user, $levelColors) {
+        $enrolledProjects = $enrollments->map(function (Enrollment $enrollment) use ($user, $levelColors, $internshipPaid) {
             $course = $enrollment->course;
             $workspace = $course?->workspaces?->first();
             $steps = $workspace ? collect($this->studentWorkspaceSteps($workspace)) : collect();
@@ -1650,7 +1723,7 @@ class DashboardController extends Controller
                 ? (int) round(($completedStepsForProject / $totalStepsForProject) * 100)
                 : (int) ($enrollment->progress ?? 0);
 
-            $level = $course?->level ?? 'Beginner';
+            $level = $course?->level ?? 'Not Selected Yet';
             $meta = $levelColors[$level] ?? $levelColors['Beginner'];
 
             // Use curriculum item title as the project title, not the course title
@@ -1673,15 +1746,34 @@ class DashboardController extends Controller
                 'status'          => Str::headline((string) ($enrollment->status ?: 'Active')),
                 'color'           => $meta['color'],
                 'icon'            => $meta['icon'],
-                'workspace_url'   => route('student.course.workspace', ['id' => $enrollment->id])
-                    . ($workspace?->id ? '?project=' . $workspace->id : ''),
+                'workspace_locked' => ! $internshipPaid,
+                'workspace_url'   => $internshipPaid
+                    ? route('student.course.workspace', ['id' => $enrollment->id])
+                        . ($workspace?->id ? '?project=' . $workspace->id : '')
+                    : null,
                 'enrollment_date' => $enrollment->enrollment_date?->format('M d, Y'),
             ];
         })->values()->toArray();
 
-        $internshipPaid = (bool) ($student?->internship_paid ?? false);
         $studentLevel   = $student?->level;
         $studentStream  = $student?->internship_stream;
+
+        // Auto-issue internship completion certificate when all 3 projects are done
+        $internshipCertificate = null;
+        if ($student && $completedCourses >= 3 && $totalEnrolled >= 3) {
+            $internshipCertificate = Certificate::where('student_id', $student->id)
+                ->whereNull('course_id')
+                ->first();
+            if (! $internshipCertificate) {
+                $certNumber = 'IEC-' . now()->format('Ym') . '-' . str_pad($student->id, 5, '0', STR_PAD_LEFT);
+                $internshipCertificate = Certificate::create([
+                    'student_id'         => $student->id,
+                    'course_id'          => null,
+                    'issued_date'        => now()->toDateString(),
+                    'certificate_number' => $certNumber,
+                ]);
+            }
+        }
 
         return compact(
             'currentTrack',
@@ -1704,6 +1796,7 @@ class DashboardController extends Controller
             'internshipPaid',
             'studentLevel',
             'studentStream',
+            'internshipCertificate',
         );
     }
 }

@@ -158,13 +158,19 @@ function enrollmentPay() {
             let orderData;
             try {
                 orderData = await this.post(@js($startUrl), {
-                    level:            @js($level),
-                    stream:           @js($pending['stream'] ?? ''),
-                    selected_courses: @js($pending['selected_courses']),
+                    level:                 @js($level),
+                    stream:                @js($pending['stream'] ?? ''),
+                    selected_courses:      @js($pending['selected_courses']),
+                    selected_project_nos:  @js(array_values(array_filter((array)($pending['selected_project_nos'] ?? [])))),
                 });
             } catch (e) {
                 this.error = 'Could not connect. Please try again.';
                 this.loading = false;
+                return;
+            }
+
+            if (orderData.already_paid) {
+                window.location.href = orderData.redirect_url || @js($dashboardUrl);
                 return;
             }
 

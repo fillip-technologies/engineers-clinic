@@ -16,12 +16,14 @@ class InternshipPayment extends Model
         'razorpay_payment_id',
         'razorpay_signature',
         'receipt',
+        'enrolled_projects',
         'paid_at',
     ];
 
     protected $casts = [
-        'amount'  => 'decimal:2',
-        'paid_at' => 'datetime',
+        'amount'            => 'decimal:2',
+        'enrolled_projects' => 'array',
+        'paid_at'           => 'datetime',
     ];
 
     public function student(): BelongsTo

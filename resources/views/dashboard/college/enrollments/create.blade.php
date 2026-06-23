@@ -101,7 +101,7 @@
                     <label class="text-sm font-medium text-slate-700" for="status">Status</label>
                     <select id="status" name="status" required
                         class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-blue-100">
-                        <option value="ongoing" @selected(old('status', 'ongoing') === 'ongoing')>Active</option>
+                        <option value="active" @selected(old('status', 'active') === 'active')>Active</option>
                         <option value="completed" @selected(old('status') === 'completed')>Completed</option>
                     </select>
                 </div>

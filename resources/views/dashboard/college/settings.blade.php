@@ -62,6 +62,57 @@
                     class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primarySoft">{{ old('address', $college->address) }}</textarea>
             </div>
 
+            {{-- ── Level-wise student intake ── --}}
+            <div class="lg:col-span-2">
+                <p class="text-sm font-semibold text-slate-600">Level-wise Student Intake</p>
+                <p class="mt-0.5 text-xs text-slate-400">How many students your college plans to enrol at each internship level.</p>
+                <div class="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
+
+                    <div class="rounded-2xl border border-emerald-200 bg-emerald-50/50 p-4">
+                        <label for="students_beginner"
+                               class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-emerald-700">
+                            <span class="inline-block h-2 w-2 rounded-full bg-emerald-500"></span>
+                            Beginner
+                        </label>
+                        <input id="students_beginner" name="students_beginner" type="number" min="0" max="9999"
+                               value="{{ old('students_beginner', $college->students_beginner ?? 0) }}"
+                               class="mt-2 w-full rounded-xl border border-emerald-200 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100">
+                        @error('students_beginner')
+                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="rounded-2xl border border-blue-200 bg-blue-50/50 p-4">
+                        <label for="students_intermediate"
+                               class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-blue-700">
+                            <span class="inline-block h-2 w-2 rounded-full bg-blue-500"></span>
+                            Intermediate
+                        </label>
+                        <input id="students_intermediate" name="students_intermediate" type="number" min="0" max="9999"
+                               value="{{ old('students_intermediate', $college->students_intermediate ?? 0) }}"
+                               class="mt-2 w-full rounded-xl border border-blue-200 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-400 focus:ring-4 focus:ring-blue-100">
+                        @error('students_intermediate')
+                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="rounded-2xl border border-violet-200 bg-violet-50/50 p-4">
+                        <label for="students_advanced"
+                               class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-violet-700">
+                            <span class="inline-block h-2 w-2 rounded-full bg-violet-500"></span>
+                            Advanced
+                        </label>
+                        <input id="students_advanced" name="students_advanced" type="number" min="0" max="9999"
+                               value="{{ old('students_advanced', $college->students_advanced ?? 0) }}"
+                               class="mt-2 w-full rounded-xl border border-violet-200 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100">
+                        @error('students_advanced')
+                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                </div>
+            </div>
+
             <div>
                 <label for="password" class="text-sm font-semibold text-slate-600">New Password</label>
                 <input id="password" name="password" type="password"
