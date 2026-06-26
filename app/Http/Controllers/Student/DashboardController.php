@@ -1040,38 +1040,51 @@ class DashboardController extends Controller
         if (!$student) {
             $orders = [];
         } else {
-            $payments = Payment::with(['course.workspaces' => fn ($q) => $q->where('status', true)->orderByDesc('updated_at')])
+            $enrollments = Enrollment::with(['course.workspaces' => fn ($q) => $q->where('status', true)->orderByDesc('updated_at')])
                 ->where('student_id', $student->id)
-                ->orderBy('payment_date', 'desc')
+                ->orderByDesc('enrollment_date')
                 ->get();
 
-            $enrollmentByCourse = Enrollment::where('student_id', $student->id)
+            // Most recent payment per course (newest id first, unique keeps first seen)
+            $paymentByCourse = Payment::where('student_id', $student->id)
+                ->orderByDesc('id')
                 ->get()
+                ->unique('course_id')
                 ->keyBy('course_id');
 
-            $orders = $payments->map(function ($payment) use ($enrollmentByCourse) {
-                $course     = $payment->course;
-                $enrollment = $course ? $enrollmentByCourse->get($course->id) : null;
-                $workspace  = $course?->workspaces?->first();
-                $workspaceUrl = $enrollment
-                    ? route('student.course.workspace', ['id' => $enrollment->id])
-                        . ($workspace?->id ? '?project=' . $workspace->id : '')
-                    : route('student.course.workspace.default');
+            $orders = $enrollments->map(function ($enrollment) use ($paymentByCourse) {
+                $course    = $enrollment->course;
+                $payment   = $course ? $paymentByCourse->get($course->id) : null;
+                $workspace = $course?->workspaces?->first();
+
+                $workspaceUrl = route('student.course.workspace', ['id' => $enrollment->id])
+                    . ($workspace?->id ? '?project=' . $workspace->id : '');
+
+                $paymentStatus = match ($payment?->status) {
+                    'success'  => 'Paid',
+                    'refunded' => 'Refunded',
+                    'failed'   => 'Failed',
+                    'pending'  => 'Pending',
+                    default    => 'Paid', // admin/college/bulk-enrolled → treat as sponsored/active
+                };
+
+                $isActive = in_array(strtolower((string) $enrollment->status), ['active', 'completed']);
 
                 return [
-                    'id' => $payment->id,
-                    'title' => $course?->title ?? 'Unknown Course',
-                    'order_id' => 'ORD-' . str_pad($payment->id, 4, '0', STR_PAD_LEFT),
-                    'purchase_date' => $payment->payment_date?->format('F j, Y') ?? 'N/A',
-                    'price' => $payment->amount ? 'Rs. ' . number_format($payment->amount, 0) : 'N/A',
-                    'payment_status' => match ($payment->status) {
-                        'success'  => 'Paid',
-                        'refunded' => 'Refunded',
-                        'failed'   => 'Failed',
-                        default    => 'Pending',
-                    },
-                    'access_status' => $payment->status === 'success' ? 'Active' : 'Pending',
-                    'workspace_url' => $workspaceUrl,
+                    'id'             => $payment?->id ?? $enrollment->id,
+                    'title'          => $course?->title ?? 'Unknown Course',
+                    'order_id'       => $payment
+                        ? 'ORD-' . str_pad($payment->id, 4, '0', STR_PAD_LEFT)
+                        : 'ENR-' . str_pad($enrollment->id, 4, '0', STR_PAD_LEFT),
+                    'purchase_date'  => $payment?->payment_date?->format('F j, Y')
+                        ?? $enrollment->enrollment_date?->format('F j, Y')
+                        ?? 'N/A',
+                    'price'          => $payment?->amount
+                        ? 'Rs. ' . number_format($payment->amount, 0)
+                        : 'Sponsored',
+                    'payment_status' => $paymentStatus,
+                    'access_status'  => $isActive ? 'Active' : 'Pending',
+                    'workspace_url'  => $workspaceUrl,
                 ];
             })->toArray();
         }
