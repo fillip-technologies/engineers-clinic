@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PaymentConfirmationMail;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Order;
@@ -13,7 +14,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Throwable;
 
 class PaymentController extends Controller
 {
@@ -111,6 +115,21 @@ class PaymentController extends Controller
                 ['enrollment_date' => now(), 'status' => 'active', 'sponsor_type' => 'self']
             );
         });
+
+        try {
+            $payment = Payment::with('student.user', 'course', 'order')
+                ->where('order_id', $order->id)
+                ->first();
+            $user = $payment?->student?->user;
+            if ($payment && $user && $user->email) {
+                Mail::to($user->email, $user->name)->send(new PaymentConfirmationMail($payment));
+            }
+        } catch (Throwable $exception) {
+            Log::warning('Could not send payment confirmation email.', [
+                'order_id' => $order->id,
+                'message' => $exception->getMessage(),
+            ]);
+        }
 
         return response()->json([
             'success' => true,

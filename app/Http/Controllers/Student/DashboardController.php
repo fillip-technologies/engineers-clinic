@@ -1713,47 +1713,65 @@ class DashboardController extends Controller
             'Advanced'     => ['color' => 'violet',  'icon' => 'fi fi-rr-rocket'],
         ];
 
-        $enrolledProjects = $enrollments->map(function (Enrollment $enrollment) use ($user, $levelColors, $internshipPaid) {
-            $course = $enrollment->course;
-            $workspace = $course?->workspaces?->first();
-            $steps = $workspace ? collect($this->studentWorkspaceSteps($workspace)) : collect();
-            $totalStepsForProject = $steps->count();
-            $completedStepsForProject = $steps->where('state', 'completed')->count();
-            $projectProgress = $totalStepsForProject > 0
-                ? (int) round(($completedStepsForProject / $totalStepsForProject) * 100)
-                : (int) ($enrollment->progress ?? 0);
+        $enrolledProjects = $enrollments->flatMap(function (Enrollment $enrollment) use ($user, $levelColors, $internshipPaid) {
+            $course     = $enrollment->course;
+            $workspaces = $course?->workspaces ?? collect();
+            $curriculum = $course?->curriculum ?? [];
+            $level      = $course?->level ?? 'Not Selected Yet';
+            $meta       = $levelColors[$level] ?? $levelColors['Beginner'];
+            $status     = Str::headline((string) ($enrollment->status ?: 'Active'));
+            $date       = $enrollment->enrollment_date?->format('M d, Y');
 
-            $level = $course?->level ?? 'Not Selected Yet';
-            $meta = $levelColors[$level] ?? $levelColors['Beginner'];
+            $selectedProjectNos = array_values(array_filter((array) ($enrollment->enrolled_projects ?? [])));
 
-            // Use curriculum item title as the project title, not the course title
-            $curriculum  = $course?->curriculum ?? [];
-            $firstItem   = $curriculum[0] ?? [];
-            $projectTitle = filled($firstItem['title'] ?? '')
-                ? $firstItem['title']
-                : ($course?->title ?? 'Unknown Project');
+            // Build a lookup keyed by project_no (fall back to 1-based index for older curriculum items)
+            $curriculumByNo = collect($curriculum)
+                ->mapWithKeys(fn ($item, $index) => [($item['project_no'] ?? ($index + 1)) => $item]);
 
-            $firstTask   = ($firstItem['tasks'][0] ?? []);
-            $description = $firstTask['assignment'] ?? $course?->description ?? '';
+            $resolveCard = function ($projectNo) use (
+                $enrollment, $course, $workspaces, $curriculumByNo, $level, $meta, $status, $date, $internshipPaid
+            ) {
+                $item        = $curriculumByNo->get($projectNo) ?? $curriculumByNo->first() ?? [];
+                $projectTitle = filled($item['title'] ?? '') ? $item['title'] : ($course?->title ?? 'Unknown Project');
+                $firstTask   = ($item['tasks'][0] ?? []);
+                $description = $firstTask['assignment'] ?? $course?->description ?? '';
 
-            return [
-                'id'              => $enrollment->id,
-                'title'           => $projectTitle,
-                'level'           => $level,
-                'category'        => $course?->category ?? 'Project',
-                'description'     => $description,
-                'progress'        => $projectProgress,
-                'status'          => Str::headline((string) ($enrollment->status ?: 'Active')),
-                'color'           => $meta['color'],
-                'icon'            => $meta['icon'],
-                'workspace_locked' => ! $internshipPaid,
-                'workspace_url'   => $internshipPaid
-                    ? route('student.course.workspace', ['id' => $enrollment->id])
-                        . ($workspace?->id ? '?project=' . $workspace->id : '')
-                    : null,
-                'enrollment_date' => $enrollment->enrollment_date?->format('M d, Y'),
-            ];
-        })->values()->toArray();
+                // Match workspace by zero-based index (project_no 1 → index 0)
+                $workspace = $workspaces->values()->get($projectNo - 1) ?? $workspaces->first();
+
+                $steps                    = $workspace ? collect($this->studentWorkspaceSteps($workspace)) : collect();
+                $totalStepsForProject     = $steps->count();
+                $completedStepsForProject = $steps->where('state', 'completed')->count();
+                $projectProgress          = $totalStepsForProject > 0
+                    ? (int) round(($completedStepsForProject / $totalStepsForProject) * 100)
+                    : (int) ($enrollment->progress ?? 0);
+
+                return [
+                    'id'               => $enrollment->id . '-' . $projectNo,
+                    'title'            => $projectTitle,
+                    'level'            => $level,
+                    'category'         => $course?->category ?? 'Project',
+                    'description'      => $description,
+                    'progress'         => $projectProgress,
+                    'status'           => $status,
+                    'color'            => $meta['color'],
+                    'icon'             => $meta['icon'],
+                    'workspace_locked' => ! $internshipPaid,
+                    'workspace_url'    => $internshipPaid
+                        ? route('student.course.workspace', ['id' => $enrollment->id])
+                            . ($workspace?->id ? '?project=' . $workspace->id : '')
+                        : null,
+                    'enrollment_date'  => $date,
+                ];
+            };
+
+            // No specific projects recorded (legacy / college-sponsored) — show first curriculum item
+            if (empty($selectedProjectNos)) {
+                return [$resolveCard(array_key_first($curriculumByNo->toArray()) ?? 1)];
+            }
+
+            return collect($selectedProjectNos)->map(fn ($no) => $resolveCard($no))->all();
+        })->values()->take(3)->toArray();
 
         $studentLevel   = $student?->level;
         $studentStream  = $student?->internship_stream;

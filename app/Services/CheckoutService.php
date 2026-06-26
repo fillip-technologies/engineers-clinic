@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Jobs\SendWelcomeCredentialsEmail;
+use App\Mail\PaymentConfirmationMail;
 use App\Models\College;
 use App\Models\Course;
 use App\Models\Order;
@@ -13,6 +14,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -136,7 +138,7 @@ class CheckoutService
             'razorpay_signature' => $attributes['razorpay_signature'],
         ]);
 
-        return DB::transaction(function () use ($order, $attributes) {
+        $payment = DB::transaction(function () use ($order, $attributes) {
             $order->update([
                 'status' => 'paid',
                 'razorpay_payment_id' => $attributes['razorpay_payment_id'],
@@ -157,6 +159,21 @@ class CheckoutService
 
             return $payment;
         });
+
+        try {
+            $payment->load('student.user', 'course', 'order');
+            $user = $payment->student?->user;
+            if ($user && $user->email) {
+                Mail::to($user->email, $user->name)->send(new PaymentConfirmationMail($payment));
+            }
+        } catch (Throwable $exception) {
+            Log::warning('Could not send payment confirmation email.', [
+                'payment_id' => $payment->id,
+                'message' => $exception->getMessage(),
+            ]);
+        }
+
+        return $payment;
     }
 
     public function failOrder(Order $order): void
