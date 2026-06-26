@@ -267,13 +267,13 @@
                     <a href="{{ $resumeUrl }}"
                        class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
                         <i class="fi fi-rr-play-alt text-base"></i>
-                        <span>Continue Learning</span>
+                        <span>Continue Learning ghfhgfghfcg</span>
                     </a>
                 @else
                     <a href="{{ route('student.projects') }}"
                        class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primaryLight">
                         <i class="fi fi-rr-search text-base"></i>
-                        <span>Browse Projects</span>
+                        <span>Browse Projects tdftdtydty</span>
                     </a>
                 @endif
             </div>
@@ -334,8 +334,8 @@
             <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                 <div class="flex items-center justify-between gap-4">
                     <div>
-                        <p class="text-sm font-semibold text-primary">Internship Tasks</p>
-                        <h2 class="mt-2 text-xl font-semibold text-slate-950">Current workload</h2>
+                        <p class="text-sm font-semibold text-primary">Internship Tasks nvhbvhv</p>
+                        <h2 class="mt-2 text-xl font-semibold text-slate-950">Current workload ytrtyry</h2>
                     </div>
                     <div class="hidden gap-2 sm:flex">
                         <span class="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700 ring-1 ring-amber-200">{{ $pendingTasks }} pending</span>
