@@ -54,7 +54,7 @@
                 </div>
 
                 <div class="mt-8">
-                    <h3 class="text-label text-brandLight">Our Clients</h3>
+                    <h3 class="text-label text-brandLight">Our Verticals</h3>
                     <div class="mt-4 space-y-2 text-sm text-bgSoft/78">
                         <a href="https://fillipskillacademy.com/" target="_blank" rel="noopener noreferrer"
                             class="flex items-start gap-3 transition hover:text-secondary">
@@ -119,8 +119,16 @@
             <p class="text-white">&copy; {{ date('Y') }} Engineers Clinic. All rights reserved.</p>
             <div class="flex items-center gap-6">
                 <a href="{{ route('privacy') }}" class="transition hover:text-secondary">Privacy</a>
+                <a href="{{ route('refund-policy') }}" class="transition hover:text-secondary">Refund Policy</a>
                 <!-- <a href="#" class="transition hover:text-secondary">Terms</a> -->
             </div>
         </div>
+
+        <p class="mt-5 text-center text-sm text-white">
+            Designed and Developed By
+            <a href="https://filliptechnologies.com/" target="_blank" rel="noopener noreferrer" class="font-semibold text-white underline-offset-4 transition hover:underline">
+                Fillip Technologies
+            </a>
+        </p>
     </div>
 </footer>

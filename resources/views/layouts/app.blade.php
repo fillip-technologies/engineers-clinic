@@ -79,7 +79,13 @@
         h5,
         h6 {
             color: var(--color-text-primary);
-            letter-spacing: -0.04em;
+            letter-spacing: -0.02em;
+            font-weight: 700;
+        }
+
+        .font-black,
+        .font-extrabold {
+            font-weight: 700 !important;
         }
 
         p {
@@ -124,9 +130,9 @@
         .text-hero {
             color: var(--color-text-primary);
             font-size: clamp(3rem, 7vw, 4.5rem);
-            font-weight: 800;
+            font-weight: 700;
             line-height: 0.92;
-            letter-spacing: -0.06em;
+            letter-spacing: -0.03em;
             max-width: 10ch;
         }
 

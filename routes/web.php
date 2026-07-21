@@ -19,6 +19,7 @@ Route::get('/college-tieup', [HomeController::class, 'collegeTieup'])->name('col
 Route::get('/company-branding', [HomeController::class, 'companyBranding'])->name('company.branding');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
+Route::get('/refund-policy', [HomeController::class, 'refundPolicy'])->name('refund-policy');
 Route::get('/coming-soon/enterprise-services', [HomeController::class, 'comingSoonEnterpriseServices'])->name('coming-soon.enterprise-services');
 Route::get('/coming-soon/ai-tools', [HomeController::class, 'comingSoonAiTools'])->name('coming-soon.ai-tools');
 Route::get('/coming-soon/blog', [HomeController::class, 'comingSoonBlog'])->name('coming-soon.blog');

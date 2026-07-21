@@ -1,251 +1,42 @@
 @php
-    $testimonials = [
-        ['class' => 'wc-card-left-top', 'quote' => 'This internship helped me understand how real client projects are handled. The mentors explained every task clearly and gave feedback regularly.', 'name' => 'shreya', 'role' => 'Frontend Intern', 'avatar' => 'images/students/image-8.jpg', 'style' => 'quote-small'],
-        ['class' => 'wc-card-left-mid', 'quote' => 'I improved my coding skills and learned how APIs and databases work in real projects. The practical assignments were very useful.', 'name' => 'Aman Kumar', 'role' => 'Full Stack Intern', 'avatar' => 'images/students/image-2.jpg', 'style' => 'text'],
-        ['class' => 'wc-card-feature', 'quote' => 'I really appreciate the mentorship and project feedback. It made learning feel clear and professional.', 'name' => 'Sneha Patel', 'role' => 'UI/UX Intern', 'avatar' => 'images/students/image-3.jpg', 'style' => 'stars'],
-        ['class' => 'wc-card-photo', 'quote' => 'More than online tasks, this internship gave me confidence with real output.', 'name' => 'Rohit Verma', 'role' => 'Python Intern', 'avatar' => 'images/students/image-4.jpg', 'style' => 'photo'],
-        ['class' => 'wc-card-right-top', 'quote' => 'Good job! The course flow, support, and assignments helped me stay consistent.', 'name' => 'Priya Singh', 'role' => 'Marketing Intern', 'avatar' => 'images/students/image-5.jpg', 'style' => 'center'],
-        ['class' => 'wc-card-right-mid', 'quote' => 'I gained hands-on experience in React and frontend development. The internship gave me exposure to real workflow and teamwork.', 'name' => 'Arjun Mehta', 'role' => 'React Intern', 'avatar' => 'images/students/image-6.jpg', 'style' => 'split'],
-        ['class' => 'wc-card-bottom-wide', 'quote' => 'I was very impressed. The platform, assignments, and mentor support helped me complete my first portfolio project.', 'name' => 'Aditi Rao', 'role' => 'Full Stack Intern', 'avatar' => 'https://i.pravatar.cc/120?img=25', 'style' => 'wide'],
-        ['class' => 'wc-card-bottom-mid', 'quote' => 'This internship improved both my creativity and technical skills. Working on real design tasks helped me build a stronger portfolio.', 'name' => 'Kavya Jain', 'role' => 'Graphic Design', 'avatar' => 'https://i.pravatar.cc/120?img=49', 'style' => 'bubble'],
-        ['class' => 'wc-card-bottom-right', 'quote' => 'Engineers Clinic gave me direction, deadlines, and a practical way to learn.', 'name' => 'Ananya pandey', 'role' => 'Backend intern', 'avatar' => 'images/students/image-7.jpg', 'style' => 'text'],
+    $features = [
+        ['icon' => 'fi-rr-folder-open', 'title' => 'Level-Based Projects', 'desc' => 'Choose beginner, intermediate, or advanced projects that match your current skill level.', 'from' => '#EEF2FF', 'to' => '#F5F3FF', 'accent' => '#6D5DF6', 'glow' => 'rgba(109, 93, 246, 0.22)'],
+        ['icon' => 'fi-rr-apps', 'title' => 'Personal Workspace', 'desc' => 'Track milestones, tasks, submissions, and progress in one guided project board.', 'from' => '#ECFEFF', 'to' => '#F0FDFA', 'accent' => '#0EA5E9', 'glow' => 'rgba(14, 165, 233, 0.22)'],
+        ['icon' => 'fi-rr-code-branch', 'title' => 'GitHub Workflow', 'desc' => 'Build the habit companies expect: commits, repositories, and visible project proof.', 'from' => '#F0FDF4', 'to' => '#ECFDF5', 'accent' => '#22C55E', 'glow' => 'rgba(34, 197, 94, 0.22)'],
+        ['icon' => 'fi-rr-comment-check', 'title' => 'Project Review', 'desc' => 'Submit your work for review and improve it before certificate approval.', 'from' => '#FFF7ED', 'to' => '#FEF3C7', 'accent' => '#F97316', 'glow' => 'rgba(249, 115, 22, 0.2)'],
+        ['icon' => 'fi-rr-badge-check', 'title' => 'Verified Certificate', 'desc' => 'Earn a shareable certificate after completing milestone-based project work.', 'from' => '#FDF2F8', 'to' => '#FAE8FF', 'accent' => '#EC4899', 'glow' => 'rgba(236, 72, 153, 0.2)'],
+        ['icon' => 'fi-rr-briefcase', 'title' => 'Career Proof', 'desc' => 'Use projects, GitHub, reviews, and certificates to strengthen interviews and resumes.', 'from' => '#EFF6FF', 'to' => '#F5F3FF', 'accent' => '#2563EB', 'glow' => 'rgba(37, 99, 235, 0.2)'],
     ];
 @endphp
 
-<style>
-    .wc-collage-section {
-        overflow: hidden;
-        background:
-            radial-gradient(circle at 12% 16%, rgba(124, 92, 252, 0.12), transparent 28%),
-            radial-gradient(circle at 88% 18%, rgba(245, 200, 66, 0.14), transparent 26%),
-            linear-gradient(135deg, #f7f5ff 0%, #ffffff 45%, #eef6ff 100%);
-    }
+<section class="relative isolate overflow-hidden bg-[#FAFBFF] py-16 sm:py-20 lg:py-24">
+    <div class="pointer-events-none absolute -left-24 top-10 -z-10 h-80 w-80 rounded-full bg-[#6D5DF6]/10 blur-3xl"></div>
+    <div class="pointer-events-none absolute -right-24 bottom-10 -z-10 h-80 w-80 rounded-full bg-[#22C55E]/10 blur-3xl"></div>
 
-    .wc-collage {
-        display: grid;
-        grid-template-columns: repeat(12, minmax(0, 1fr));
-        gap: 18px;
-        align-items: stretch;
-    }
-
-    .wc-card {
-        position: relative;
-        border: 1px solid rgba(226, 217, 255, 0.86);
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 0.92);
-        padding: 18px;
-        color: #23212d;
-        box-shadow: 0 14px 34px rgba(22, 8, 64, 0.08);
-        backdrop-filter: blur(14px);
-    }
-
-    .wc-quote-mark {
-        font-family: Georgia, serif;
-        font-size: 54px;
-        font-weight: 700;
-        line-height: 0.75;
-        color: #160840;
-    }
-
-    .wc-avatar {
-        height: 54px;
-        width: 54px;
-        border: 4px solid #ffffff;
-        border-radius: 999px;
-        object-fit: cover;
-        box-shadow: 0 8px 18px rgba(22, 8, 64, 0.14);
-    }
-
-    .wc-avatar-sm {
-        height: 42px;
-        width: 42px;
-    }
-
-    .wc-photo {
-        height: 190px;
-        width: 100%;
-        border-radius: 7px;
-        object-fit: cover;
-        object-position: top;
-    }
-
-    .wc-stars {
-        color: #f5c842;
-        font-size: 16px;
-        letter-spacing: 2px;
-    }
-
-    .wc-card-left-top {
-        grid-column: 1 / span 3;
-        grid-row: 1;
-    }
-
-    .wc-card-left-mid {
-        grid-column: 1 / span 3;
-        grid-row: 2;
-    }
-
-    .wc-card-feature {
-        grid-column: 4 / span 3;
-        grid-row: 1 / span 2;
-        text-align: center;
-    }
-
-    .wc-card-photo {
-        grid-column: 7 / span 2;
-        grid-row: 1 / span 2;
-    }
-
-    .wc-card-right-top {
-        grid-column: 9 / span 4;
-        grid-row: 1;
-        text-align: center;
-    }
-
-    .wc-card-right-mid {
-        grid-column: 9 / span 4;
-        grid-row: 2;
-    }
-
-    .wc-card-bottom-wide {
-        grid-column: 1 / span 5;
-        grid-row: 3;
-        text-align: center;
-    }
-
-    .wc-card-bottom-mid {
-        grid-column: 6 / span 3;
-        grid-row: 3;
-        text-align: center;
-    }
-
-    .wc-card-bottom-right {
-        grid-column: 9 / span 4;
-        grid-row: 3;
-    }
-
-    @media (max-width: 1024px) {
-        .wc-collage {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        .wc-card-left-top,
-        .wc-card-left-mid,
-        .wc-card-feature,
-        .wc-card-photo,
-        .wc-card-right-top,
-        .wc-card-right-mid,
-        .wc-card-bottom-wide,
-        .wc-card-bottom-mid,
-        .wc-card-bottom-right {
-            grid-column: auto;
-            grid-row: auto;
-        }
-
-        .wc-card-right-mid,
-        .wc-card-bottom-wide {
-            grid-column: span 2;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .wc-collage {
-            grid-template-columns: 1fr;
-            gap: 14px;
-        }
-
-        .wc-card,
-        .wc-card-right-mid,
-        .wc-card-bottom-wide {
-            grid-column: auto;
-        }
-
-        .wc-card {
-            padding: 16px;
-        }
-
-        .wc-photo {
-            height: 220px;
-        }
-    }
-</style>
-
-<section class="wc-collage-section py-14 sm:py-16 lg:py-20">
-    <div class="mx-auto max-w-7xl px-6">
-        <div class="mx-auto mb-10 max-w-3xl text-center sm:mb-12">
-            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-brand">
-                Student Success Stories
-            </p>
-            <h2 class="mt-4 text-3xl font-semibold tracking-tight text-textPrimary sm:text-4xl">
-                Our students say it best
+    <div class="container-main">
+        <div class="mx-auto mb-12 max-w-3xl text-center">
+            <span class="inline-flex rounded-full border border-[#ECEBFF] bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-[#6D5DF6]">Why Choose Us</span>
+            <h2 class="mt-5 text-3xl font-black leading-tight text-[#161326] sm:text-4xl lg:text-5xl">
+                Everything students need to turn learning into proof.
             </h2>
-            <p class="mx-auto mt-4 max-w-2xl text-base leading-7 text-textSecondary">
-                Real feedback from learners who built practical skills through guided projects, mentor support, and internship-style tasks.
+            <p class="mt-5 text-base leading-8 text-[#6B7280]">
+                A premium project-based system designed around outcomes recruiters can actually inspect.
             </p>
         </div>
 
-        <div class="wc-collage">
-            @foreach ($testimonials as $testimonial)
-                <article class="wc-card {{ $testimonial['class'] }}">
-                    @if ($testimonial['style'] === 'quote-small')
-                        <div class="flex items-start gap-3">
-                            <span class="wc-quote-mark">&ldquo;</span>
-                            <div>
-                                <p class="text-xs leading-5 text-[#55515e]">{{ $testimonial['quote'] }}</p>
-                                <div class="mt-3 flex items-center gap-3">
-                                    <img src="{{ $testimonial['avatar'] }}" alt="{{ $testimonial['name'] }}" class="wc-avatar wc-avatar-sm">
-                                    <div>
-                                        <p class="text-xs font-bold">{{ $testimonial['name'] }}</p>
-                                        <p class="text-[10px] text-[#77727f]">{{ $testimonial['role'] }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @elseif ($testimonial['style'] === 'stars')
-                        <img src="{{ $testimonial['avatar'] }}" alt="{{ $testimonial['name'] }}" class="wc-avatar mx-auto">
-                        <div class="wc-stars mt-5">★★★★★</div>
-                        <h3 class="mt-3 text-lg font-bold">I really appreciate!!</h3>
-                        <p class="mt-3 text-xs leading-5 text-[#55515e]">{{ $testimonial['quote'] }}</p>
-                        <p class="mt-5 text-xs font-bold">{{ $testimonial['name'] }}</p>
-                        <p class="text-[10px] text-[#77727f]">{{ $testimonial['role'] }}</p>
-                        <span class="absolute bottom-2 right-6 font-serif text-6xl leading-none text-brandDark">&rdquo;</span>
-                    @elseif ($testimonial['style'] === 'photo')
-                        <img src="{{ $testimonial['avatar'] }}" alt="{{ $testimonial['name'] }}" class="wc-photo">
-                        <p class="mt-3 text-xs leading-5 text-[#55515e]">{{ $testimonial['quote'] }}</p>
-                        <p class="mt-3 text-xs font-bold">{{ $testimonial['name'] }}</p>
-                    @elseif ($testimonial['style'] === 'center')
-                        <img src="{{ $testimonial['avatar'] }}" alt="{{ $testimonial['name'] }}" class="wc-avatar mx-auto">
-                        <h3 class="mt-4 text-sm font-bold">Good Job!</h3>
-                        <p class="mt-2 text-xs leading-5 text-[#55515e]">{{ $testimonial['quote'] }}</p>
-                        <p class="mt-3 text-[10px] font-bold">{{ $testimonial['name'] }}</p>
-                    @elseif ($testimonial['style'] === 'split')
-                        <div class="grid items-center gap-4 sm:grid-cols-[118px_1fr]">
-                            <img src="{{ $testimonial['avatar'] }}" alt="{{ $testimonial['name'] }}" class="h-28 w-28 rounded-md object-cover object-top">
-                            <div>
-                                <span class="font-serif text-3xl leading-none">&ldquo;</span>
-                                <p class="mt-1 text-xs leading-5 text-[#55515e]">{{ $testimonial['quote'] }}</p>
-                                <p class="mt-4 text-xs font-bold">{{ $testimonial['name'] }}</p>
-                                <p class="text-[10px] text-[#77727f]">{{ $testimonial['role'] }}</p>
-                            </div>
-                        </div>
-                    @elseif ($testimonial['style'] === 'wide')
-                        <h3 class="text-sm font-bold">I was very impressed!</h3>
-                        <p class="mt-2 text-xs leading-5 text-[#55515e]">{{ $testimonial['quote'] }}</p>
-                    @elseif ($testimonial['style'] === 'bubble')
-                        <img src="{{ $testimonial['avatar'] }}" alt="{{ $testimonial['name'] }}" class="wc-avatar mx-auto">
-                        <p class="mt-5 text-xs leading-5 text-[#55515e]">&ldquo;{{ $testimonial['quote'] }}&rdquo;</p>
-                        <p class="mt-4 text-xs font-bold">{{ $testimonial['name'] }}</p>
-                    @else
-                        <p class="text-xs leading-5 text-[#55515e]">&ldquo;{{ $testimonial['quote'] }}&rdquo;</p>
-                        <div class="mt-4 flex items-center justify-end gap-3">
-                            <div class="text-right">
-                                <p class="text-xs font-bold">{{ $testimonial['name'] }}</p>
-                                <p class="text-[10px] text-[#77727f]">{{ $testimonial['role'] }}</p>
-                            </div>
-                            <img src="{{ $testimonial['avatar'] }}" alt="{{ $testimonial['name'] }}" class="wc-avatar wc-avatar-sm">
-                        </div>
-                    @endif
-                </article>
+        <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            @foreach ($features as $feature)
+                <div class="group relative overflow-hidden rounded-[2rem] border border-white bg-white p-6 shadow-[0_18px_48px_rgba(15,10,42,0.06)] transition duration-300 hover:scale-[1.02] hover:shadow-[0_26px_70px_rgba(15,10,42,0.12)]" style="background: linear-gradient(135deg, {{ $feature['from'] }}, {{ $feature['to'] }});">
+                    <div class="absolute -right-14 -top-14 h-36 w-36 rounded-full blur-2xl transition duration-300 group-hover:scale-125" style="background: {{ $feature['glow'] }};"></div>
+                    <div class="absolute bottom-0 left-0 h-24 w-24 rounded-full blur-2xl" style="background: {{ $feature['glow'] }};"></div>
+                    <div class="relative">
+                        <span class="grid h-14 w-14 place-items-center rounded-2xl bg-white/80 text-2xl shadow-[0_14px_32px_rgba(15,10,42,0.08)] transition duration-300 group-hover:-translate-y-1" style="color: {{ $feature['accent'] }};">
+                            <i class="fi {{ $feature['icon'] }}"></i>
+                        </span>
+                        <h3 class="mt-6 text-xl font-black text-[#161326]">{{ $feature['title'] }}</h3>
+                        <p class="mt-3 text-sm leading-7 text-[#6B7280]">{{ $feature['desc'] }}</p>
+                    </div>
+                </div>
             @endforeach
         </div>
     </div>

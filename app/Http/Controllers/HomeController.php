@@ -248,6 +248,11 @@ class HomeController extends Controller
         return view('pages.privacy');
     }
 
+    public function refundPolicy()
+    {
+        return view('pages.refund-policy');
+    }
+
     public function comingSoonEnterpriseServices()
     {
         return view('pages.coming-soon', [

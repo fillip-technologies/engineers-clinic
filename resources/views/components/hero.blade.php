@@ -1,263 +1,79 @@
-<section id="heroSection" class="section-surface relative isolate overflow-hidden section-padding-sm">
-    <div id="particles-js" class="absolute inset-0 z-0"></div>
-
-    <div class="pointer-events-none absolute inset-0 z-0">
-        <div class="absolute -left-24 top-0 h-72 w-72 rounded-full bg-glowPurple blur-3xl"></div>
-        <div class="absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-glowPink blur-3xl"></div>
+<section id="heroSection" class="relative isolate overflow-hidden bg-[#FAFBFF] py-16 sm:py-20 lg:py-24">
+    <div class="pointer-events-none absolute inset-0 -z-10">
+        <div class="absolute right-8 top-1/2 h-[28rem] w-[28rem] -translate-y-1/2 rounded-full bg-[#6D5DF6]/8 blur-3xl"></div>
     </div>
 
-    <div class="container-main relative z-10">
-        <div class="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
-            <div>
-                <span class="badge-pill">
-                    <span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>
-                    Industry-Led Internship Platform
+    <div class="container-main">
+        <div class="grid items-center gap-12 lg:grid-cols-[1fr_1fr] lg:gap-16">
+            <div class="ec-fade-up">
+                <span class="inline-flex items-center gap-2 rounded-full border border-[#ECEBFF] bg-[#F5F3FF] px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-[#6D5DF6]">
+                    <span class="h-2 w-2 rounded-full bg-[#22C55E]"></span>
+                    Project-Based Learning Platform
                 </span>
 
-                <h1 class="text-hero mt-6 max-w-4xl">
-                    Learn by building
-                    <span class="gradient-text block">real-world</span>
-                    workflows
+                <h1 class="mt-8 max-w-3xl text-4xl font-black leading-[1.02] tracking-tight text-[#161326] sm:text-5xl lg:text-[4rem]">
+                    Build real projects. Prove you are job-ready.
                 </h1>
 
-                <p class="text-body-lg mt-6 max-w-2xl">
-                    Choose your level, work on real projects, complete tasks, build practical skills, and earn industry-focused certifications.
+                <p class="mt-6 max-w-[35rem] text-lg font-medium leading-8 text-[#6B7280]">
+                    Pick a project for your level, complete guided milestones, publish your code to GitHub, and earn a certificate backed by reviewed work.
                 </p>
 
-                {{-- <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-                    <a href="#courses" class="btn-primary">Start Internship</a>
-                    <a href="#courses" class="btn-secondary">Explore Tracks</a>
-                </div> --}}
-
-                <div class="mt-8">
-                    <p class="flex items-center gap-2 text-base font-bold text-textPrimary">
-                        Or select your goal
-                        <i class="fi fi-rr-target text-sm text-brand"></i>
-                    </p>
-
-                    <div class="mt-4 flex flex-wrap gap-3">
-                        @foreach ([
-                        ['label' => 'Core Python & Computational Logic', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Core Python & Computational Logic'))],
-                        ['label' => 'Data Foundations & Visual Analytics', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Data Foundations & Visual Analytics (Excel/SQL)'))],
-                        ['label' => 'Full Stack Web Development', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Full Stack Web Development (React/Node)'))],
-                        ['label' => 'Applied Machine Learning', 'href' => route('course.detail', \Illuminate\Support\Str::slug('Applied Machine Learning & Data Modeling'))],
-                        ] as $goal)
-                        <a href="{{ $goal['href'] }}"
-                            class="inline-flex min-h-11 items-center justify-center rounded-control border border-borderLight bg-bgWhite px-4 py-2 text-sm font-bold text-textPrimary shadow-sm transition hover:border-brand hover:bg-brandSoft hover:text-brand">
-                            {{ $goal['label'] }}
-                        </a>
-                        @endforeach
-                    </div>
+                <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <a href="#courses" class="inline-flex min-h-12 items-center justify-center rounded-2xl bg-[#6D5DF6] px-7 py-3 text-sm font-black text-white shadow-[0_14px_34px_rgba(109,93,246,0.24)] transition duration-300 hover:-translate-y-1 hover:bg-[#5A4AE3]">
+                        Explore Projects
+                    </a>
+                    <a href="#how-it-works" class="inline-flex min-h-12 items-center justify-center rounded-2xl border border-[#D9D6FF] bg-white px-7 py-3 text-sm font-black text-[#161326] transition duration-300 hover:-translate-y-1 hover:bg-[#F5F3FF] hover:text-[#161326]">
+                        See How It Works
+                    </a>
                 </div>
 
-                <div class="mt-9 flex flex-wrap items-center gap-5">
-                    <div class="flex -space-x-3">
-                        @foreach ([1, 2, 3, 4] as $image)
-                        <img src="https://i.pravatar.cc/48?img={{ $image }}" alt="" class="h-10 w-10 rounded-full border-2 border-cardBorder object-cover">
-                        @endforeach
-                    </div>
+                <!-- <div class="mt-10 grid max-w-xl grid-cols-3 gap-4">
+                    @foreach ([
+                        ['value' => '6K+', 'label' => 'Students'],
+                        ['value' => '320+', 'label' => 'Projects'],
+                        ['value' => '98%', 'label' => 'Completion'],
+                    ] as $trust)
+                        <div class="rounded-3xl border border-[#ECEBFF] bg-white p-5 transition duration-300 hover:scale-[1.02] hover:border-[#6D5DF6] hover:bg-[#FCFBFF] hover:shadow-[0_16px_38px_rgba(109,93,246,0.10)]">
+                            <p class="text-2xl font-black text-[#161326]">{{ $trust['value'] }}</p>
+                            <p class="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-[#8A8FA3]">{{ $trust['label'] }}</p>
+                        </div>
+                    @endforeach
+                </div> -->
 
-                    <p class="text-caption">
-                        <span class="font-bold text-textPrimary">100K+</span> learners
-                    </p>
-
-                    <p class="text-caption">
-                        <span class="font-bold text-textPrimary">4.9</span> average rating
-                    </p>
-                </div>
+                <!-- <div class="mt-7 flex flex-wrap items-center gap-2 text-sm font-bold text-[#6B7280]">
+                    @foreach (['Build Projects', 'Complete Tasks', 'Push GitHub', 'Earn Certificate'] as $item)
+                        <span class="inline-flex items-center gap-2 rounded-full border border-[#ECEBFF] bg-white px-3 py-2">
+                            <span class="h-1.5 w-1.5 rounded-full bg-[#6D5DF6]"></span>
+                            {{ $item }}
+                        </span>
+                    @endforeach
+                </div> -->
             </div>
 
-            <div class="relative">
-                <div class="glass-card mx-auto max-w-md p-6 sm:p-8">
-                    <span class="badge-pill">
-                        <span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>
-                        Free Career Guidance
-                    </span>
+            <div class="relative flex min-h-[410px] items-start justify-center pt-2 ec-fade-up sm:min-h-[470px] lg:min-h-[520px] lg:pt-6">
+                <div class="pointer-events-none absolute left-1/2 top-[42%] h-[25rem] w-[25rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#6D5DF6]/10 blur-3xl sm:h-[31rem] sm:w-[31rem]"></div>
+                <div class="pointer-events-none absolute bottom-16 left-1/2 h-16 w-[68%] -translate-x-1/2 rounded-full bg-[#D9D6FF]/45 blur-2xl"></div>
 
-                    <h2 class="text-card-title mt-5">Book a Free Call</h2>
-                    <p class="text-body mt-2">Talk to our expert and plan your career path.</p>
+                <img src="{{ asset('images/hero-new-girl.png') }}"
+                    alt="Student building a project in a guided workspace"
+                    class="relative z-10 h-auto max-h-[410px] w-full max-w-[31rem] object-contain object-center sm:max-h-[500px] sm:max-w-[35rem] lg:max-h-[575px] lg:max-w-[38rem]">
 
-                    @if (session('success'))
-                        <div class="mt-5 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+                <div class="absolute left-4 top-14 hidden rounded-2xl border border-[#ECEBFF] bg-white/90 px-4 py-3 shadow-[0_14px_34px_rgba(15,10,42,0.08)] backdrop-blur-xl sm:block">
+                    <p class="text-xs font-black uppercase tracking-[0.12em] text-[#8A8FA3]">GitHub</p>
+                    <p class="mt-1 text-sm font-black text-[#161326]">Connected</p>
+                </div>
 
-                    @if ($errors->any())
-                        <div class="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
-                            Please check the form details and try again.
-                        </div>
-                    @endif
+                <div class="absolute right-4 top-[38%] hidden rounded-2xl border border-[#ECEBFF] bg-white/90 px-4 py-3 shadow-[0_14px_34px_rgba(15,10,42,0.08)] backdrop-blur-xl md:block">
+                    <p class="text-xs font-black uppercase tracking-[0.12em] text-[#8A8FA3]">Task</p>
+                    <p class="mt-1 text-sm font-black text-[#161326]">Completed</p>
+                </div>
 
-                    <form action="{{ route('counselling.store') }}" method="POST" class="mt-6 space-y-4">
-                        @csrf
-
-                        <div>
-                            <input type="text" name="name" value="{{ old('name') }}" placeholder="Full Name" required class="input-primary">
-                            @error('name')
-                                <p class="mt-2 text-xs font-semibold text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="Phone Number" required class="input-primary">
-                            @error('phone')
-                                <p class="mt-2 text-xs font-semibold text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <input type="email" name="email" value="{{ old('email') }}" placeholder="Email Address (optional)" class="input-primary">
-                            @error('email')
-                                <p class="mt-2 text-xs font-semibold text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <button type="submit" class="btn-primary w-full">
-                            Get Free Counselling
-                        </button>
-                    </form>
-
-                    <p class="text-caption mt-4 text-center">
-                        No spam. Only helpful guidance.
-                    </p>
+                <div class="absolute bottom-16 left-8 hidden rounded-2xl border border-[#ECEBFF] bg-white/90 px-4 py-3 shadow-[0_14px_34px_rgba(15,10,42,0.08)] backdrop-blur-xl lg:block">
+                    <p class="text-xs font-black uppercase tracking-[0.12em] text-[#8A8FA3]">Certificate</p>
+                    <p class="mt-1 text-sm font-black text-[#161326]">Ready</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
-<style>
-    #particles-js {
-        height: 100%;
-        width: 100%;
-        opacity: 1;
-        overflow: hidden;
-        filter: drop-shadow(0 0 10px var(--color-glow-purple));
-    }
-
-    #particles-js canvas {
-        display: block;
-        height: 100% !important;
-        width: 100% !important;
-    }
-
-    @media (max-width: 640px) {
-        #particles-js {
-            opacity: 0.6;
-            filter: none;
-        }
-    }
-</style>
-
-<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        if (typeof particlesJS === "undefined") {
-            return;
-        }
-
-        const colors = {
-            brand: '#7C5CFC',
-            brandLight: '#A78BFA',
-            auroraMid: '#B8DEFF',
-            auroraRight: '#FFD0E8',
-        };
-
-        const getParticleSettings = () => {
-            const isMobile = window.matchMedia("(max-width: 640px)").matches;
-            const isTablet = window.matchMedia("(max-width: 1024px)").matches;
-
-            return {
-                count: isMobile ? 22 : (isTablet ? 38 : 60),
-                size: isMobile ? 3 : (isTablet ? 4 : 5),
-                distance: isMobile ? 95 : (isTablet ? 130 : 170),
-                speed: isMobile ? 0.8 : 1.6,
-                lineOpacity: isMobile ? 0.22 : 0.40,
-                hover: !isMobile
-            };
-        };
-
-        const destroyParticles = () => {
-            if (!window.pJSDom || !window.pJSDom.length) {
-                return;
-            }
-
-            window.pJSDom.forEach((instance) => instance.pJS.fn.vendors.destroypJS());
-            window.pJSDom = [];
-        };
-
-        const initHeroParticles = () => {
-            const settings = getParticleSettings();
-            destroyParticles();
-
-            particlesJS("particles-js", {
-                particles: {
-                    number: {
-                        value: settings.count
-                    },
-                    color: {
-                        value: [colors.brand, colors.brandLight, colors.auroraMid, colors.auroraRight]
-                    },
-                    shape: {
-                        type: "circle"
-                    },
-                    opacity: {
-                        value: 0.55,
-                        random: true
-                    },
-                    size: {
-                        value: settings.size,
-                        random: true
-                    },
-                    line_linked: {
-                        enable: true,
-                        distance: settings.distance,
-                        color: colors.brand,
-                        opacity: settings.lineOpacity,
-                        width: 1.2
-                    },
-                    move: {
-                        enable: true,
-                        speed: settings.speed
-                    }
-                },
-                interactivity: {
-                    detect_on: "canvas",
-                    events: {
-                        onhover: {
-                            enable: settings.hover,
-                            mode: "grab"
-                        },
-                        onclick: {
-                            enable: true,
-                            mode: "push"
-                        },
-                        resize: true
-                    },
-                    modes: {
-                        grab: {
-                            distance: 220,
-                            line_linked: {
-                                opacity: 1
-                            }
-                        },
-                        push: {
-                            particles_nb: settings.hover ? 4 : 2
-                        }
-                    }
-                },
-                retina_detect: true
-            });
-        };
-
-        initHeroParticles();
-
-        let resizeTimer;
-        window.addEventListener("resize", () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(initHeroParticles, 250);
-        });
-    });
-</script>
