@@ -21,7 +21,10 @@ class DatabaseSeeder extends Seeder
             // UserSeeder::class,
             // InternshipTopicCourseSeeder::class,
             // CourseProjectDocumentSeeder::class,
-            EnterprisePasswordStrengthAnalyzerWorkspaceSeeder::class,
+            // EnterprisePasswordStrengthAnalyzerWorkspaceSeeder::class,
+            NegativeKeywordExclusionWorkspaceSeeder::class,
+            AlternativeTitleSorterWorkspaceSeeder::class,
+            LinkedInXRayBooleanStringWorkspaceSeeder::class,
             // CourseWorkspaceSeeder::class,
         ]);
     }
